@@ -166,6 +166,10 @@ hr {
   margin: 0;
   padding: 0;
   gap: 0.1rem;
+  align-items: center;
+}
+.site-nav__list li {
+  margin: 0;
 }
 .site-nav__link {
   color: rgba(255,255,255,0.78);
@@ -742,6 +746,14 @@ hr {
     padding: 0.45rem 0.55rem;
   }
   .search-trigger__label { display: none; }
+}
+
+/* Below 600px: hide the brand text (badge alone is enough) so the
+   header fits without horizontal overflow on phones. */
+@media (max-width: 600px) {
+  .site-header__brand > span:not(.site-header__brand-mark) {
+    display: none;
+  }
 }
 
 .search-modal { display: none; }
