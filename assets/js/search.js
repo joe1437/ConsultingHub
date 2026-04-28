@@ -330,6 +330,11 @@
     modal.classList.add('is-open');
     document.body.classList.add('has-search-open');
     isModalOpen = true;
+    // Push a history entry so the browser/Android back button closes the
+    // modal first instead of leaving the site.
+    try {
+      history.pushState({ searchOpen: true }, '', location.href);
+    } catch (e) { /* ignore */ }
     const inp = modal.querySelector('.search-modal__input');
     inp.value = '';
     showInitial();
@@ -337,13 +342,28 @@
     if (!searchIndex) buildIndex();
   }
 
-  function closeModal() {
+  // When closeModal is called from a user action (Esc, click backdrop,
+  // close button) we want to roll back the history entry pushed by
+  // openModal, so the URL/state stays clean. When called in response to
+  // a popstate event (back button), we must NOT call history.back() or
+  // we'd loop. The flag distinguishes the two paths.
+  function closeModal(fromPopState) {
     const modal = document.getElementById('searchModal');
     if (!modal) return;
+    if (!isModalOpen) return;
     modal.classList.remove('is-open');
     document.body.classList.remove('has-search-open');
     isModalOpen = false;
+    if (!fromPopState) {
+      try {
+        if (history.state && history.state.searchOpen) history.back();
+      } catch (e) { /* ignore */ }
+    }
   }
+
+  window.addEventListener('popstate', () => {
+    if (isModalOpen) closeModal(true);
+  });
 
   /* ---------- Global keyboard shortcuts ---------- */
   document.addEventListener('keydown', (e) => {
