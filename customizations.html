@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Customizations &amp; Integrations — D365 F&amp;O Consulting Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="index.html" class="site-header__brand">
+      <span class="site-header__brand-mark">D</span>
+      <span>D365 F&amp;O Consulting Hub</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+      <ul class="site-nav__list" id="primaryNav">
+        <li><a class="site-nav__link" href="consulting.html">Consulting</a></li>
+        <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
+        <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
+        <li><a class="site-nav__link" href="modules.html">Modules</a></li>
+        <li><a class="site-nav__link" href="accounting.html">Accounting</a></li>
+        <li><a class="site-nav__link" href="ai.html">AI</a></li>
+        <li><a class="site-nav__link is-active" href="customizations.html">Customizations</a></li>
+        <li><a class="site-nav__link" href="advanced.html">Advanced</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-header">
+  <div class="container">
+    <span class="page-header__eyebrow">07 · Extending the platform</span>
+    <h1 class="page-header__title">Customizations, integrations &amp; interfaces</h1>
+    <p class="page-header__lead">
+      When standard configuration is not enough — extensions, ISVs, integration patterns, and the framework for deciding when to build vs configure.
+    </p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="article-page">
+
+    <aside class="article-page__toc" aria-label="On this page">
+      <p class="article-page__toc-title">On this page</p>
+      <ul>
+        <li><a href="#configure-vs-customize">Configure vs customize</a></li>
+        <li><a href="#extensions">Extensions &amp; the model</a></li>
+        <li><a href="#isv">ISV solutions</a></li>
+        <li><a href="#integration-patterns">Integration patterns</a></li>
+        <li><a href="#dual-write">Dual-write &amp; Dataverse</a></li>
+        <li><a href="#dmf">Data Management Framework</a></li>
+        <li><a href="#power-platform">Power Platform</a></li>
+        <li><a href="#electronic-reporting">Electronic reporting</a></li>
+        <li><a href="#governance">Change governance</a></li>
+      </ul>
+    </aside>
+
+    <main class="article-page__main">
+
+      <section id="configure-vs-customize">
+        <article class="article">
+          <h2>Configure vs customize — the decision framework</h2>
+          <p class="article__meta">Method · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — the cost of customization (upgrades, regression risk, technical debt), how to lead clients toward standard processes, and the times when customization is genuinely the right answer.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="extensions">
+        <article class="article">
+          <h2>Extensions &amp; the X++ extension model</h2>
+          <p class="article__meta">Technical · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — extension models (over-layering vs extensions), the role of the developer, deployable packages, table extensions, form extensions, event handlers, and chains of command.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="isv">
+        <article class="article">
+          <h2>ISV solutions</h2>
+          <p class="article__meta">Ecosystem · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — common ISVs you'll meet (DMS, EDI, tax, banking, document automation), how to evaluate one, deployment implications, and licensing patterns.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="integration-patterns">
+        <article class="article">
+          <h2>Integration patterns</h2>
+          <p class="article__meta">Technical · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — synchronous (OData, custom services) vs asynchronous (DMF, recurring integration, Service Bus), batch vs real-time, error handling, idempotency, and the consultant's role in defining the integration spec.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="dual-write">
+        <article class="article">
+          <h2>Dual-write &amp; Dataverse</h2>
+          <p class="article__meta">Technical · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — what dual-write actually does, the entity maps, the sync direction, common failure modes, and how it ties F&amp;O to the rest of the Dynamics 365 family.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="dmf">
+        <article class="article">
+          <h2>Data Management Framework (DMF / DIXF)</h2>
+          <p class="article__meta">Technical · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — data entities, import/export projects, recurring data jobs, source mappings, error handling, and using DMF for go-live data migration.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="power-platform">
+        <article class="article">
+          <h2>Power Platform integration</h2>
+          <p class="article__meta">Technical · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — Power Automate flows over F&amp;O, Power Apps front-ends, the F&amp;O virtual entities in Dataverse, and where this should be used vs avoided.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="electronic-reporting">
+        <article class="article">
+          <h2>Electronic reporting (ER) &amp; e-invoicing</h2>
+          <p class="article__meta">Technical · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — ER configuration model, format vs model, country-specific e-invoicing scenarios, and how to extend a delivered configuration.</p>
+          </article>
+        </article>
+      </section>
+
+      <section id="governance">
+        <article class="article">
+          <h2>Change governance</h2>
+          <p class="article__meta">Method · Last updated —</p>
+          <article class="article article--placeholder" style="margin: 0;">
+            <p>Add content here — change request templates, impact assessment, the role of architecture review, and how to keep customizations from accumulating into unmanageable debt.</p>
+          </article>
+        </article>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>D365 F&amp;O Consulting Hub · A personal reference and teaching resource.</p>
+    <p>Last updated <time>2026-04-28</time>.</p>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/search.js"></script>
+</body>
+</html>

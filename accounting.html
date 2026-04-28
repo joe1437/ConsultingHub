@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Accounting by Transaction — D365 F&amp;O Consulting Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="index.html" class="site-header__brand">
+      <span class="site-header__brand-mark">D</span>
+      <span>D365 F&amp;O Consulting Hub</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+      <ul class="site-nav__list" id="primaryNav">
+        <li><a class="site-nav__link" href="consulting.html">Consulting</a></li>
+        <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
+        <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
+        <li><a class="site-nav__link" href="modules.html">Modules</a></li>
+        <li><a class="site-nav__link is-active" href="accounting.html">Accounting</a></li>
+        <li><a class="site-nav__link" href="ai.html">AI</a></li>
+        <li><a class="site-nav__link" href="customizations.html">Customizations</a></li>
+        <li><a class="site-nav__link" href="advanced.html">Advanced</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-header">
+  <div class="container">
+    <span class="page-header__eyebrow">05 · Numbers</span>
+    <h1 class="page-header__title">Accounting by transaction</h1>
+    <p class="page-header__lead">
+      For each business process, the actual journal entries — the debits, the credits, and the rules behind the postings. Pick a process from the left to see its transactions.
+    </p>
+  </div>
+</section>
+
+<div class="container" data-workspace>
+  <div class="workspace">
+
+    <aside class="workspace__sidebar" aria-label="Processes">
+      <button class="workspace__sidebar-toggle" type="button" aria-expanded="false">
+        <span class="workspace__sidebar-current">Browse processes</span>
+      </button>
+      <div class="workspace__sidebar-body">
+        <p class="workspace__sidebar-title">Processes</p>
+        <ul class="workspace__nav">
+          <li><a class="workspace__nav-link" data-item-link="acquire-to-dispose" href="#acquire-to-dispose">Acquire to dispose</a></li>
+          <li><a class="workspace__nav-link" data-item-link="case-to-resolution" href="#case-to-resolution">Case to resolution</a></li>
+          <li><a class="workspace__nav-link" data-item-link="concept-to-market" href="#concept-to-market">Concept to market</a></li>
+          <li><a class="workspace__nav-link" data-item-link="design-to-retire" href="#design-to-retire">Design to retire</a></li>
+          <li><a class="workspace__nav-link" data-item-link="forecast-to-plan" href="#forecast-to-plan">Forecast to plan</a></li>
+          <li><a class="workspace__nav-link" data-item-link="hire-to-retire" href="#hire-to-retire">Hire to retire</a></li>
+          <li><a class="workspace__nav-link" data-item-link="inventory-to-deliver" href="#inventory-to-deliver">Inventory to deliver</a></li>
+          <li><a class="workspace__nav-link" data-item-link="order-to-cash" href="#order-to-cash">Order to cash</a></li>
+          <li><a class="workspace__nav-link" data-item-link="plan-to-produce" href="#plan-to-produce">Plan to produce</a></li>
+          <li><a class="workspace__nav-link" data-item-link="project-to-profit" href="#project-to-profit">Project to profit</a></li>
+          <li><a class="workspace__nav-link" data-item-link="prospect-to-quote" href="#prospect-to-quote">Prospect to quote</a></li>
+          <li><a class="workspace__nav-link" data-item-link="record-to-report" href="#record-to-report">Record to report</a></li>
+          <li><a class="workspace__nav-link" data-item-link="service-to-deliver" href="#service-to-deliver">Service to deliver</a></li>
+          <li><a class="workspace__nav-link" data-item-link="source-to-pay" href="#source-to-pay">Source to pay</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="workspace__main">
+
+      <!-- Order to cash — example pane fully populated to show the table pattern -->
+      <article class="item-pane" data-item-pane="order-to-cash">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Order to cash</span>
+          <h2 class="item-pane__title">Order to cash — journal entries</h2>
+          <p class="item-pane__lead">From the packing slip through invoice, payment, and settlement — what posts, when, and why.</p>
+        </header>
+
+        <article class="article">
+          <h3>Example: Packing slip posting</h3>
+          <p class="article__meta">Transaction · Sales order delivery</p>
+          <p>When the packing slip is posted, inventory leaves the warehouse and a cost accrual recognizes the COGS on a deferred basis. The customer is not yet billed.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Issue, packing slip (DR)</td><td>COGS deferred</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Issue, packing slip offset (CR)</td><td>Inventory packing slip offset</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Both legs reverse on invoice posting; the final COGS hits at the invoice step. Add your tenant-specific notes here (posting profile setup, dimensions, exceptions).
+          </div>
+        </article>
+
+        <article class="article article--placeholder">
+          <h3>Add the next transaction</h3>
+          <p>Copy the article block above and adapt it for sales-order invoice, customer payment, settlement, and any return / credit-memo flows.</p>
+        </article>
+      </article>
+
+      <article class="item-pane" data-item-pane="acquire-to-dispose">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Acquire to dispose</span><h2 class="item-pane__title">Acquire to dispose — journal entries</h2><p class="item-pane__lead">Acquisition, depreciation, value adjustment, write-up / write-down, and disposal.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for: acquisition (from PO, from journal), monthly depreciation, value adjustment, disposal (sale, scrap), and the impact on multiple books.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="case-to-resolution">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Case to resolution</span><h2 class="item-pane__title">Case to resolution — journal entries</h2><p class="item-pane__lead">Where cases create accounting events — typically through service invoices, returns, or warranty cost.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for service invoice, return material authorization, warranty cost recognition, and any goodwill credit notes.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="concept-to-market">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Concept to market</span><h2 class="item-pane__title">Concept to market — journal entries</h2><p class="item-pane__lead">Mostly cost accumulation in development — capitalized vs expensed.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for R&amp;D project costs, capitalization criteria, transfer to fixed asset, and the launch-period accounting.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="design-to-retire">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Design to retire</span><h2 class="item-pane__title">Design to retire — journal entries</h2><p class="item-pane__lead">End-of-life inventory adjustments and obsolescence reserves.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for obsolescence reserve, inventory write-off, BOM rework cost, and the discontinuation impact on standard cost.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="forecast-to-plan">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Forecast to plan</span><h2 class="item-pane__title">Forecast to plan — journal entries</h2><p class="item-pane__lead">Master planning typically does not post — but forecast / budget reservations and commitments may.</p></header>
+        <article class="article article--placeholder"><p>Add notes for budget reservations, encumbrance accounting (if used), and any forecast-driven postings.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="hire-to-retire">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Hire to retire</span><h2 class="item-pane__title">Hire to retire — journal entries</h2><p class="item-pane__lead">Payroll postings — gross pay, taxes, benefits, and accruals.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for payroll run posting, payroll accruals, benefit deductions, employer taxes, and severance.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="inventory-to-deliver">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Inventory to deliver</span><h2 class="item-pane__title">Inventory to deliver — journal entries</h2><p class="item-pane__lead">Inventory journal postings — counting, movement, transfer, and write-offs.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for counting (positive / negative), movement, transfer, BOM journal, and inventory profit / loss.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="plan-to-produce">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Plan to produce</span><h2 class="item-pane__title">Plan to produce — journal entries</h2><p class="item-pane__lead">Production order postings — picking list, route card, report as finished, end.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for picking list (raw material to WIP), route card (labor / overhead to WIP), report as finished (WIP to FG), and end (variance to GL).</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="project-to-profit">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Project to profit</span><h2 class="item-pane__title">Project to profit — journal entries</h2><p class="item-pane__lead">Project transactions — hour, expense, item, fee — and the revenue recognition postings.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for hour, expense and item posting on a T&amp;M project; cost &amp; revenue accrual on a fixed-price project; on-account invoicing; and project closing.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="prospect-to-quote">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Prospect to quote</span><h2 class="item-pane__title">Prospect to quote — journal entries</h2><p class="item-pane__lead">Pre-sales has no GL postings — the accounting starts at the sales order. This page captures any commitment-side entries.</p></header>
+        <article class="article article--placeholder"><p>Add notes here — quote conversion tracking, any commission accruals at win, and the carry-over to sales order.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="record-to-report">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Record to report</span><h2 class="item-pane__title">Record to report — journal entries</h2><p class="item-pane__lead">The classic GL entries — accruals, reclasses, allocations, FX revaluation, and consolidation.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for accruals and reversal, manual reclass, ledger allocation rules, FX revaluation (open transaction and balance), and elimination journals.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="service-to-deliver">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Service to deliver</span><h2 class="item-pane__title">Service to deliver — journal entries</h2><p class="item-pane__lead">Service order postings — consumption, hours, and invoicing.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for service order item consumption, technician hour posting, fee, and final invoice.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="source-to-pay">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Source to pay</span><h2 class="item-pane__title">Source to pay — journal entries</h2><p class="item-pane__lead">PO receipt, vendor invoice, payment, and settlement.</p></header>
+        <article class="article article--placeholder"><p>Add transaction tables for product receipt (accrued purchase liability), vendor invoice posting, vendor payment, and settlement reversal scenarios.</p></article>
+      </article>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>D365 F&amp;O Consulting Hub · A personal reference and teaching resource.</p>
+    <p>Last updated <time>2026-04-28</time>.</p>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/search.js"></script>
+</body>
+</html>

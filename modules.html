@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Modules — D365 F&amp;O Consulting Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="index.html" class="site-header__brand">
+      <span class="site-header__brand-mark">D</span>
+      <span>D365 F&amp;O Consulting Hub</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+      <ul class="site-nav__list" id="primaryNav">
+        <li><a class="site-nav__link" href="consulting.html">Consulting</a></li>
+        <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
+        <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
+        <li><a class="site-nav__link is-active" href="modules.html">Modules</a></li>
+        <li><a class="site-nav__link" href="accounting.html">Accounting</a></li>
+        <li><a class="site-nav__link" href="ai.html">AI</a></li>
+        <li><a class="site-nav__link" href="customizations.html">Customizations</a></li>
+        <li><a class="site-nav__link" href="advanced.html">Advanced</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-header">
+  <div class="container">
+    <span class="page-header__eyebrow">04 · Application surface</span>
+    <h1 class="page-header__title">Main modules</h1>
+    <p class="page-header__lead">
+      Every functional module in D365 F&amp;O — what it does, how it's set up, where it touches other modules. Pick a module from the left to see its article.
+    </p>
+  </div>
+</section>
+
+<div class="container" data-workspace>
+  <div class="workspace">
+
+    <aside class="workspace__sidebar" aria-label="Modules">
+      <button class="workspace__sidebar-toggle" type="button" aria-expanded="false">
+        <span class="workspace__sidebar-current">Browse modules</span>
+      </button>
+      <div class="workspace__sidebar-body">
+        <p class="workspace__sidebar-title">Modules</p>
+        <ul class="workspace__nav">
+          <li><a class="workspace__nav-link" data-item-link="accounts-payable" href="#accounts-payable">Accounts Payable</a></li>
+          <li><a class="workspace__nav-link" data-item-link="accounts-receivable" href="#accounts-receivable">Accounts Receivable</a></li>
+          <li><a class="workspace__nav-link" data-item-link="asset-management" href="#asset-management">Asset Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="budgeting" href="#budgeting">Budgeting</a></li>
+          <li><a class="workspace__nav-link" data-item-link="cash-bank" href="#cash-bank">Cash &amp; Bank Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="cost-accounting" href="#cost-accounting">Cost Accounting</a></li>
+          <li><a class="workspace__nav-link" data-item-link="cost-management" href="#cost-management">Cost Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="credit-collections" href="#credit-collections">Credit &amp; Collections</a></li>
+          <li><a class="workspace__nav-link" data-item-link="expense-management" href="#expense-management">Expense Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="fixed-assets" href="#fixed-assets">Fixed Assets</a></li>
+          <li><a class="workspace__nav-link" data-item-link="general-ledger" href="#general-ledger">General Ledger</a></li>
+          <li><a class="workspace__nav-link" data-item-link="human-resources" href="#human-resources">Human Resources</a></li>
+          <li><a class="workspace__nav-link" data-item-link="inventory-management" href="#inventory-management">Inventory Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="landed-cost" href="#landed-cost">Landed Cost</a></li>
+          <li><a class="workspace__nav-link" data-item-link="master-planning" href="#master-planning">Master Planning</a></li>
+          <li><a class="workspace__nav-link" data-item-link="org-administration" href="#org-administration">Organization Administration</a></li>
+          <li><a class="workspace__nav-link" data-item-link="payroll" href="#payroll">Payroll</a></li>
+          <li><a class="workspace__nav-link" data-item-link="procurement-sourcing" href="#procurement-sourcing">Procurement &amp; Sourcing</a></li>
+          <li><a class="workspace__nav-link" data-item-link="pim" href="#pim">Product Information Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="production-control" href="#production-control">Production Control</a></li>
+          <li><a class="workspace__nav-link" data-item-link="project-mgmt-accounting" href="#project-mgmt-accounting">Project Management &amp; Accounting</a></li>
+          <li><a class="workspace__nav-link" data-item-link="rebate-management" href="#rebate-management">Rebate Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="retail-commerce" href="#retail-commerce">Retail &amp; Commerce</a></li>
+          <li><a class="workspace__nav-link" data-item-link="sales-marketing" href="#sales-marketing">Sales &amp; Marketing</a></li>
+          <li><a class="workspace__nav-link" data-item-link="service-management" href="#service-management">Service Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="subscription-billing" href="#subscription-billing">Subscription Billing</a></li>
+          <li><a class="workspace__nav-link" data-item-link="system-administration" href="#system-administration">System Administration</a></li>
+          <li><a class="workspace__nav-link" data-item-link="tax" href="#tax">Tax</a></li>
+          <li><a class="workspace__nav-link" data-item-link="transportation" href="#transportation">Transportation Management</a></li>
+          <li><a class="workspace__nav-link" data-item-link="vendor-collaboration" href="#vendor-collaboration">Vendor Collaboration</a></li>
+          <li><a class="workspace__nav-link" data-item-link="warehouse-management" href="#warehouse-management">Warehouse Management</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="workspace__main">
+
+      <article class="item-pane" data-item-pane="accounts-payable">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Accounts Payable</h2><p class="item-pane__lead">Vendor invoices, payment proposals, and the AP side of source-to-pay.</p></header>
+        <article class="article article--placeholder"><p>Add content here — vendor master, payment terms, methods of payment, invoice journals vs vendor invoices, three-way matching, payment proposals, prepayments, settlements, posting profiles, and reporting.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="accounts-receivable">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Accounts Receivable</h2><p class="item-pane__lead">Customer invoices, payments, settlements, and the AR side of order-to-cash.</p></header>
+        <article class="article article--placeholder"><p>Add content here — customer master, terms of payment, free-text invoices vs sales-order invoices, customer payment journal, settlements, write-offs, customer aging, and posting profiles.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="asset-management">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Asset Management</h2><p class="item-pane__lead">Maintenance and servicing of physical assets — distinct from Fixed Assets accounting.</p></header>
+        <article class="article article--placeholder"><p>Add content here — assets vs fixed assets, functional locations, maintenance work orders, preventive vs corrective maintenance, asset BOMs, condition assessments, and integration with inventory and procurement.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="budgeting">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Budgeting</h2><p class="item-pane__lead">Budget planning, control, and registration entries — the guardrails on the GL.</p></header>
+        <article class="article article--placeholder"><p>Add content here — budget register entries, budget plans, budget control configuration, available budget calculation, and the difference between basic and advanced budgeting.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="cash-bank">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cash &amp; Bank Management</h2><p class="item-pane__lead">Bank accounts, deposits, bank reconciliation, and cash flow forecasting.</p></header>
+        <article class="article article--placeholder"><p>Add content here — bank account setup, check layouts, deposit slips, bank reconciliation (manual vs advanced), bank statement import (BAI2, MT940, ISO20022), and electronic payments.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="cost-accounting">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Accounting</h2><p class="item-pane__lead">A separate ledger for managerial accounting — cost objects, allocations, and contribution analysis.</p></header>
+        <article class="article article--placeholder"><p>Add content here — cost accounting ledger vs general ledger, dimensions, source data providers, cost allocation policies, overhead calculation, and reporting.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="cost-management">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Management</h2><p class="item-pane__lead">Inventory and production costing — standard, FIFO, LIFO, weighted average, and the close.</p></header>
+        <article class="article article--placeholder"><p>Add content here — costing methodology, item model groups, cost groups, inventory closing, recalculation, standard cost variances, production WIP, and the impact on COGS.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="credit-collections">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Credit &amp; Collections</h2><p class="item-pane__lead">Credit limits, blocking rules, and the workflow of chasing overdue invoices.</p></header>
+        <article class="article article--placeholder"><p>Add content here — credit groups and limits, credit hold rules, collection letters, NSF, write-offs, agent assignments, and integration with the customer master.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="expense-management">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Expense Management</h2><p class="item-pane__lead">Expense reports, travel requisitions, per diems, and the link to AP and projects.</p></header>
+        <article class="article article--placeholder"><p>Add content here — expense categories, policies, mobile capture, credit card import, mileage, per diem rules, approval workflows, and posting to AP / project.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="fixed-assets">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Fixed Assets</h2><p class="item-pane__lead">Acquisition, depreciation, value adjustment, and disposal of fixed assets.</p></header>
+        <article class="article article--placeholder"><p>Add content here — fixed asset groups, books, depreciation profiles, acquisition methods (manual, from PO, from project), depreciation runs, disposal, and the multiple-books story.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="general-ledger">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">General Ledger</h2><p class="item-pane__lead">The financial backbone — chart of accounts, dimensions, journals, and period close.</p></header>
+        <article class="article article--placeholder"><p>Add content here — main accounts, financial dimensions, account structures, ledger setup, fiscal calendars, journal types, period close, consolidation, currency revaluation, and intercompany.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="human-resources">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Human Resources</h2><p class="item-pane__lead">Workers, positions, jobs, leave, and the data backbone for payroll and project resourcing.</p></header>
+        <article class="article article--placeholder"><p>Add content here — worker types, position management, jobs and job tasks, leave plans, compensation, performance, and the relationship with Dataverse-based HR Talent.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="inventory-management">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Inventory Management</h2><p class="item-pane__lead">On-hand visibility, inventory journals, transfers, and counting.</p></header>
+        <article class="article article--placeholder"><p>Add content here — site / warehouse / location, storage and tracking dimensions, inventory journals (movement, profit/loss, transfer, BOM, counting), reservations, and on-hand views.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="landed-cost">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Landed Cost</h2><p class="item-pane__lead">Tracking the true cost of imported goods — freight, duty, insurance, and overhead.</p></header>
+        <article class="article article--placeholder"><p>Add content here — voyages, shipping containers, costing types, cost apportionment to items, customs and duty handling, and the integration with PO receipts and inventory cost.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="master-planning">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Master Planning</h2><p class="item-pane__lead">MRP / planning runs that produce planned purchase, transfer, and production orders from demand.</p></header>
+        <article class="article article--placeholder"><p>Add content here — coverage groups, master plan vs forecast plan, planning parameters, time fences, action messages, firming, and the new Planning Optimization service.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="org-administration">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Organization Administration</h2><p class="item-pane__lead">Legal entities, operating units, organization hierarchies, number sequences, and the cross-cutting setup.</p></header>
+        <article class="article article--placeholder"><p>Add content here — legal entity setup, operating units, org hierarchies and purposes, address books, number sequences, calendars, and global address book.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="payroll">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Payroll</h2><p class="item-pane__lead">Pay processing for the supported regions, with earnings, deductions, and benefits.</p></header>
+        <article class="article article--placeholder"><p>Add content here — payroll setup, earnings codes, benefit plans, payroll cycles, pay statements, GL posting, and the regional scope (e.g., US payroll feature).</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="procurement-sourcing">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Procurement &amp; Sourcing</h2><p class="item-pane__lead">Purchase requisitions, RFQs, purchase orders, and the procurement workflow.</p></header>
+        <article class="article article--placeholder"><p>Add content here — vendor onboarding, procurement categories, requisitions, RFQ, purchase agreements, PO change management, receipts, and three-way match controls.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="pim">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Product Information Management</h2><p class="item-pane__lead">Centralized product master — definitions, variants, attributes, and release across legal entities.</p></header>
+        <article class="article article--placeholder"><p>Add content here — product types, product variants, product dimensions (color, size, style, configuration), attributes and attribute groups, category hierarchies, and the release process.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="production-control">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Production Control</h2><p class="item-pane__lead">Production orders, batch orders, kanbans, BOMs, routes, and shop-floor execution.</p></header>
+        <article class="article article--placeholder"><p>Add content here — production methodology choice, BOM and route, production order lifecycle, picking list and route card, lean kanbans, batch orders for process manufacturing, and shop floor.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="project-mgmt-accounting">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Project Management &amp; Accounting</h2><p class="item-pane__lead">Project execution and the accounting for hours, expenses, items, and revenue recognition.</p></header>
+        <article class="article article--placeholder"><p>Add content here — project types, WBS, project budgets and forecasts, transaction types (hour, expense, item, fee, on-account), revenue recognition methods, billing rules, and project closing.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="rebate-management">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Rebate Management</h2><p class="item-pane__lead">Trade allowances and customer / vendor rebates — accruing, processing, and settling.</p></header>
+        <article class="article article--placeholder"><p>Add content here — rebate programs vs trade allowance agreements, accrual postings, claim settlement, and integration with sales / purchase.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="retail-commerce">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Retail &amp; Commerce</h2><p class="item-pane__lead">POS, channels, assortments, and the omni-channel commerce stack.</p></header>
+        <article class="article article--placeholder"><p>Add content here — channels, stores, assortments, retail catalog, pricing &amp; discounts, POS configuration, statements, and Commerce scale unit / e-commerce.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="sales-marketing">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Sales &amp; Marketing</h2><p class="item-pane__lead">Light CRM in F&amp;O — leads, opportunities, campaigns, and the bridge to Dataverse Sales.</p></header>
+        <article class="article article--placeholder"><p>Add content here — leads, opportunities, sales quotation, campaigns, telemarketing, and the integration / handover to Dataverse-based Dynamics 365 Sales.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="service-management">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Service Management</h2><p class="item-pane__lead">Service agreements, service orders, and dispatching field work.</p></header>
+        <article class="article article--placeholder"><p>Add content here — service objects, service agreements, service orders, dispatch board, repair management, and how it ties to projects vs free-text invoicing.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="subscription-billing">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Subscription Billing</h2><p class="item-pane__lead">Recurring contracts, usage-based billing, and revenue recognition under ASC 606 / IFRS 15.</p></header>
+        <article class="article article--placeholder"><p>Add content here — billing schedules, recurring contract billing, milestone billing, revenue and expense deferrals, and the relationship to free-text invoicing.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="system-administration">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">System Administration</h2><p class="item-pane__lead">Users, security, batches, workflows, data management, and the platform hygiene that keeps the system healthy.</p></header>
+        <article class="article article--placeholder"><p>Add content here — users and security roles, segregation of duties, batch jobs, workflows, document management, electronic reporting, and the data management framework (DIXF).</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="tax">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Tax</h2><p class="item-pane__lead">Indirect tax setup — sales tax / VAT / GST groups, codes, and reporting.</p></header>
+        <article class="article article--placeholder"><p>Add content here — sales tax codes and groups, item sales tax groups, jurisdictions, settlement periods, withholding tax, intrastat, and tax reporting.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="transportation">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Transportation Management</h2><p class="item-pane__lead">Carriers, rate engines, route planning, freight reconciliation.</p></header>
+        <article class="article article--placeholder"><p>Add content here — shipping carriers, rate masters, route planning, load building, appointment scheduling, freight reconciliation, and integration with WMS.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="vendor-collaboration">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Vendor Collaboration</h2><p class="item-pane__lead">External-facing portal for vendors to view and respond to POs, RFQs, and invoices.</p></header>
+        <article class="article article--placeholder"><p>Add content here — collaborator users, vendor self-service, PO confirmation flow, RFQ response, invoice submission, and security implications.</p></article>
+      </article>
+
+      <article class="item-pane" data-item-pane="warehouse-management">
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Warehouse Management</h2><p class="item-pane__lead">Advanced WMS — locations, work, mobile devices, wave processing, and label printing.</p></header>
+        <article class="article article--placeholder"><p>Add content here — location profiles, location directives, work templates, wave templates, mobile device menus, license plates, cycle counting, and the WMS-vs-basic decision.</p></article>
+      </article>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>D365 F&amp;O Consulting Hub · A personal reference and teaching resource.</p>
+    <p>Last updated <time>2026-04-28</time>.</p>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/search.js"></script>
+</body>
+</html>
