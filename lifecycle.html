@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css" />
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
 </head>
 <body>
 
@@ -76,9 +77,584 @@
           <h2 class="item-pane__title">Requirement gathering</h2>
           <p class="item-pane__lead">Discovering what the business actually needs — from declared requirements down to the unspoken ones.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: how to run discovery sessions, the difference between business and functional requirements, who attends, the artifacts produced (BRD, requirement log), MoSCoW prioritization, and the traps to avoid (blue-sky requirements, copy-paste from the legacy system).</p>
-        </article>
+
+        <div class="callout">
+          <p><strong>Source.</strong> The framework below is based on the <strong>Business Process Workshops</strong> released by Microsoft as part of the Dynamics 365 implementation guidance. Microsoft publishes a "scenario board" workshop and a set of deep-dive discovery workshops for each of the 14 end-to-end business processes. The content here distills those workshops down to what is most useful for a consultant running discovery — the structure, the stakeholders, the questions that actually move the conversation, and the traps to avoid. Process-specific scope and questions are summarized per workshop further down.</p>
+        </div>
+
+        <p>Requirement gathering is not an interview. It is a structured process of mapping the customer's intended end-to-end flow, ranking the scenarios in scope, identifying the gaps against standard D365 F&amp;O, and producing a written record everyone agrees to. Microsoft's Business Process Workshops give you a repeatable scaffolding for that — use them, but don't be a slave to them.</p>
+
+        <div class="topics">
+
+          <details class="topic" open>
+            <summary><span class="topic__eyebrow">Method</span>How a Microsoft Business Process Workshop runs</summary>
+            <div class="topic__body">
+              <p>Every Microsoft BPW follows the same shape. Knowing the shape lets you walk into any of the 14 process workshops with the same playbook — only the process-specific questions change.</p>
+              <h4>Two layers of workshop per process</h4>
+              <ul>
+                <li><strong>Scenario board discovery workshop</strong> — the breadth pass. One workshop per process. The output is an agreed scope: which scenarios are in, which are out, which are gaps. Roughly 90–120 minutes.</li>
+                <li><strong>Deep-dive discovery workshops</strong> — the depth pass. One per L2 process area inside the process (e.g. <em>75.40 Procure Goods and Services</em> inside Source to pay). Held after the scenario board, with a narrower stakeholder group.</li>
+              </ul>
+              <h4>Standard agenda (every workshop)</h4>
+              <ol>
+                <li>Introduction and objectives (10–15 min)</li>
+                <li>Overview of the process — walk the scenario board left-to-right (15–20 min)</li>
+                <li>Detailed discussion on key scenarios (45 min — the longest block)</li>
+                <li>Interactive Q&amp;A (20–30 min)</li>
+                <li>Wrap-up, decisions, action items, next steps (10 min)</li>
+              </ol>
+              <h4>The three objectives, every time</h4>
+              <ol>
+                <li><strong>Understand the customer's process</strong> — their as-is flow, their pain points, where it bends.</li>
+                <li><strong>Identify key scenarios &amp; requirements</strong> — what's most critical for them and what is a deal-breaker.</li>
+                <li><strong>Document agreed business scope</strong> — leave the room with a written, signed-off list of in-scope scenarios.</li>
+              </ol>
+              <h4>The scenario board</h4>
+              <p>The scenario board is a one-page flowchart that runs across the top of the room. Each L2 area is a column; under each column are the scenarios and policy decisions to discuss. Run it left to right. As scenarios are discussed: <strong>highlight</strong> what's in scope, <strong>strike through</strong> what's out, <strong>add</strong> any missing ones as gaps. The marked-up board is the artifact you walk out with — photograph it before anyone leaves.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">People</span>Stakeholders to bring</summary>
+            <div class="topic__body">
+              <p>Workshops with the wrong room produce the wrong answers. The right room has process owners (people who do the work daily), decision-makers (people who can say yes), and at least one technical voice. Avoid the room being only managers — they tell you the policy, not the reality.</p>
+              <h4>The standing group — bring to every workshop</h4>
+              <ul>
+                <li><strong>IT department</strong> — implementation and integration ownership.</li>
+                <li><strong>Finance department</strong> — every process touches the GL eventually.</li>
+                <li><strong>Operations</strong> — alignment with day-to-day execution.</li>
+                <li><strong>Legal &amp; compliance</strong> — regulatory constraints (data privacy, anti-corruption, tax, labor, contract).</li>
+                <li><strong>Executive leadership</strong> — alignment with strategic goals; needed at minimum for kickoff and wrap-up of the scenario board workshop.</li>
+              </ul>
+              <h4>Process-specific additions</h4>
+              <ul>
+                <li><strong>Source to pay:</strong> Procurement managers, supplier relationship managers, contract managers, AP managers.</li>
+                <li><strong>Order to cash:</strong> Sales managers, AR managers, credit &amp; collections managers.</li>
+                <li><strong>Hire to retire:</strong> HR managers, the HR department itself.</li>
+                <li><strong>Record to report:</strong> CFO, controllers, accounting managers, treasury, budget &amp; planning analysts, AP/AR leads, audit &amp; compliance officers.</li>
+                <li><strong>Acquire to dispose:</strong> Asset managers, maintenance dept, procurement, HR (for users operating the assets).</li>
+                <li><strong>Plan to produce:</strong> Production planners, plant managers, quality, shop-floor supervisors.</li>
+                <li><strong>Inventory to deliver:</strong> Warehouse managers, transportation/logistics, quality.</li>
+                <li><strong>Project to profit:</strong> Project managers, PMO, project accountants, resource managers.</li>
+                <li><strong>Prospect to quote:</strong> Sales leadership, sales operations, marketing.</li>
+                <li><strong>Concept to market:</strong> Marketing, product management, R&amp;D.</li>
+                <li><strong>Design to retire:</strong> Product management, engineering, supply chain.</li>
+                <li><strong>Forecast to plan:</strong> S&amp;OP leads, demand planners, FP&amp;A.</li>
+                <li><strong>Service to deliver:</strong> Service operations, dispatch, field technicians.</li>
+                <li><strong>Case to resolution:</strong> Customer service ops, knowledge managers, contact center supervisors.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Questions</span>Cross-cutting questions every workshop asks</summary>
+            <div class="topic__body">
+              <p>Every BPW opens and closes with the same set of cross-cutting questions. Memorize these — they are the spine you can rely on while improvising on the process-specific questions.</p>
+              <h4>Introduction &amp; objectives</h4>
+              <ul>
+                <li>What are your main objectives for implementing Dynamics 365 for this process?</li>
+                <li>What are the key challenges you are currently facing in this process?</li>
+                <li>Are there key differences between legal entities, business units, or departments that need to be considered?</li>
+              </ul>
+              <h4>Process scope (during scenario-board walk-through)</h4>
+              <ul>
+                <li>What are the key scenarios in your process? Which is the primary one for the next phase?</li>
+                <li>Are there scenarios that should not be on this diagram? (Out of scope.)</li>
+                <li>Are there scenarios missing from the diagram? (Potential gaps.)</li>
+                <li>What key differences do you see between your current process and this standard process? (Document for change management.)</li>
+                <li>What are the key pain points or bottlenecks today?</li>
+              </ul>
+              <h4>Detailed scenarios</h4>
+              <ul>
+                <li>Are there policies that need to be reviewed or adjusted as part of this project?</li>
+                <li>What are the most critical scenarios you encounter?</li>
+                <li>Volume question (always reframed for the process — "How many POs / sales orders / employees / assets / projects / cases do you manage today?").</li>
+                <li>What systems or tools are you using today?</li>
+                <li>How do you ensure regulatory compliance in this process?</li>
+                <li>What improvements or changes would you most like to see?</li>
+              </ul>
+              <h4>Data migration (every workshop)</h4>
+              <ul>
+                <li>What data needs to be migrated to the new system?</li>
+                <li>How is data currently managed and stored?</li>
+                <li>Are there known data quality issues that must be addressed before migration?</li>
+                <li>What challenges do you anticipate during migration?</li>
+                <li>How will you validate and verify the migrated data?</li>
+              </ul>
+              <h4>Integrations (every workshop)</h4>
+              <ul>
+                <li>What systems need to integrate with the new system?</li>
+                <li>How is data currently exchanged between systems? (Frequency, volume.)</li>
+                <li>Are there specific integration requirements or protocols (SFTP, API, EDI, real-time vs. batch)?</li>
+                <li>What challenges do you anticipate during the integration build?</li>
+                <li>How will integrations be tested and validated?</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Catalog</span>The 14 workshops</summary>
+            <div class="topic__body">
+              <p>The 14 end-to-end processes Microsoft documents in the BPW set. For each, the process-specific scope (the L2 areas covered) and the questions that matter most for a D365 F&amp;O consultant. Cross-cutting questions (data migration, integrations, intro objectives) are not repeated here — refer to the previous section.</p>
+
+              <details class="topic">
+                <summary>Source to pay (75) — procurement &amp; AP</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> from defining procurement strategy through paying the supplier. The AP-side bookend of the supply chain.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>75.10 Develop procurement and sourcing strategy</li>
+                    <li>75.30 Manage supplier relationships</li>
+                    <li>75.35 Source and contract goods and services</li>
+                    <li>75.40 Procure goods and services</li>
+                    <li>75.50 Manage accounts payable</li>
+                    <li>75.80 Analyze procurement and sourcing</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>How are POs placed today — manual, EDI, requisition, planned PO, RFQ, purchase agreement?</li>
+                    <li>Are products single- or multi-sourced? Is there a multi-sourcing strategy?</li>
+                    <li>Are pricing rules complex? Tiered? Blanket / standing POs?</li>
+                    <li>Will purchase requisitions be used? For both direct and indirect spend?</li>
+                    <li>Are there spending and signing limits per requisition / PO?</li>
+                    <li>Workflows on requisitions and POs — yes or no?</li>
+                    <li>Intercompany ordering requirements?</li>
+                    <li>Invoice intake — manual, OCR, EDI, vendor portal? Two-way or three-way match?</li>
+                    <li>Process for resolving PO-invoice matching exceptions?</li>
+                    <li>Vendor payment techniques — checks, ACH, wire, virtual cards, P-card?</li>
+                    <li>Prepayments vs. prepayment invoices — does the team know the difference?</li>
+                    <li>Vendor self-service / collaboration in scope?</li>
+                    <li>Consignment inventory in scope?</li>
+                    <li>Same vendor in multiple legal entities — how is creation/edit controlled?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Order to cash (65) — sales &amp; AR</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> from sales policy and order capture through customer payment and collection. The AR-side bookend.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>65.05 Develop sales policies</li>
+                    <li>65.20 Manage sales orders</li>
+                    <li>65.30 Manage accounts receivable</li>
+                    <li>65.50 Manage credit and collections</li>
+                    <li>65.60 Analyze sales performance</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>What sales channels exist — POS, B2B / B2C eCommerce, call center, traditional, EDI? Which are in scope for D365?</li>
+                    <li>Pricing strategies — list, tiered, customer-specific, contract pricing?</li>
+                    <li>Discount and promotion policies — line, total, mix &amp; match, threshold?</li>
+                    <li>Trade allowances — bill back, off-invoice, lump sum, rebates?</li>
+                    <li>Order types — standard SO, blanket order, return order, subscription/recurring?</li>
+                    <li>Order on behalf of / call center / e-commerce specifics?</li>
+                    <li>Sales tax — multi-jurisdiction? Tax engine integration (Avalara, Vertex)?</li>
+                    <li>Credit limit rules — when to block, who can override?</li>
+                    <li>AR settlement automation — auto-apply, lockbox, customer portal payments?</li>
+                    <li>Collections — aging buckets, dunning letters, agent assignments, write-off rules?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Record to report (90) — finance &amp; close</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> the entire financial management lifecycle — chart of accounts through period close and analysis. Multi-entity, multi-currency, corporate and operational finance.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>90.10 Define accounting policies</li>
+                    <li>90.25 Manage cash</li>
+                    <li>90.30 Manage budget</li>
+                    <li>90.50 Record financial transactions</li>
+                    <li>90.60 Close financial periods</li>
+                    <li>90.70 Analyze financial performance</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>What accounting standards apply — GAAP, IFRS, local? Multiple in parallel?</li>
+                    <li>Chart of accounts and financial dimension structure — how many dimensions, how many accounts?</li>
+                    <li>How many legal entities, currencies, fiscal calendars?</li>
+                    <li>Multi-entity / shared services / centralized accounting model?</li>
+                    <li>Intercompany accounting setup — auto-balancing, due-to / due-from accounts?</li>
+                    <li>Cash management — daily cash positioning, forecasting, treasury operations?</li>
+                    <li>Bank reconciliation — manual, advanced, statement formats (BAI2, MT940, ISO20022)?</li>
+                    <li>Budgeting approach — basic register entries vs. full budget plans? Budget control on what documents?</li>
+                    <li>Journal automation — recurring, allocation rules, accruals?</li>
+                    <li>Subledger-to-GL integration — auto post or batched?</li>
+                    <li>Month-end and year-end close process — current pain points, time to close?</li>
+                    <li>Consolidation — online, import, or external tool?</li>
+                    <li>Reporting tools today — Financial Reporter, Power BI, third-party? Which scenarios?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Acquire to dispose (10) — asset lifecycle</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> end-to-end asset management, from sourcing the asset to retiring it — covering both fixed asset accounting and physical asset maintenance.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>10.05 Define asset strategy and policies</li>
+                    <li>10.20 Acquire assets</li>
+                    <li>10.30 Manage active assets</li>
+                    <li>10.50 Maintain and repair assets</li>
+                    <li>10.60 Retire and dispose of assets</li>
+                    <li>10.70 Analyze assets</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Build vs. buy vs. lease — which scenarios are in scope?</li>
+                    <li>Lease accounting — ASC 842 / IFRS 16 in play? In scope or out?</li>
+                    <li>Capitalization threshold? Depreciation methods used?</li>
+                    <li>Acquisition paths — manual, PO, requisition, project (CIP), P-card?</li>
+                    <li>Asset types — tangible high/low value, intellectual property, trademarks, land?</li>
+                    <li>Active asset events — depreciation, revaluation, write-up/down, transfer?</li>
+                    <li>Maintenance — planned (preventive) and unplanned, internal vs. third-party?</li>
+                    <li>Disposal scenarios — sale, scrap, decommission?</li>
+                    <li>How many active assets today? How often are they retired?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Hire to retire (55) — HR lifecycle</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> end-to-end HR — from people strategy through offboarding and analysis.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>55.05 Develop people strategy</li>
+                    <li>55.10 Recruit and onboard talent</li>
+                    <li>55.30 Manage workplace compliance</li>
+                    <li>55.40 Manage performance and growth</li>
+                    <li>55.50 Manage time and attendance (incl. travel and expense)</li>
+                    <li>55.70 Manage compensation and benefits</li>
+                    <li>55.80 Offboard talent</li>
+                    <li>55.90 Analyze HR</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Organizational structure — how many legal entities, business units, departments?</li>
+                    <li>Planned organizational changes during the project window?</li>
+                    <li>Recruiting sources — postings, agencies, referrals, campus?</li>
+                    <li>Worker types — full-time, part-time, intern, contractor — all in scope?</li>
+                    <li>Position management used today? Budgeted positions vs. unbudgeted?</li>
+                    <li>Compliance topics — labor laws, EEO, GDPR, country-specific?</li>
+                    <li>Performance review cycle — annual, quarterly, 360, continuous?</li>
+                    <li>Time and attendance system today? Clock-in scenarios?</li>
+                    <li>Travel &amp; expense — credit card import, per diems, mileage, mobile capture?</li>
+                    <li>Compensation plans — fixed, variable, equity? Cycle frequency?</li>
+                    <li>Benefit plans in scope?</li>
+                    <li>Payroll — F&amp;O native (US), partner / outsourced? Integration model?</li>
+                    <li>Offboarding — voluntary, retirement, termination — distinct flows?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Plan to produce (70) — manufacturing execution</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> production strategies, planning, execution, quality, and analysis. Covers discrete, process, and lean manufacturing.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>70.10 Develop production strategies</li>
+                    <li>70.20 Plan production operations</li>
+                    <li>70.30 Run production operations</li>
+                    <li>70.60 Control production quality</li>
+                    <li>70.70 Analyze production operations</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Manufacturing model — discrete, process, lean, or mixed? Per site?</li>
+                    <li>Make-to-stock, make-to-order, assemble-to-order, engineer-to-order — which apply?</li>
+                    <li>MPS / MRP / capacity planning — current tooling and pain?</li>
+                    <li>Production order types — production orders, batch orders, kanbans?</li>
+                    <li>BOMs — single-level, multi-level, multi-site? Versioning?</li>
+                    <li>Formulas — co-products, by-products, scalable, step consumption?</li>
+                    <li>Routes / operations / resources / resource groups?</li>
+                    <li>Quality control checkpoints — incoming, in-process, outgoing?</li>
+                    <li>Production KPIs — OEE, scrap, downtime, schedule adherence?</li>
+                    <li>Shop-floor execution — paper, MES, F&amp;O production floor execution interface?</li>
+                    <li>Co-products, by-products, rework — handled how today?</li>
+                    <li>Seasonality / demand fluctuation impact?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Inventory to deliver (60) — warehouse &amp; transportation</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> warehouse operations, inventory management, inbound/outbound flows, quality, and freight.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>60.10 Manage warehouse operations</li>
+                    <li>60.20 Maintain inventory levels</li>
+                    <li>60.30 Process inbound goods</li>
+                    <li>60.40 Process outbound goods</li>
+                    <li>60.50 Manage inventory quality</li>
+                    <li>60.60 Manage freight and transportation</li>
+                    <li>60.80 Analyze warehouse operations</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>How is on-hand inventory managed today? High transaction volume?</li>
+                    <li>Will inventory journals be used for the initial on-hand load?</li>
+                    <li>Will counting journals be used for cycle counts? Block on count?</li>
+                    <li>Intracompany site / warehouse transfers in scope?</li>
+                    <li>Quality management requirements?</li>
+                    <li>Advanced WMS or basic warehousing?</li>
+                    <li>Distribution network and warehouse layout document available?</li>
+                    <li>Virtual warehouses or virtual locations needed?</li>
+                    <li>Tracking dimensions — batch, serial — required?</li>
+                    <li>Product variants in scope?</li>
+                    <li>Physical dimensions on items? Volumetric capacity constraints?</li>
+                    <li>Cycle count frequency? Order release process? Wave templates?</li>
+                    <li>Warehouse mobile app — handheld scanners? Credential model?</li>
+                    <li>Label printing requirements?</li>
+                    <li>Catch weight functionality required?</li>
+                    <li>Transportation Management — load planning, rate engines, freight reconciliation in scope?</li>
+                    <li>Hazardous goods?</li>
+                    <li>WHS cleanup jobs scheduled?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Forecast to plan (50) — strategic &amp; S&amp;OP</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> strategic and operational planning — business strategy, financial planning, S&amp;OP, execution, and analysis.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>50.15 Develop business strategy</li>
+                    <li>50.55 Conduct financial planning</li>
+                    <li>50.35 Conduct sales and operations planning</li>
+                    <li>50.45 Execute sales and operations</li>
+                    <li>50.65 Analyze business performance</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Strategic planning cycle — annual, rolling, scenario-based?</li>
+                    <li>Forecasting types — budget, revenue, expense, cash flow, demand?</li>
+                    <li>S&amp;OP scenario — make-to-stock, make-to-order, project-centric, product-centric?</li>
+                    <li>Demand planning tooling today (Excel, dedicated tool, none)?</li>
+                    <li>Capacity / supply planning integration with demand?</li>
+                    <li>ESG / sustainability requirements feeding strategy?</li>
+                    <li>Investment planning and risk assessment in scope?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Project to profit (80) — project lifecycle</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> project management and accounting — internal and external projects, contracts, delivery, financials, and analysis.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>80.10 Develop project strategy (internal and external)</li>
+                    <li>80.20 Manage project contracts</li>
+                    <li>80.30 Plan projects</li>
+                    <li>80.40 Manage project delivery</li>
+                    <li>80.50 Manage project financials</li>
+                    <li>80.60 Analyze project performance</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Project types — internal, customer-funded, capital, R&amp;D, grant-funded, MRO?</li>
+                    <li>Differentiation by project type in governance, financials, reporting?</li>
+                    <li>Contract structures — T&amp;M, fixed price, cost-plus, milestone, subcontractor?</li>
+                    <li>Change order management — scope, pricing changes?</li>
+                    <li>WBS, resource planning, scheduling methodology (Agile, Waterfall)?</li>
+                    <li>Resource assignment — internal employees, contractors, mix?</li>
+                    <li>Time tracking — system, integration with HR?</li>
+                    <li>Revenue recognition — POC, completed contract, milestone? ASC 606 / IFRS 15 application?</li>
+                    <li>Internal cost capitalization rules?</li>
+                    <li>Project KPIs — margin, utilization, earned value?</li>
+                    <li>Integration with HR (employee master, absence, time), payroll, learning system (skills/levels)?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Prospect to quote (85) — pre-sales</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> the front of the sales funnel — relationships, leads, opportunities, and quoting. Heavy overlap with Dataverse-based D365 Sales.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>85.15 Manage customer relationships</li>
+                    <li>85.25 Identify and qualify sales</li>
+                    <li>85.35 Define sales strategy and policies (incl. channels)</li>
+                    <li>85.45 Pursue opportunities</li>
+                    <li>85.55 Estimate and quote sales</li>
+                    <li>85.65 Analyze sales</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Lead generation sources — campaigns, referrals, web forms, inbound, outbound?</li>
+                    <li>Lead scoring and qualification framework — BANT, MEDDIC, custom?</li>
+                    <li>Marketing-to-sales handoff process?</li>
+                    <li>Sales channels — direct, partner, digital, brick-and-mortar, call center, online?</li>
+                    <li>Quote pricing models — standard, tiered, negotiated?</li>
+                    <li>Discount / approval thresholds and workflow?</li>
+                    <li>Quote delivery — PDF, portal, email?</li>
+                    <li>Where does the system live — F&amp;O Sales &amp; Marketing or Dataverse-based D365 Sales? Integration model?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Concept to market (30) — marketing</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> marketing strategy, offering development, campaigns, and analysis. Often delivered with Dynamics 365 Customer Insights — Journeys / Data.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>30.05 Develop marketing strategy</li>
+                    <li>30.15 Research and develop offerings</li>
+                    <li>30.25 Manage service offerings</li>
+                    <li>30.35 Prepare marketing campaigns</li>
+                    <li>30.45 Manage marketing campaigns</li>
+                    <li>30.55 Analyze marketing operations</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Marketing goals and KPIs — engagement, conversion, ROI?</li>
+                    <li>Customer segmentation and targeting tools today?</li>
+                    <li>Customer data — single source or fragmented? Enrichment process?</li>
+                    <li>R&amp;D collaboration tools? VoC programs?</li>
+                    <li>Service / offering catalog — how maintained? Bundles, subscription, usage-based?</li>
+                    <li>Campaign channels — email, social, advertising, events?</li>
+                    <li>Compliance — GDPR, CCPA, consent management, accessibility?</li>
+                    <li>Integration with Sales, Commerce, Supply Chain — real-time or batch?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Design to retire (40) — product lifecycle</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> product information management — strategy, introduction, active management, and retirement. Owns the master that feeds everything else.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>40.10 Develop product strategy</li>
+                    <li>40.20 Introduce products</li>
+                    <li>40.50 Manage active products</li>
+                    <li>40.60 Retire products</li>
+                    <li>40.90 Analyze product performance</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Product types — tangible, service, intangible? BOM, formula, configurable?</li>
+                    <li>Product dimensions — size, color, style, configuration? Variant generation strategy?</li>
+                    <li>Categorization hierarchy — procurement, sales, retail?</li>
+                    <li>Stocking policies — batch, serial, allocation, reservation?</li>
+                    <li>Costing methodology and policies?</li>
+                    <li>BOM / formula complexity — single-level, multi-level, multi-site, scalable, step consumption?</li>
+                    <li>Co-products / by-products?</li>
+                    <li>Catalogs — internal, external/vendor, punch-out?</li>
+                    <li>POS-relevant attributes — assortments?</li>
+                    <li>Total active products today? Retirement frequency?</li>
+                    <li>Product release process across legal entities?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Service to deliver (95) — field service</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> service strategy, planning, execution, delivery, and analysis. Often delivered with Dynamics 365 Field Service.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>95.05 Develop service strategy</li>
+                    <li>95.15 Plan service work</li>
+                    <li>95.25 Manage service work</li>
+                    <li>95.35 Deliver services</li>
+                    <li>95.45 Analyze service performance</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Service types — break/fix, preventive, predictive (IoT), warranty, contract, depot, field?</li>
+                    <li>Scheduling — manual, assisted, Resource Scheduling Optimization (RSO), territory, skill, crew?</li>
+                    <li>Resource model — internal, third-party contractors, mixed?</li>
+                    <li>Planning inputs — IoT alerts, customer requests, preventive plans, case escalations?</li>
+                    <li>Work order creation — from case, IoT, schedule, manual, sales/project?</li>
+                    <li>Entitlement &amp; SLA validation — warranty, contract, response time?</li>
+                    <li>Inventory and parts — issue, transfer, return?</li>
+                    <li>Billing model — flat rate, T&amp;M, contract?</li>
+                    <li>Customer communication and documentation?</li>
+                    <li>Performance — SLA compliance, first-time-fix rate?</li>
+                    <li>Integration with Finance, Supply Chain, Customer Service?</li>
+                  </ul>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Case to resolution (20) — customer service</summary>
+                <div class="topic__body">
+                  <p><strong>Scope:</strong> customer-service operations — knowledge, intake, working cases, and analysis.</p>
+                  <h4>L2 areas covered</h4>
+                  <ul>
+                    <li>20.10 Establish a knowledge base</li>
+                    <li>20.20 Define customer and employee service operations</li>
+                    <li>20.30 Intake cases</li>
+                    <li>20.40 Manage and work on cases</li>
+                    <li>20.60 Analyze case performance</li>
+                  </ul>
+                  <h4>Process-specific questions that matter</h4>
+                  <ul>
+                    <li>Knowledge base structure — internal, external (self-service), AI-suggested?</li>
+                    <li>Approval and publishing workflow for articles? Translation needs?</li>
+                    <li>Internal employee service vs. external customer service — both in scope?</li>
+                    <li>Case intake channels — email, portal, phone, chat, social, IoT?</li>
+                    <li>Tiered support model — L1, L2, L3? Follow-the-sun?</li>
+                    <li>Routing and prioritization rules? Workload balancing?</li>
+                    <li>Escalation and SLA policies?</li>
+                    <li>Field service escalation handoff?</li>
+                    <li>Customer feedback / CSAT capture?</li>
+                    <li>Telephony / contact center integration — CTI, omnichannel?</li>
+                    <li>Use of Copilot or AI for resolution and authoring?</li>
+                  </ul>
+                </div>
+              </details>
+
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Craft</span>Running discovery well — consultant tips</summary>
+            <div class="topic__body">
+              <p>The BPWs give you the structure, but the value of discovery comes from how you run the room. The notes below are not in the Microsoft docs — they're the things experienced consultants learn the hard way.</p>
+              <h4>Before the workshop</h4>
+              <ul>
+                <li><strong>Send the scenario board in advance.</strong> Ask the customer to read it. Do not let people see it for the first time in the room — you'll spend the first 30 minutes explaining the diagram instead of running the workshop.</li>
+                <li><strong>Confirm the right people are coming.</strong> If the AP manager is double-booked for the Source to pay workshop, reschedule. A workshop without the process owner is a meeting, not a workshop.</li>
+                <li><strong>Pre-read their existing process docs.</strong> Show up knowing what their flow looks like. Asking "tell me how you do AP today" from a blank slate signals the wrong kind of consultant.</li>
+                <li><strong>Have a neutral scribe.</strong> The lead consultant cannot run the room and capture cleanly at the same time. Use a second consultant or BA.</li>
+              </ul>
+              <h4>In the room</h4>
+              <ul>
+                <li><strong>Walk the scenario board left to right.</strong> Don't let the conversation jump around. The board is a discipline — use it.</li>
+                <li><strong>Mark up the board live.</strong> In/Out/Gap on every column. If you leave the room without ink on the board, you didn't run a workshop.</li>
+                <li><strong>Get to the &ldquo;volume&rdquo; question early.</strong> "How many POs / orders / employees / assets per month?" reframes everything that follows. Manual processes that work at 200/month break at 20,000.</li>
+                <li><strong>Push past policy answers.</strong> When someone says "We do three-way match," ask "What's your exception rate? What does an exception cost in time?" Policy is the answer they tell auditors. Reality is what you need.</li>
+                <li><strong>Capture pain points verbatim.</strong> "It takes 3 days to resolve a PO mismatch" is a usable requirement. "We have AP issues" is not.</li>
+                <li><strong>Defer the deep dive.</strong> When someone wants to debate a single field's setup in the scenario board workshop, write it down and move on. The deep-dive workshop is where that lives.</li>
+                <li><strong>Document decisions, not just discussion.</strong> "In scope: X, Y, Z. Out of scope: A. Gaps: B." Send it the same day.</li>
+              </ul>
+              <h4>Common traps</h4>
+              <ul>
+                <li><strong>"Just like the legacy system."</strong> Beware of requirements that copy the old ERP's quirks. Ask "If you were starting fresh, would you still want it this way?"</li>
+                <li><strong>Blue-sky requirements.</strong> "We'd like the system to predict the future." Park them in a wishlist, but make clear they are not project scope.</li>
+                <li><strong>The loud voice.</strong> One outspoken stakeholder dominating. Round-robin specific questions to others by name.</li>
+                <li><strong>The silent room.</strong> If no one is pushing back on the scenario board, you have not earned trust. Ask provocative questions ("This standard process treats X as out of scope — is that right for you?") to start a real conversation.</li>
+                <li><strong>Skipping change management.</strong> If the standard D365 flow is materially different from theirs, flag it for change management at the moment of discovery — not three months later.</li>
+                <li><strong>Closing without next steps.</strong> Every workshop should end with: who, does what, by when. Otherwise momentum dies.</li>
+              </ul>
+              <h4>The output</h4>
+              <p>From a scenario board workshop you should walk out with: the marked-up board (photo), a one-page meeting note (decisions, in/out/gap, action items), the deep-dive schedule, and confirmed parking-lot items. The deep-dive workshops then feed the requirement log that becomes the input to fit-gap analysis (the next phase).</p>
+            </div>
+          </details>
+
+        </div>
       </article>
 
       <!-- 2. Fit-gap -->

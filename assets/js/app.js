@@ -23,6 +23,45 @@
     el.innerHTML = FOOTER_HTML;
   });
 
+  /* ---------- Theme toggle (light/dark) ----------
+     The dark-mode class is set in an inline <head> script on each page
+     to avoid a flash. Here we just inject the toggle button and wire it. */
+  const SUN_SVG =
+    '<svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="4"/>' +
+      '<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>' +
+    '</svg>';
+  const MOON_SVG =
+    '<svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>' +
+    '</svg>';
+
+  function injectThemeToggle() {
+    const headerInner = document.querySelector('.site-header__inner');
+    if (!headerInner) return;
+    const nav = headerInner.querySelector('.site-nav');
+    if (!nav) return;
+    const btn = document.createElement('button');
+    btn.className = 'theme-toggle';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Toggle dark mode');
+    btn.title = 'Toggle dark mode';
+    btn.innerHTML = SUN_SVG + MOON_SVG;
+    btn.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const next = isDark ? 'light' : 'dark';
+      if (next === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+      try { localStorage.setItem('theme', next); } catch (e) { /* ignore */ }
+    });
+    // Insert just before the nav so it sits next to the search trigger
+    headerInner.insertBefore(btn, nav);
+  }
+  injectThemeToggle();
+
   /* ---------- Header: mobile nav ---------- */
   const navToggle = document.querySelector('.site-nav__toggle');
   const navList = document.querySelector('.site-nav__list');
