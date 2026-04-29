@@ -1,5 +1,6 @@
 /* =========================================================
    D365 F&O Consulting Hub — Shared scripts
+   - Shared footer (single source of truth — edit here, every page updates)
    - Mobile nav toggle
    - Workspace sidebar (item switching, deep links via #id)
    - Mobile sidebar collapse
@@ -8,6 +9,19 @@
 
 (function () {
   'use strict';
+
+  /* ---------- Shared footer ----------
+     Edit this once and every page picks it up. Each page just needs
+     <footer class="site-footer" data-footer></footer> as a placeholder. */
+  const FOOTER_HTML =
+    '<div class="container site-footer__inner">' +
+      '<p>D365 F&amp;O Consulting Hub</p>' +
+      '<p>Built by Joe El Hajj. Last updated <time>2026-04-29</time>.</p>' +
+    '</div>';
+
+  document.querySelectorAll('footer.site-footer[data-footer]').forEach(el => {
+    el.innerHTML = FOOTER_HTML;
+  });
 
   /* ---------- Header: mobile nav ---------- */
   const navToggle = document.querySelector('.site-nav__toggle');
