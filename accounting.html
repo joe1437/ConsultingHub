@@ -74,38 +74,2082 @@
 
     <main class="workspace__main">
 
-      <!-- Order to cash — example pane fully populated to show the table pattern -->
       <article class="item-pane" data-item-pane="order-to-cash">
         <header class="item-pane__header">
           <span class="item-pane__eyebrow">Accounting · Order to cash</span>
           <h2 class="item-pane__title">Order to cash — journal entries</h2>
-          <p class="item-pane__lead">From the packing slip through invoice, payment, and settlement — what posts, when, and why.</p>
+          <p class="item-pane__lead">Sales-order invoice, COGS, customer payment, settlements, returns, write-offs, and revenue deferrals.</p>
         </header>
 
         <article class="article">
-          <h3>Example: Packing slip posting</h3>
-          <p class="article__meta">Transaction · Sales order delivery</p>
-          <p>When the packing slip is posted, inventory leaves the warehouse and a cost accrual recognizes the COGS on a deferred basis. The customer is not yet billed.</p>
+          <h3>Packing slip — physical issue</h3>
+          <p class="article__meta">Sales order · Delivery posting</p>
+          <p>Inventory physically leaves the warehouse on the packing slip. D365 F&amp;O posts a temporary deferred-COGS entry that gets reversed at the invoice step. No customer receivable yet.</p>
           <div class="entry-table-wrap">
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
               <tbody>
-                <tr><td>Issue, packing slip (DR)</td><td>COGS deferred</td><td class="num">1,000.00</td><td class="num"></td></tr>
-                <tr><td>Issue, packing slip offset (CR)</td><td>Inventory packing slip offset</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr><td>Issue, packing slip</td><td>COGS deferred (interim)</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Issue, packing slip offset</td><td>Inventory packing-slip offset</td><td class="num"></td><td class="num">1,000.00</td></tr>
                 <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
               </tbody>
             </table>
           </div>
           <div class="callout">
-            <strong>Note —</strong> Both legs reverse on invoice posting; the final COGS hits at the invoice step. Add your tenant-specific notes here (posting profile setup, dimensions, exceptions).
+            <strong>Note —</strong> Both legs reverse on invoice posting and the final COGS / Inventory hits at the invoice step. The interim accounts are configured per item group on the inventory posting profile.
           </div>
         </article>
 
-        <article class="article article--placeholder">
-          <h3>Add the next transaction</h3>
-          <p>Copy the article block above and adapt it for sales-order invoice, customer payment, settlement, and any return / credit-memo flows.</p>
+        <article class="article">
+          <h3>Sales-order invoice — revenue, COGS, and tax</h3>
+          <p class="article__meta">Sales order · Invoice posting</p>
+          <p>The invoice is the moment AR, revenue, and COGS all crystallize. The packing-slip interim entries reverse and the final journals post. Net 1,000 + 20% VAT = 1,200 invoice; cost of the goods sold = 700.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>Invoice total</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Sales revenue</td><td>Net sales</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr><td>Sales tax payable</td><td>Output VAT 20%</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr><td>COGS</td><td>Cost of items sold</td><td class="num">700.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — finished goods</td><td>Reduce inventory at cost</td><td class="num"></td><td class="num">700.00</td></tr>
+                <tr><td>Inventory packing-slip offset</td><td>Reverse packing-slip interim</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>COGS deferred (interim)</td><td>Reverse packing-slip interim</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">2,900.00</td><td class="num">2,900.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If the invoice is posted directly (no packing slip first), the four interim lines drop out — only the AR / revenue / VAT / COGS / Inventory entries remain. Account selection comes from the customer posting profile (AR), the inventory posting profile (COGS, Inventory), and the sales tax setup.
+          </div>
         </article>
+
+        <article class="article">
+          <h3>Customer payment — direct deposit</h3>
+          <p class="article__meta">AR · Payment journal</p>
+          <p>Customer pays the invoice in full by bank transfer. With basic bank reconciliation (no clearing), the bank account is debited directly.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bank — operating account</td><td>Customer remittance</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Settle invoice</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Settlement against the invoice can be automatic (mark-to-settle on the payment journal) or manual via the customer transactions form.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Customer payment — with bank clearing</h3>
+          <p class="article__meta">AR · Advanced bank reconciliation</p>
+          <p>When advanced bank reconciliation is enabled, the receipt first hits a bank clearing account; the bank account is updated only when the bank statement is reconciled.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bank clearing</td><td>Receipt pending bank confirmation</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Settle invoice</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1 totals</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+                <tr><td>Bank — operating account</td><td>Bank statement reconciled</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Bank clearing</td><td>Clear pending receipt</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2 totals</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The bank clearing account should reconcile to zero against unreconciled bank statement lines at every period close — it's one of the standard clearing-account reconciliations.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Customer prepayment — unapplied receipt</h3>
+          <p class="article__meta">AR · Customer pays before invoicing</p>
+          <p>Customer wires money before the invoice is issued. The cash is real but the obligation isn't recognized as revenue yet — sits as a customer advance / unapplied receipt liability.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bank — operating account</td><td>Customer wire received</td><td class="num">12,000.00</td><td class="num"></td></tr>
+                <tr><td>Customer advances / unapplied receipts</td><td>Liability until invoiced</td><td class="num"></td><td class="num">12,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: receipt</td><td class="num">12,000.00</td><td class="num">12,000.00</td></tr>
+                <tr><td>Customer advances / unapplied receipts</td><td>Apply prepayment to invoice</td><td class="num">12,000.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Settle invoice with prepayment</td><td class="num"></td><td class="num">12,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: application</td><td class="num">12,000.00</td><td class="num">12,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The customer advances account is a separate posting-profile setup (the prepayment posting profile in AR parameters). Track its balance — old prepayments that never got invoiced are an audit flag.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Cash discount taken at payment</h3>
+          <p class="article__meta">AR · Early-payment discount</p>
+          <p>Customer pays within the discount window (e.g., 2/10 net 30). The discount reduces revenue (or sales discounts contra-revenue) and the customer settles the invoice with less cash.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bank — operating account</td><td>Cash received (1,200 - 24)</td><td class="num">1,176.00</td><td class="num"></td></tr>
+                <tr><td>Sales discounts (contra-revenue)</td><td>2% early-payment discount</td><td class="num">24.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Settle invoice in full</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The cash discount account is set on the cash-discount setup. Whether the discount is taken on the gross invoice or net of VAT depends on local tax rules and is a setup option (Calculate cash discount on net invoice).
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Credit memo — customer return / dispute</h3>
+          <p class="article__meta">AR · Credit memo on returned goods</p>
+          <p>Customer returns 100 EUR of damaged goods (cost 60). Credit memo reverses the original invoice partially, returns the inventory, and reverses VAT.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Sales returns / allowances</td><td>Reverse revenue</td><td class="num">100.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax payable</td><td>Reverse output VAT</td><td class="num">20.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Reduce receivable</td><td class="num"></td><td class="num">120.00</td></tr>
+                <tr><td>Inventory — finished goods</td><td>Goods back on hand</td><td class="num">60.00</td><td class="num"></td></tr>
+                <tr><td>COGS</td><td>Reverse cost</td><td class="num"></td><td class="num">60.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">180.00</td><td class="num">180.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If the goods are not physically returned (e.g., a goodwill credit), the inventory and COGS lines drop out. Use a sales-allowance reason code to keep these scenarios reportable separately.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Customer write-off — uncollectible</h3>
+          <p class="article__meta">AR · Bad-debt write-off</p>
+          <p>An invoice has aged past collectibility. After approval, the balance is written off to bad-debt expense (or against the allowance for doubtful accounts if a reserve is in use).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bad-debt expense (or Allowance for doubtful accounts)</td><td>Write off the receivable</td><td class="num">500.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Clear the open invoice</td><td class="num"></td><td class="num">500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">500.00</td><td class="num">500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If a reserve was previously booked (Dr Bad-debt expense / Cr Allowance), the write-off only debits the Allowance — the P&amp;L hit was taken at reserve time. Approval limits live in the AR write-off setup.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Customer overpayment — refund</h3>
+          <p class="article__meta">AR · Refund of excess payment</p>
+          <p>Customer pays 1,300 against a 1,200 invoice. The 100 overpayment sits as a customer advance. AMTG refunds it.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bank</td><td>Receipt 1,300</td><td class="num">1,300.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Settle 1,200 invoice</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr><td>Customer advances / unapplied</td><td>100 overpayment</td><td class="num"></td><td class="num">100.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: overpayment received</td><td class="num">1,300.00</td><td class="num">1,300.00</td></tr>
+                <tr><td>Customer advances / unapplied</td><td>Refund the customer</td><td class="num">100.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Refund issued</td><td class="num"></td><td class="num">100.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: refund</td><td class="num">100.00</td><td class="num">100.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> A refund in D365 F&amp;O can be processed via a refund journal in AR, which creates an offsetting payment to the customer; the customer balance reconciles to zero after both legs.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Deferred revenue — annual subscription invoiced upfront</h3>
+          <p class="article__meta">AR · Subscription billing / ASC 606</p>
+          <p>Customer is invoiced for a 12-month subscription (12,000) in January. Revenue is deferred and recognized 1,000 per month.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>Annual invoice</td><td class="num">14,400.00</td><td class="num"></td></tr>
+                <tr><td>Deferred revenue</td><td>Liability until earned</td><td class="num"></td><td class="num">12,000.00</td></tr>
+                <tr><td>Sales tax payable</td><td>VAT 20% on full invoice</td><td class="num"></td><td class="num">2,400.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: invoice</td><td class="num">14,400.00</td><td class="num">14,400.00</td></tr>
+                <tr><td>Deferred revenue</td><td>Recognize Jan revenue</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Subscription revenue</td><td>Earn 1/12</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: monthly recognition</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> In F&amp;O, this is handled via Revenue recognition / Subscription billing module, or with an amortization schedule on a free-text invoice. The deferral schedule must align with delivery, not invoice date — ASC 606 / IFRS 15.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Multi-currency invoice — period-end FX revaluation</h3>
+          <p class="article__meta">AR · Foreign currency revaluation</p>
+          <p>Invoice issued in USD when the company's accounting currency is EUR. The open AR balance is revalued at period end to current rates; difference is unrealized FX. At payment, the difference between revalued and paid amount becomes realized FX.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>USD 12,000 @ 0.92 = EUR 11,040</td><td class="num">11,040.00</td><td class="num"></td></tr>
+                <tr><td>Sales revenue</td><td>Net</td><td class="num"></td><td class="num">9,200.00</td></tr>
+                <tr><td>Sales tax payable</td><td>VAT</td><td class="num"></td><td class="num">1,840.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: invoice (initial)</td><td class="num">11,040.00</td><td class="num">11,040.00</td></tr>
+                <tr><td>Customer (AR)</td><td>Reval at 0.94 → EUR 11,280; gain 240</td><td class="num">240.00</td><td class="num"></td></tr>
+                <tr><td>FX gain (unrealized)</td><td>Period-end revaluation</td><td class="num"></td><td class="num">240.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: month-end reval</td><td class="num">240.00</td><td class="num">240.00</td></tr>
+                <tr><td>Bank</td><td>Receipt at 0.93 → EUR 11,160</td><td class="num">11,160.00</td><td class="num"></td></tr>
+                <tr><td>FX loss (realized)</td><td>Reval gain reversed; rate moved back</td><td class="num">120.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Settle revalued AR 11,280</td><td class="num"></td><td class="num">11,280.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 3: receipt</td><td class="num">11,280.00</td><td class="num">11,280.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Use the Foreign currency revaluation routine in GL (or AR sub-ledger reval). Only the open balance is revalued; settled invoices have already crystallized their FX. Set the unrealized vs. realized accounts deliberately — reporting requires telling them apart.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Customer rebate accrual — volume incentive</h3>
+          <p class="article__meta">Sales · Rebate at invoice</p>
+          <p>Customer earns a 2% volume rebate on a 10,000 invoice. Net revenue is reduced; the rebate liability accrues until claim and settlement.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Sales rebate (contra-revenue)</td><td>Accrue 2% rebate at invoice</td><td class="num">200.00</td><td class="num"></td></tr>
+                <tr><td>Customer rebate accrual</td><td>Liability to customer</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: accrual</td><td class="num">200.00</td><td class="num">200.00</td></tr>
+                <tr><td>Customer rebate accrual</td><td>Settle on claim approval</td><td class="num">200.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Issue credit memo</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: settlement</td><td class="num">200.00</td><td class="num">200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Driven by the Rebate Management or Trade allowance management module. Rebate accruals must be reconciled at period end; old accruals indicate broken claim flow.
+          </div>
+        </article>
+
       </article>
+
+      <!-- ============== Source to pay ============== -->
+      <article class="item-pane" data-item-pane="source-to-pay">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Source to pay</span>
+          <h2 class="item-pane__title">Source to pay — journal entries</h2>
+          <p class="item-pane__lead">Product receipt, vendor invoice, payments, prepayments, returns, withholding tax, FX, and AP discount scenarios.</p>
+        </header>
+
+        <article class="article">
+          <h3>Product receipt — inventory item with PO</h3>
+          <p class="article__meta">Inventory PO · Receipt accrual (GRNI)</p>
+          <p>Goods are received before the vendor invoice arrives. D365 F&amp;O accrues the inventory liability via the Purchase accrual / Receipt accrual account, often called GRNI (Goods Received Not Invoiced).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory — raw materials</td><td>1,000 kg @ 15.00</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Liability for uninvoiced receipt</td><td class="num"></td><td class="num">15,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">15,000.00</td><td class="num">15,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Posting requires the parameter "Post product receipt in ledger" to be enabled (PO module parameters). VAT does not post at receipt — it waits for the invoice. If destination is "Inspection," an interim Receiving inspection account is used before being moved to inventory at put-away.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Vendor invoice — three-way matched</h3>
+          <p class="article__meta">AP · Invoice posting</p>
+          <p>Vendor invoice arrives. Net 15,000 + 20% VAT = 18,000. The GRNI accrual clears, the supplier liability is recognized, and recoverable VAT is captured.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Purchase accrual (GRNI)</td><td>Clear receipt accrual</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable (Input VAT)</td><td>VAT 20%</td><td class="num">3,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP — trade)</td><td>Total liability</td><td class="num"></td><td class="num">18,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">18,000.00</td><td class="num">18,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If product receipt is not posted to the ledger (parameter off), the receipt has no accounting and the invoice debits Inventory directly: Dr Inventory 15,000 / Dr Sales tax recoverable 3,000 / Cr Vendor 18,000. The GRNI account in either case must reconcile to "received-not-invoiced" reports at every close.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Vendor invoice — service / expense item, accrue at receipt</h3>
+          <p class="article__meta">AP · Service PO · Accrual policy "perpetual"</p>
+          <p>For non-stocked services, F&amp;O can accrue at receipt (perpetual) or at period end (manual accrual). Accrue-at-receipt mirrors the inventory pattern.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Maintenance expense (615600)</td><td>Service received in January</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Liability</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: service receipt (Jan)</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Clear accrual</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">240.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Invoice 1,440</td><td class="num"></td><td class="num">1,440.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: invoice (Feb)</td><td class="num">1,440.00</td><td class="num">1,440.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The expense is recognized in the right period (Jan) even though the invoice arrives in Feb. VAT is recoverable only when the invoice is recorded (legally Feb), so it sits at Inventory/expense level until then.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Period-end accrual — service received but not invoiced</h3>
+          <p class="article__meta">R2R close · Manual or generated accrual</p>
+          <p>Same service as above, but the policy is to accrue only at month-end (no receipt accounting). At period end, an accrual is booked and reverses the next period.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Maintenance expense</td><td>Accrue Jan expense</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Accrued expenses</td><td>Liability for unbilled</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: Jan close accrual</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+                <tr><td>Accrued expenses</td><td>Reverse on Feb 1</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Maintenance expense</td><td>Reverse</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: Feb 1 reversal</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The Feb invoice then posts cleanly (Dr Expense / Dr VAT / Cr Vendor), and the auto-reversal cancels out. Use a journal name with auto-reversing checked to make this routine.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Vendor payment — direct deposit</h3>
+          <p class="article__meta">AP · Payment journal</p>
+          <p>Pay the 18,000 invoice by bank transfer. With basic bank reconciliation, the bank account is debited directly.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Vendor (AP)</td><td>Settle invoice</td><td class="num">18,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank — operating account</td><td>Outflow</td><td class="num"></td><td class="num">18,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">18,000.00</td><td class="num">18,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If advanced bank reconciliation is on, replace Bank with Bank clearing; a second entry at reconciliation moves the balance from clearing to bank.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Vendor payment — early-payment cash discount taken</h3>
+          <p class="article__meta">AP · 2/10 net 30</p>
+          <p>Pay the 18,000 invoice within the discount window. 2% discount (360) reduces the cost or hits a Purchase discount income account.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Vendor (AP)</td><td>Settle invoice in full</td><td class="num">18,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Net cash 17,640</td><td class="num"></td><td class="num">17,640.00</td></tr>
+                <tr><td>Purchase discounts (contra expense / income)</td><td>2% discount earned</td><td class="num"></td><td class="num">360.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">18,000.00</td><td class="num">18,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Some jurisdictions require the discount to reduce the inventory cost or expense, not flow to a separate income account. Set up the cash-discount account and policy with the controller — it's an audit-flagged area.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Vendor prepayment — advance against future invoice</h3>
+          <p class="article__meta">AP · Prepayment vendor invoice</p>
+          <p>Pay a vendor 5,000 advance in January. February: receive the actual invoice for 12,000 + VAT and apply the prepayment.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Vendor advances / prepayments (asset)</td><td>Recognize prepaid asset</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Liability</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: prepayment invoice</td><td class="num">5,000.00</td><td class="num">5,000.00</td></tr>
+                <tr><td>Vendor (AP)</td><td>Settle prepayment liability</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Pay vendor</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: prepayment payment</td><td class="num">5,000.00</td><td class="num">5,000.00</td></tr>
+                <tr><td>Inventory / expense</td><td>Net invoice</td><td class="num">12,000.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">2,400.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Total invoice</td><td class="num"></td><td class="num">14,400.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 3: standard invoice</td><td class="num">14,400.00</td><td class="num">14,400.00</td></tr>
+                <tr><td>Vendor (AP)</td><td>Apply prepayment</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor advances / prepayments</td><td>Clear prepaid asset</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 4: prepayment application</td><td class="num">5,000.00</td><td class="num">5,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> D365 F&amp;O distinguishes "Prepayment invoice" (a real invoice creating a prepaid asset, with VAT recoverable per the prepayment VAT rules of the country) from a vendor "Prepayment journal voucher" (no invoice, just a cash advance posted directly). The two are accounted differently — confirm with the controller which one applies.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Return to vendor (RTV) — quality reject</h3>
+          <p class="article__meta">Inventory · Return on PO</p>
+          <p>100 kg of the 1,000 kg shipment fails quality. Return to vendor before the invoice; vendor issues a credit memo.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Purchase accrual (GRNI)</td><td>Reverse accrual for 100 kg</td><td class="num">1,500.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — raw materials</td><td>Reduce on-hand</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: physical return</td><td class="num">1,500.00</td><td class="num">1,500.00</td></tr>
+                <tr><td>Vendor (AP)</td><td>Vendor credit memo</td><td class="num">1,800.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Clear remaining accrual</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr><td>Sales tax recoverable</td><td>Reverse VAT</td><td class="num"></td><td class="num">300.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: credit memo</td><td class="num">1,800.00</td><td class="num">1,800.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If the return happens after the invoice has been posted, step 1 looks different — Dr Vendor / Cr Inventory. The matching mechanism in F&amp;O links the return to the original PO line so quantities reconcile.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Vendor invoice with withholding tax (WHT)</h3>
+          <p class="article__meta">AP · Withholding at payment</p>
+          <p>Consulting invoice for 10,000 (no VAT, professional services). 10% WHT is withheld at payment and remitted to the tax authority.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Consulting expense</td><td>Service expense</td><td class="num">10,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Gross liability</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: invoice</td><td class="num">10,000.00</td><td class="num">10,000.00</td></tr>
+                <tr><td>Vendor (AP)</td><td>Settle full liability</td><td class="num">10,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Net to vendor</td><td class="num"></td><td class="num">9,000.00</td></tr>
+                <tr><td>Withholding tax payable</td><td>WHT held back</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: payment with WHT</td><td class="num">10,000.00</td><td class="num">10,000.00</td></tr>
+                <tr><td>Withholding tax payable</td><td>Remit to authority</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>WHT remittance</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 3: WHT remittance</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> WHT in F&amp;O is set up under Tax → Withholding tax codes / groups. Some jurisdictions require WHT certificates for the vendor — ensure the right reporting layout is configured for ER (Electronic Reporting).
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Invoice price variance (PPV) — invoice price higher than PO</h3>
+          <p class="article__meta">Cost · Standard cost variance</p>
+          <p>PO price was 10/unit; invoice came in at 11/unit (100 units). Under standard costing, the difference posts as Purchase price variance.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory — at standard</td><td>100 × 10 (standard)</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Receipt at PO price</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: receipt at PO price</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Clear accrual at PO price</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Purchase price variance (PPV)</td><td>Invoice 100 over PO</td><td class="num">100.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Invoice at actual price</td><td class="num"></td><td class="num">1,100.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: invoice posting</td><td class="num">1,100.00</td><td class="num">1,100.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Under moving-average costing, the variance is absorbed into the inventory unit cost instead of going to PPV. Item model group + costing method drive the behavior. PPV is a P&amp;L line (gain or loss) — track it; persistent PPV signals stale standards.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Multi-currency vendor invoice — period-end FX revaluation</h3>
+          <p class="article__meta">AP · Foreign currency revaluation</p>
+          <p>Vendor invoice in USD when the entity is EUR-based. Revaluation logic mirrors AR: open balance revalued at period end, realized FX at payment.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory / expense</td><td>USD 10,000 @ 0.92 → EUR 9,200</td><td class="num">9,200.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Liability in EUR</td><td class="num"></td><td class="num">9,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: invoice (initial)</td><td class="num">9,200.00</td><td class="num">9,200.00</td></tr>
+                <tr><td>FX loss (unrealized)</td><td>Reval at 0.94 → liability now 9,400</td><td class="num">200.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Increase liability</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: month-end reval</td><td class="num">200.00</td><td class="num">200.00</td></tr>
+                <tr><td>Vendor (AP)</td><td>Settle revalued 9,400</td><td class="num">9,400.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Pay USD 10,000 @ 0.93 → 9,300</td><td class="num"></td><td class="num">9,300.00</td></tr>
+                <tr><td>FX gain (realized)</td><td>Settled below revalued</td><td class="num"></td><td class="num">100.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 3: payment</td><td class="num">9,400.00</td><td class="num">9,400.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Run AP foreign currency revaluation as part of the close. Realized vs. unrealized FX accounts should be separate to support P&amp;L analysis.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Consignment inventory — ownership at consumption</h3>
+          <p class="article__meta">Inventory · Vendor-managed stock</p>
+          <p>Vendor-owned stock physically at the warehouse. No accounting at receipt; ownership transfers (and accounting hits) at consumption.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td colspan="4" class="text-muted">Step 1: physical receipt — no accounting (vendor still owns the stock).</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1 totals</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+                <tr><td>Inventory — raw materials</td><td>Move to owned stock at consumption</td><td class="num">500.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Liability accrual</td><td class="num"></td><td class="num">500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: ownership change</td><td class="num">500.00</td><td class="num">500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The consumption-triggered "consignment replenishment order" in F&amp;O moves the units from vendor stock to AMTG stock and creates the PO/receipt automatically. The vendor invoice arrives later and clears the GRNI as normal.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Retainage / holdback</h3>
+          <p class="article__meta">AP · Construction / project holdback</p>
+          <p>Construction vendor invoice for 100,000. 10% retainage held back until project acceptance.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>CIP / construction expense</td><td>Full cost recognized</td><td class="num">100,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP) — current portion</td><td>90% payable now</td><td class="num"></td><td class="num">90,000.00</td></tr>
+                <tr><td>Retainage payable</td><td>10% held back</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: invoice with retainage</td><td class="num">100,000.00</td><td class="num">100,000.00</td></tr>
+                <tr><td>Vendor (AP)</td><td>Pay current portion</td><td class="num">90,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Outflow</td><td class="num"></td><td class="num">90,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: pay 90%</td><td class="num">90,000.00</td><td class="num">90,000.00</td></tr>
+                <tr><td>Retainage payable</td><td>Release at acceptance</td><td class="num">10,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Final payment</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 3: release retainage</td><td class="num">10,000.00</td><td class="num">10,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Retainage in F&amp;O is enabled per project / vendor and posts via a dedicated retainage account. Track aged retainage — un-released retainage is a vendor relationship issue waiting to happen.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Lockbox / auto-applied receipts</h3>
+          <p class="article__meta">AR/Cash · High-volume settlement</p>
+          <p>Bank lockbox file imports hundreds of customer payments. F&amp;O auto-matches each line to its open invoice. The journal pattern is the same as a manual receipt — multiplied by N.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bank clearing</td><td>Total file amount</td><td class="num">125,000.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Settle multiple invoices</td><td class="num"></td><td class="num">125,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: lockbox import</td><td class="num">125,000.00</td><td class="num">125,000.00</td></tr>
+                <tr><td>Bank — operating account</td><td>Bank statement reconciled</td><td class="num">125,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank clearing</td><td>Clear pending</td><td class="num"></td><td class="num">125,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: bank reconciliation</td><td class="num">125,000.00</td><td class="num">125,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Unmatched lockbox lines fall to a suspense / unidentified receipt account and require treasury triage. Auto-application rules (by customer, by amount, by reference) drive match rate — tune them.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Inventory to deliver ============== -->
+      <article class="item-pane" data-item-pane="inventory-to-deliver">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Inventory to deliver</span>
+          <h2 class="item-pane__title">Inventory to deliver — journal entries</h2>
+          <p class="item-pane__lead">Inventory journals — counting, movement, transfer, BOM, profit/loss — and landed cost adjustments.</p>
+        </header>
+
+        <article class="article">
+          <h3>Counting journal — positive adjustment (found stock)</h3>
+          <p class="article__meta">Inventory · Cycle count</p>
+          <p>Physical count finds 50 units more than the system. The difference is booked to inventory adjustment income.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory</td><td>50 units × 10.00 unit cost</td><td class="num">500.00</td><td class="num"></td></tr>
+                <tr><td>Inventory adjustment / Misc income</td><td>Found stock</td><td class="num"></td><td class="num">500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">500.00</td><td class="num">500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Use a dedicated inventory adjustment account, not generic income — auditors want to see counting variances broken out separately from operational results.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Counting journal — negative adjustment (shrinkage)</h3>
+          <p class="article__meta">Inventory · Cycle count</p>
+          <p>Count is short by 25 units. Booked to inventory write-off / shrinkage expense.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory write-off / shrinkage</td><td>25 × 10.00</td><td class="num">250.00</td><td class="num"></td></tr>
+                <tr><td>Inventory</td><td>Reduce on-hand</td><td class="num"></td><td class="num">250.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">250.00</td><td class="num">250.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Separate accounts for shrinkage, scrap, and quality loss when reporting needs to distinguish them. Shrinkage trend is a KPI for warehouse operations.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Movement journal — internal consumption</h3>
+          <p class="article__meta">Inventory · Issue to expense</p>
+          <p>Issue 30 units of supplies to maintenance use. Inventory drops; expense recognized.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Maintenance expense</td><td>Internal consumption</td><td class="num">120.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — supplies</td><td>Reduce on-hand</td><td class="num"></td><td class="num">120.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">120.00</td><td class="num">120.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The offset account is set on the movement journal line. For repeat scenarios, use journal templates so the offset is defaulted correctly.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Transfer journal — between warehouses (no in-transit)</h3>
+          <p class="article__meta">Inventory · Same legal entity transfer</p>
+          <p>Move 100 units from Warehouse A to Warehouse B in the same legal entity. With basic transfer (no in-transit), there is no GL impact at all — only sub-ledger inventory dimension change.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td colspan="4" class="text-muted">No GL accounting — only inventory dimensions change. Cost remains in the same Inventory account.</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If you need GL postings for site-level reporting (e.g., site is a financial dimension that splits Inventory by warehouse), the dimension change does flow but the natural account is unchanged.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Transfer order — with in-transit</h3>
+          <p class="article__meta">Inventory · Inter-site transfer</p>
+          <p>Transfer order ships 100 units from Site A to Site B via In-transit. Posting splits across ship and receive events.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory in transit</td><td>Goods on the road</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — Site A</td><td>Reduce origin</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: ship</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+                <tr><td>Inventory — Site B</td><td>Increase destination</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory in transit</td><td>Clear in-transit</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: receive</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Inventory in transit is a clearing account — it must reconcile to "transfer orders shipped but not received" at every period close. Aged in-transit is a sign of broken transfer-order receipt discipline.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>BOM journal — assemble a kit</h3>
+          <p class="article__meta">Inventory · Light manufacturing</p>
+          <p>Components are consumed and a kit (parent item) is assembled — no production order, just an inventory BOM journal.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory — kit (parent)</td><td>Receive 10 kits at total component cost</td><td class="num">800.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — component A</td><td>Issue 20 × 30</td><td class="num"></td><td class="num">600.00</td></tr>
+                <tr><td>Inventory — component B</td><td>Issue 10 × 20</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">800.00</td><td class="num">800.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> BOM journal does not capture labor or overhead — for that you need a production order. Use BOM journal only for simple assemblies.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Landed cost — estimated charge allocation at receipt</h3>
+          <p class="article__meta">LCM · Estimated voyage charge</p>
+          <p>Import 8,000 bags @ 2.00. Estimated freight = 1,000, allocated by quantity. Receipt accounting splits material and landed cost.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory — raw materials (material)</td><td>8,000 × 2.00</td><td class="num">16,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — raw materials (landed cost portion)</td><td>Estimated freight allocated</td><td class="num">800.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Goods accrual</td><td class="num"></td><td class="num">16,000.00</td></tr>
+                <tr><td>Landed cost clearing</td><td>Estimated charge clearing</td><td class="num"></td><td class="num">800.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">16,800.00</td><td class="num">16,800.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The estimated charge is allocated only to the received quantity (8,000 of 10,000); the 200 unallocated portion stays in the voyage until the rest is received. Charge basis (aggregate, per-unit, % of value) and allocation basis (quantity, weight, volume, value) are decisions per charge type.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Landed cost — actual freight invoice and variance</h3>
+          <p class="article__meta">LCM · Actual charge invoice</p>
+          <p>Freight vendor's actual invoice: 1,200 + VAT. The 200 variance vs. estimate is allocated to the received units, increasing inventory cost.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Landed cost clearing</td><td>Charge invoice debits clearing</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">240.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (freight carrier)</td><td>Liability</td><td class="num"></td><td class="num">1,440.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: actual charge invoice</td><td class="num">1,440.00</td><td class="num">1,440.00</td></tr>
+                <tr><td>Inventory — raw materials</td><td>Allocate variance to received qty (160)</td><td class="num">160.00</td><td class="num"></td></tr>
+                <tr><td>Landed cost clearing</td><td>Reduce clearing</td><td class="num"></td><td class="num">160.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: actual variance allocation</td><td class="num">160.00</td><td class="num">160.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If the inventory has already been issued (sold or consumed) before the actual charge invoice arrives, the variance must be allocated to COGS / WIP for those units rather than to inventory. F&amp;O Cost Accounting handles the post-issue cost adjustment.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Inventory revaluation — cost adjustment</h3>
+          <p class="article__meta">Cost Mgmt · Manual revaluation</p>
+          <p>Standard cost is updated for an item with on-hand stock. Inventory value adjusts to the new standard.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory</td><td>Increase to new standard</td><td class="num">2,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory revaluation gain</td><td>Cost-change recognized</td><td class="num"></td><td class="num">2,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">2,000.00</td><td class="num">2,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Direction reverses if the new standard is lower (Dr Inventory revaluation loss / Cr Inventory). Revaluation runs as part of the cost-version activation when a new standard is published.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Obsolescence reserve</h3>
+          <p class="article__meta">Inventory · Period-end reserve</p>
+          <p>Aged inventory analysis flags 5,000 of stock as slow-moving / likely-obsolete. Reserve booked; no physical write-off yet.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory obsolescence expense</td><td>Recognize provision</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory obsolescence reserve (contra-asset)</td><td>Reduce net inventory value</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: book reserve</td><td class="num">5,000.00</td><td class="num">5,000.00</td></tr>
+                <tr><td>Inventory obsolescence reserve</td><td>Use reserve when scrapped</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory</td><td>Physical write-off</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: physical write-off</td><td class="num">5,000.00</td><td class="num">5,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If there is no reserve and the stock is scrapped directly, debit Inventory write-off (P&amp;L) instead of the reserve. The reserve approach gives smoother P&amp;L and earlier disclosure.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Plan to produce ============== -->
+      <article class="item-pane" data-item-pane="plan-to-produce">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Plan to produce</span>
+          <h2 class="item-pane__title">Plan to produce — journal entries</h2>
+          <p class="item-pane__lead">Production order lifecycle — picking list, route card, RAF, end. Plus scrap, variances, OSP.</p>
+        </header>
+
+        <article class="article">
+          <h3>Picking list — issue raw materials to WIP</h3>
+          <p class="article__meta">Production order · Material consumption</p>
+          <p>Issue 200 kg resin (40/kg) and 100 kg additive (15/kg) to a production order for 100 finished units.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>WIP — material</td><td>Resin to WIP</td><td class="num">8,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — raw materials</td><td>Consume resin</td><td class="num"></td><td class="num">8,000.00</td></tr>
+                <tr><td>WIP — material</td><td>Additive to WIP</td><td class="num">1,500.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — raw materials</td><td>Consume additive</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">9,500.00</td><td class="num">9,500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Picking list is "estimated" until the production order is fully ended; final variance posts at end. Posting at picking-list time is controlled per item model group / production parameters.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Route card — labor and overhead to WIP</h3>
+          <p class="article__meta">Production order · Resource charges</p>
+          <p>50 machine hours @ 30 = 1,500 labor cost. Overhead applied at 25% of labor = 375.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>WIP — labor</td><td>50 hours × 30</td><td class="num">1,500.00</td><td class="num"></td></tr>
+                <tr><td>Labor / production absorption</td><td>Credit absorption account</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr><td>WIP — overhead</td><td>25% of labor</td><td class="num">375.00</td><td class="num"></td></tr>
+                <tr><td>Overhead absorbed</td><td>Apply burden</td><td class="num"></td><td class="num">375.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,875.00</td><td class="num">1,875.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The credit side of labor/overhead in F&amp;O depends on whether you absorb actuals (labor accrual) or use rate-based standards (absorption clearing accounts that reconcile to actual payroll / overhead pools at period end).
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Report as finished (RAF) — receive finished goods</h3>
+          <p class="article__meta">Production order · Completion</p>
+          <p>100 finished units received into FG inventory at estimated cost (material + labor + overhead = 11,375 / 100 = 113.75 per unit).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory — finished goods</td><td>RAF at estimated cost</td><td class="num">11,375.00</td><td class="num"></td></tr>
+                <tr><td>WIP — material</td><td>Clear material WIP</td><td class="num"></td><td class="num">9,500.00</td></tr>
+                <tr><td>WIP — labor</td><td>Clear labor WIP</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr><td>WIP — overhead</td><td>Clear overhead WIP</td><td class="num"></td><td class="num">375.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">11,375.00</td><td class="num">11,375.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Under standard costing, RAF is at <em>standard</em> cost (e.g., 11,000) and the difference (375) becomes a variance at order End. Under moving average, the RAF cost is the actual cost of inputs.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>End production order — variance posting (standard cost)</h3>
+          <p class="article__meta">Production order · End</p>
+          <p>Standard cost of the FG was 110 per unit (total 11,000). Actuals were 11,375. The 375 variance is recognized at End.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Production variance — usage / efficiency</td><td>Recognize variance</td><td class="num">375.00</td><td class="num"></td></tr>
+                <tr><td>WIP (residual)</td><td>Clear remaining WIP</td><td class="num"></td><td class="num">375.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">375.00</td><td class="num">375.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> F&amp;O distinguishes substitution, lot-size, quantity, and price variances. Each posts to a separate account if configured — lets finance see <em>why</em> a production order was off-plan.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Scrap — recognize loss during production</h3>
+          <p class="article__meta">Production order · Scrap</p>
+          <p>5 units scrapped during production. Scrap cost (5 × 110 standard = 550) booked to scrap expense.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Scrap expense</td><td>Recognize scrap</td><td class="num">550.00</td><td class="num"></td></tr>
+                <tr><td>WIP</td><td>Reduce WIP for scrap</td><td class="num"></td><td class="num">550.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">550.00</td><td class="num">550.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Some policies absorb scrap into the unit cost of the surviving units (treating it as expected loss); others recognize it explicitly. The choice is set in the production parameters.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Outside processing (OSP) — subcontracted operation</h3>
+          <p class="article__meta">Production · Subcontract</p>
+          <p>A coating operation is subcontracted. The PO line is linked to the production order. The vendor invoice posts to WIP, not to expense.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>WIP — subcontract</td><td>Subcontract receipt</td><td class="num">800.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Accrual</td><td class="num"></td><td class="num">800.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: receipt</td><td class="num">800.00</td><td class="num">800.00</td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Clear accrual</td><td class="num">800.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">160.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Total invoice</td><td class="num"></td><td class="num">960.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: invoice</td><td class="num">960.00</td><td class="num">960.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If OSP is wired as a regular service PO without the production-order link, the cost lands in operating expense — not WIP — and the unit cost is wrong. Verify the link in UAT.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Sale of finished goods — COGS recognition</h3>
+          <p class="article__meta">SO invoice · COGS to GL</p>
+          <p>Sell 50 of those FG units at 200 each. Revenue 10,000; COGS at standard 110 × 50 = 5,500.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>50 × 200 × 1.20</td><td class="num">12,000.00</td><td class="num"></td></tr>
+                <tr><td>Sales revenue — finished goods</td><td>Net</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr><td>Sales tax payable</td><td>VAT 20%</td><td class="num"></td><td class="num">2,000.00</td></tr>
+                <tr><td>COGS</td><td>50 × 110 standard</td><td class="num">5,500.00</td><td class="num"></td></tr>
+                <tr><td>Inventory — finished goods</td><td>Reduce on-hand at cost</td><td class="num"></td><td class="num">5,500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">17,500.00</td><td class="num">17,500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> COGS is the same flow as Order to cash — included here to close the manufacturing loop. Gross margin per unit (200 − 110 = 90) is what production-order variances ultimately distort.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Acquire to dispose ============== -->
+      <article class="item-pane" data-item-pane="acquire-to-dispose">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Acquire to dispose</span>
+          <h2 class="item-pane__title">Acquire to dispose — journal entries</h2>
+          <p class="item-pane__lead">Asset acquisition (PO, journal, project), depreciation, transfers, retirements, impairment, leases.</p>
+        </header>
+
+        <article class="article">
+          <h3>Asset acquisition — from a PO</h3>
+          <p class="article__meta">CapEx · PO-driven acquisition</p>
+          <p>Buy 10 laptops at 1,500 each + VAT. AP invoice debits an Asset clearing / Asset bridge account; FA capitalizes from the bridge.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Asset clearing / bridge</td><td>10 × 1,500 (held for FA)</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">3,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (CapEx AP)</td><td>Total liability</td><td class="num"></td><td class="num">18,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: AP invoice</td><td class="num">18,000.00</td><td class="num">18,000.00</td></tr>
+                <tr><td>Fixed asset — IT equipment, cost</td><td>Capitalize via acquisition proposal</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Asset clearing / bridge</td><td>Clear bridge</td><td class="num"></td><td class="num">15,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: capitalization (FA)</td><td class="num">15,000.00</td><td class="num">15,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The "Acquisition proposal" in Fixed Assets is F&amp;O's equivalent of Mass Additions. Asset clearing should reconcile to zero at period end — aged balances mean assets received but not yet capitalized.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Monthly depreciation</h3>
+          <p class="article__meta">FA · Depreciation proposal</p>
+          <p>15,000 capitalized over 36 months straight-line = 416.67/month.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Depreciation expense</td><td>Monthly amortization</td><td class="num">416.67</td><td class="num"></td></tr>
+                <tr><td>Accumulated depreciation — IT</td><td>Reduce NBV</td><td class="num"></td><td class="num">416.67</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">416.67</td><td class="num">416.67</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If multiple books are configured (corporate, tax, IFRS), each runs its own depreciation. Only the books with a posting layer = "Current" hit the GL; tax and statutory books usually post to "Operations" / "Tax" layers and stay parallel.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Asset transfer — between cost centers</h3>
+          <p class="article__meta">FA · Reclassification</p>
+          <p>Move asset from Production cost center to R&amp;D. The asset cost and accumulated depreciation accounts are unchanged; only the financial dimension shifts.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>FA cost — IT (cost center R&amp;D)</td><td>Move asset to R&amp;D</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>FA cost — IT (cost center Production)</td><td>Remove from Production</td><td class="num"></td><td class="num">15,000.00</td></tr>
+                <tr><td>Accumulated dep — IT (cost center R&amp;D)</td><td>Move accum depreciation</td><td class="num"></td><td class="num">2,500.00</td></tr>
+                <tr><td>Accumulated dep — IT (cost center Production)</td><td>Remove from Production</td><td class="num">2,500.00</td><td class="num"></td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">17,500.00</td><td class="num">17,500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Natural account is unchanged — only the financial dimensions move. P&amp;L impact is zero. Future depreciation hits the new cost center.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Asset disposal — sale with gain</h3>
+          <p class="article__meta">FA · Disposal — sale</p>
+          <p>Sell an old laptop. Cost 1,500; accumulated depreciation 1,200; NBV 300. Sold for 500 — gain 200.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bank (or AR if invoiced)</td><td>Sale proceeds</td><td class="num">500.00</td><td class="num"></td></tr>
+                <tr><td>Accumulated depreciation — IT</td><td>Remove accumulated dep</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>FA cost — IT</td><td>Remove asset</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr><td>Gain on disposal of fixed assets</td><td>Proceeds 500 − NBV 300</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,700.00</td><td class="num">1,700.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If the sale runs through AR (free-text invoice), the AR side picks up the receivable and VAT, and the FA disposal removes the cost / accumulated depreciation. Two separate transactions, same net effect.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Asset disposal — scrap with loss</h3>
+          <p class="article__meta">FA · Disposal — scrap</p>
+          <p>Same laptop scrapped instead of sold. NBV 300 → loss 300.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Accumulated depreciation — IT</td><td>Remove accumulated dep</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Loss on disposal of fixed assets</td><td>NBV written off</td><td class="num">300.00</td><td class="num"></td></tr>
+                <tr><td>FA cost — IT</td><td>Remove asset</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,500.00</td><td class="num">1,500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Disposal — scrap and disposal — sale use different transaction types in F&amp;O. They post to different gain/loss accounts so reporting splits them clearly.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Asset impairment</h3>
+          <p class="article__meta">FA · Value adjustment</p>
+          <p>Machinery's carrying value (50,000) exceeds recoverable amount (35,000) — impair by 15,000.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Impairment expense</td><td>Recognize loss</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Accumulated impairment — machinery</td><td>Reduce NBV</td><td class="num"></td><td class="num">15,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">15,000.00</td><td class="num">15,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Use a value-adjustment journal of type "Write-down" in F&amp;O. Future depreciation is calculated on the impaired NBV. Reversal is allowed under IFRS but not US GAAP.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>CIP capitalization — self-constructed asset</h3>
+          <p class="article__meta">FA · Project to CIP to FA</p>
+          <p>Capital project accumulates 100,000 in CIP through AP invoices. When placed in service, transfer CIP balance to the FA cost account.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>CIP — capital projects</td><td>Cost accumulation via AP</td><td class="num">100,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Invoice liability</td><td class="num"></td><td class="num">100,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: AP cost to CIP (multiple invoices)</td><td class="num">100,000.00</td><td class="num">100,000.00</td></tr>
+                <tr><td>FA — machinery, cost</td><td>Capitalize on placed-in-service</td><td class="num">100,000.00</td><td class="num"></td></tr>
+                <tr><td>CIP — capital projects</td><td>Clear CIP</td><td class="num"></td><td class="num">100,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: capitalization</td><td class="num">100,000.00</td><td class="num">100,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> CIP must reconcile to "open capital projects" at every close. Aged CIP signals projects that finished but were never capitalized — material P&amp;L impact (no depreciation = understated expense).
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Lease accounting (ASC 842 / IFRS 16) — initial recognition</h3>
+          <p class="article__meta">FA · Operating lease as a right-of-use asset</p>
+          <p>5-year office lease, present value of payments = 250,000 (rate implicit). Recognize a right-of-use (ROU) asset and a lease liability.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Right-of-use asset</td><td>PV of lease payments</td><td class="num">250,000.00</td><td class="num"></td></tr>
+                <tr><td>Lease liability — long-term</td><td>Future payments</td><td class="num"></td><td class="num">200,000.00</td></tr>
+                <tr><td>Lease liability — current</td><td>Next 12 months</td><td class="num"></td><td class="num">50,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">250,000.00</td><td class="num">250,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The Lease module in F&amp;O Fixed Assets handles ASC 842 / IFRS 16 — schedules amortization and interest, splits current vs. long-term liability automatically. Without the module, this is journal-driven and error-prone.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Monthly lease payment — interest and principal</h3>
+          <p class="article__meta">FA · Lease amortization</p>
+          <p>Monthly cash payment of 4,500. Interest portion 1,200 (declining), principal portion 3,300. ROU asset amortized 4,167/month (straight-line over 60).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Interest expense — leases</td><td>Effective interest</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Lease liability — current</td><td>Principal portion</td><td class="num">3,300.00</td><td class="num"></td></tr>
+                <tr><td>Bank (or vendor for lessor)</td><td>Cash payment</td><td class="num"></td><td class="num">4,500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: cash payment</td><td class="num">4,500.00</td><td class="num">4,500.00</td></tr>
+                <tr><td>Lease amortization expense</td><td>Straight-line ROU</td><td class="num">4,167.00</td><td class="num"></td></tr>
+                <tr><td>Accumulated amortization — ROU</td><td>Reduce ROU NBV</td><td class="num"></td><td class="num">4,167.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: monthly amortization</td><td class="num">4,167.00</td><td class="num">4,167.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> ASC 842 operating leases recognize a single straight-line lease expense (combining interest + amortization to a flat number). Finance leases recognize them separately as shown. Determine classification at inception.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Project to profit ============== -->
+      <article class="item-pane" data-item-pane="project-to-profit">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Project to profit</span>
+          <h2 class="item-pane__title">Project to profit — journal entries</h2>
+          <p class="item-pane__lead">Project costs (hour, expense, item, fee), revenue recognition (T&amp;M, fixed price, milestone), invoicing, closing.</p>
+        </header>
+
+        <article class="article">
+          <h3>Hour transaction — labor on a T&amp;M project</h3>
+          <p class="article__meta">Project · Hour journal / timesheet</p>
+          <p>Worker logs 8 hours at cost rate 50 to a customer T&amp;M project.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Project cost — labor</td><td>8 × 50 cost</td><td class="num">400.00</td><td class="num"></td></tr>
+                <tr><td>Payroll allocation / labor absorption</td><td>Credit absorption</td><td class="num"></td><td class="num">400.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">400.00</td><td class="num">400.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The credit side depends on the labor accounting model — direct charge to a payroll accrual, allocation from a labor pool, or absorption from labor rates. Set per project group.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Expense transaction — T&amp;E posted to project</h3>
+          <p class="article__meta">Project · Expense from T&amp;E</p>
+          <p>Worker submits a 200 travel expense to a billable project. Posted via Expense Management to AP, with the project on the distribution.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Project cost — expense</td><td>Travel cost on project</td><td class="num">200.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (Worker) (AP)</td><td>Reimbursement liability</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">200.00</td><td class="num">200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Project Management &amp; Accounting receives the expense from Expense Management when the expense report is approved. The project transaction is what drives revenue recognition / billing for the cost.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Item transaction — material consumed on project</h3>
+          <p class="article__meta">Project · Item issued to project</p>
+          <p>Issue 5 units at 100 each to a project (from inventory).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Project cost — item</td><td>Material to project</td><td class="num">500.00</td><td class="num"></td></tr>
+                <tr><td>Inventory</td><td>Reduce on-hand</td><td class="num"></td><td class="num">500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">500.00</td><td class="num">500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Item costs flow through the inventory posting profile but project segments are captured. Reconciliation requires checking both inventory and project sub-ledgers.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Project invoice — T&amp;M billing</h3>
+          <p class="article__meta">Project · Invoice proposal</p>
+          <p>Bill the customer for 8 hours at 100/hour billing rate (800), 200 travel pass-through, and 5 items at 150 (750). Total net 1,750 + 20% VAT.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>Project invoice total</td><td class="num">2,100.00</td><td class="num"></td></tr>
+                <tr><td>Project revenue — services</td><td>Hours billed</td><td class="num"></td><td class="num">800.00</td></tr>
+                <tr><td>Project revenue — expense</td><td>Travel pass-through</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr><td>Project revenue — item</td><td>Items billed</td><td class="num"></td><td class="num">750.00</td></tr>
+                <tr><td>Sales tax payable</td><td>VAT 20%</td><td class="num"></td><td class="num">350.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">2,100.00</td><td class="num">2,100.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> T&amp;M revenue is typically recognized as costs are incurred. The project invoice posting is the AR realization of revenue already accrued via the cost-side recognition (or is the recognition itself, depending on the policy).
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Fixed-price project — POC revenue recognition</h3>
+          <p class="article__meta">Project · Estimate / WIP recognition</p>
+          <p>Fixed-price contract value 100,000. Total estimated cost 70,000. Through Q1, actual cost = 21,000 (30% complete). Recognize 30,000 of revenue (POC × contract value).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Unbilled receivable / accrued revenue</td><td>Earn 30% of contract</td><td class="num">30,000.00</td><td class="num"></td></tr>
+                <tr><td>Project revenue — fixed price</td><td>Recognize 30,000</td><td class="num"></td><td class="num">30,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: revenue accrual via Estimate process</td><td class="num">30,000.00</td><td class="num">30,000.00</td></tr>
+                <tr><td>Customer (AR)</td><td>Milestone invoice 25,000 + VAT</td><td class="num">30,000.00</td><td class="num"></td></tr>
+                <tr><td>Unbilled receivable</td><td>Convert accrual to billed</td><td class="num"></td><td class="num">25,000.00</td></tr>
+                <tr><td>Sales tax payable</td><td>VAT 20%</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: milestone invoice</td><td class="num">30,000.00</td><td class="num">30,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Run "Estimate process" in Project to drive POC. The Estimate periodically reverses and re-recognizes — keeping the unbilled receivable at the right balance for current % complete.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Capital project to FA — placed in service</h3>
+          <p class="article__meta">Project · CIP to capitalization</p>
+          <p>Internal capital project accumulated 100,000. On placed-in-service, post the capitalization journal that moves CIP to FA cost.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>FA — machinery cost</td><td>Capitalize</td><td class="num">100,000.00</td><td class="num"></td></tr>
+                <tr><td>CIP — capital projects</td><td>Clear CIP</td><td class="num"></td><td class="num">100,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">100,000.00</td><td class="num">100,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Same accounting as in Acquire to dispose, just driven from a project. F&amp;O links the capital project to a fixed asset record and posts via the "eliminate" / capitalization step.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>On-account invoice — milestone deposit</h3>
+          <p class="article__meta">Project · Advance / on-account</p>
+          <p>Customer pays a 20,000 deposit before any project cost is incurred. Liability until earned.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>On-account invoice 20,000 + VAT</td><td class="num">24,000.00</td><td class="num"></td></tr>
+                <tr><td>Customer deposits / on-account</td><td>Liability</td><td class="num"></td><td class="num">20,000.00</td></tr>
+                <tr><td>Sales tax payable</td><td>VAT 20%</td><td class="num"></td><td class="num">4,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">24,000.00</td><td class="num">24,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> On-account is realized revenue only when matched against subsequent fee / hour / milestone invoices. Maintain the on-account balance as a liability until consumed.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Hire to retire ============== -->
+      <article class="item-pane" data-item-pane="hire-to-retire">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Hire to retire</span>
+          <h2 class="item-pane__title">Hire to retire — journal entries</h2>
+          <p class="item-pane__lead">Payroll posting, accruals, T&amp;E reimbursement, leave, severance.</p>
+        </header>
+
+        <article class="article">
+          <h3>Monthly payroll run — gross to net</h3>
+          <p class="article__meta">Payroll · GL costing</p>
+          <p>Gross 80,000. Employee deductions (taxes + social) 20,000. Employer charges 15,000. Net pay 60,000.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Salaries expense</td><td>Gross wages</td><td class="num">80,000.00</td><td class="num"></td></tr>
+                <tr><td>Employer social charges</td><td>Employer share</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Payroll payable (net pay)</td><td>Owed to employees</td><td class="num"></td><td class="num">60,000.00</td></tr>
+                <tr><td>Payroll taxes payable</td><td>Employee + employer</td><td class="num"></td><td class="num">35,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">95,000.00</td><td class="num">95,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The cost is allocated by department / cost center via the payroll costing setup. Validate the GL posting amount against the payroll register every cycle — payroll-to-GL reconciliation is non-negotiable.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Pay employees — net pay distribution</h3>
+          <p class="article__meta">Payroll · Cash payment</p>
+          <p>Pay the net pay to employees by ACH.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Payroll payable</td><td>Settle obligation</td><td class="num">60,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank — payroll account</td><td>Outflow</td><td class="num"></td><td class="num">60,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">60,000.00</td><td class="num">60,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Maintaining a separate payroll bank sub-account simplifies reconciliation and audit.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Pay tax authorities and social</h3>
+          <p class="article__meta">Payroll · Authority remittance</p>
+          <p>Settle the 35,000 payroll tax liability to authorities.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Payroll taxes payable</td><td>Remit to authority</td><td class="num">35,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Outflow</td><td class="num"></td><td class="num">35,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">35,000.00</td><td class="num">35,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Different authorities (income tax, social, unemployment) usually require separate remittances on different cadences. The payroll-tax liability account must reconcile to "open authority obligations" each month.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Year-end bonus accrual + reversal</h3>
+          <p class="article__meta">Payroll · Period-end accrual</p>
+          <p>Accrue 50,000 of bonuses payable in March. Auto-reverses Jan 1; actual bonus posted with March payroll.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Bonus expense</td><td>Accrue Dec</td><td class="num">50,000.00</td><td class="num"></td></tr>
+                <tr><td>Accrued bonuses</td><td>Liability</td><td class="num"></td><td class="num">50,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: Dec 31 accrual</td><td class="num">50,000.00</td><td class="num">50,000.00</td></tr>
+                <tr><td>Accrued bonuses</td><td>Reverse Jan 1</td><td class="num">50,000.00</td><td class="num"></td></tr>
+                <tr><td>Bonus expense</td><td>Reverse</td><td class="num"></td><td class="num">50,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: Jan 1 reversal</td><td class="num">50,000.00</td><td class="num">50,000.00</td></tr>
+                <tr><td>Bonus expense</td><td>Mar payroll posts actual</td><td class="num">50,000.00</td><td class="num"></td></tr>
+                <tr><td>Payroll payable</td><td>Net of withholding</td><td class="num"></td><td class="num">50,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 3: Mar payroll</td><td class="num">50,000.00</td><td class="num">50,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Use a journal name with "Reversal" enabled to schedule the auto-reverse — avoids double-counting in the new period.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Leave accrual — vacation earned</h3>
+          <p class="article__meta">HR · Leave plan accrual</p>
+          <p>Each pay period, employees earn vacation hours. The dollar value of the obligation is accrued.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Vacation expense</td><td>Period accrual</td><td class="num">2,500.00</td><td class="num"></td></tr>
+                <tr><td>Accrued vacation liability</td><td>Future obligation</td><td class="num"></td><td class="num">2,500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">2,500.00</td><td class="num">2,500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> When vacation is taken, the liability is settled (no new expense) — Dr Accrued vacation / Cr Payroll payable. When paid out at termination, it's the same mechanism.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>T&amp;E expense reimbursement</h3>
+          <p class="article__meta">Expense Management · Worker reimbursement</p>
+          <p>Approved expense report with 500 of business travel; non-billable.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Travel expense</td><td>Business travel</td><td class="num">500.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (Worker as supplier) (AP)</td><td>Reimbursement liability</td><td class="num"></td><td class="num">500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">500.00</td><td class="num">500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> When reimbursed by AP payment, it's the standard vendor settlement journal. Corporate cards work differently — the expense often hits a corporate-card payable rather than the worker.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Severance — termination payout</h3>
+          <p class="article__meta">Payroll · Termination</p>
+          <p>One-time severance payment of 20,000.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Severance expense</td><td>One-time termination cost</td><td class="num">20,000.00</td><td class="num"></td></tr>
+                <tr><td>Payroll payable / accrual</td><td>Liability before payment</td><td class="num"></td><td class="num">20,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">20,000.00</td><td class="num">20,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Reserve / accrue at the date the obligation becomes both probable and estimable, not at the cash date — period-matching matters for restructuring disclosures.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Record to report ============== -->
+      <article class="item-pane" data-item-pane="record-to-report">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Record to report</span>
+          <h2 class="item-pane__title">Record to report — journal entries</h2>
+          <p class="item-pane__lead">Period-end accruals, reclasses, prepaid amortization, FX revaluation, allocations, intercompany, year-end close.</p>
+        </header>
+
+        <article class="article">
+          <h3>Prepaid expense — annual insurance</h3>
+          <p class="article__meta">R2R · Multi-period accounting</p>
+          <p>Pay 12,000 in January for a 12-month insurance policy. Recognize 1,000 expense each month.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Prepaid expenses</td><td>Treat as asset</td><td class="num">12,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Insurance invoice</td><td class="num"></td><td class="num">12,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: invoice</td><td class="num">12,000.00</td><td class="num">12,000.00</td></tr>
+                <tr><td>Insurance expense</td><td>January 1/12</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Prepaid expenses</td><td>Reduce asset</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: monthly amortization</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Use the Allocations / amortization-schedule feature in F&amp;O General Ledger to automate the monthly reclass. Manual recurring journals work but drift over time.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Period-end accrual — utility</h3>
+          <p class="article__meta">R2R · Reversing accrual</p>
+          <p>3,000 of utility usage in Dec; invoice arrives in Jan. Accrue Dec; reverse Jan; the actual invoice posts cleanly.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Utility expense</td><td>Estimate Dec usage</td><td class="num">3,000.00</td><td class="num"></td></tr>
+                <tr><td>Accrued expenses</td><td>Liability for unbilled</td><td class="num"></td><td class="num">3,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: Dec 31 accrual</td><td class="num">3,000.00</td><td class="num">3,000.00</td></tr>
+                <tr><td>Accrued expenses</td><td>Reverse Jan 1</td><td class="num">3,000.00</td><td class="num"></td></tr>
+                <tr><td>Utility expense</td><td>Reverse</td><td class="num"></td><td class="num">3,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: Jan 1 reversal</td><td class="num">3,000.00</td><td class="num">3,000.00</td></tr>
+                <tr><td>Utility expense</td><td>Actual Jan invoice</td><td class="num">2,950.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">590.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Total</td><td class="num"></td><td class="num">3,540.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 3: actual invoice (Jan)</td><td class="num">3,540.00</td><td class="num">3,540.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The 50 estimate variance (3,000 accrual vs. 2,950 actual) lands in the period the invoice posts. Don't go back and adjust Dec — that's a re-open.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Reclass journal — correct an account assignment</h3>
+          <p class="article__meta">R2R · Manual reclass</p>
+          <p>1,500 was posted to Office supplies; should be IT supplies. Reclass between accounts (no P&amp;L net change).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>IT supplies expense</td><td>Correct account</td><td class="num">1,500.00</td><td class="num"></td></tr>
+                <tr><td>Office supplies expense</td><td>Reverse mis-post</td><td class="num"></td><td class="num">1,500.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,500.00</td><td class="num">1,500.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Reclass journals should reference the original voucher and include rationale in the description for audit trail.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Allocation — overhead to cost centers</h3>
+          <p class="article__meta">R2R · Allocation rule</p>
+          <p>10,000 of facilities cost is allocated 60/30/10 to Production, R&amp;D, and Admin cost centers based on headcount.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Facilities expense (CC: Production)</td><td>60%</td><td class="num">6,000.00</td><td class="num"></td></tr>
+                <tr><td>Facilities expense (CC: R&amp;D)</td><td>30%</td><td class="num">3,000.00</td><td class="num"></td></tr>
+                <tr><td>Facilities expense (CC: Admin)</td><td>10%</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Facilities expense (CC: unallocated)</td><td>Clear allocation source</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">10,000.00</td><td class="num">10,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Same natural account; only the cost-center dimension changes. Use Ledger allocation rules in F&amp;O — reproducible, auditable, version-controlled.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>FX revaluation — open AR balance</h3>
+          <p class="article__meta">R2R · Foreign-currency revaluation</p>
+          <p>Open AR includes USD 50,000 at month-end. Original spot was 0.92 → 46,000 EUR. Month-end rate is 0.94 → 47,000 EUR. Unrealized FX gain 1,000.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>Increase to revalued amount</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>FX gain (unrealized)</td><td>Mark-to-market</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Reverses the next period (depending on revaluation policy: previous + current, or current only). At eventual receipt, the difference between revalued and paid is realized FX. Run AP, AR, and bank revaluations in sequence at close.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Intercompany allocation — service charge</h3>
+          <p class="article__meta">R2R · IC due-to / due-from</p>
+          <p>Parent company charges Subsidiary A 25,000 for shared services. Intercompany journal creates due-to / due-from positions.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>IC receivable — from Sub A</td><td>Parent books receivable</td><td class="num">25,000.00</td><td class="num"></td></tr>
+                <tr><td>IC service revenue</td><td>Parent revenue</td><td class="num"></td><td class="num">25,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Parent entity</td><td class="num">25,000.00</td><td class="num">25,000.00</td></tr>
+                <tr><td>Shared services expense</td><td>Sub A picks up cost</td><td class="num">25,000.00</td><td class="num"></td></tr>
+                <tr><td>IC payable — to Parent</td><td>Sub A obligation</td><td class="num"></td><td class="num">25,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Subsidiary A entity</td><td class="num">25,000.00</td><td class="num">25,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Set up Intercompany accounting in GL with each entity pair's due-to / due-from accounts. F&amp;O auto-balances IC postings if configured. At consolidation, IC receivable / payable eliminate against each other.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Consolidation — IC elimination</h3>
+          <p class="article__meta">R2R · Consolidation entity</p>
+          <p>Eliminate the 25,000 IC receivable / payable in the consolidation entity.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>IC payable</td><td>Eliminate Sub A liability</td><td class="num">25,000.00</td><td class="num"></td></tr>
+                <tr><td>IC receivable</td><td>Eliminate Parent receivable</td><td class="num"></td><td class="num">25,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: balance sheet eliminations</td><td class="num">25,000.00</td><td class="num">25,000.00</td></tr>
+                <tr><td>IC service revenue</td><td>Eliminate Parent revenue</td><td class="num">25,000.00</td><td class="num"></td></tr>
+                <tr><td>Shared services expense</td><td>Eliminate Sub A expense</td><td class="num"></td><td class="num">25,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: P&amp;L eliminations</td><td class="num">25,000.00</td><td class="num">25,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> IC eliminations live only in the consolidation entity, not in the operating ledgers. The originals stay intact for statutory reporting per legal entity.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Year-end closing — opening transactions</h3>
+          <p class="article__meta">R2R · Fiscal-year close</p>
+          <p>At fiscal-year close, P&amp;L accounts are closed to retained earnings; balance sheet rolls forward.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>All revenue accounts</td><td>Close credit balances</td><td class="num">5,000,000.00</td><td class="num"></td></tr>
+                <tr><td>All expense accounts</td><td>Close debit balances</td><td class="num"></td><td class="num">4,200,000.00</td></tr>
+                <tr><td>Retained earnings</td><td>Net income for the year</td><td class="num"></td><td class="num">800,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">5,000,000.00</td><td class="num">5,000,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> F&amp;O's year-end closing process auto-generates the opening balance journal in the new year. Run only after all subledgers are closed and the trial balance is finalized.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>VAT settlement — periodic remittance</h3>
+          <p class="article__meta">Tax · VAT settle</p>
+          <p>Output VAT 20,000; input VAT 12,000; net payable 8,000.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Sales tax payable (output)</td><td>Clear period collected</td><td class="num">20,000.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable (input)</td><td>Clear period recovered</td><td class="num"></td><td class="num">12,000.00</td></tr>
+                <tr><td>VAT settlement payable</td><td>Net to authority</td><td class="num"></td><td class="num">8,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: settle</td><td class="num">20,000.00</td><td class="num">20,000.00</td></tr>
+                <tr><td>VAT settlement payable</td><td>Pay authority</td><td class="num">8,000.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Cash out</td><td class="num"></td><td class="num">8,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: remittance</td><td class="num">8,000.00</td><td class="num">8,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Run "Settle and post sales tax" in F&amp;O. If input exceeds output, you have a refund position — the difference goes to a VAT receivable, not payable.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Service to deliver ============== -->
+      <article class="item-pane" data-item-pane="service-to-deliver">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Service to deliver</span>
+          <h2 class="item-pane__title">Service to deliver — journal entries</h2>
+          <p class="item-pane__lead">Service-order item consumption, technician hours, service invoicing, and warranty cost.</p>
+        </header>
+
+        <article class="article">
+          <h3>Service-order item consumption — parts on a work order</h3>
+          <p class="article__meta">Service · Item issue to service order</p>
+          <p>Technician consumes 80 of parts on a service order.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Service cost — parts</td><td>WIP equivalent for service</td><td class="num">80.00</td><td class="num"></td></tr>
+                <tr><td>Inventory</td><td>Reduce on-hand</td><td class="num"></td><td class="num">80.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">80.00</td><td class="num">80.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If the service order is project-based, this routes via Project transactions instead — same accounting effect, different reporting / billing logic.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Technician hour — labor on a service order</h3>
+          <p class="article__meta">Service · Hour transaction</p>
+          <p>Technician logs 4 hours @ 60 cost = 240 to a service order.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Service cost — labor</td><td>Recognize labor cost</td><td class="num">240.00</td><td class="num"></td></tr>
+                <tr><td>Labor allocation / payroll absorption</td><td>Credit labor pool</td><td class="num"></td><td class="num">240.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">240.00</td><td class="num">240.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The credit side mirrors how labor is accounted in production (absorption account or payroll accrual).
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Service invoice — billed to customer</h3>
+          <p class="article__meta">AR · Service invoice</p>
+          <p>Bill 4 hours @ 120 = 480 + 80 parts at cost passthrough + 50% markup → 120 parts billed = 600 + VAT.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Customer (AR)</td><td>Total invoice</td><td class="num">720.00</td><td class="num"></td></tr>
+                <tr><td>Service revenue — labor</td><td>Hours billed</td><td class="num"></td><td class="num">480.00</td></tr>
+                <tr><td>Service revenue — parts</td><td>Parts billed</td><td class="num"></td><td class="num">120.00</td></tr>
+                <tr><td>Sales tax payable</td><td>VAT 20%</td><td class="num"></td><td class="num">120.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">720.00</td><td class="num">720.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Service margin (revenue − cost) = (480+120) − (240+80) = 280 = 47%. Track it per service contract — margin compression on contract renewals is a leading indicator.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Warranty cost — accrual at sale</h3>
+          <p class="article__meta">Service · Warranty reserve</p>
+          <p>Sell 1,000 units; estimated warranty cost is 1% of sales = 10,000. Accrue at sale; consume the reserve as warranty work happens.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Warranty expense</td><td>1% of sales</td><td class="num">10,000.00</td><td class="num"></td></tr>
+                <tr><td>Warranty reserve (liability)</td><td>Future obligation</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: accrual at sale</td><td class="num">10,000.00</td><td class="num">10,000.00</td></tr>
+                <tr><td>Warranty reserve</td><td>Use reserve when serviced</td><td class="num">350.00</td><td class="num"></td></tr>
+                <tr><td>Inventory / Labor</td><td>Parts and labor used</td><td class="num"></td><td class="num">350.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: warranty work</td><td class="num">350.00</td><td class="num">350.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> No reserve = expense at the work-order date. Reserve smooths the P&amp;L and matches the cost to the period of sale. True-up periodically based on actual claim experience.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Case to resolution ============== -->
+      <article class="item-pane" data-item-pane="case-to-resolution">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Case to resolution</span>
+          <h2 class="item-pane__title">Case to resolution — journal entries</h2>
+          <p class="item-pane__lead">Most cases don't post to the GL. The accounting events are concentrated where a case triggers a credit, refund, RMA, or warranty service.</p>
+        </header>
+
+        <article class="article">
+          <h3>Goodwill credit — no return</h3>
+          <p class="article__meta">AR · Customer service credit memo</p>
+          <p>Customer complaint (case) is resolved with a 100 goodwill credit. Goods are not returned. Credit memo reduces AR / revenue.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Sales allowances (contra-revenue)</td><td>Reduce net revenue</td><td class="num">100.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax payable</td><td>Reverse VAT</td><td class="num">20.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Reduce receivable</td><td class="num"></td><td class="num">120.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">120.00</td><td class="num">120.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Use a reason code on the credit memo so service-driven credits are reportable separately from returns or pricing adjustments. Without reason coding, contra-revenue becomes an opaque bucket.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>RMA from a case — return + refund</h3>
+          <p class="article__meta">Case · Return material authorization</p>
+          <p>Case results in a return. Goods come back (cost 60), original 100 sale is reversed, customer refunded the 120 they paid.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Sales returns</td><td>Reverse revenue</td><td class="num">100.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax payable</td><td>Reverse VAT</td><td class="num">20.00</td><td class="num"></td></tr>
+                <tr><td>Customer (AR)</td><td>Reduce receivable</td><td class="num"></td><td class="num">120.00</td></tr>
+                <tr><td>Inventory</td><td>Goods back on hand</td><td class="num">60.00</td><td class="num"></td></tr>
+                <tr><td>COGS</td><td>Reverse cost</td><td class="num"></td><td class="num">60.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: return / credit memo</td><td class="num">180.00</td><td class="num">180.00</td></tr>
+                <tr><td>Customer (AR)</td><td>Refund customer</td><td class="num">120.00</td><td class="num"></td></tr>
+                <tr><td>Bank</td><td>Cash refund</td><td class="num"></td><td class="num">120.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: refund (if no open invoices to net)</td><td class="num">120.00</td><td class="num">120.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> If the credit can be applied to other open invoices, skip the cash refund step. Refund decisions tie back to the customer's payment terms and trust level.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Warranty work tied to a case</h3>
+          <p class="article__meta">Service · Warranty service</p>
+          <p>Case triggers warranty work. If a warranty reserve exists, consume it; otherwise hit warranty expense directly.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Warranty reserve (or warranty expense)</td><td>Consume reserve / expense work</td><td class="num">200.00</td><td class="num"></td></tr>
+                <tr><td>Inventory + Labor</td><td>Parts and labor used</td><td class="num"></td><td class="num">200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">200.00</td><td class="num">200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Cross-reference: see Service to deliver → Warranty cost — accrual at sale. The reserve and the work-order accounting are two halves of the same lifecycle.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Concept to market ============== -->
+      <article class="item-pane" data-item-pane="concept-to-market">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Concept to market</span>
+          <h2 class="item-pane__title">Concept to market — journal entries</h2>
+          <p class="item-pane__lead">Marketing campaigns are mostly expense recognition. R&amp;D and product-development costs may be capitalized depending on policy and standard.</p>
+        </header>
+
+        <article class="article">
+          <h3>Marketing campaign cost — expensed</h3>
+          <p class="article__meta">AP · Advertising expense</p>
+          <p>Pay an agency 25,000 for a campaign + VAT. Expensed in the period the service is delivered.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Advertising expense</td><td>Campaign cost</td><td class="num">25,000.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Liability</td><td class="num"></td><td class="num">30,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">30,000.00</td><td class="num">30,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Campaign costs spanning multiple periods (e.g., a 3-month TV ad) should match periods via accrual / prepaid mechanics, not all hit at invoice.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>R&amp;D cost — expensed (US GAAP / development phase under IFRS not met)</h3>
+          <p class="article__meta">AP · Research expense</p>
+          <p>Research-phase R&amp;D is expensed as incurred. This is the default treatment for most R&amp;D under US GAAP (ASC 730) and the research phase under IFRS.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Research &amp; development expense</td><td>R&amp;D cost</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP) / Payroll / Inventory</td><td>Sourced cost</td><td class="num"></td><td class="num">15,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">15,000.00</td><td class="num">15,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The credit side depends on the cost source — vendor invoice, payroll allocation, inventory consumption.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Capitalized development cost — IFRS criteria met</h3>
+          <p class="article__meta">FA · Capitalized R&amp;D / intangible asset</p>
+          <p>IFRS allows capitalization when development-phase criteria are met (technical feasibility, intent and ability to complete, future economic benefit, measurable cost). Cost accumulates as an intangible asset and amortizes once placed in service.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Intangible assets — development costs</td><td>Capitalize qualifying cost</td><td class="num">50,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP) / Payroll</td><td>Sourced cost</td><td class="num"></td><td class="num">50,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: capitalization</td><td class="num">50,000.00</td><td class="num">50,000.00</td></tr>
+                <tr><td>Amortization expense — intangibles</td><td>Monthly 50,000 / 60</td><td class="num">833.33</td><td class="num"></td></tr>
+                <tr><td>Accumulated amortization — intangibles</td><td>Reduce NBV</td><td class="num"></td><td class="num">833.33</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: monthly amortization</td><td class="num">833.33</td><td class="num">833.33</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The capitalization decision is policy-driven and audit-tested. Document the criteria assessment by project; auditors will ask.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Design to retire ============== -->
+      <article class="item-pane" data-item-pane="design-to-retire">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Design to retire</span>
+          <h2 class="item-pane__title">Design to retire — journal entries</h2>
+          <p class="item-pane__lead">End-of-life inventory write-offs, obsolescence reserves, and the cost-method change at retirement.</p>
+        </header>
+
+        <article class="article">
+          <h3>End-of-life inventory write-off</h3>
+          <p class="article__meta">Inventory · Discontinued product</p>
+          <p>Item retired from active sale; 800 of remaining inventory has no resale value. Direct write-off (no reserve).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory write-off — obsolete</td><td>P&amp;L hit</td><td class="num">800.00</td><td class="num"></td></tr>
+                <tr><td>Inventory</td><td>Reduce on-hand to zero</td><td class="num"></td><td class="num">800.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">800.00</td><td class="num">800.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Cross-reference: see Inventory to deliver → Obsolescence reserve for the reserve-based pattern. Direct write-off is appropriate when retirement was unplanned and no reserve was set.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Last-time buy — held inventory at risk</h3>
+          <p class="article__meta">Inventory · Reserve at retirement decision</p>
+          <p>Item discontinued; on-hand 5,000 will be sold over 6 months. Book a partial reserve (40%) for excess that's unlikely to sell at full value.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory obsolescence expense</td><td>Provision 40% × 5,000</td><td class="num">2,000.00</td><td class="num"></td></tr>
+                <tr><td>Inventory obsolescence reserve</td><td>Contra-asset</td><td class="num"></td><td class="num">2,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">2,000.00</td><td class="num">2,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> True-up the reserve at each period close based on aging analysis and revised sell-through expectations.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>BOM rework — engineering change costs</h3>
+          <p class="article__meta">Manufacturing · ECN cost</p>
+          <p>Engineering change requires rework on 200 units of work-in-progress. Rework labor + material booked to a rework / scrap variance account.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Rework expense / variance</td><td>ECN-driven labor + material</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>WIP / Inventory / Labor pool</td><td>Sourced cost</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Tracked separately from normal scrap so design-quality issues are visible. Frequent rework expense → re-examine product design or BOM controls.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Forecast to plan ============== -->
+      <article class="item-pane" data-item-pane="forecast-to-plan">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Forecast to plan</span>
+          <h2 class="item-pane__title">Forecast to plan — journal entries</h2>
+          <p class="item-pane__lead">Planning runs do not post to the GL. The accounting events are budget commitments and encumbrance — only when budget control is enabled.</p>
+        </header>
+
+        <article class="article">
+          <h3>Master planning — no GL impact</h3>
+          <p class="article__meta">Planning · Planned orders</p>
+          <p>MRP / Planning Optimization generates planned purchase, transfer, and production orders. None of these post to the GL — they are sub-ledger objects. Accounting begins only when planned orders are firmed and executed.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td colspan="4" class="text-muted">No GL accounting from planning runs.</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Planning is a forecasting / scheduling activity, not an accounting event. The first GL impact lands at PO / production order / transfer order execution.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Encumbrance (commitment accounting) — when budget control is on</h3>
+          <p class="article__meta">Budgeting · Public sector / encumbrance</p>
+          <p>Some sectors (notably public sector / government) require encumbrance accounting — the budget is reduced when the PO is issued, not when the invoice posts. F&amp;O supports this through Budget control + commitment accounting.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Encumbrance — committed budget</td><td>PO issued</td><td class="num">10,000.00</td><td class="num"></td></tr>
+                <tr><td>Reserve for encumbrance</td><td>Reduce available budget</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: PO issued</td><td class="num">10,000.00</td><td class="num">10,000.00</td></tr>
+                <tr><td>Reserve for encumbrance</td><td>Release commitment</td><td class="num">10,000.00</td><td class="num"></td></tr>
+                <tr><td>Encumbrance — committed budget</td><td>Reverse encumbrance</td><td class="num"></td><td class="num">10,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: invoice posted (release)</td><td class="num">10,000.00</td><td class="num">10,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Most commercial businesses don't use encumbrance accounting. Confirm at requirements: the standard pattern is to set a budget figure and let actuals be compared against it without journal-level commitment.
+          </div>
+        </article>
+
+      </article>
+
+      <!-- ============== Prospect to quote ============== -->
+      <article class="item-pane" data-item-pane="prospect-to-quote">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Prospect to quote</span>
+          <h2 class="item-pane__title">Prospect to quote — journal entries</h2>
+          <p class="item-pane__lead">Pre-sales is not accounting. Leads, opportunities, and quotes don't post to the GL. The first journal lands at sales-order conversion or commission accrual.</p>
+        </header>
+
+        <article class="article">
+          <h3>Lead, opportunity, quote — no GL impact</h3>
+          <p class="article__meta">CRM · Pipeline</p>
+          <p>Recording a lead, qualifying an opportunity, generating a quote — none of this posts to the GL. The accounting begins when the quote becomes a sales order (see Order to cash).</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td colspan="4" class="text-muted">No GL accounting in pre-sales activity.</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> The closest thing to accounting in pre-sales is sales-pipeline reporting (forecasted revenue) — informational, not a journal.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Sales commission accrual — at win</h3>
+          <p class="article__meta">Commission · Period accrual</p>
+          <p>Sales rep wins a 100,000 deal with 5% commission. Accrue at win even if commission is paid in a later period.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Sales commission expense</td><td>Recognize commission</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Accrued commissions payable</td><td>Liability to rep</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: accrual at win</td><td class="num">5,000.00</td><td class="num">5,000.00</td></tr>
+                <tr><td>Accrued commissions payable</td><td>Settle when paid</td><td class="num">5,000.00</td><td class="num"></td></tr>
+                <tr><td>Payroll payable</td><td>Through payroll</td><td class="num"></td><td class="num">5,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: payment via payroll</td><td class="num">5,000.00</td><td class="num">5,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note —</strong> Under ASC 606, incremental costs of obtaining a contract (e.g., sales commissions) may need to be capitalized and amortized over the customer life — confirm policy.
+          </div>
+        </article>
+
+      </article>
+
+    </main>
 
       <article class="item-pane" data-item-pane="acquire-to-dispose">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Accounting · Acquire to dispose</span><h2 class="item-pane__title">Acquire to dispose — journal entries</h2><p class="item-pane__lead">Acquisition, depreciation, value adjustment, write-up / write-down, and disposal.</p></header>
