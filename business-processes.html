@@ -74,158 +74,1446 @@
 
     <main class="workspace__main">
 
+      <!-- ============== Acquire to dispose ============== -->
       <article class="item-pane" data-item-pane="acquire-to-dispose">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 10</span>
           <h2 class="item-pane__title">Acquire to dispose</h2>
-          <p class="item-pane__lead">The lifecycle of a fixed asset, from acquisition through depreciation to disposal or write-off.</p>
+          <p class="item-pane__lead">The full lifecycle of a fixed asset — strategy, acquisition, active management, maintenance, and disposal.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here from the workshop document — process scope, sub-processes, key roles, modules involved (Fixed Assets, AP, GL), main transactions, integration points, and what to watch out for during implementation.</p>
-        </article>
+
+        <p>Acquire to dispose is the asset-management end-to-end. It is two intertwined stories: an <strong>accounting story</strong> (capitalization, depreciation, value adjustment, disposal) and an <strong>operational story</strong> (where the asset lives, what condition it is in, who maintains it). A consultant who only sees Fixed Assets will leave the maintenance side broken; a consultant who only sees Asset Management will leave the books unreconciled. The job is to wire both halves to the same asset.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Define asset strategy and policies</strong> — build vs. buy vs. lease, capitalization threshold, depreciation methods, lease classification (ASC 842 / IFRS 16).</li>
+                <li><strong>Acquire</strong> — RFQ, requisition, PO, P-card, project (CIP), or manual. Receipt and capitalization.</li>
+                <li><strong>Manage active assets</strong> — depreciate, revalue, write-up / write-down, transfer, insure, tag, inventory.</li>
+                <li><strong>Maintain and repair</strong> — preventive and corrective maintenance, in-house or third-party, work orders.</li>
+                <li><strong>Retire and dispose</strong> — sale, scrap, replace, decommission, write-off.</li>
+                <li><strong>Analyze</strong> — asset value, depreciation, condition, lease liabilities, maintenance cost.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#fixed-assets">Fixed Assets</a> — the accounting asset record, books, depreciation profiles, acquisitions / adjustments / disposals.</li>
+                <li><a href="modules.html#asset-management">Asset Management</a> — the operational asset (functional location, asset BOM, work orders, maintenance plans).</li>
+                <li><a href="modules.html#procurement-sourcing">Procurement &amp; Sourcing</a> — PO-based acquisition.</li>
+                <li><a href="modules.html#accounts-payable">Accounts Payable</a> — vendor invoice for asset acquisition / lease.</li>
+                <li><a href="modules.html#project-mgmt-accounting">Project Management &amp; Accounting</a> — CIP for self-built assets.</li>
+                <li><a href="modules.html#general-ledger">General Ledger</a> — capitalization, depreciation, gain/loss postings.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Define asset strategy (10.05)</h4>
+              <p>Build, buy, lease, develop. Capitalization threshold ($ amount and policy), depreciation methods, lease classification rules, maintenance guidelines.</p>
+              <h4>Acquire assets (10.20)</h4>
+              <p>Sourcing path — RFQ, requisition, PO, P-card, internal project (CIP). Asset types — high-value tangible, low-value, intellectual property, trademarks, land. Budgeted vs. unbudgeted; budget approach (top-down, bottom-up, zero-based).</p>
+              <h4>Manage active assets (10.30)</h4>
+              <p>Depreciation, revaluation, write-up/down, value correction. Lease scenarios — accrue, pay, amortize liability, record expense. CIP capitalization. Tagging, inventory, insurance, transfer.</p>
+              <h4>Maintain and repair (10.50)</h4>
+              <p>Scheduled vs. unplanned. Internal (local, remote, traveling) vs. third-party. Asset Management module integration with Inventory and Procurement for spare parts.</p>
+              <h4>Retire and dispose (10.60)</h4>
+              <p>Sell (via AR free-text invoice with proceeds posting), scrap, replace, decommission. Each has a different gain/loss footprint.</p>
+              <h4>Analyze (10.70)</h4>
+              <p>Inventory value, depreciation runs, asset condition, lease liability schedule, maintenance cost per asset.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>How many books?</strong> One per valuation purpose (corporate book, tax book, IFRS, local statutory). Get this wrong and you can't unwind it without history rebuild.</li>
+                <li><strong>Posting layer per book.</strong> Current, operations, tax — drives whether the book hits the GL or sits parallel.</li>
+                <li><strong>Depreciation profile choice.</strong> Straight-line, reducing balance, manual, factor — and on what convention (half-year, full month, daily).</li>
+                <li><strong>Acquisition path standard.</strong> Pick the dominant flow (PO-based, project-based, manual) and document it. Mixing all three without a primary leads to inconsistent capitalization decisions.</li>
+                <li><strong>Asset Management vs. Fixed Assets sync.</strong> Decide whether the operational asset record and the accounting asset record share an identifier and how creation propagates.</li>
+                <li><strong>Lease accounting module.</strong> ASC 842 / IFRS 16 lease accounting is its own subsystem within Fixed Assets — confirm in scope or deferred.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Source to pay</strong> — vendor invoice for asset acquisition and lease payments.</li>
+                <li><strong>Project to profit</strong> — CIP capitalization for self-constructed assets.</li>
+                <li><strong>Record to report</strong> — depreciation accrual, gain/loss on disposal, year-end roll-forward.</li>
+                <li><strong>Inventory to deliver</strong> — spare parts on work orders.</li>
+                <li><strong>Hire to retire</strong> — workers operating and maintaining the asset.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Two asset masters that don't reconcile.</strong> If FA has 850 assets and Asset Management has 1,200 functional locations, finance and operations will report different numbers forever.</li>
+                <li><strong>Wrong capitalization threshold.</strong> Too low and the FA register fills with $300 chairs; too high and material assets are expensed. Confirm with auditor.</li>
+                <li><strong>CIP that never closes.</strong> Projects ageing as CIP for years because no one runs the eliminate / capitalize step.</li>
+                <li><strong>Disposal accounting flubs.</strong> Selling for less than NBV creates a loss; check the journal in UAT, not after go-live.</li>
+                <li><strong>Lease accounting underestimated.</strong> ASC 842 / IFRS 16 is a project of its own — don't budget it as "configure a few fields."</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Case to resolution ============== -->
       <article class="item-pane" data-item-pane="case-to-resolution">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 20</span>
           <h2 class="item-pane__title">Case to resolution</h2>
-          <p class="item-pane__lead">Receiving, triaging, and resolving customer cases — typically the bridge between Sales/Service and the rest of the business.</p>
+          <p class="item-pane__lead">Customer-service operations — knowledge, intake, working cases, resolution, and analysis.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here from the workshop document — process scope, intake channels, case categories, escalation rules, SLAs, integration with service management, and how cases tie back to invoices, returns, or warranty claims.</p>
-        </article>
+
+        <p>Case to resolution lives mostly outside F&amp;O proper — it sits in <strong>Dynamics 365 Customer Service</strong> on Dataverse. For an F&amp;O consultant, the process matters because cases <strong>cross over</strong> into invoices, returns, warranty claims, field service work orders, and credit memos. The integration boundary is where the F&amp;O consultant earns their keep.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Establish a knowledge base</strong> — articles, lifecycle, approval workflow.</li>
+                <li><strong>Define service operations</strong> — channels, tiers (L1/L2/L3), SLAs, agent assignment rules.</li>
+                <li><strong>Intake cases</strong> — manual, portal, email-to-case, chatbot, IoT, omnichannel routing.</li>
+                <li><strong>Manage and work on cases</strong> — assign, investigate, escalate, link to KB, resolve.</li>
+                <li><strong>Analyze case performance</strong> — SLA compliance, CSAT, first-contact resolution, agent productivity.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Dynamics 365 Customer Service</strong> (Dataverse) — primary system. Cases, knowledge, omnichannel, queues, routing.</li>
+                <li><strong>Dynamics 365 Field Service</strong> — when cases trigger on-site work.</li>
+                <li><a href="modules.html#service-management">Service Management</a> in F&amp;O — for service order / depot scenarios that stay in F&amp;O.</li>
+                <li><a href="modules.html#accounts-receivable">Accounts Receivable</a> — credit memos and refunds tied to cases.</li>
+                <li><a href="modules.html#sales-marketing">Sales &amp; Marketing</a> — return material authorizations (RMAs) and customer communications.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Establish a knowledge base (20.10)</h4>
+              <p>Internal (agent-facing), external (self-service), AI-suggested. Lifecycle (draft → approved → published → retired), translation, version control, feedback ratings.</p>
+              <h4>Service operations (20.20)</h4>
+              <p>Channels — chat, voice, email, social. Tiered support, agent scripting, escalation, follow-the-sun, 24/7. Telephony / contact center integration, omnichannel routing.</p>
+              <h4>Case intake (20.30)</h4>
+              <p>Manual creation, portal submission, email-to-case automation, chatbot escalation, IoT or system-generated cases.</p>
+              <h4>Manage cases (20.40)</h4>
+              <p>Routing, prioritization, SLA enforcement, agent ownership and reassignment. Field service handoff for on-site work.</p>
+              <h4>Analyze (20.60)</h4>
+              <p>SLA compliance, CSAT, first-contact resolution, response and resolution time, agent productivity.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>System of record.</strong> Customer Service (Dataverse) for the case, F&amp;O for the customer / order / invoice. Confirm where customer master is mastered and how it syncs.</li>
+                <li><strong>Routing model.</strong> Skill-based, queue-based, round-robin, or unified routing — informs how agents are configured.</li>
+                <li><strong>SLA design.</strong> Response vs. resolution, business calendar vs. 24/7, pause-on-hold rules. SLAs without business calendars give weekend penalties for nothing.</li>
+                <li><strong>Knowledge approval.</strong> Who can publish? Single approver, peer review, formal review board.</li>
+                <li><strong>Channel scope.</strong> Email + portal first; chat, voice, social are each separate projects.</li>
+                <li><strong>Copilot / AI.</strong> Suggested articles, summary generation — separate licensing and governance call.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Service to deliver</strong> — case escalates to a field service work order.</li>
+                <li><strong>Order to cash</strong> — case results in a return, RMA, credit memo, or refund.</li>
+                <li><strong>Design to retire</strong> — case feedback informs product issues and engineering changes.</li>
+                <li><strong>Hire to retire</strong> — internal employee service (HR helpdesk) is the same case mechanic for a different audience.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Treating Customer Service as a sub-module of F&amp;O.</strong> It isn't. It's a separate Dataverse-based product with its own implementation discipline.</li>
+                <li><strong>Customer master in two places without sync rules.</strong> Cases on a customer that doesn't exist in F&amp;O = broken refund flow.</li>
+                <li><strong>Knowledge base launched empty.</strong> You need 20–50 articles at go-live or agents won't trust the tool.</li>
+                <li><strong>SLA targets that aren't measurable.</strong> "Resolve quickly" is not an SLA. Hours, on a calendar, against named priorities.</li>
+                <li><strong>Forgetting CTI on day 1.</strong> If the contact center is voice-first, omnichannel-voice integration is core scope, not a stretch goal.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Concept to market ============== -->
       <article class="item-pane" data-item-pane="concept-to-market">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 30</span>
           <h2 class="item-pane__title">Concept to market</h2>
-          <p class="item-pane__lead">Taking a product idea through design, validation, and release to the catalog the sales team can sell.</p>
+          <p class="item-pane__lead">Marketing strategy, offering development, campaigns, and analysis — turning a concept into demand the sales team can close.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — product ideation, design approval, item creation, BOM/route definition, costing setup, release to legal entity, and the data hand-off into PIM.</p>
-        </article>
+
+        <p>Concept to market is the marketing-side end-to-end. Like Case to resolution, this lives largely outside F&amp;O — it is delivered by <strong>Dynamics 365 Customer Insights — Journeys</strong> (the marketing app, formerly Marketing) and <strong>Customer Insights — Data</strong> (the CDP). For an F&amp;O consultant, the relevance is the data hand-off: campaigns generate leads, leads become opportunities, opportunities become quotes, quotes become sales orders. The clean flow of master data (customers, products, prices) into and back out of the marketing system is what you own.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop marketing strategy</strong> — brand, segmentation, channels, customer journey.</li>
+                <li><strong>Research and develop offerings</strong> — VoC, competitive analysis, concept testing.</li>
+                <li><strong>Manage service offerings</strong> — catalog, pricing, bundling, subscription models.</li>
+                <li><strong>Prepare campaigns</strong> — content, audience, approval, schedule.</li>
+                <li><strong>Manage campaigns</strong> — execute across email, social, advertising; track engagement.</li>
+                <li><strong>Analyze marketing operations</strong> — conversion, engagement, ROI.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Dynamics 365 Customer Insights — Journeys</strong> (Dataverse) — campaigns, journeys, real-time / outbound marketing.</li>
+                <li><strong>Dynamics 365 Customer Insights — Data</strong> — unified customer profile, segmentation.</li>
+                <li><strong>Dynamics 365 Sales</strong> (Dataverse) — leads / opportunities downstream of campaigns.</li>
+                <li><a href="modules.html#sales-marketing">Sales &amp; Marketing</a> in F&amp;O — light marketing for organizations that don't deploy the Dataverse marketing app.</li>
+                <li><a href="modules.html#pim">Product Information Management</a> — products / offerings synced as catalog items.</li>
+                <li><a href="modules.html#retail-commerce">Retail &amp; Commerce</a> — when offerings include POS-driven channels.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop marketing strategy (30.05)</h4>
+              <p>Brand strategy, product launch planning, segmentation, omnichannel alignment, customer journey mapping. Compliance — GDPR, CCPA, accessibility, consent.</p>
+              <h4>Research and develop offerings (30.15)</h4>
+              <p>VoC programs, competitive analysis, concept testing, co-creation. R&amp;D collaboration, customer research apps.</p>
+              <h4>Manage service offerings (30.25)</h4>
+              <p>Catalog, bundling, pricing strategies, subscription / usage-based models. Integration with Commerce or Supply Chain for product release.</p>
+              <h4>Prepare campaigns (30.35)</h4>
+              <p>Goals, audiences, content (Designer, Clipchamp), approval, scheduling.</p>
+              <h4>Manage campaigns (30.45)</h4>
+              <p>Execution, channel mix (email, social, ads), engagement tracking.</p>
+              <h4>Analyze (30.55)</h4>
+              <p>Conversion, engagement, ROI, attribution. Power BI, Clarity for behavioral analytics.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Marketing platform choice.</strong> F&amp;O Sales &amp; Marketing module (limited) vs. Customer Insights — Journeys (full). For real marketing, only Journeys is viable.</li>
+                <li><strong>Customer master.</strong> Where does the contact / lead originate, and where does it get enriched? Dataverse, Customer Insights, F&amp;O — all three? Define the ownership matrix.</li>
+                <li><strong>Consent and preference management.</strong> GDPR / CCPA require auditable consent. Decide: where is consent stored, who can reverse it?</li>
+                <li><strong>Lead-to-opportunity handoff.</strong> What qualifies a lead as sales-ready? Score threshold, manual qualification, hybrid.</li>
+                <li><strong>Product / offering sync.</strong> Static catalog vs. real-time pricing — drives integration architecture.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Prospect to quote</strong> — campaigns generate leads that become opportunities.</li>
+                <li><strong>Order to cash</strong> — qualified opportunities become sales orders.</li>
+                <li><strong>Design to retire</strong> — product offerings flow from PIM to the marketing catalog.</li>
+                <li><strong>Case to resolution</strong> — customer feedback from cases informs marketing positioning.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Underestimating Journeys.</strong> Implementation is its own project — content, journey design, deliverability, consent, suppression rules, A/B testing.</li>
+                <li><strong>Treating F&amp;O Sales &amp; Marketing as &ldquo;close enough.&rdquo;</strong> It is fine for very basic outreach. It is not a marketing automation platform.</li>
+                <li><strong>Lead enrichment ignored.</strong> Leads come in dirty. If you don't define enrichment rules, sales rejects 60% as garbage.</li>
+                <li><strong>No closed-loop reporting.</strong> Marketing claims credit for revenue; sales claims credit for the same revenue. Decide attribution model up front.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Design to retire ============== -->
       <article class="item-pane" data-item-pane="design-to-retire">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 40</span>
           <h2 class="item-pane__title">Design to retire</h2>
-          <p class="item-pane__lead">The full lifecycle of a product — from engineering design through production, sustaining, and end-of-life.</p>
+          <p class="item-pane__lead">The product master lifecycle — from product strategy through introduction, active management, and retirement.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — engineering change orders, BOM/route revisions, version control, lifecycle states, retirement strategy, and reporting around discontinued items.</p>
-        </article>
+
+        <p>Design to retire owns the product master, which is the data backbone of every other process. Get this wrong and you have wrong inventory, wrong COGS, wrong tax, wrong sales pricing, wrong replenishment. The decisions you make in this process — product type, dimension groups, item model groups, costing methodology, category hierarchy — are <strong>extremely difficult to change after go-live</strong>. Spend time here in the requirements stage.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop product strategy</strong> — product types, stocking policies, costing methodology, categorization.</li>
+                <li><strong>Introduce products</strong> — define the master, variants, BOMs / formulas, release to legal entities.</li>
+                <li><strong>Manage active products</strong> — engineering changes, BOM versions, attribute updates, vendor changes.</li>
+                <li><strong>Retire products</strong> — block further sale / purchase, exhaust inventory, clean up master data.</li>
+                <li><strong>Analyze product performance</strong> — sales, margin, inventory turns, returns, lifecycle stage.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#pim">Product Information Management</a> — the master itself (shared product, released product, variants, dimensions, attributes, categories).</li>
+                <li><a href="modules.html#cost-management">Cost Management</a> — costing methodology, item model groups, cost groups, cost versions.</li>
+                <li><a href="modules.html#production-control">Production Control</a> — BOMs, formulas, routes, resources.</li>
+                <li><a href="modules.html#inventory-management">Inventory Management</a> — storage / tracking dimensions, dimension groups.</li>
+                <li><a href="modules.html#tax">Tax</a> — item sales tax groups.</li>
+                <li><a href="modules.html#retail-commerce">Retail &amp; Commerce</a> — assortments, retail catalog, navigation hierarchy.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop product strategy (40.10)</h4>
+              <p>Tangible vs. service vs. intangible. BOM vs. formula vs. configurable. Dimensions (size, color, style, configuration). Categorization, POS assortments, catalogs (internal, external/vendor, punch-out). Stocking policies — batch, serial, allocation, reservation. Costing methodology (standard, FIFO, weighted average).</p>
+              <h4>Introduce products (40.20)</h4>
+              <p>Product variants — size, color, style, configuration. BOMs — single-level, multi-level, multi-site, bundles, kits. Formulas — co-products, by-products, scalable, step consumption. Release process to each legal entity.</p>
+              <h4>Manage active products (40.50)</h4>
+              <p>Engineering change management, BOM versioning, attribute updates, vendor master sync. Lifecycle states (planned, released, active, on hold, retired).</p>
+              <h4>Retire products (40.60)</h4>
+              <p>Block on sales / purchase / inventory transactions, exhaust on-hand, archive in reporting catalog.</p>
+              <h4>Analyze (40.90)</h4>
+              <p>Sales by product, gross margin, inventory turns, return rate, ABC analysis, lifecycle stage distribution.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Product subtype.</strong> Item (no variants) vs. product master (with variants). Wrong choice forces a re-master later.</li>
+                <li><strong>Dimension groups.</strong> Storage and tracking dimensions are <strong>set per item</strong> and very expensive to change after transactions exist. Decide for the product family, not the SKU.</li>
+                <li><strong>Item model group.</strong> Drives costing (standard, FIFO, etc.), physical / financial inventory posting, costing on transfer. The single most consequential field on an item.</li>
+                <li><strong>Categorization hierarchy.</strong> One hierarchy per purpose (procurement, sales, retail). Avoid one hierarchy that tries to serve all purposes.</li>
+                <li><strong>Number sequence for item ID.</strong> Smart numbers are tempting and almost always regretted. Use a non-meaningful number sequence and let attributes carry the meaning.</li>
+                <li><strong>Release process.</strong> Bulk release vs. selective release across legal entities, and the attribute defaults each entity overrides.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Source to pay</strong> — purchasable items, vendor relationships, procurement category.</li>
+                <li><strong>Order to cash</strong> — sellable items, sales price, sales tax group.</li>
+                <li><strong>Plan to produce</strong> — manufacturable items with BOMs, formulas, routes.</li>
+                <li><strong>Inventory to deliver</strong> — physical attributes drive warehouse handling.</li>
+                <li><strong>Concept to market</strong> — products surface as offerings in marketing catalogs.</li>
+                <li><strong>Forecast to plan</strong> — demand is per item / variant.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Smart-number item IDs.</strong> "ABC-RED-LARGE-2024" — works until the year changes or the supplier changes. Use neutral IDs.</li>
+                <li><strong>Variants exploded as separate items.</strong> 500 SKUs that should be one product master with 500 variants. Reporting and planning break.</li>
+                <li><strong>Wrong item model group on day 1.</strong> Switching costing methodology after go-live is the most painful re-master in F&amp;O.</li>
+                <li><strong>Categories as buckets only.</strong> Without category hierarchy, you lose default account setup, reporting groupings, procurement category controls.</li>
+                <li><strong>Retirement without inventory plan.</strong> Items "retired" with 5,000 on hand — the exhaust strategy is half the work.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Forecast to plan ============== -->
       <article class="item-pane" data-item-pane="forecast-to-plan">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 50</span>
           <h2 class="item-pane__title">Forecast to plan</h2>
-          <p class="item-pane__lead">Demand forecasting through master scheduling — turning expected demand into purchase, transfer, and production plans.</p>
+          <p class="item-pane__lead">Strategic and operational planning — business strategy, financial planning, S&amp;OP, execution, analysis.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — demand forecast inputs, forecast models, master planning runs, planned orders firming, and the handshake with procurement and production.</p>
-        </article>
+
+        <p>Forecast to plan is the planning lifecycle — taking strategy, demand, and constraints and producing an executable plan for the rest of the business. Within F&amp;O it is delivered primarily via <strong>Master Planning / Planning Optimization</strong>, supplemented by Budgeting, Demand Forecasting, and external S&amp;OP tooling. For most clients, planning is where the company says one thing and does another — the consultant's job is to make the gap visible so it can be closed.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop business strategy</strong> — long- and short-term planning, market and competitive analysis, ESG.</li>
+                <li><strong>Conduct financial planning</strong> — budget, revenue, expense, cash flow forecasting.</li>
+                <li><strong>Conduct sales and operations planning</strong> — match demand to supply (make-to-stock, make-to-order, project-centric, product-centric).</li>
+                <li><strong>Execute sales and operations</strong> — release plans into procurement, production, inventory, sales.</li>
+                <li><strong>Analyze business performance</strong> — variance to plan, KPI dashboards, scenario modeling.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#master-planning">Master Planning</a> &amp; Planning Optimization — MRP / supply planning.</li>
+                <li><a href="modules.html#budgeting">Budgeting</a> — financial plans, budget control, register entries.</li>
+                <li><strong>Demand Forecasting</strong> (formerly DFM) / Azure ML-based forecasting.</li>
+                <li><a href="modules.html#cost-accounting">Cost Accounting</a> — managerial reporting and contribution analysis.</li>
+                <li><a href="modules.html#general-ledger">General Ledger</a> — actuals against budget.</li>
+                <li><strong>Power BI</strong> — analytical layer for variance, scenario modeling.</li>
+                <li>External / partner — most enterprise-grade S&amp;OP runs in a dedicated tool (Anaplan, Kinaxis, o9).</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop business strategy (50.15)</h4>
+              <p>Market analysis, competitive analysis, SWOT, strategic goals, long- and short-term planning, risk management, resource allocation. ESG — environmental, social, governance, sustainability reporting.</p>
+              <h4>Conduct financial planning (50.55)</h4>
+              <p>Forecasting types — budget, revenue, expense, cash flow. Financial risk, investment planning, cost management. Compliance with financial regulations.</p>
+              <h4>Conduct S&amp;OP (50.35)</h4>
+              <p>Make-to-stock, make-to-order, project-centric, product-centric. Demand consensus, supply alignment, executive review.</p>
+              <h4>Execute (50.45)</h4>
+              <p>Master plan run, planned order conversion, firming, scheduling release.</p>
+              <h4>Analyze (50.65)</h4>
+              <p>Plan vs. actual, scenario modeling, KPI tracking, performance review.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Planning Optimization vs. legacy MRP.</strong> Planning Optimization is the strategic direction (off-DB, faster) but with feature gaps for some scenarios. Confirm features in scope.</li>
+                <li><strong>Master plan vs. forecast plan vs. dynamic plan.</strong> One per purpose, not one for everything.</li>
+                <li><strong>Coverage groups.</strong> Per item — period, requirement, min/max, manual. Drives planned order generation behavior.</li>
+                <li><strong>Time fences.</strong> Coverage time fence, freeze time fence, capacity time fence — the discipline buffer between plan and execution.</li>
+                <li><strong>Demand forecast input.</strong> Statistical (DF Azure ML), manual, hybrid. Where is demand authored and how is it imported?</li>
+                <li><strong>S&amp;OP tooling.</strong> In-F&amp;O budgeting + Power BI vs. external S&amp;OP tool. Be honest with the client about F&amp;O's S&amp;OP limits.</li>
+                <li><strong>Budgeting maturity.</strong> Basic register entries (just numbers) vs. budget plans with workflow and Excel integration vs. budget control with active document blocking.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Source to pay</strong> — planned purchase orders firm into POs.</li>
+                <li><strong>Plan to produce</strong> — planned production orders firm into production orders.</li>
+                <li><strong>Inventory to deliver</strong> — planned transfer orders firm into transfers.</li>
+                <li><strong>Order to cash</strong> — sales forecast feeds demand; ATP feeds quoting.</li>
+                <li><strong>Record to report</strong> — budgets feed budget vs. actual reporting.</li>
+                <li><strong>Hire to retire</strong> — workforce planning informs labor capacity.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Master planning that takes 6 hours.</strong> Often a sign of bad coverage groups or massive open-order data; Planning Optimization helps but doesn't fix bad input.</li>
+                <li><strong>Action messages ignored.</strong> Planners drown in 5,000 messages a day, then ignore all of them. Tune the time fences and the noise.</li>
+                <li><strong>Demand forecast disconnected from sales.</strong> Stats forecast in a vacuum; sales has its own spreadsheet. Bring them to one number before go-live.</li>
+                <li><strong>Budget control over-engineered.</strong> Blocking POs at $50 over budget breaks operations. Use warning thresholds before hard blocks.</li>
+                <li><strong>S&amp;OP claimed but not done.</strong> Many clients say they do S&amp;OP; check whether there is an actual monthly executive consensus meeting.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Hire to retire ============== -->
       <article class="item-pane" data-item-pane="hire-to-retire">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 55</span>
           <h2 class="item-pane__title">Hire to retire</h2>
-          <p class="item-pane__lead">The employee lifecycle — recruitment, onboarding, position management, payroll, performance, and offboarding.</p>
+          <p class="item-pane__lead">The full HR lifecycle — people strategy, recruitment, performance, time, compensation, offboarding, analytics.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — HR org structure, position vs job vs worker, onboarding workflows, payroll integration, leave management, and offboarding controls.</p>
-        </article>
+
+        <p>Hire to retire owns the worker master, which feeds payroll, project resourcing, expense, signing limits, security, and approval hierarchies. The historic split between F&amp;O HR and the standalone Talent / Dataverse-HR product caused years of confusion; today most net-new implementations use F&amp;O Human Resources directly. A consultant has to be careful about <strong>scope</strong> here — HR can mean anything from worker records to a full HCM rollout with payroll, learning, benefits, and performance.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop people strategy</strong> — workforce planning, talent management, succession, diversity.</li>
+                <li><strong>Recruit and onboard talent</strong> — sourcing, application tracking, hiring, onboarding tasks.</li>
+                <li><strong>Manage workplace compliance</strong> — health &amp; safety, labor laws, anti-discrimination, data protection.</li>
+                <li><strong>Manage performance and growth</strong> — reviews, goals, development, learning.</li>
+                <li><strong>Manage time and attendance</strong> — clock-in, leave, absence, travel and expense.</li>
+                <li><strong>Manage compensation and benefits</strong> — pay structure, bonus cycles, benefit plans.</li>
+                <li><strong>Offboard talent</strong> — voluntary, involuntary, retirement.</li>
+                <li><strong>Analyze HR</strong> — headcount, turnover, comp, time-to-fill, skills.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#human-resources">Human Resources</a> — worker master, positions, jobs, leave, compensation, benefits.</li>
+                <li><a href="modules.html#payroll">Payroll</a> — pay processing (US Payroll feature in F&amp;O); other regions are partner solutions.</li>
+                <li><a href="modules.html#expense-management">Expense Management</a> — T&amp;E with worker as filer.</li>
+                <li><a href="modules.html#project-mgmt-accounting">Project Management &amp; Accounting</a> — workers as project resources.</li>
+                <li><a href="modules.html#org-administration">Organization Administration</a> — positions feed organization hierarchies (signing limit, security).</li>
+                <li><a href="modules.html#general-ledger">General Ledger</a> — payroll posting, T&amp;E posting.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>People strategy (55.05)</h4>
+              <p>Workforce planning, talent management, succession, diversity initiatives. Compliance — labor laws, EEO, GDPR.</p>
+              <h4>Recruit &amp; onboard (55.10)</h4>
+              <p>Sourcing — postings, agencies, referrals, campus. Worker types — full-time, part-time, intern, contractor. Planned / budgeted vs. unplanned positions. Background checks, onboarding workflows.</p>
+              <h4>Workplace compliance (55.30)</h4>
+              <p>Health and safety, labor laws, anti-discrimination, data protection. Code of conduct, disciplinary procedures, whistleblower policy.</p>
+              <h4>Performance and growth (55.40)</h4>
+              <p>Annual / quarterly reviews, 360 feedback, goal setting, performance improvement plans, training.</p>
+              <h4>Time and attendance (55.50)</h4>
+              <p>Clock-in scenarios, leave plans and accruals, absence management, travel and expense (mobile capture, credit card import, mileage, per diems).</p>
+              <h4>Compensation and benefits (55.70)</h4>
+              <p>Compensation plans (fixed, variable, equity), benefit plans, comp cycles, taxes, deductions.</p>
+              <h4>Offboard (55.80)</h4>
+              <p>Voluntary, involuntary, retirement. Asset return, access revocation, exit interview, final pay.</p>
+              <h4>Analyze (55.90)</h4>
+              <p>Headcount, turnover, time-to-fill, comp ratio, training completion, diversity metrics.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Position management on or off.</strong> If positions matter (signing limits, headcount control, budgeting), turn on rigorous position management. If not, workers without positions is simpler.</li>
+                <li><strong>Worker types.</strong> Employee, contractor — does the client model contractors as workers (for project resourcing) or as vendors only?</li>
+                <li><strong>Payroll path.</strong> F&amp;O native payroll (US-only feature), partner integrated, or fully outsourced. The integration model is one of the biggest decisions in any HR project.</li>
+                <li><strong>Leave plans.</strong> Accrual rules — front-loaded, monthly, by service. Carry-over, max accrual, payout-on-termination.</li>
+                <li><strong>Time-tracking integration.</strong> Worker time → expense / project / payroll — pick one source of truth per dimension.</li>
+                <li><strong>Comp visibility.</strong> Who can see what — comp data is sensitive. XDS / role design needs careful work.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Project to profit</strong> — workers are project resources; hours feed project transactions.</li>
+                <li><strong>Source to pay</strong> — T&amp;E posts to AP; contractor invoices via vendor.</li>
+                <li><strong>Record to report</strong> — payroll accruals, comp expense, headcount budget.</li>
+                <li><strong>Acquire to dispose</strong> — workers operate and maintain assets.</li>
+                <li><strong>System administration</strong> — workers are users; positions drive role assignment via org hierarchies.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Scope creep into HCM.</strong> A "core HR" project becomes payroll + benefits + learning + performance because everyone gets excited. Hold the line.</li>
+                <li><strong>Position vs. job confusion.</strong> Job is the type of work; position is a slot held by a worker. Stakeholders frequently use the words interchangeably and design suffers.</li>
+                <li><strong>Effective dates ignored.</strong> Worker, position, and compensation are date-effective. Implementation teams that ignore date discipline produce broken history.</li>
+                <li><strong>Payroll integration as an afterthought.</strong> Payroll cut-over deserves its own dress rehearsal — a wrong first paycheck is the most public possible go-live failure.</li>
+                <li><strong>Dataverse HR confusion.</strong> Old project plans referencing "Talent" or "Dataverse HR" — confirm current Microsoft direction (F&amp;O HR is the strategic product) before designing.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Inventory to deliver ============== -->
       <article class="item-pane" data-item-pane="inventory-to-deliver">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 60</span>
           <h2 class="item-pane__title">Inventory to deliver</h2>
-          <p class="item-pane__lead">Inventory operations — from receipt and put-away through picking, packing, and outbound shipment.</p>
+          <p class="item-pane__lead">Warehouse and inventory operations — receiving, putaway, picking, packing, shipping, counting, transportation.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — warehouse setup (sites, warehouses, locations), inventory transactions, reservations, work creation, mobile device flows, and the WMS-vs-basic-warehousing decision.</p>
-        </article>
+
+        <p>Inventory to deliver is the physical-flow end-to-end. It is also the process where the largest single design decision in F&amp;O lives: <strong>basic warehousing vs. advanced WMS</strong>. The two paths look superficially similar but have fundamentally different data models, master data, and execution mechanics. Once you've moved transactions in one model you cannot trivially flip — confirm the choice during requirements, not later.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Manage warehouse operations</strong> — design (sites, warehouses, locations), workforce, mobility.</li>
+                <li><strong>Maintain inventory levels</strong> — counting, transfers, reservations, replenishment.</li>
+                <li><strong>Process inbound goods</strong> — PO receipt, putaway, quality check, return-to-vendor.</li>
+                <li><strong>Process outbound goods</strong> — picking, packing, loading, shipping confirmation.</li>
+                <li><strong>Manage inventory quality</strong> — quality orders, blocked stock, non-conformance.</li>
+                <li><strong>Manage freight and transportation</strong> — carriers, rates, route planning, freight reconciliation.</li>
+                <li><strong>Analyze warehouse operations</strong> — throughput, accuracy, cycle count variance, picking productivity.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#inventory-management">Inventory Management</a> — basic warehousing, journals, on-hand.</li>
+                <li><a href="modules.html#warehouse-management">Warehouse Management</a> — advanced WMS, work, waves, mobile.</li>
+                <li><a href="modules.html#transportation">Transportation Management</a> — carriers, rates, loads, route planning.</li>
+                <li><a href="modules.html#cost-management">Cost Management</a> — inventory valuation and cost flow.</li>
+                <li><a href="modules.html#landed-cost">Landed Cost</a> — when imports add freight / duty / insurance into cost.</li>
+                <li><a href="modules.html#procurement-sourcing">Procurement &amp; Sourcing</a> — inbound product receipt.</li>
+                <li><a href="modules.html#accounts-receivable">Accounts Receivable</a> &amp; <a href="modules.html#sales-marketing">Sales</a> — outbound shipment confirmation.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Manage warehouse operations (60.10)</h4>
+              <p>Warehouse architecture, location profiles and formats, work users, mobile device menus, label printers. Distribution network document is a prerequisite.</p>
+              <h4>Maintain inventory levels (60.20)</h4>
+              <p>Inventory journals — counting, movement, profit/loss, transfer, BOM. Cycle count plans, reservation behavior, transfer order lifecycle.</p>
+              <h4>Process inbound (60.30)</h4>
+              <p>PO confirmation, ASN, receipt, putaway, quality inspection, return to vendor.</p>
+              <h4>Process outbound (60.40)</h4>
+              <p>Reservations, picking (work generation, wave templates), packing, loading, shipping confirmation, packing slip, invoice.</p>
+              <h4>Manage quality (60.50)</h4>
+              <p>Quality orders (auto / manual), inspection plans, non-conformance, corrective action.</p>
+              <h4>Freight and transportation (60.60)</h4>
+              <p>Carrier setup, rate masters, route planning, load building, appointment scheduling, freight reconciliation, hazardous goods.</p>
+              <h4>Analyze (60.80)</h4>
+              <p>Inventory accuracy, picking productivity, dock-to-stock, cycle-count variance, on-time-in-full (OTIF).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Basic vs. advanced WMS.</strong> The most consequential SCM decision. Basic is fine for low-volume / single-bin operations; WMS is required for serious throughput.</li>
+                <li><strong>Storage and tracking dimensions.</strong> Decided on the item, propagates to all transactions. Adding a tracking dimension after go-live is migration-grade work.</li>
+                <li><strong>Reservation hierarchy.</strong> Default reservation hierarchy controls which dimensions are reserved when. Wrong setting = available stock you can't actually pick.</li>
+                <li><strong>Wave templates.</strong> One per process flow (sales pick, transfer pick, return). Over-engineered wave templates cause performance problems.</li>
+                <li><strong>Location directives.</strong> Each work type needs its own. The combinatorial explosion is real — keep them maintainable.</li>
+                <li><strong>Mobile device experience.</strong> Custom menu items vs. standard — over-customizing the WMA is expensive to maintain.</li>
+                <li><strong>Transportation Management activation.</strong> Often deferred to a later phase. Confirm in/out of scope for go-live.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Source to pay</strong> — receipt against PO drives inventory increase and accounting entries.</li>
+                <li><strong>Order to cash</strong> — picking and shipping a sales order drives inventory decrease and revenue / COGS.</li>
+                <li><strong>Plan to produce</strong> — production picks consume inventory, report-as-finished increases inventory.</li>
+                <li><strong>Forecast to plan</strong> — on-hand is an input to MRP.</li>
+                <li><strong>Record to report</strong> — inventory subledger reconciliation, COGS, write-offs.</li>
+                <li><strong>Design to retire</strong> — item dimensions and stocking policies set the constraints.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>WMS chosen for the wrong reason.</strong> "WMS sounds advanced" — but basic warehousing fits many businesses cleaner and cheaper. Match to throughput.</li>
+                <li><strong>Cycle count without a count plan.</strong> Counts happen sporadically, variances accumulate, accuracy stays at 92%. A real count plan with frequency by ABC class is non-negotiable.</li>
+                <li><strong>Reservations everywhere.</strong> Auto-reservation on sales order entry feels safe; in practice it locks stock that other orders need. Pick a model and tune it.</li>
+                <li><strong>WHS cleanup not scheduled.</strong> Work tables grow; WMS slows; cleanup batch jobs are essential housekeeping, not optional.</li>
+                <li><strong>Inventory subledger out of sync with GL.</strong> Voucher detail / GL detail discrepancy is a sign of misposted transactions or wrong posting profile setup. Reconcile in UAT, not post-go-live.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Order to cash ============== -->
       <article class="item-pane" data-item-pane="order-to-cash">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 65</span>
           <h2 class="item-pane__title">Order to cash</h2>
-          <p class="item-pane__lead">The classic OTC flow — from sales order entry through delivery, invoicing, and customer payment.</p>
+          <p class="item-pane__lead">Sales policy, order capture, fulfillment, AR, credit and collections — the revenue side of the business.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — order types (regular, return, project), credit checks, picking and packing, packing slip vs invoice, posting impact, customer payment, and the journal entries at each step.</p>
-        </article>
+
+        <p>Order to cash is the revenue spine. Every change in this flow has direct P&amp;L impact, which is why finance is always in the room and the bar for accuracy is high. The process is simple to describe (order → ship → invoice → cash) but full of subtleties: pricing rules, discount stacking, credit blocks, partial shipments, returns, write-offs. The consultant's job is to prove the standard flow handles 80% of cases and to negotiate hard about the remaining 20%.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop sales policies</strong> — channels, pricing, discounts, returns, terms, credit.</li>
+                <li><strong>Manage sales orders</strong> — capture, configure, validate, release.</li>
+                <li><strong>Pick / pack / ship</strong> — handled in Inventory to deliver, but driven by the SO.</li>
+                <li><strong>Invoice</strong> — packing slip then invoice (sales order) or direct invoice (free-text).</li>
+                <li><strong>Manage AR</strong> — apply payment, settle invoice, manage open balances.</li>
+                <li><strong>Manage credit and collections</strong> — credit hold, dunning, write-offs.</li>
+                <li><strong>Analyze sales performance</strong> — DSO, gross margin, channel mix, customer profitability.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#sales-marketing">Sales &amp; Marketing</a> — sales orders, quotations, sales agreements.</li>
+                <li><a href="modules.html#accounts-receivable">Accounts Receivable</a> — customer master, invoices, payments, settlements.</li>
+                <li><a href="modules.html#credit-collections">Credit &amp; Collections</a> — credit limits, hold rules, dunning.</li>
+                <li><a href="modules.html#cash-bank">Cash &amp; Bank Management</a> — payment receipt, deposit, lockbox.</li>
+                <li><a href="modules.html#tax">Tax</a> — sales tax calculation per line.</li>
+                <li><a href="modules.html#inventory-management">Inventory Management</a> &amp; <a href="modules.html#warehouse-management">Warehouse</a> — physical fulfillment.</li>
+                <li><a href="modules.html#retail-commerce">Retail &amp; Commerce</a> — POS, e-commerce, call center channels.</li>
+                <li><a href="modules.html#general-ledger">General Ledger</a> — revenue, COGS, AR posting.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop sales policies (65.05)</h4>
+              <p>Channels — POS, B2B / B2C eCommerce, call center, traditional, EDI. Pricing strategies, discount policies, return / refund policies, sales commission. Trade allowances — bill-back, off-invoice, lump sum, rebates.</p>
+              <h4>Manage sales orders (65.20)</h4>
+              <p>Order processing, fulfillment, tracking, modifications. By channel — POS, eCommerce, call center, traditional. Order on behalf of, B2B and B2C nuances. Compliance — sales tax, shipping, payment processing.</p>
+              <h4>Manage AR (65.30)</h4>
+              <p>Invoicing, customer payment journal, settlements (auto, manual), write-offs, credit memos, customer aging. Integration with sales order or free-text invoicing.</p>
+              <h4>Credit &amp; collections (65.50)</h4>
+              <p>Credit limits, credit hold, override workflow, dunning letters, write-offs, NSF.</p>
+              <h4>Analyze (65.60)</h4>
+              <p>DSO, gross margin, channel mix, customer profitability, returns rate, sales by sales rep / channel / product.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Sales-order invoice vs. free-text invoice.</strong> SO invoice ties to inventory and revenue; free-text is for non-inventory billing (services, fees). Both are needed; clarify which scenarios use each.</li>
+                <li><strong>Pricing engine.</strong> Trade agreements, sales agreements, retail price groups, discount combinations. Decide a layering rule and stick to it.</li>
+                <li><strong>Credit hold rules.</strong> When to block (order entry, picking, shipping, invoice posting). Earlier = safer but more friction.</li>
+                <li><strong>Posting profile per customer group.</strong> Drives summary account, which drives reporting splits. Set carefully — easy to under-engineer.</li>
+                <li><strong>Tax engine.</strong> Native sales tax (sufficient for simple jurisdictions) vs. external (Avalara, Vertex) for multi-state US or international.</li>
+                <li><strong>Lockbox / auto-apply.</strong> If volume justifies it, lockbox import + auto-settlement saves enormous AR effort. Setup is non-trivial.</li>
+                <li><strong>Returns flow.</strong> Return order, advanced returns (RMA), credit memo only, replacement order — define scenarios per return reason.</li>
+                <li><strong>Channel architecture.</strong> Which orders flow through HQ vs. through Commerce / channel? Statement posting reconciliation is its own sub-project.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Prospect to quote</strong> — quote converts to sales order.</li>
+                <li><strong>Inventory to deliver</strong> — sales order drives picking and shipment.</li>
+                <li><strong>Plan to produce</strong> — make-to-order sales orders trigger production.</li>
+                <li><strong>Forecast to plan</strong> — sales orders are demand signals.</li>
+                <li><strong>Record to report</strong> — revenue and COGS recognition, AR aging.</li>
+                <li><strong>Case to resolution</strong> — case can result in a credit memo or return.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Trade agreements over-engineered.</strong> Six layers of price hierarchy nobody understands; finance can't explain why an item invoiced at $19.99.</li>
+                <li><strong>Discount stacking with surprises.</strong> Line discount + total discount + customer discount + retail promo — order matters.</li>
+                <li><strong>Free-text invoice abuse.</strong> Selling inventory through free-text bypasses COGS — silent margin drift.</li>
+                <li><strong>Customer credit limit ignored.</strong> Limit set but never enforced because nobody turned on the credit hold rule.</li>
+                <li><strong>Returns without policy.</strong> Reps generate credits ad-hoc; no audit trail for write-offs vs. real returns.</li>
+                <li><strong>Posting profile mismatch.</strong> Customer group changed mid-year; the AR summary account split, and reconciliation breaks.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Plan to produce ============== -->
       <article class="item-pane" data-item-pane="plan-to-produce">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 70</span>
           <h2 class="item-pane__title">Plan to produce</h2>
-          <p class="item-pane__lead">From the planned production order through release, picking, reporting as finished, and ending the order.</p>
+          <p class="item-pane__lead">Manufacturing — production strategies, planning, execution, quality, analysis. Discrete, process, lean.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — production order lifecycle (created → released → started → reported as finished → ended), picking lists, route cards, scrap and yield, WIP postings, and standard vs FIFO costing impact.</p>
-        </article>
+
+        <p>Plan to produce is the manufacturing-execution end-to-end. F&amp;O supports three production methodologies — <strong>discrete (production order)</strong>, <strong>process (batch order)</strong>, and <strong>lean (kanban)</strong>. The right consultant maps the customer's reality to one of these (or a mix) and resists the temptation to use Production Orders for everything because it's the most familiar. The cost flow is the most complex in F&amp;O — picking → reporting as finished → ending closes the loop on WIP, and the variances at each step are how operations and finance disagree.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop production strategies</strong> — make-to-stock, make-to-order, assemble-to-order, engineer-to-order.</li>
+                <li><strong>Plan production operations</strong> — MPS, MRP, capacity, demand forecasting.</li>
+                <li><strong>Run production operations</strong> — production order lifecycle (created → released → started → reported as finished → ended) for discrete; batch order for process; kanban for lean.</li>
+                <li><strong>Control production quality</strong> — in-process inspection, scrap, rework.</li>
+                <li><strong>Analyze production operations</strong> — OEE, scrap, downtime, schedule adherence, variances.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#production-control">Production Control</a> — production orders, batch orders, kanbans, BOMs, routes, resources.</li>
+                <li><a href="modules.html#master-planning">Master Planning</a> — MRP planned production orders.</li>
+                <li><a href="modules.html#cost-management">Cost Management</a> — WIP, costing methodology, variances, inventory close.</li>
+                <li><a href="modules.html#inventory-management">Inventory Management</a> — material consumption, reporting as finished.</li>
+                <li><a href="modules.html#pim">Product Information Management</a> — BOMs and formulas live here.</li>
+                <li><a href="modules.html#warehouse-management">Warehouse Management</a> — production picking and put-away of finished goods.</li>
+                <li><a href="modules.html#asset-management">Asset Management</a> — production resources requiring maintenance.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop production strategies (70.10)</h4>
+              <p>Make-to-stock, make-to-order, assemble-to-order, engineer-to-order. Inventory buffer strategies, outsourcing, sustainability and waste reduction.</p>
+              <h4>Plan production operations (70.20)</h4>
+              <p>MPS, MRP, capacity planning, demand forecasting. Scheduling rules, lead time management, replenishment, supplier coordination.</p>
+              <h4>Run production (70.30)</h4>
+              <p>Discrete — production order lifecycle, picking list journal, route card / job card. Process — batch order with formula and co-/by-products. Lean — kanban rules and execution.</p>
+              <h4>Control quality (70.60)</h4>
+              <p>Quality association, quality orders auto-triggered in production, non-conformance, corrective action.</p>
+              <h4>Analyze (70.70)</h4>
+              <p>OEE (availability × performance × quality), scrap, downtime, schedule adherence, production variances (quantity, price, substitution, lot size).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Methodology mix.</strong> Discrete vs. process vs. lean — pick the dominant one per site / product family. Mixing is fine but each adds setup cost.</li>
+                <li><strong>Costing methodology.</strong> Standard cost (variances visible, but BOM calculation discipline required) vs. moving average (simpler but variances hide).</li>
+                <li><strong>Reporting-as-finished model.</strong> Auto-consume picking list at RAF? Backflushing rules? Wrong choice creates phantom WIP.</li>
+                <li><strong>Co-products and by-products.</strong> Process-only feature; allocation method (manual, by physical, by sales value) is a finance decision.</li>
+                <li><strong>BOM versioning policy.</strong> When to create a new version vs. modify in place; how engineering changes propagate.</li>
+                <li><strong>Resource model.</strong> Resources, resource groups, capabilities — drives scheduling. Over-modeling resources slows planning.</li>
+                <li><strong>Shop-floor execution.</strong> Paper, F&amp;O Production Floor Execution interface, MES integration. The data fidelity gap between paper and MES is the biggest hidden cost in manufacturing projects.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Forecast to plan</strong> — planned production orders firm into production orders.</li>
+                <li><strong>Inventory to deliver</strong> — picking list consumes raw materials; RAF increases finished goods.</li>
+                <li><strong>Source to pay</strong> — purchases of raw materials triggered by MRP.</li>
+                <li><strong>Design to retire</strong> — BOMs and formulas come from PIM.</li>
+                <li><strong>Record to report</strong> — WIP and variance postings hit the GL.</li>
+                <li><strong>Acquire to dispose</strong> — production equipment is a fixed asset under maintenance.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Production Order for everything.</strong> Lean operations forced into production-order overhead; consultant comfort over methodology fit.</li>
+                <li><strong>Standard cost without discipline.</strong> Costs not refreshed; variances pile up; nobody investigates them; standard cost loses meaning.</li>
+                <li><strong>WIP that never closes.</strong> Inventory close skipped or partially run; WIP balances drift; year-end auditors find the discrepancy.</li>
+                <li><strong>Backflush surprises.</strong> Backflush configured on the item but not on every BOM line — picking list ends up with both manual and auto consumption, traceability suffers.</li>
+                <li><strong>Engineering changes without governance.</strong> BOMs edited live, mid-production-order; cost variances spike with no narrative.</li>
+                <li><strong>Capacity ignored.</strong> Planning assumes infinite capacity; production schedule is unrealistic; planners override the system in spreadsheets.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Project to profit ============== -->
       <article class="item-pane" data-item-pane="project-to-profit">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 80</span>
           <h2 class="item-pane__title">Project to profit</h2>
-          <p class="item-pane__lead">Project lifecycle — quoting, budgeting, executing, billing milestones, and recognizing revenue.</p>
+          <p class="item-pane__lead">Project lifecycle — strategy, contracts, planning, delivery, financials, analysis. Internal and external projects.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — project types (time &amp; material, fixed price, internal, investment, cost), WBS, project budgets and forecasts, transactions (hour, expense, item, fee), revenue recognition methods, and project closing.</p>
-        </article>
+
+        <p>Project to profit is the project-services and CIP end-to-end. F&amp;O distinguishes between <strong>internal</strong> projects (cost-only, time, investment, internal — used for capital projects, R&amp;D, internal initiatives) and <strong>external</strong> projects (time &amp; material, fixed price — billed to a customer). The accounting differs significantly. Beyond accounting, this process is also the project-management end-to-end for service / professional-services firms — Project Operations on Dataverse is the front-of-house and F&amp;O Project Management &amp; Accounting is the back-of-house.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop project strategy</strong> — internal portfolio prioritization or external pipeline strategy.</li>
+                <li><strong>Manage project contracts</strong> — for external projects (T&amp;M, fixed price, milestone, subcontractor).</li>
+                <li><strong>Plan projects</strong> — WBS, resource plan, budget, schedule.</li>
+                <li><strong>Manage project delivery</strong> — task execution, time tracking, expense, materials.</li>
+                <li><strong>Manage project financials</strong> — actuals capture, revenue recognition (POC, completed contract, milestone), invoicing, billing.</li>
+                <li><strong>Analyze project performance</strong> — margin, utilization, earned value.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#project-mgmt-accounting">Project Management &amp; Accounting</a> — projects, transactions, budgets, invoicing.</li>
+                <li><strong>Dynamics 365 Project Operations</strong> (Dataverse) — opportunity, contract, planning, resourcing for services firms.</li>
+                <li><a href="modules.html#human-resources">Human Resources</a> — workers as project resources.</li>
+                <li><a href="modules.html#expense-management">Expense Management</a> — T&amp;E posts to project transactions.</li>
+                <li><a href="modules.html#procurement-sourcing">Procurement &amp; Sourcing</a> — items / subcontracts purchased to project.</li>
+                <li><a href="modules.html#fixed-assets">Fixed Assets</a> — capital project capitalization (CIP).</li>
+                <li><a href="modules.html#general-ledger">General Ledger</a> — revenue recognition, WIP, COGS-equivalent on projects.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop project strategy (80.10)</h4>
+              <p>Internal — capital, R&amp;D, internal initiatives, grant-funded. External — customer-funded delivery. Portfolio management, prioritization, governance.</p>
+              <h4>Manage contracts (80.20, external)</h4>
+              <p>Time and materials, fixed price, cost-plus, subcontractor agreements. Change order management, terms and conditions, legal review.</p>
+              <h4>Plan projects (80.30)</h4>
+              <p>WBS, resource plan, budget plan, schedule. Methodology — Agile, Waterfall, hybrid. Forecasting frequency, contingency / reserve.</p>
+              <h4>Manage delivery (80.40)</h4>
+              <p>Task execution, time tracking, expense capture, item / subcontract consumption. Risks and issues. Internal vs. external delivery differences.</p>
+              <h4>Manage financials (80.50)</h4>
+              <p>Hour, expense, item, fee, on-account transactions. Revenue recognition — POC (cost-to-cost), completed contract, milestone. Internal cost capitalization (CIP). Invoicing — milestone, T&amp;M, retention.</p>
+              <h4>Analyze (80.60)</h4>
+              <p>Margin per project, utilization per resource, earned value, billing realization, project profitability.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Project Operations vs. F&amp;O P&amp;A only.</strong> Services firm with opportunity-to-cash-on-projects → Project Operations on top. Pure capital / cost projects → F&amp;O P&amp;A only.</li>
+                <li><strong>Project type.</strong> Time, time &amp; material, fixed price, internal, investment, cost — drives accounting fundamentally.</li>
+                <li><strong>Revenue recognition method.</strong> POC (most common), completed contract, milestone, units delivered. ASC 606 / IFRS 15 alignment.</li>
+                <li><strong>WBS depth.</strong> Two-level WBS for billing simplicity vs. five-level for delivery rigor; the depth picked drives reporting.</li>
+                <li><strong>Project group / posting setup.</strong> The setup that ties project transactions to GL accounts. Among the most underestimated configurations in F&amp;O.</li>
+                <li><strong>Time entry source.</strong> F&amp;O timesheet, Project Operations time entry, third-party (Replicon, Tempo) — pick one source, integrate the others as feeders.</li>
+                <li><strong>Resource model.</strong> Workers, contractors, generic placeholders. Skills and competencies for matching.</li>
+                <li><strong>Estimate processing frequency.</strong> Daily, weekly, monthly — drives revenue recognition cadence.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Hire to retire</strong> — workers as project resources; comp drives cost rate.</li>
+                <li><strong>Source to pay</strong> — items and subcontracts purchased to project.</li>
+                <li><strong>Order to cash</strong> — project invoices flow into AR.</li>
+                <li><strong>Acquire to dispose</strong> — investment projects capitalize into Fixed Assets.</li>
+                <li><strong>Forecast to plan</strong> — project demand consumes resource and material capacity.</li>
+                <li><strong>Record to report</strong> — revenue recognition, WIP, project profitability roll-up.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Project type chosen wrong.</strong> Fixed-price projects set as time-and-material — revenue recognized too early or too late.</li>
+                <li><strong>Estimate process never run.</strong> WIP grows because estimates aren't processed; finance closes the books and projects don't reconcile.</li>
+                <li><strong>WBS edited live.</strong> Mid-project structural changes break historical reporting; lock the WBS at certain stages.</li>
+                <li><strong>Hour journal vs. timesheet conflict.</strong> Both used in parallel by accident; double-counting hours.</li>
+                <li><strong>Project Operations / F&amp;O integration drift.</strong> Customers, projects, transactions out of sync; reconciliation becomes weekly cleanup.</li>
+                <li><strong>Internal projects with no end date.</strong> "Internal R&amp;D" project running for 5 years; CIP forever, never capitalized or expensed.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Prospect to quote ============== -->
       <article class="item-pane" data-item-pane="prospect-to-quote">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 85</span>
           <h2 class="item-pane__title">Prospect to quote</h2>
-          <p class="item-pane__lead">Pre-sales activity — lead capture, qualification, opportunity tracking, and producing a quote that becomes a sales order.</p>
+          <p class="item-pane__lead">Pre-sales — customer relationships, lead qualification, opportunity pursuit, quoting.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — lead and opportunity records, sales pipeline, quote configuration, approval flow, conversion to sales order, and the role of CRM (Dataverse / Sales) in tandem with F&amp;O.</p>
-        </article>
+
+        <p>Prospect to quote is the front of the sales funnel. Like Concept to market, this lives mostly in the Dataverse-based <strong>Dynamics 365 Sales</strong> rather than F&amp;O. F&amp;O has its own light Sales &amp; Marketing module (leads, opportunities, sales quotation), but for any real CRM, Dynamics 365 Sales is the right product. The F&amp;O consultant's responsibility is the seam between CRM and ERP — opportunity to quote to sales order, customer master sync, product catalog sync, pricing, and the closed-loop reporting back to marketing and exec.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Manage customer relationships</strong> — accounts, contacts, segmentation.</li>
+                <li><strong>Identify and qualify sales</strong> — lead capture, scoring, qualification.</li>
+                <li><strong>Define sales strategy and policies</strong> — territories, channels, pricing, sales playbooks.</li>
+                <li><strong>Pursue opportunities</strong> — opportunity tracking, stage progression, forecasting.</li>
+                <li><strong>Estimate and quote sales</strong> — quote creation, configuration, approval, customer delivery.</li>
+                <li><strong>Analyze sales</strong> — pipeline coverage, win rate, sales velocity.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Dynamics 365 Sales</strong> (Dataverse) — leads, opportunities, accounts, opportunities, quotes, sales pipeline, forecasting.</li>
+                <li><strong>Dynamics 365 Customer Insights</strong> — segmentation and unified customer profile.</li>
+                <li><a href="modules.html#sales-marketing">Sales &amp; Marketing</a> in F&amp;O — light alternative; integrates natively with sales orders.</li>
+                <li><a href="modules.html#accounts-receivable">Accounts Receivable</a> — customer master synced from CRM.</li>
+                <li><a href="modules.html#pim">Product Information Management</a> — products synced as CRM catalog.</li>
+                <li><strong>Dual-write / virtual entities</strong> — the integration mechanism between CRM and F&amp;O.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Manage customer relationships (85.15)</h4>
+              <p>New customer onboarding, existing engagement, account-based marketing, segmentation, loyalty. Compliance — GDPR, CCPA, consent.</p>
+              <h4>Identify and qualify (85.25)</h4>
+              <p>Lead generation (inbound, outbound), scoring and grading, qualification frameworks (BANT, MEDDIC). Marketing-to-sales handoff, lead routing, follow-up SLAs.</p>
+              <h4>Sales strategy &amp; policies (85.35)</h4>
+              <p>Territory planning, account planning, channel strategy (direct, partner, digital, brick-and-mortar, call center, online). Pricing and discounting guidelines, commission structures, deal approval thresholds.</p>
+              <h4>Pursue opportunities (85.45)</h4>
+              <p>Opportunity creation, stage progression, cross-team collaboration (pre-sales, legal), competitor tracking. Audit trails, document version control.</p>
+              <h4>Estimate and quote (85.55)</h4>
+              <p>Quote creation, pricing models (standard, tiered, negotiated), discount approval, quote delivery (PDF, portal, email), conversion to order.</p>
+              <h4>Analyze (85.65)</h4>
+              <p>Pipeline coverage, win rate, sales velocity, forecast accuracy.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>CRM platform.</strong> Dynamics 365 Sales (full CRM) vs. F&amp;O Sales &amp; Marketing (light) vs. third-party (Salesforce). Drives integration architecture.</li>
+                <li><strong>Customer master.</strong> Where does the customer originate (CRM) vs. where it is invoice-able (F&amp;O)? The qualification trigger that creates the F&amp;O record.</li>
+                <li><strong>Product catalog sync direction.</strong> F&amp;O is the master; CRM consumes a subset. What attributes flow, how often.</li>
+                <li><strong>Pricing source.</strong> CRM uses static price list, or calls F&amp;O for real-time pricing (virtual entities)? Real-time is better but more complex.</li>
+                <li><strong>Quote-to-order transition.</strong> Manual handoff vs. automated; what data flows; how subsequent quote changes affect the order.</li>
+                <li><strong>Forecasting model.</strong> Bottom-up (deal-by-deal) vs. top-down (territory targets). Both common; choose one for management cadence.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Concept to market</strong> — campaigns produce leads.</li>
+                <li><strong>Order to cash</strong> — quote becomes a sales order.</li>
+                <li><strong>Project to profit</strong> — opportunities for project work become project quotations.</li>
+                <li><strong>Design to retire</strong> — products from PIM populate the CRM catalog.</li>
+                <li><strong>Forecast to plan</strong> — sales pipeline informs demand forecast.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Two customer masters out of sync.</strong> Customer in CRM, customer in F&amp;O, names don't match, IDs different — orders fail to import.</li>
+                <li><strong>Pricing tells two stories.</strong> CRM quote shows $9,500; F&amp;O sales order recalculates to $9,800 — sales rep loses credibility.</li>
+                <li><strong>Sales rep has to re-enter the deal.</strong> Quote in CRM, copy-paste into F&amp;O sales order. Adoption suffers.</li>
+                <li><strong>Forecasting in spreadsheets.</strong> Pipeline lives in CRM, but the actual forecast is a parallel Excel run by sales ops; the system isn't trusted.</li>
+                <li><strong>Treating Dual-write as turn-key.</strong> Out-of-the-box maps cover 60–70% of fields; real implementations always require map customization.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Record to report ============== -->
       <article class="item-pane" data-item-pane="record-to-report">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 90</span>
           <h2 class="item-pane__title">Record to report</h2>
-          <p class="item-pane__lead">The finance backbone — recording transactions, closing the books, and producing financial reports.</p>
+          <p class="item-pane__lead">The financial backbone — accounting policies, transactions, period close, consolidation, reporting.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — chart of accounts and dimensions, journal types, ledger settlements, foreign currency revaluation, period close, consolidation, financial reporting (Management Reporter / Power BI), and audit trail.</p>
-        </article>
+
+        <p>Record to report is the finance end-to-end and the process every other process eventually feeds. It is also the process where the consultant's competence is judged most harshly — finance audiences see every flaw immediately. The configuration decisions made here (chart of accounts, dimensions, ledger, fiscal calendar, currency, posting profiles) are the foundation everything else builds on, and reversing them post go-live is rarely cheap.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Define accounting policies</strong> — chart of accounts, dimensions, calendar, currency, multi-entity model.</li>
+                <li><strong>Manage cash</strong> — bank accounts, cash positioning, cash flow forecasting.</li>
+                <li><strong>Manage budget</strong> — budget plans, budget control, budget vs. actuals.</li>
+                <li><strong>Record financial transactions</strong> — daily journals, recurring journals, allocations, accruals, intercompany.</li>
+                <li><strong>Close financial periods</strong> — month-end, quarter-end, year-end. Subledger close, FX revaluation, consolidation, eliminations.</li>
+                <li><strong>Analyze financial performance</strong> — financial reporter, Power BI, variance analysis, KPI dashboards.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#general-ledger">General Ledger</a> — chart of accounts, dimensions, journals, period close, FX revaluation, consolidation.</li>
+                <li><a href="modules.html#cash-bank">Cash &amp; Bank Management</a> — bank accounts, deposits, reconciliation, cash flow.</li>
+                <li><a href="modules.html#budgeting">Budgeting</a> — plans, register entries, budget control.</li>
+                <li><a href="modules.html#tax">Tax</a> — sales tax / VAT settlement, withholding.</li>
+                <li><a href="modules.html#fixed-assets">Fixed Assets</a>, <a href="modules.html#accounts-payable">AP</a>, <a href="modules.html#accounts-receivable">AR</a>, <a href="modules.html#cost-management">Cost Management</a> — subledgers feeding GL.</li>
+                <li><a href="modules.html#cost-accounting">Cost Accounting</a> — managerial accounting alongside GL.</li>
+                <li><strong>Financial Reporter</strong> (Management Reporter) &amp; <strong>Power BI</strong> — analytical layer.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Define accounting policies (90.10)</h4>
+              <p>Multi-entity, multi-currency, shared services, centralized accounting. Industry-specific accounting (e.g., revenue recognition under industry standards). Compliance — GAAP, IFRS, local, SOX. Chart of accounts structure, revenue recognition policy, expense allocation, journal entry approval.</p>
+              <h4>Manage cash (90.25)</h4>
+              <p>Daily cash positioning, cash flow forecasting, bank account reconciliation, treasury operations.</p>
+              <h4>Manage budget (90.30)</h4>
+              <p>Annual budgeting, rolling forecasts, zero-based budgeting, scenario planning. Budget approval thresholds, variance analysis protocols.</p>
+              <h4>Record transactions (90.50)</h4>
+              <p>Manual journal entries, automated subledger postings, accruals and deferrals, intercompany. Audit trail, segregation of duties, posting periods and cutoffs, reconciliation procedures.</p>
+              <h4>Close periods (90.60)</h4>
+              <p>Monthly, quarterly, year-end. Consolidation of entities, subledger reconciliation, adjusting entries. Close calendar and timelines, task ownership, materiality thresholds.</p>
+              <h4>Analyze (90.70)</h4>
+              <p>P&amp;L, balance sheet health, cash flow, budget vs. actuals. Financial statements, management reporting, variance analysis. KPI dashboards, scenario modeling.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Chart of accounts.</strong> Number of main accounts, granularity, account categories. Lean COA + dimensions almost always beats wide COA.</li>
+                <li><strong>Financial dimensions.</strong> Fixed vs. custom; how many; mandatory or optional per account. The longest-running design discussion in any F&amp;O project.</li>
+                <li><strong>Account structure.</strong> Defines valid combinations — too loose and bad combos post; too tight and operational journals fail.</li>
+                <li><strong>Multi-currency setup.</strong> Accounting currency, reporting currency per legal entity; exchange rate types and providers; revaluation rules.</li>
+                <li><strong>Fiscal calendar.</strong> Standard, 4-4-5, 4-5-4, 13-period; calendar shared across entities or per entity; year-end roll-forward.</li>
+                <li><strong>Multi-entity model.</strong> One ledger per entity; consolidation entity for roll-up; intercompany due-to/from accounts.</li>
+                <li><strong>Subledger-to-GL frequency.</strong> Auto-post per transaction vs. summary post in batch — the trade-off between immediacy and GL bloat.</li>
+                <li><strong>Period status discipline.</strong> Who can post to a "closed" period, who can re-open. Material control issue.</li>
+                <li><strong>Reporting platform.</strong> Financial Reporter for statutory reports, Power BI for analytics. The story doesn't have to be either/or.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Source to pay</strong> — AP postings (vendor invoice, payment, accrual).</li>
+                <li><strong>Order to cash</strong> — AR postings (revenue, COGS, customer payment).</li>
+                <li><strong>Inventory to deliver</strong> — inventory subledger reconciliation.</li>
+                <li><strong>Acquire to dispose</strong> — depreciation, gain/loss on disposal.</li>
+                <li><strong>Plan to produce</strong> — WIP, COGS, production variances.</li>
+                <li><strong>Project to profit</strong> — revenue recognition, project WIP.</li>
+                <li><strong>Hire to retire</strong> — payroll posting, T&amp;E posting.</li>
+              </ul>
+              <p>In short: every other business process eventually flows here.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Wide chart of accounts.</strong> 5,000 main accounts with department in the account number — instead of 200 accounts and a department dimension. Reporting drowns.</li>
+                <li><strong>Dimension explosion.</strong> Eight financial dimensions on every transaction; users skip them; data is unreliable.</li>
+                <li><strong>Account structure too loose.</strong> Auto-posted entries from subledgers post to combinations finance never imagined; trial balance has surprises.</li>
+                <li><strong>No close calendar.</strong> Month-end is a 12-day scramble; every cycle is a one-off; no template, no improvement.</li>
+                <li><strong>FX revaluation forgotten.</strong> Foreign currency balances drift; year-end audit asks why; emergency clean-up.</li>
+                <li><strong>Intercompany broken at scale.</strong> Manual IC postings instead of automatic; due-to and due-from out of sync; cross-entity reconciliation manual forever.</li>
+                <li><strong>Financial Reporter as the only reporting tool.</strong> Statutory reports work; modern dashboards don't. Add Power BI for the rest.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Service to deliver ============== -->
       <article class="item-pane" data-item-pane="service-to-deliver">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 95</span>
           <h2 class="item-pane__title">Service to deliver</h2>
-          <p class="item-pane__lead">Service delivery — agreements, service orders, dispatch, work execution, and billing.</p>
+          <p class="item-pane__lead">Service strategy, planning, work execution, delivery, analysis. Field service, depot repair, contract service.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — service agreements, repeating service orders, dispatch board, technician work execution, on-site item consumption, and invoicing tied to service orders or projects.</p>
-        </article>
+
+        <p>Service to deliver is the field-service end-to-end. Most modern implementations of field service use <strong>Dynamics 365 Field Service</strong> on Dataverse — strong scheduling, mobile app, IoT integration. F&amp;O has its own Service Management module which is best for service that ties closely to projects or where field-service complexity is low. The integration / module choice is the central design decision.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop service strategy</strong> — service types, SLAs, contracts, resource model.</li>
+                <li><strong>Plan service work</strong> — scheduling (manual, assisted, RSO), resource selection.</li>
+                <li><strong>Manage service work</strong> — work order creation, parts allocation, entitlement validation.</li>
+                <li><strong>Deliver services</strong> — on-site execution, time / parts / expense capture, customer signoff.</li>
+                <li><strong>Analyze service performance</strong> — SLA, first-time fix, utilization, customer satisfaction.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Dynamics 365 Field Service</strong> (Dataverse) — work orders, scheduling, mobile, IoT for most field-service scenarios.</li>
+                <li><a href="modules.html#service-management">Service Management</a> in F&amp;O — service agreements, repeating service orders, dispatch board for F&amp;O-resident scenarios.</li>
+                <li><a href="modules.html#project-mgmt-accounting">Project Management &amp; Accounting</a> — when service is project-based.</li>
+                <li><a href="modules.html#inventory-management">Inventory Management</a> &amp; <a href="modules.html#warehouse-management">Warehouse</a> — parts on the truck or at depot.</li>
+                <li><a href="modules.html#asset-management">Asset Management</a> — when servicing customer-owned assets, the asset BOM and history feed work orders.</li>
+                <li><a href="modules.html#accounts-receivable">Accounts Receivable</a> — service invoicing.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop service strategy (95.05)</h4>
+              <p>Preventive maintenance, reactive break/fix, predictive (IoT), warranty, contract, depot, field. SLAs, warranty coverage rules, contract entitlements, resource utilization targets, outsourcing.</p>
+              <h4>Plan service work (95.15)</h4>
+              <p>Scheduling — manual, assisted, Resource Scheduling Optimization (RSO), territory, skill, crew. Resource types — internal techs, third-party contractors, mixed workforce. Inputs — IoT, customer requests, preventive plans, case escalations.</p>
+              <h4>Manage service work (95.25)</h4>
+              <p>Work order creation — from case, IoT alert, schedule, manual, sales / project. Tasks, parts, services, expenses. Entitlement and contract validation, SLA enforcement.</p>
+              <h4>Deliver services (95.35)</h4>
+              <p>Mobile execution, time tracking, parts consumption, expense capture, customer signoff, photo / inspection capture.</p>
+              <h4>Analyze (95.45)</h4>
+              <p>SLA compliance, first-time fix rate, technician utilization, parts-per-call, customer satisfaction.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Field Service vs. F&amp;O Service Management.</strong> Volume / complexity test — Field Service for serious dispatch, RSO, mobile; F&amp;O SM for contract-driven service tied to projects.</li>
+                <li><strong>Scheduling model.</strong> Manual dispatcher vs. RSO; with RSO, the constraints (skills, territory, working hours, travel time) drive results.</li>
+                <li><strong>Mobile experience.</strong> Field Service mobile app is mature; F&amp;O has no equivalent. If technicians need mobile, that's a vote for Field Service.</li>
+                <li><strong>Inventory model on truck / depot.</strong> Each vehicle as a warehouse vs. consumption-only. Real reservations across moving inventory is its own complexity.</li>
+                <li><strong>Entitlement/SLA architecture.</strong> Entitlement drives validation at work order creation; SLAs drive enforcement during execution. Wire both.</li>
+                <li><strong>IoT triggers.</strong> Asset condition triggers a case; case becomes a work order. The pipeline is real but each link must be configured.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Case to resolution</strong> — case escalates to a work order.</li>
+                <li><strong>Acquire to dispose</strong> — service against customer assets reuses the asset master.</li>
+                <li><strong>Order to cash</strong> — service invoices via AR or via projects.</li>
+                <li><strong>Inventory to deliver</strong> — parts on the truck consume from inventory.</li>
+                <li><strong>Hire to retire</strong> — technicians as workers; hours and certification drive scheduling.</li>
+                <li><strong>Project to profit</strong> — when service is project-based, cost and revenue flow through project transactions.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>F&amp;O Service Management chosen for a Field Service problem.</strong> Underestimating scheduling needs; tech sees a clipboard, not a mobile app.</li>
+                <li><strong>RSO turned on with bad data.</strong> Skills not maintained, working hours wrong, results worse than manual dispatch.</li>
+                <li><strong>Truck inventory ignored.</strong> Parts consumed but never replenished; technicians arrive with empty trucks; a real replenishment process is missed.</li>
+                <li><strong>SLA without business calendar.</strong> 4-hour SLA on weekends nobody works.</li>
+                <li><strong>Entitlement validated post hoc.</strong> Work performed, then billed, then customer says it was under warranty. Validate at work order creation.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
+      <!-- ============== Source to pay ============== -->
       <article class="item-pane" data-item-pane="source-to-pay">
         <header class="item-pane__header">
-          <span class="item-pane__eyebrow">Business process</span>
+          <span class="item-pane__eyebrow">Business process · 75</span>
           <h2 class="item-pane__title">Source to pay</h2>
-          <p class="item-pane__lead">From sourcing and vendor onboarding through purchase requisition, PO, receipt, invoice, and vendor payment.</p>
+          <p class="item-pane__lead">Procurement strategy, supplier relationships, sourcing, purchasing, AP, analysis — the buy side of the business.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here — RFQ, vendor master, requisition vs PO, approval workflows, three-way match, vendor invoice register vs invoice journal, payment proposal, and the journal entries along the way.</p>
-        </article>
+
+        <p>Source to pay is the procurement-and-AP spine. From a finance perspective it ends at vendor payment; from an operations perspective it begins long before the PO with sourcing strategy, supplier qualification, and contract negotiation. Strong implementations bring both perspectives into the room. The single biggest design decision is the <strong>requisition-to-PO model</strong> — direct PO entry, requisition workflow, P-card, agreement consumption, or a mix. That decision drives controls, approval design, and where exception handling lands.</p>
+
+        <div class="topics">
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Flow</span>End-to-end flow</summary>
+            <div class="topic__body">
+              <ol>
+                <li><strong>Develop procurement and sourcing strategy</strong> — categories, supplier segmentation, catalog model, policies.</li>
+                <li><strong>Manage supplier relationships</strong> — onboarding, performance, risk, portal collaboration.</li>
+                <li><strong>Source and contract goods and services</strong> — RFP / RFQ / RFI, bidding, contract negotiation.</li>
+                <li><strong>Procure goods and services</strong> — requisition, PO, agreement consumption, receipt, return.</li>
+                <li><strong>Manage accounts payable</strong> — invoice intake, matching, payment.</li>
+                <li><strong>Analyze procurement and sourcing</strong> — spend, on-time delivery, supplier performance, savings.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modules</span>D365 modules that drive it</summary>
+            <div class="topic__body">
+              <ul>
+                <li><a href="modules.html#procurement-sourcing">Procurement &amp; Sourcing</a> — requisition, PO, RFQ, agreements, vendor catalog.</li>
+                <li><a href="modules.html#accounts-payable">Accounts Payable</a> — vendor master, invoice, payment proposal, settlements.</li>
+                <li><a href="modules.html#vendor-collaboration">Vendor Collaboration</a> — supplier self-service portal.</li>
+                <li><a href="modules.html#cash-bank">Cash &amp; Bank Management</a> — payment journal and electronic payment file.</li>
+                <li><a href="modules.html#tax">Tax</a> — vendor sales tax / withholding.</li>
+                <li><a href="modules.html#expense-management">Expense Management</a> — T&amp;E posts to AP.</li>
+                <li><a href="modules.html#inventory-management">Inventory Management</a> &amp; <a href="modules.html#warehouse-management">Warehouse</a> — receipt against PO.</li>
+                <li><a href="modules.html#general-ledger">General Ledger</a> — accruals, payment, posting.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scope</span>Sub-processes &amp; scenarios</summary>
+            <div class="topic__body">
+              <h4>Develop procurement strategy (75.10)</h4>
+              <p>Centralized vs. decentralized procurement, category management, supplier segmentation, risk management. Catalog model — internal, external (punch-out), vendor self-service. Compliance — procurement regulations, ethical sourcing, anti-corruption. Policies — sourcing, AP, invoicing, payment, approval, cash discount.</p>
+              <h4>Manage supplier relationships (75.30)</h4>
+              <p>Supplier onboarding, performance evaluation, development programs, risk management, portal collaboration. Compliance — supplier code of conduct, data privacy, trade compliance.</p>
+              <h4>Source and contract (75.35)</h4>
+              <p>RFP, RFQ, RFI. Contract negotiation, bidding (open / closed), evaluation criteria. Contract management policies, terms and conditions, SLAs.</p>
+              <h4>Procure goods and services (75.40)</h4>
+              <p>Purchase requisitions, purchase orders, blanket orders, spot buying (P-card), unplanned vs. planned. Procurement approval workflows, receiving and inspection, payment terms.</p>
+              <h4>Manage AP (75.50)</h4>
+              <p>Invoice intake — EDI, paper, email, supplier portal, OCR/AI. Matching — three-way, two-way. Payments — credit cards, prepayments, ACH, wire, check. Vendor collaboration self-service.</p>
+              <h4>Analyze (75.80)</h4>
+              <p>Spend by category / supplier, on-time delivery, supplier performance, savings, working capital, AP aging.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Decisions</span>Critical configuration decisions</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Requisition vs. direct PO.</strong> Requisition adds approval rigor but slows the process; direct PO is fast but reduces control. Hybrid is common — requisition for indirect spend, direct PO for direct materials per agreement.</li>
+                <li><strong>Procurement categories.</strong> The category hierarchy drives default account, controls (signing limits, allowed vendors), and reporting.</li>
+                <li><strong>Approval workflow design.</strong> Spending limit by category vs. department; serial vs. parallel; escalation rules.</li>
+                <li><strong>Two-way vs. three-way match.</strong> Three-way is the gold standard; two-way is faster but loses receipt validation. Pick per category.</li>
+                <li><strong>Vendor master controls.</strong> Tax ID uniqueness, hold-on-creation policy, change approval workflow. Once burnt by a duplicate vendor, never again.</li>
+                <li><strong>Vendor invoice channel.</strong> Manual entry, OCR, EDI, vendor portal — usually a mix. The journey to e-invoicing is a multi-year program.</li>
+                <li><strong>Payment terms / methods.</strong> Method per vendor (ACH, check, wire); discount terms; payment day calendar.</li>
+                <li><strong>Prepayment handling.</strong> Vendor prepayment vs. prepayment invoice — the difference matters for tax and reporting.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Touchpoints</span>Where it meets other processes</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Inventory to deliver</strong> — PO receipt drives inventory and accrual.</li>
+                <li><strong>Forecast to plan</strong> — planned purchase orders firm into POs.</li>
+                <li><strong>Plan to produce</strong> — production materials sourced via PO.</li>
+                <li><strong>Acquire to dispose</strong> — asset acquisition through PO.</li>
+                <li><strong>Project to profit</strong> — items / subcontracts purchased to project.</li>
+                <li><strong>Record to report</strong> — AP postings, accruals, cash position.</li>
+                <li><strong>Hire to retire</strong> — T&amp;E posts to AP.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pitfalls</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Workflow theater.</strong> 5-level approval workflow that everyone clicks through in 2 seconds — control on paper, not in practice.</li>
+                <li><strong>Three-way match exceptions ignored.</strong> Mismatches park in a queue nobody owns; AP accrual is wrong; vendor relationships sour.</li>
+                <li><strong>Duplicate vendor master.</strong> Same supplier as three vendors with different tax IDs. Spend reporting useless; potential duplicate payments.</li>
+                <li><strong>Procurement categories as flat list.</strong> No hierarchy, no defaults, no controls — categories degrade into a free-text field.</li>
+                <li><strong>Vendor portal launched without vendor adoption.</strong> Self-service exists; no vendor uses it; AP still receives PDFs by email.</li>
+                <li><strong>Prepayment treated as invoice.</strong> Tax accrued at the wrong moment; year-end auditors find it.</li>
+                <li><strong>Payment proposal as a manual report.</strong> The point is automation; a payment proposal that is reviewed line-by-line every week is no faster than a check run from a spreadsheet.</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
       </article>
 
     </main>
