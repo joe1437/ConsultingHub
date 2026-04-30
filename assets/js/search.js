@@ -1,5 +1,5 @@
 /* =========================================================
-   D365 F&O Consulting Hub — Site search
+   D365 F&O Consulting Hub - Site search
    - Indexes all 9 pages on first open (lazy)
    - Modal UI, keyboard-first (Cmd/Ctrl+K, /, arrows, Enter)
    - Works whenever the site is served via http(s)://

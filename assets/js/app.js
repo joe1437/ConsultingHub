@@ -1,6 +1,6 @@
 /* =========================================================
-   D365 F&O Consulting Hub — Shared scripts
-   - Shared footer (single source of truth — edit here, every page updates)
+   D365 F&O Consulting Hub - Shared scripts
+   - Shared footer (single source of truth - edit here, every page updates)
    - Mobile nav toggle
    - Workspace sidebar (item switching, deep links via #id)
    - Mobile sidebar collapse

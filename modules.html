@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Modules — D365 F&amp;O Consulting Hub</title>
+<title>Modules, D365 F&amp;O Consulting Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme', 'dark');}catch(e){}})();</script>
 </head>
 <body>
 
@@ -39,7 +39,7 @@
     <span class="page-header__eyebrow">04 · Application surface</span>
     <h1 class="page-header__title">Main modules</h1>
     <p class="page-header__lead">
-      Every functional module in D365 F&amp;O — what it does, how it's set up, where it touches other modules. Pick a module from the left to see its article.
+      Every functional module in D365 F&amp;O, what it does, how it's set up, where it touches other modules. Pick a module from the left to see its article.
     </p>
   </div>
 </section>
@@ -100,7 +100,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Setup</span>Posting profiles &amp; defaults</summary>
             <div class="topic__body topic__body--placeholder">
-              <p>Add content here — vendor posting profiles (Summary account, Settle, Arrival), payment terms, methods of payment, payment day, terms of payment, cash discounts, and the AP parameters that drive defaults.</p>
+              <p>Add content here, vendor posting profiles (Summary account, Settle, Arrival), payment terms, methods of payment, payment day, terms of payment, cash discounts, and the AP parameters that drive defaults.</p>
             </div>
           </details>
 
@@ -110,31 +110,31 @@
               <p>The vendor master is the single source of truth for everyone you pay. Get it right at setup and downstream AP, procurement, and reporting all behave; get it wrong and you'll be cleaning up posting errors and duplicate payments for months.</p>
 
               <details class="topic">
-                <summary>Vendor creation — step by step</summary>
+                <summary>Vendor creation, step by step</summary>
                 <div class="topic__body">
                   <p><strong>Where:</strong> <code>Accounts payable &gt; Vendors &gt; All vendors &gt; New</code>.</p>
                   <h4>Required fields</h4>
                   <ul>
-                    <li><strong>Vendor account</strong> — usually pulled from a number sequence; only manual if you've set it that way.</li>
-                    <li><strong>Name</strong> — picks from or creates a Global Address Book party. Same legal entity name should never be a separate party.</li>
-                    <li><strong>Group</strong> — drives posting profile, terms of payment, and tax defaults. The most consequential field on the form.</li>
-                    <li><strong>Currency</strong> — invoice currency. Can differ from accounting currency; FX revaluation handles the rest.</li>
+                    <li><strong>Vendor account</strong>, usually pulled from a number sequence; only manual if you've set it that way.</li>
+                    <li><strong>Name</strong>, picks from or creates a Global Address Book party. Same legal entity name should never be a separate party.</li>
+                    <li><strong>Group</strong>, drives posting profile, terms of payment, and tax defaults. The most consequential field on the form.</li>
+                    <li><strong>Currency</strong>, invoice currency. Can differ from accounting currency; FX revaluation handles the rest.</li>
                   </ul>
                   <h4>Tabs to fill before going live</h4>
                   <ul>
-                    <li><strong>Addresses</strong> — at least one purpose=Invoice address. Without it, payment formats with address blocks fail silently.</li>
-                    <li><strong>Contact information</strong> — remit-to email for ACH advice, AP contact phone.</li>
-                    <li><strong>Purchase order defaults</strong> — delivery terms (Incoterms), mode of delivery.</li>
-                    <li><strong>Invoice and delivery</strong> — invoice account (third-party pay-to vendor if different), tax group, item sales tax group.</li>
-                    <li><strong>Payment</strong> — terms of payment, method of payment, cash discount, payment specification (e.g., ACH/CCD/CTX), bank account.</li>
-                    <li><strong>1099</strong> — only for US AP. 1099 box (NEC, MISC, INT, DIV) and 1099 status. Wrong here = wrong year-end form.</li>
+                    <li><strong>Addresses</strong>, at least one purpose=Invoice address. Without it, payment formats with address blocks fail silently.</li>
+                    <li><strong>Contact information</strong>, remit-to email for ACH advice, AP contact phone.</li>
+                    <li><strong>Purchase order defaults</strong>, delivery terms (Incoterms), mode of delivery.</li>
+                    <li><strong>Invoice and delivery</strong>, invoice account (third-party pay-to vendor if different), tax group, item sales tax group.</li>
+                    <li><strong>Payment</strong>, terms of payment, method of payment, cash discount, payment specification (e.g., ACH/CCD/CTX), bank account.</li>
+                    <li><strong>1099</strong>, only for US AP. 1099 box (NEC, MISC, INT, DIV) and 1099 status. Wrong here = wrong year-end form.</li>
                   </ul>
                   <h4>Common pitfalls</h4>
                   <ul>
-                    <li><strong>Duplicate vendors.</strong> AP won't enforce uniqueness on Tax ID by default — turn on the "vendor search" warning in AP parameters and train AP clerks to search before creating.</li>
+                    <li><strong>Duplicate vendors.</strong> AP won't enforce uniqueness on Tax ID by default, turn on the "vendor search" warning in AP parameters and train AP clerks to search before creating.</li>
                     <li><strong>Wrong group at creation.</strong> Group can be changed later, but historical postings already used the old posting profile, so reporting splits across two summary accounts. Get it right the first time.</li>
                     <li><strong>Hold field forgotten.</strong> Hold = Payment is the safe default during onboarding (lets you receive invoices but blocks payment until verified).</li>
-                    <li><strong>One-time vendors abused.</strong> One-time vendor is for genuinely one-shot payments — don't use it as a shortcut, you lose all reporting history.</li>
+                    <li><strong>One-time vendors abused.</strong> One-time vendor is for genuinely one-shot payments, don't use it as a shortcut, you lose all reporting history.</li>
                   </ul>
                 </div>
               </details>
@@ -142,21 +142,21 @@
               <details class="topic">
                 <summary>Vendor groups</summary>
                 <div class="topic__body topic__body--placeholder">
-                  <p>Add content here — designing vendor groups for posting profile separation and reporting (domestic vs. foreign, employee expense vendors, intercompany), and the relationship to the chart of accounts.</p>
+                  <p>Add content here, designing vendor groups for posting profile separation and reporting (domestic vs. foreign, employee expense vendors, intercompany), and the relationship to the chart of accounts.</p>
                 </div>
               </details>
 
               <details class="topic">
                 <summary>Vendor bank accounts</summary>
                 <div class="topic__body topic__body--placeholder">
-                  <p>Add content here — adding a vendor bank, IBAN/SWIFT vs. routing/account, the "Use central bank purposes" toggle, and how the default bank flows to the payment proposal.</p>
+                  <p>Add content here, adding a vendor bank, IBAN/SWIFT vs. routing/account, the "Use central bank purposes" toggle, and how the default bank flows to the payment proposal.</p>
                 </div>
               </details>
 
               <details class="topic">
                 <summary>Vendor on-hold options</summary>
                 <div class="topic__body topic__body--placeholder">
-                  <p>Add content here — No, Invoice, Payment, All, Requisition, Never — what each value blocks and the typical onboarding workflow (Hold = All → verify → Hold = No).</p>
+                  <p>Add content here, No, Invoice, Payment, All, Requisition, Never, what each value blocks and the typical onboarding workflow (Hold = All → verify → Hold = No).</p>
                 </div>
               </details>
             </div>
@@ -165,21 +165,21 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Transactions</span>Invoicing &amp; payments</summary>
             <div class="topic__body topic__body--placeholder">
-              <p>Add content here — invoice journal vs. pending vendor invoice, three-way matching (PO + receipt + invoice), invoice register / approval workflow, prepayments, and settlements.</p>
+              <p>Add content here, invoice journal vs. pending vendor invoice, three-way matching (PO + receipt + invoice), invoice register / approval workflow, prepayments, and settlements.</p>
             </div>
           </details>
 
           <details class="topic">
             <summary><span class="topic__eyebrow">Periodic</span>Payment proposals &amp; close</summary>
             <div class="topic__body topic__body--placeholder">
-              <p>Add content here — payment proposal generation, payment journal, electronic payment file (NACHA, SEPA, ISO20022), and the AP month-end close steps.</p>
+              <p>Add content here, payment proposal generation, payment journal, electronic payment file (NACHA, SEPA, ISO20022), and the AP month-end close steps.</p>
             </div>
           </details>
 
           <details class="topic">
             <summary><span class="topic__eyebrow">Reporting</span>Aging, balances, 1099</summary>
             <div class="topic__body topic__body--placeholder">
-              <p>Add content here — vendor aging buckets, vendor balance list vs. trial balance reconciliation, 1099 year-end (US), and the standard inquiries every AP clerk should know.</p>
+              <p>Add content here, vendor aging buckets, vendor balance list vs. trial balance reconciliation, 1099 year-end (US), and the standard inquiries every AP clerk should know.</p>
             </div>
           </details>
 
@@ -190,35 +190,35 @@
       <article class="item-pane" data-item-pane="accounts-receivable">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Accounts Receivable</h2><p class="item-pane__lead">Customer invoices, payments, settlements, and the AR side of order-to-cash.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Posting profiles &amp; defaults</summary><div class="topic__body topic__body--placeholder"><p>Add content here — customer posting profiles, terms of payment, methods of payment, AR parameters, and the difference between sales-order invoices and free-text invoices defaults.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Customer master</summary><div class="topic__body topic__body--placeholder"><p>Add content here — customer creation, customer groups, addresses (invoice / delivery / one-time), tax setup, credit limit, salesperson, and the relationship to the global address book.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Invoicing &amp; payments</summary><div class="topic__body topic__body--placeholder"><p>Add content here — sales-order invoice flow, free-text invoice (no SO), customer payment journal, settlements (auto and manual), credit memos, and write-offs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Statements, dunning, close</summary><div class="topic__body topic__body--placeholder"><p>Add content here — customer statements, dunning letters, the link to Credit &amp; Collections, and AR month-end activities.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Aging &amp; balances</summary><div class="topic__body topic__body--placeholder"><p>Add content here — customer aging, AR trial balance reconciliation, days sales outstanding (DSO), and the standard AR inquiries.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Posting profiles &amp; defaults</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer posting profiles, terms of payment, methods of payment, AR parameters, and the difference between sales-order invoices and free-text invoices defaults.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Customer master</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer creation, customer groups, addresses (invoice / delivery / one-time), tax setup, credit limit, salesperson, and the relationship to the global address book.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Invoicing &amp; payments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales-order invoice flow, free-text invoice (no SO), customer payment journal, settlements (auto and manual), credit memos, and write-offs.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Statements, dunning, close</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer statements, dunning letters, the link to Credit &amp; Collections, and AR month-end activities.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Aging &amp; balances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer aging, AR trial balance reconciliation, days sales outstanding (DSO), and the standard AR inquiries.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Asset Management ============== -->
       <article class="item-pane" data-item-pane="asset-management">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Asset Management</h2><p class="item-pane__lead">Maintenance and servicing of physical assets — distinct from Fixed Assets accounting.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Asset Management</h2><p class="item-pane__lead">Maintenance and servicing of physical assets, distinct from Fixed Assets accounting.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module setup &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — Asset Management parameters, lifecycle states, work order types, work order types vs. job types, and the integration toggle with Fixed Assets.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Assets &amp; functional locations</summary><div class="topic__body topic__body--placeholder"><p>Add content here — asset master, asset types, functional locations, location hierarchy, asset BOMs, and counters.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Work orders &amp; jobs</summary><div class="topic__body topic__body--placeholder"><p>Add content here — preventive vs. corrective maintenance, work order lifecycle, scheduling and dispatching, job journals (hour, item, expense), and posting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Maintenance plans &amp; rounds</summary><div class="topic__body topic__body--placeholder"><p>Add content here — maintenance plans, maintenance rounds, condition assessments, and the role of IoT data.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Inventory &amp; procurement</summary><div class="topic__body topic__body--placeholder"><p>Add content here — spare parts on work orders, item requirements, integration with Fixed Assets for capitalization vs. expense, and the line between this module and Production Control.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module setup &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, Asset Management parameters, lifecycle states, work order types, work order types vs. job types, and the integration toggle with Fixed Assets.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Assets &amp; functional locations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, asset master, asset types, functional locations, location hierarchy, asset BOMs, and counters.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Work orders &amp; jobs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, preventive vs. corrective maintenance, work order lifecycle, scheduling and dispatching, job journals (hour, item, expense), and posting.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Maintenance plans &amp; rounds</summary><div class="topic__body topic__body--placeholder"><p>Add content here, maintenance plans, maintenance rounds, condition assessments, and the role of IoT data.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Inventory &amp; procurement</summary><div class="topic__body topic__body--placeholder"><p>Add content here, spare parts on work orders, item requirements, integration with Fixed Assets for capitalization vs. expense, and the line between this module and Production Control.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Budgeting ============== -->
       <article class="item-pane" data-item-pane="budgeting">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Budgeting</h2><p class="item-pane__lead">Budget planning, control, and registration entries — the guardrails on the GL.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Budgeting</h2><p class="item-pane__lead">Budget planning, control, and registration entries, the guardrails on the GL.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Basic vs. advanced budgeting</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when to use budget register entries only vs. full budget plans, budget codes, budget cycle time spans, and the parameters in GL that control budgeting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Budget plans</span>Plan creation &amp; workflow</summary><div class="topic__body topic__body--placeholder"><p>Add content here — budget planning processes, scenarios, stages and workflow, budget plan templates, and Excel integration for budget input.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Budget control</span>Configuration &amp; checks</summary><div class="topic__body topic__body--placeholder"><p>Add content here — budget control configuration, source documents covered (PO, requisition, expense, journal), available budget calculation, and over-budget warnings vs. blocks.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Budget vs. actuals</summary><div class="topic__body topic__body--placeholder"><p>Add content here — budget vs. actuals reports, financial reporter (Management Reporter) for budget reporting, and the consolidation of multi-entity budgets.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Common pitfalls</summary><div class="topic__body topic__body--placeholder"><p>Add content here — over-engineering budget control, dimension explosion in budget plans, and the rollforward process at year-end.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Basic vs. advanced budgeting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when to use budget register entries only vs. full budget plans, budget codes, budget cycle time spans, and the parameters in GL that control budgeting.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Budget plans</span>Plan creation &amp; workflow</summary><div class="topic__body topic__body--placeholder"><p>Add content here, budget planning processes, scenarios, stages and workflow, budget plan templates, and Excel integration for budget input.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Budget control</span>Configuration &amp; checks</summary><div class="topic__body topic__body--placeholder"><p>Add content here, budget control configuration, source documents covered (PO, requisition, expense, journal), available budget calculation, and over-budget warnings vs. blocks.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Budget vs. actuals</summary><div class="topic__body topic__body--placeholder"><p>Add content here, budget vs. actuals reports, financial reporter (Management Reporter) for budget reporting, and the consolidation of multi-entity budgets.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Common pitfalls</summary><div class="topic__body topic__body--placeholder"><p>Add content here, over-engineering budget control, dimension explosion in budget plans, and the rollforward process at year-end.</p></div></details>
         </div>
       </article>
 
@@ -226,35 +226,35 @@
       <article class="item-pane" data-item-pane="cash-bank">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cash &amp; Bank Management</h2><p class="item-pane__lead">Bank accounts, deposits, bank reconciliation, and cash flow forecasting.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Bank groups &amp; accounts</summary><div class="topic__body topic__body--placeholder"><p>Add content here — bank groups, bank account creation, main account linkage, currency, and the difference between bank account and ledger main account.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Check layouts &amp; payment formats</summary><div class="topic__body topic__body--placeholder"><p>Add content here — check layouts, electronic reporting (ER) for payment formats (NACHA, SEPA, BAI2 import), and how to extend a delivered configuration.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Deposits &amp; payments</summary><div class="topic__body topic__body--placeholder"><p>Add content here — deposit slips, voiding checks, stop payments, NSF, and the cash receipt journal.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reconciliation</span>Manual vs. advanced</summary><div class="topic__body topic__body--placeholder"><p>Add content here — manual bank reconciliation, advanced bank reconciliation (BAI2 / MT940 / ISO20022 import), matching rules, and reconciling unposted items.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Cash flow</span>Forecasting</summary><div class="topic__body topic__body--placeholder"><p>Add content here — cash flow forecast setup, source data (AP open, AR open, sales orders, POs, budget), and dependencies on the GL accounts setup.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Bank groups &amp; accounts</summary><div class="topic__body topic__body--placeholder"><p>Add content here, bank groups, bank account creation, main account linkage, currency, and the difference between bank account and ledger main account.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Check layouts &amp; payment formats</summary><div class="topic__body topic__body--placeholder"><p>Add content here, check layouts, electronic reporting (ER) for payment formats (NACHA, SEPA, BAI2 import), and how to extend a delivered configuration.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Deposits &amp; payments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, deposit slips, voiding checks, stop payments, NSF, and the cash receipt journal.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reconciliation</span>Manual vs. advanced</summary><div class="topic__body topic__body--placeholder"><p>Add content here, manual bank reconciliation, advanced bank reconciliation (BAI2 / MT940 / ISO20022 import), matching rules, and reconciling unposted items.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Cash flow</span>Forecasting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cash flow forecast setup, source data (AP open, AR open, sales orders, POs, budget), and dependencies on the GL accounts setup.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Cost Accounting ============== -->
       <article class="item-pane" data-item-pane="cost-accounting">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Accounting</h2><p class="item-pane__lead">A separate ledger for managerial accounting — cost objects, allocations, and contribution analysis.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Accounting</h2><p class="item-pane__lead">A separate ledger for managerial accounting, cost objects, allocations, and contribution analysis.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Cost accounting ledger</summary><div class="topic__body topic__body--placeholder"><p>Add content here — cost accounting ledger vs. general ledger, dimension hierarchies (cost element, cost object, statistical), and the data integration jobs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Sources</span>Source data providers</summary><div class="topic__body topic__body--placeholder"><p>Add content here — GL transactions as a source, statistical providers (headcount, square footage), budget integration, and frequency of data refresh.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Allocations</span>Cost allocation policies</summary><div class="topic__body topic__body--placeholder"><p>Add content here — formula allocation bases, hierarchy allocation, overhead calculation, and the order of operations in the calculation process.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Cost control workspace</summary><div class="topic__body topic__body--placeholder"><p>Add content here — cost control workspace, contribution margin analysis, and Power BI integration.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>When to use it</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when cost accounting is justified vs. when financial dimensions on the GL are enough, and the maturity threshold a client should hit before adopting.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Cost accounting ledger</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cost accounting ledger vs. general ledger, dimension hierarchies (cost element, cost object, statistical), and the data integration jobs.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Sources</span>Source data providers</summary><div class="topic__body topic__body--placeholder"><p>Add content here, GL transactions as a source, statistical providers (headcount, square footage), budget integration, and frequency of data refresh.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Allocations</span>Cost allocation policies</summary><div class="topic__body topic__body--placeholder"><p>Add content here, formula allocation bases, hierarchy allocation, overhead calculation, and the order of operations in the calculation process.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Cost control workspace</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cost control workspace, contribution margin analysis, and Power BI integration.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>When to use it</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when cost accounting is justified vs. when financial dimensions on the GL are enough, and the maturity threshold a client should hit before adopting.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Cost Management ============== -->
       <article class="item-pane" data-item-pane="cost-management">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Management</h2><p class="item-pane__lead">Inventory and production costing — standard, FIFO, LIFO, weighted average, and the close.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Management</h2><p class="item-pane__lead">Inventory and production costing, standard, FIFO, LIFO, weighted average, and the close.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Costing methodology</summary><div class="topic__body topic__body--placeholder"><p>Add content here — choosing standard cost vs. moving average vs. FIFO vs. weighted average, item model groups, cost groups, and the implications for the close.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Costing sheet &amp; cost versions</summary><div class="topic__body topic__body--placeholder"><p>Add content here — costing sheet (material, labor, overhead), cost versions (planned, active), and the BOM calculation process for standard costs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Inventory close &amp; recalculation</summary><div class="topic__body topic__body--placeholder"><p>Add content here — inventory recalculation vs. inventory close, what changes vs. what's permanent, frozen periods, and the steps to schedule a healthy close.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Variances</span>Standard cost variances</summary><div class="topic__body topic__body--placeholder"><p>Add content here — purchase price variance, cost change variance, lot size variance, production variances, and the GL accounts that should receive each.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>WIP &amp; COGS</summary><div class="topic__body topic__body--placeholder"><p>Add content here — production WIP reporting, COGS reconciliation (inventory subledger to GL), and the typical close reports.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Costing methodology</summary><div class="topic__body topic__body--placeholder"><p>Add content here, choosing standard cost vs. moving average vs. FIFO vs. weighted average, item model groups, cost groups, and the implications for the close.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Costing sheet &amp; cost versions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, costing sheet (material, labor, overhead), cost versions (planned, active), and the BOM calculation process for standard costs.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Inventory close &amp; recalculation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, inventory recalculation vs. inventory close, what changes vs. what's permanent, frozen periods, and the steps to schedule a healthy close.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Variances</span>Standard cost variances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, purchase price variance, cost change variance, lot size variance, production variances, and the GL accounts that should receive each.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>WIP &amp; COGS</summary><div class="topic__body topic__body--placeholder"><p>Add content here, production WIP reporting, COGS reconciliation (inventory subledger to GL), and the typical close reports.</p></div></details>
         </div>
       </article>
 
@@ -262,11 +262,11 @@
       <article class="item-pane" data-item-pane="credit-collections">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Credit &amp; Collections</h2><p class="item-pane__lead">Credit limits, blocking rules, and the workflow of chasing overdue invoices.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Credit groups &amp; limits</summary><div class="topic__body topic__body--placeholder"><p>Add content here — credit groups, credit limit definition, credit limit type (none, balance, balance + open orders), and over-limit rules.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Workflow</span>Credit hold</summary><div class="topic__body topic__body--placeholder"><p>Add content here — credit hold rules, the credit management workspace, override approvals, and the exception flow when an order is blocked at picking.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Collections</span>Aging snapshots &amp; activities</summary><div class="topic__body topic__body--placeholder"><p>Add content here — aging snapshots, collections agents and customer pools, collection letters / dunning, and the integration with the customer master.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Write-offs &amp; NSF</summary><div class="topic__body topic__body--placeholder"><p>Add content here — write-off journal, NSF processing, and the link back to AR settlements.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Aging &amp; collection metrics</summary><div class="topic__body topic__body--placeholder"><p>Add content here — aging buckets, collection effectiveness index (CEI), DSO, and the collections KPI workspace.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Credit groups &amp; limits</summary><div class="topic__body topic__body--placeholder"><p>Add content here, credit groups, credit limit definition, credit limit type (none, balance, balance + open orders), and over-limit rules.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Workflow</span>Credit hold</summary><div class="topic__body topic__body--placeholder"><p>Add content here, credit hold rules, the credit management workspace, override approvals, and the exception flow when an order is blocked at picking.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Collections</span>Aging snapshots &amp; activities</summary><div class="topic__body topic__body--placeholder"><p>Add content here, aging snapshots, collections agents and customer pools, collection letters / dunning, and the integration with the customer master.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Write-offs &amp; NSF</summary><div class="topic__body topic__body--placeholder"><p>Add content here, write-off journal, NSF processing, and the link back to AR settlements.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Aging &amp; collection metrics</summary><div class="topic__body topic__body--placeholder"><p>Add content here, aging buckets, collection effectiveness index (CEI), DSO, and the collections KPI workspace.</p></div></details>
         </div>
       </article>
 
@@ -274,11 +274,11 @@
       <article class="item-pane" data-item-pane="expense-management">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Expense Management</h2><p class="item-pane__lead">Expense reports, travel requisitions, per diems, and the link to AP and projects.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Categories &amp; policies</summary><div class="topic__body topic__body--placeholder"><p>Add content here — expense categories and shared categories, expense policies (warning vs. error), per diem rules, mileage rates, and policy by department/project.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Worker &amp; delegate setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here — workers as expense filers, delegates, position-based defaults, and the link to financial dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Travel requisition &amp; expense report</summary><div class="topic__body topic__body--placeholder"><p>Add content here — travel requisition, cash advance, expense report (mobile + web), credit card import (VCF 4.0), itemization, and receipts.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Approval</span>Workflow &amp; posting</summary><div class="topic__body topic__body--placeholder"><p>Add content here — approval workflow design, line-level vs. header approval, posting to AP / project, and the credit card transaction matching workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Project &amp; AP</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when expenses post to projects vs. AP only, intercompany expense, and the relationship with PO-funded T&amp;E.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Categories &amp; policies</summary><div class="topic__body topic__body--placeholder"><p>Add content here, expense categories and shared categories, expense policies (warning vs. error), per diem rules, mileage rates, and policy by department/project.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Worker &amp; delegate setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here, workers as expense filers, delegates, position-based defaults, and the link to financial dimensions.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Travel requisition &amp; expense report</summary><div class="topic__body topic__body--placeholder"><p>Add content here, travel requisition, cash advance, expense report (mobile + web), credit card import (VCF 4.0), itemization, and receipts.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Approval</span>Workflow &amp; posting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, approval workflow design, line-level vs. header approval, posting to AP / project, and the credit card transaction matching workflow.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Project &amp; AP</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when expenses post to projects vs. AP only, intercompany expense, and the relationship with PO-funded T&amp;E.</p></div></details>
         </div>
       </article>
 
@@ -286,25 +286,25 @@
       <article class="item-pane" data-item-pane="fixed-assets">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Fixed Assets</h2><p class="item-pane__lead">Acquisition, depreciation, value adjustment, and disposal of fixed assets.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Books &amp; depreciation profiles</summary><div class="topic__body topic__body--placeholder"><p>Add content here — books (multiple books for different valuations), posting layers (current, operations, tax), depreciation profiles (straight line, reducing balance, manual), and fixed asset groups.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Asset creation</summary><div class="topic__body topic__body--placeholder"><p>Add content here — fixed asset record, financial dimensions, parent asset, location, and the data needed before first acquisition.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Acquisition methods</summary><div class="topic__body topic__body--placeholder"><p>Add content here — manual acquisition, acquisition via purchase order, acquisition from project, acquisition proposal, and the GL accounts hit by each path.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Depreciation runs &amp; adjustments</summary><div class="topic__body topic__body--placeholder"><p>Add content here — depreciation proposal, value adjustments (write-up, write-down), bonus depreciation, and the multiple-books story for tax vs. book.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Disposal</span>Sale &amp; scrap</summary><div class="topic__body topic__body--placeholder"><p>Add content here — disposal — sale (via AR free-text invoice), disposal — scrap, and the gain/loss accounting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Roll-forward &amp; tax reports</summary><div class="topic__body topic__body--placeholder"><p>Add content here — fixed asset roll-forward, fixed asset note, and the country-specific tax depreciation reports.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Books &amp; depreciation profiles</summary><div class="topic__body topic__body--placeholder"><p>Add content here, books (multiple books for different valuations), posting layers (current, operations, tax), depreciation profiles (straight line, reducing balance, manual), and fixed asset groups.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Asset creation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, fixed asset record, financial dimensions, parent asset, location, and the data needed before first acquisition.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Acquisition methods</summary><div class="topic__body topic__body--placeholder"><p>Add content here, manual acquisition, acquisition via purchase order, acquisition from project, acquisition proposal, and the GL accounts hit by each path.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Depreciation runs &amp; adjustments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, depreciation proposal, value adjustments (write-up, write-down), bonus depreciation, and the multiple-books story for tax vs. book.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Disposal</span>Sale &amp; scrap</summary><div class="topic__body topic__body--placeholder"><p>Add content here, disposal, sale (via AR free-text invoice), disposal, scrap, and the gain/loss accounting.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Roll-forward &amp; tax reports</summary><div class="topic__body topic__body--placeholder"><p>Add content here, fixed asset roll-forward, fixed asset note, and the country-specific tax depreciation reports.</p></div></details>
         </div>
       </article>
 
       <!-- ============== General Ledger ============== -->
       <article class="item-pane" data-item-pane="general-ledger">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">General Ledger</h2><p class="item-pane__lead">The financial backbone — chart of accounts, dimensions, journals, and period close.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">General Ledger</h2><p class="item-pane__lead">The financial backbone, chart of accounts, dimensions, journals, and period close.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Ledger &amp; fiscal calendar</summary><div class="topic__body topic__body--placeholder"><p>Add content here — ledger setup (accounting currency, reporting currency, fiscal calendar), exchange rate types, and the consequences of getting any of these wrong post go-live.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Chart of accounts &amp; dimensions</summary><div class="topic__body topic__body--placeholder"><p>Add content here — main accounts, account categories, financial dimensions (fixed vs. custom), account structures and advanced rule structures, and the trade-off between more accounts vs. more dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Journals &amp; allocations</summary><div class="topic__body topic__body--placeholder"><p>Add content here — daily journal, periodic journal, allocation rules (fixed, basis, formula), reverse postings, and journal approval workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Period close &amp; revaluation</summary><div class="topic__body topic__body--placeholder"><p>Add content here — period status (open / on hold / closed / permanently closed), foreign currency revaluation, year-end close (opening transactions), and the typical close calendar.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Cross-cutting</span>Consolidation &amp; intercompany</summary><div class="topic__body topic__body--placeholder"><p>Add content here — consolidation legal entity, online vs. import consolidation, intercompany accounting setup, and the auto-generated due-to / due-from postings.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Trial balance &amp; financial reporter</summary><div class="topic__body topic__body--placeholder"><p>Add content here — trial balance views, voucher transactions, Financial Reporter (Management Reporter) row/column/tree definitions, and Power BI for ledger reporting.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Ledger &amp; fiscal calendar</summary><div class="topic__body topic__body--placeholder"><p>Add content here, ledger setup (accounting currency, reporting currency, fiscal calendar), exchange rate types, and the consequences of getting any of these wrong post go-live.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Chart of accounts &amp; dimensions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, main accounts, account categories, financial dimensions (fixed vs. custom), account structures and advanced rule structures, and the trade-off between more accounts vs. more dimensions.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Journals &amp; allocations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, daily journal, periodic journal, allocation rules (fixed, basis, formula), reverse postings, and journal approval workflow.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Period close &amp; revaluation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, period status (open / on hold / closed / permanently closed), foreign currency revaluation, year-end close (opening transactions), and the typical close calendar.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Cross-cutting</span>Consolidation &amp; intercompany</summary><div class="topic__body topic__body--placeholder"><p>Add content here, consolidation legal entity, online vs. import consolidation, intercompany accounting setup, and the auto-generated due-to / due-from postings.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Trial balance &amp; financial reporter</summary><div class="topic__body topic__body--placeholder"><p>Add content here, trial balance views, voucher transactions, Financial Reporter (Management Reporter) row/column/tree definitions, and Power BI for ledger reporting.</p></div></details>
         </div>
       </article>
 
@@ -312,11 +312,11 @@
       <article class="item-pane" data-item-pane="human-resources">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Human Resources</h2><p class="item-pane__lead">Workers, positions, jobs, leave, and the data backbone for payroll and project resourcing.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters &amp; structure</summary><div class="topic__body topic__body--placeholder"><p>Add content here — HR parameters, departments, positions, jobs, and the relationship between job → position → worker.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Workers &amp; positions</summary><div class="topic__body topic__body--placeholder"><p>Add content here — employee vs. contractor, hire process, position assignment with effective dates, reporting line, and worker financial dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Leave</span>Leave plans &amp; absence</summary><div class="topic__body topic__body--placeholder"><p>Add content here — leave plans, accrual rules, leave types, leave requests workflow, and the link to payroll.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Compensation</span>Plans &amp; cycles</summary><div class="topic__body topic__body--placeholder"><p>Add content here — compensation plans (fixed, variable), grids and reference points, and the compensation event workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Dataverse HR &amp; payroll</summary><div class="topic__body topic__body--placeholder"><p>Add content here — the F&amp;O HR vs. Dataverse HR (formerly Talent) story, and how worker data flows to Payroll, Project, and Expense.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters &amp; structure</summary><div class="topic__body topic__body--placeholder"><p>Add content here, HR parameters, departments, positions, jobs, and the relationship between job → position → worker.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Workers &amp; positions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, employee vs. contractor, hire process, position assignment with effective dates, reporting line, and worker financial dimensions.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Leave</span>Leave plans &amp; absence</summary><div class="topic__body topic__body--placeholder"><p>Add content here, leave plans, accrual rules, leave types, leave requests workflow, and the link to payroll.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Compensation</span>Plans &amp; cycles</summary><div class="topic__body topic__body--placeholder"><p>Add content here, compensation plans (fixed, variable), grids and reference points, and the compensation event workflow.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Dataverse HR &amp; payroll</summary><div class="topic__body topic__body--placeholder"><p>Add content here, the F&amp;O HR vs. Dataverse HR (formerly Talent) story, and how worker data flows to Payroll, Project, and Expense.</p></div></details>
         </div>
       </article>
 
@@ -324,23 +324,23 @@
       <article class="item-pane" data-item-pane="inventory-management">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Inventory Management</h2><p class="item-pane__lead">On-hand visibility, inventory journals, transfers, and counting.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Sites, warehouses, locations</summary><div class="topic__body topic__body--placeholder"><p>Add content here — inventory hierarchy (site → warehouse → location), the difference between basic and advanced (WMS) warehouses, and the design choices that lock you in.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Dimensions</span>Storage &amp; tracking</summary><div class="topic__body topic__body--placeholder"><p>Add content here — storage dimensions (site, warehouse, location, license plate) vs. tracking dimensions (batch, serial), dimension groups, and the implications for costing.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Inventory journals</summary><div class="topic__body topic__body--placeholder"><p>Add content here — movement journal, profit/loss journal, transfer journal, BOM journal, counting journal, and when to use each.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reservations</span>Reservation behavior</summary><div class="topic__body topic__body--placeholder"><p>Add content here — manual vs. automatic reservations, reservation hierarchy, the impact on master planning, and unreserving on shipment.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>On-hand &amp; reconciliation</summary><div class="topic__body topic__body--placeholder"><p>Add content here — on-hand views, inventory aging, inventory value report by warehouse / item / dimension, and reconciling inventory subledger to GL.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Sites, warehouses, locations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, inventory hierarchy (site → warehouse → location), the difference between basic and advanced (WMS) warehouses, and the design choices that lock you in.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Dimensions</span>Storage &amp; tracking</summary><div class="topic__body topic__body--placeholder"><p>Add content here, storage dimensions (site, warehouse, location, license plate) vs. tracking dimensions (batch, serial), dimension groups, and the implications for costing.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Inventory journals</summary><div class="topic__body topic__body--placeholder"><p>Add content here, movement journal, profit/loss journal, transfer journal, BOM journal, counting journal, and when to use each.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reservations</span>Reservation behavior</summary><div class="topic__body topic__body--placeholder"><p>Add content here, manual vs. automatic reservations, reservation hierarchy, the impact on master planning, and unreserving on shipment.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>On-hand &amp; reconciliation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, on-hand views, inventory aging, inventory value report by warehouse / item / dimension, and reconciling inventory subledger to GL.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Landed Cost ============== -->
       <article class="item-pane" data-item-pane="landed-cost">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Landed Cost</h2><p class="item-pane__lead">Tracking the true cost of imported goods — freight, duty, insurance, and overhead.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Landed Cost</h2><p class="item-pane__lead">Tracking the true cost of imported goods, freight, duty, insurance, and overhead.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Costing &amp; voyage parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — landed cost parameters, costing types (freight, insurance, duty, overhead), apportionment methods (weight, volume, quantity, value), and the GL accounts hit.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Voyages &amp; containers</summary><div class="topic__body topic__body--placeholder"><p>Add content here — voyage, journey templates, shipping containers, and the link to PO lines.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Cost apportionment</summary><div class="topic__body topic__body--placeholder"><p>Add content here — auto cost calculation, manual cost adjustments, customs entry, and the AP invoice matching workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Landed cost &amp; variance</summary><div class="topic__body topic__body--placeholder"><p>Add content here — voyage cost report, landed cost variances, and the impact on inventory cost.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Landed cost vs. miscellaneous charges</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when full Landed Cost is justified vs. simply using miscellaneous charges on a PO.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Costing &amp; voyage parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, landed cost parameters, costing types (freight, insurance, duty, overhead), apportionment methods (weight, volume, quantity, value), and the GL accounts hit.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Voyages &amp; containers</summary><div class="topic__body topic__body--placeholder"><p>Add content here, voyage, journey templates, shipping containers, and the link to PO lines.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Cost apportionment</summary><div class="topic__body topic__body--placeholder"><p>Add content here, auto cost calculation, manual cost adjustments, customs entry, and the AP invoice matching workflow.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Landed cost &amp; variance</summary><div class="topic__body topic__body--placeholder"><p>Add content here, voyage cost report, landed cost variances, and the impact on inventory cost.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Landed cost vs. miscellaneous charges</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when full Landed Cost is justified vs. simply using miscellaneous charges on a PO.</p></div></details>
         </div>
       </article>
 
@@ -348,11 +348,11 @@
       <article class="item-pane" data-item-pane="master-planning">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Master Planning</h2><p class="item-pane__lead">MRP / planning runs that produce planned purchase, transfer, and production orders from demand.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Plans &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — master plan vs. forecast plan, dynamic plan, planning parameters per item / item group, and Planning Optimization vs. legacy MRP.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Coverage groups &amp; settings</summary><div class="topic__body topic__body--placeholder"><p>Add content here — coverage groups (period, requirement, min/max), time fences, action messages, and reorder points.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Run</span>Planning execution</summary><div class="topic__body topic__body--placeholder"><p>Add content here — running master planning, regeneration vs. net change, the planned order results, and firming.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Action messages</span>Pegging &amp; futures</summary><div class="topic__body topic__body--placeholder"><p>Add content here — pegging tree, futures messages, action messages, and how to triage them with planners.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Plan output &amp; KPIs</summary><div class="topic__body topic__body--placeholder"><p>Add content here — planned order workspace, the supply scheduling story, and the Planning Optimization metrics.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Plans &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, master plan vs. forecast plan, dynamic plan, planning parameters per item / item group, and Planning Optimization vs. legacy MRP.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Coverage groups &amp; settings</summary><div class="topic__body topic__body--placeholder"><p>Add content here, coverage groups (period, requirement, min/max), time fences, action messages, and reorder points.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Run</span>Planning execution</summary><div class="topic__body topic__body--placeholder"><p>Add content here, running master planning, regeneration vs. net change, the planned order results, and firming.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Action messages</span>Pegging &amp; futures</summary><div class="topic__body topic__body--placeholder"><p>Add content here, pegging tree, futures messages, action messages, and how to triage them with planners.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Plan output &amp; KPIs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, planned order workspace, the supply scheduling story, and the Planning Optimization metrics.</p></div></details>
         </div>
       </article>
 
@@ -360,11 +360,11 @@
       <article class="item-pane" data-item-pane="org-administration">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Organization Administration</h2><p class="item-pane__lead">Legal entities, operating units, organization hierarchies, number sequences, and the cross-cutting setup.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Legal entity &amp; operating units</summary><div class="topic__body topic__body--placeholder"><p>Add content here — legal entity setup, operating units (department, cost center, value stream, business unit), and the link to financial dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Organization hierarchies</summary><div class="topic__body topic__body--placeholder"><p>Add content here — hierarchy purposes (signing limit, security, organization chart), publishing a hierarchy, and the typical purposes you'll need on day one.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Address book &amp; parties</summary><div class="topic__body topic__body--placeholder"><p>Add content here — global address book, parties, party roles (customer, vendor, employee), and dedup considerations.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Numbering</span>Number sequences</summary><div class="topic__body topic__body--placeholder"><p>Add content here — scope (shared, company, fiscal calendar, fiscal calendar period), continuous vs. non-continuous, and the wizard.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Calendars</span>Working calendars</summary><div class="topic__body topic__body--placeholder"><p>Add content here — calendars and working time templates, the difference from the fiscal calendar, and where each is consumed (planning, transportation, project).</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Legal entity &amp; operating units</summary><div class="topic__body topic__body--placeholder"><p>Add content here, legal entity setup, operating units (department, cost center, value stream, business unit), and the link to financial dimensions.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Organization hierarchies</summary><div class="topic__body topic__body--placeholder"><p>Add content here, hierarchy purposes (signing limit, security, organization chart), publishing a hierarchy, and the typical purposes you'll need on day one.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Address book &amp; parties</summary><div class="topic__body topic__body--placeholder"><p>Add content here, global address book, parties, party roles (customer, vendor, employee), and dedup considerations.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Numbering</span>Number sequences</summary><div class="topic__body topic__body--placeholder"><p>Add content here, scope (shared, company, fiscal calendar, fiscal calendar period), continuous vs. non-continuous, and the wizard.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Calendars</span>Working calendars</summary><div class="topic__body topic__body--placeholder"><p>Add content here, calendars and working time templates, the difference from the fiscal calendar, and where each is consumed (planning, transportation, project).</p></div></details>
         </div>
       </article>
 
@@ -372,11 +372,11 @@
       <article class="item-pane" data-item-pane="payroll">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Payroll</h2><p class="item-pane__lead">Pay processing for the supported regions, with earnings, deductions, and benefits.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Regional scope &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — supported regions for native F&amp;O payroll (US payroll feature), and the third-party / partner integration story for unsupported regions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Earnings, deductions, benefits</summary><div class="topic__body topic__body--placeholder"><p>Add content here — earnings codes, deduction codes, benefit plans, taxes, and the link to worker / position.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Cycles</span>Pay processing</summary><div class="topic__body topic__body--placeholder"><p>Add content here — pay cycles, pay periods, pay statements, worker payments, and corrections.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">GL posting</span>Payroll to ledger</summary><div class="topic__body topic__body--placeholder"><p>Add content here — payroll posting setup, payroll-to-GL reconciliation, and the typical accruals.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Compliance</span>Year-end &amp; reporting</summary><div class="topic__body topic__body--placeholder"><p>Add content here — W-2 / 1099 (US), tax filings, and the typical year-end checklist.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Regional scope &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, supported regions for native F&amp;O payroll (US payroll feature), and the third-party / partner integration story for unsupported regions.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Earnings, deductions, benefits</summary><div class="topic__body topic__body--placeholder"><p>Add content here, earnings codes, deduction codes, benefit plans, taxes, and the link to worker / position.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Cycles</span>Pay processing</summary><div class="topic__body topic__body--placeholder"><p>Add content here, pay cycles, pay periods, pay statements, worker payments, and corrections.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">GL posting</span>Payroll to ledger</summary><div class="topic__body topic__body--placeholder"><p>Add content here, payroll posting setup, payroll-to-GL reconciliation, and the typical accruals.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Compliance</span>Year-end &amp; reporting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, W-2 / 1099 (US), tax filings, and the typical year-end checklist.</p></div></details>
         </div>
       </article>
 
@@ -384,23 +384,23 @@
       <article class="item-pane" data-item-pane="procurement-sourcing">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Procurement &amp; Sourcing</h2><p class="item-pane__lead">Purchase requisitions, RFQs, purchase orders, and the procurement workflow.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Procurement parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — procurement &amp; sourcing parameters, procurement categories, purchasing policies, and the activation policy story.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Vendor onboarding &amp; catalogs</summary><div class="topic__body topic__body--placeholder"><p>Add content here — vendor onboarding workflow, procurement category hierarchy, vendor catalogs (external + internal), and procurement category–based vendors.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Requisitions, RFQ, PO</summary><div class="topic__body topic__body--placeholder"><p>Add content here — purchase requisition workflow, RFQ to award, purchase agreement, purchase order types (standard, blanket, planned), PO change management, and three-way match.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Receipt</span>Product receipt</summary><div class="topic__body topic__body--placeholder"><p>Add content here — product receipt vs. PO confirmation, the accounting hit at receipt, and the link to landed cost / inventory cost.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Spend analysis</summary><div class="topic__body topic__body--placeholder"><p>Add content here — purchase spend by category / vendor, open PO commitments, and the procurement KPIs.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Procurement parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, procurement &amp; sourcing parameters, procurement categories, purchasing policies, and the activation policy story.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Vendor onboarding &amp; catalogs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor onboarding workflow, procurement category hierarchy, vendor catalogs (external + internal), and procurement category–based vendors.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Requisitions, RFQ, PO</summary><div class="topic__body topic__body--placeholder"><p>Add content here, purchase requisition workflow, RFQ to award, purchase agreement, purchase order types (standard, blanket, planned), PO change management, and three-way match.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Receipt</span>Product receipt</summary><div class="topic__body topic__body--placeholder"><p>Add content here, product receipt vs. PO confirmation, the accounting hit at receipt, and the link to landed cost / inventory cost.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Spend analysis</summary><div class="topic__body topic__body--placeholder"><p>Add content here, purchase spend by category / vendor, open PO commitments, and the procurement KPIs.</p></div></details>
         </div>
       </article>
 
       <!-- ============== PIM ============== -->
       <article class="item-pane" data-item-pane="pim">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Product Information Management</h2><p class="item-pane__lead">Centralized product master — definitions, variants, attributes, and release across legal entities.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Product Information Management</h2><p class="item-pane__lead">Centralized product master, definitions, variants, attributes, and release across legal entities.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Product types &amp; subtypes</summary><div class="topic__body topic__body--placeholder"><p>Add content here — item vs. service, product subtype (product, product master), and the implications for variants.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Product variants &amp; dimensions</summary><div class="topic__body topic__body--placeholder"><p>Add content here — product dimensions (color, size, style, configuration), dimension groups, variant generation, and the impact on inventory and orders.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Categories</span>Hierarchies &amp; attributes</summary><div class="topic__body topic__body--placeholder"><p>Add content here — category hierarchies (procurement, sales, retail), attributes and attribute groups, and using categories for default account setup.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Release to legal entities</summary><div class="topic__body topic__body--placeholder"><p>Add content here — released products vs. shared product, the release wizard, the legal-entity-specific fields, and how to handle multi-company items.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Item model groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here — choosing item model groups (costing method, post physical / financial inventory), and the dimension group decisions that are hard to reverse.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Product types &amp; subtypes</summary><div class="topic__body topic__body--placeholder"><p>Add content here, item vs. service, product subtype (product, product master), and the implications for variants.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Product variants &amp; dimensions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, product dimensions (color, size, style, configuration), dimension groups, variant generation, and the impact on inventory and orders.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Categories</span>Hierarchies &amp; attributes</summary><div class="topic__body topic__body--placeholder"><p>Add content here, category hierarchies (procurement, sales, retail), attributes and attribute groups, and using categories for default account setup.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Release to legal entities</summary><div class="topic__body topic__body--placeholder"><p>Add content here, released products vs. shared product, the release wizard, the legal-entity-specific fields, and how to handle multi-company items.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Item model groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here, choosing item model groups (costing method, post physical / financial inventory), and the dimension group decisions that are hard to reverse.</p></div></details>
         </div>
       </article>
 
@@ -408,12 +408,12 @@
       <article class="item-pane" data-item-pane="production-control">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Production Control</h2><p class="item-pane__lead">Production orders, batch orders, kanbans, BOMs, routes, and shop-floor execution.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Production methodology</summary><div class="topic__body topic__body--placeholder"><p>Add content here — discrete (production order) vs. process (batch order) vs. lean (kanban), and the parameters per production type.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>BOMs &amp; routes</summary><div class="topic__body topic__body--placeholder"><p>Add content here — BOM versions and BOM lines, route operations, resources and resource groups, and the BOM calculation for cost.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Production order lifecycle</summary><div class="topic__body topic__body--placeholder"><p>Add content here — created → estimated → scheduled → released → start → report-as-finished → ended, the picking list and route card journals, and the GL hits at each step.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Batch orders</summary><div class="topic__body topic__body--placeholder"><p>Add content here — batch order specifics for process manufacturing (formula, co-product / by-product), and shelf-life dates.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Lean</span>Kanban &amp; pull</summary><div class="topic__body topic__body--placeholder"><p>Add content here — kanban rules, manufacturing kanbans, sales / withdrawal kanbans, and when lean is the right choice.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>WIP &amp; variances</summary><div class="topic__body topic__body--placeholder"><p>Add content here — WIP report, production variances (quantity, price, substitution, lot size), and reconciliation to GL.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Production methodology</summary><div class="topic__body topic__body--placeholder"><p>Add content here, discrete (production order) vs. process (batch order) vs. lean (kanban), and the parameters per production type.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>BOMs &amp; routes</summary><div class="topic__body topic__body--placeholder"><p>Add content here, BOM versions and BOM lines, route operations, resources and resource groups, and the BOM calculation for cost.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Production order lifecycle</summary><div class="topic__body topic__body--placeholder"><p>Add content here, created → estimated → scheduled → released → start → report-as-finished → ended, the picking list and route card journals, and the GL hits at each step.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Batch orders</summary><div class="topic__body topic__body--placeholder"><p>Add content here, batch order specifics for process manufacturing (formula, co-product / by-product), and shelf-life dates.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Lean</span>Kanban &amp; pull</summary><div class="topic__body topic__body--placeholder"><p>Add content here, kanban rules, manufacturing kanbans, sales / withdrawal kanbans, and when lean is the right choice.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>WIP &amp; variances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, WIP report, production variances (quantity, price, substitution, lot size), and reconciliation to GL.</p></div></details>
         </div>
       </article>
 
@@ -421,24 +421,24 @@
       <article class="item-pane" data-item-pane="project-mgmt-accounting">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Project Management &amp; Accounting</h2><p class="item-pane__lead">Project execution and the accounting for hours, expenses, items, and revenue recognition.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Project types &amp; categories</summary><div class="topic__body topic__body--placeholder"><p>Add content here — project types (time, time &amp; material, fixed price, internal, investment, cost), shared categories, project categories, and the posting setup that ties them to the GL.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Project structure</summary><div class="topic__body topic__body--placeholder"><p>Add content here — project group, project, sub-project, WBS, project budgets and forecasts, and the line property (chargeable, non-chargeable, capitalized, etc.).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Hours, expenses, items, fees</summary><div class="topic__body topic__body--placeholder"><p>Add content here — the five transaction types, hour journal vs. timesheet, expense from Expense Management, item from inventory / PO, fee transaction, and on-account.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Revenue</span>Recognition methods</summary><div class="topic__body topic__body--placeholder"><p>Add content here — revenue recognition for fixed-price (POC, completed contract), revenue recognition for time &amp; material, ASC 606 / IFRS 15 considerations, and estimate processing.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Billing</span>Invoice proposals &amp; rules</summary><div class="topic__body topic__body--placeholder"><p>Add content here — invoice proposal generation, billing rules (chargeable, milestone), customer retention, and the on-account scenario.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Project closing</summary><div class="topic__body topic__body--placeholder"><p>Add content here — eliminate WIP, project end date, and the close checklist.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Project types &amp; categories</summary><div class="topic__body topic__body--placeholder"><p>Add content here, project types (time, time &amp; material, fixed price, internal, investment, cost), shared categories, project categories, and the posting setup that ties them to the GL.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Project structure</summary><div class="topic__body topic__body--placeholder"><p>Add content here, project group, project, sub-project, WBS, project budgets and forecasts, and the line property (chargeable, non-chargeable, capitalized, etc.).</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Hours, expenses, items, fees</summary><div class="topic__body topic__body--placeholder"><p>Add content here, the five transaction types, hour journal vs. timesheet, expense from Expense Management, item from inventory / PO, fee transaction, and on-account.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Revenue</span>Recognition methods</summary><div class="topic__body topic__body--placeholder"><p>Add content here, revenue recognition for fixed-price (POC, completed contract), revenue recognition for time &amp; material, ASC 606 / IFRS 15 considerations, and estimate processing.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Billing</span>Invoice proposals &amp; rules</summary><div class="topic__body topic__body--placeholder"><p>Add content here, invoice proposal generation, billing rules (chargeable, milestone), customer retention, and the on-account scenario.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Project closing</summary><div class="topic__body topic__body--placeholder"><p>Add content here, eliminate WIP, project end date, and the close checklist.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Rebate Management ============== -->
       <article class="item-pane" data-item-pane="rebate-management">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Rebate Management</h2><p class="item-pane__lead">Trade allowances and customer / vendor rebates — accruing, processing, and settling.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Rebate Management</h2><p class="item-pane__lead">Trade allowances and customer / vendor rebates, accruing, processing, and settling.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Rebate vs. trade allowance</summary><div class="topic__body topic__body--placeholder"><p>Add content here — Rebate management module vs. Trade allowance management, when each applies, and the parameters for accruals.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Rebate programs</summary><div class="topic__body topic__body--placeholder"><p>Add content here — rebate program type, customer or vendor selection, item / category coverage, rebate rates and tiers, and effective dates.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Accruals &amp; calculations</summary><div class="topic__body topic__body--placeholder"><p>Add content here — accrual posting at sales / purchase invoice, recalculation, the GL accounts for accrued rebate.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Settlement</span>Claim &amp; payment</summary><div class="topic__body topic__body--placeholder"><p>Add content here — claim creation, settlement to credit memo / invoice, and the link back to AR / AP.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Rebate exposure</summary><div class="topic__body topic__body--placeholder"><p>Add content here — accrued rebate liability, settled vs. open, and customer / vendor rebate analysis.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Rebate vs. trade allowance</summary><div class="topic__body topic__body--placeholder"><p>Add content here, Rebate management module vs. Trade allowance management, when each applies, and the parameters for accruals.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Rebate programs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, rebate program type, customer or vendor selection, item / category coverage, rebate rates and tiers, and effective dates.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Accruals &amp; calculations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, accrual posting at sales / purchase invoice, recalculation, the GL accounts for accrued rebate.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Settlement</span>Claim &amp; payment</summary><div class="topic__body topic__body--placeholder"><p>Add content here, claim creation, settlement to credit memo / invoice, and the link back to AR / AP.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Rebate exposure</summary><div class="topic__body topic__body--placeholder"><p>Add content here, accrued rebate liability, settled vs. open, and customer / vendor rebate analysis.</p></div></details>
         </div>
       </article>
 
@@ -446,23 +446,23 @@
       <article class="item-pane" data-item-pane="retail-commerce">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Retail &amp; Commerce</h2><p class="item-pane__lead">POS, channels, assortments, and the omni-channel commerce stack.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Channels &amp; stores</summary><div class="topic__body topic__body--placeholder"><p>Add content here — channels (retail store, online, call center), stores, terminals and registers, and the headquarters / channel data sync.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Products &amp; assortments</summary><div class="topic__body topic__body--placeholder"><p>Add content here — assortments, retail catalog, navigation hierarchy, and category-based product release.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Pricing</span>Discounts &amp; promotions</summary><div class="topic__body topic__body--placeholder"><p>Add content here — price groups, discounts (quantity, threshold, mix &amp; match), promotions, and affiliations / loyalty.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">POS</span>Configuration &amp; offline</summary><div class="topic__body topic__body--placeholder"><p>Add content here — POS layouts and screen designer, functionality profile, hardware profile, and the offline mode (CSU).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Statement posting</summary><div class="topic__body topic__body--placeholder"><p>Add content here — calculation of statements, statement posting to GL / AR, and the typical reconciliation issues.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Channels &amp; stores</summary><div class="topic__body topic__body--placeholder"><p>Add content here, channels (retail store, online, call center), stores, terminals and registers, and the headquarters / channel data sync.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Products &amp; assortments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, assortments, retail catalog, navigation hierarchy, and category-based product release.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Pricing</span>Discounts &amp; promotions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, price groups, discounts (quantity, threshold, mix &amp; match), promotions, and affiliations / loyalty.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">POS</span>Configuration &amp; offline</summary><div class="topic__body topic__body--placeholder"><p>Add content here, POS layouts and screen designer, functionality profile, hardware profile, and the offline mode (CSU).</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Statement posting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, calculation of statements, statement posting to GL / AR, and the typical reconciliation issues.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Sales & Marketing ============== -->
       <article class="item-pane" data-item-pane="sales-marketing">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Sales &amp; Marketing</h2><p class="item-pane__lead">Light CRM in F&amp;O — leads, opportunities, campaigns, and the bridge to Dataverse Sales.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Sales &amp; Marketing</h2><p class="item-pane__lead">Light CRM in F&amp;O, leads, opportunities, campaigns, and the bridge to Dataverse Sales.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — sales and marketing parameters, business relations, and the high-level structure.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Leads &amp; opportunities</summary><div class="topic__body topic__body--placeholder"><p>Add content here — leads, qualifying to opportunity, opportunity stages, and the conversion to a sales quotation.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Campaigns</span>Telemarketing &amp; campaigns</summary><div class="topic__body topic__body--placeholder"><p>Add content here — campaigns, target groups, telemarketing scripts, and the basic outreach functionality.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Sales quotation</summary><div class="topic__body topic__body--placeholder"><p>Add content here — sales quotation creation, conversion to sales order, and the agreements link.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Dataverse / D365 Sales</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when to use F&amp;O sales &amp; marketing vs. Dataverse-based Dynamics 365 Sales, and the integration patterns.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales and marketing parameters, business relations, and the high-level structure.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Leads &amp; opportunities</summary><div class="topic__body topic__body--placeholder"><p>Add content here, leads, qualifying to opportunity, opportunity stages, and the conversion to a sales quotation.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Campaigns</span>Telemarketing &amp; campaigns</summary><div class="topic__body topic__body--placeholder"><p>Add content here, campaigns, target groups, telemarketing scripts, and the basic outreach functionality.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Sales quotation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales quotation creation, conversion to sales order, and the agreements link.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Dataverse / D365 Sales</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when to use F&amp;O sales &amp; marketing vs. Dataverse-based Dynamics 365 Sales, and the integration patterns.</p></div></details>
         </div>
       </article>
 
@@ -470,11 +470,11 @@
       <article class="item-pane" data-item-pane="service-management">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Service Management</h2><p class="item-pane__lead">Service agreements, service orders, and dispatching field work.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Service module setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here — service management parameters, stages, and the relationship to projects.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Service objects &amp; templates</summary><div class="topic__body topic__body--placeholder"><p>Add content here — service objects, service object groups, service templates, and BOMs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Service agreements &amp; orders</summary><div class="topic__body topic__body--placeholder"><p>Add content here — service agreement, service order, dispatch board, and the difference between project-based and free-text-invoice based service.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Repair management</summary><div class="topic__body topic__body--placeholder"><p>Add content here — repair lines, RMAs, and the link to inventory.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Service vs. Asset Management</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when service management is the right tool vs. when Asset Management work orders are a better fit.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Service module setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here, service management parameters, stages, and the relationship to projects.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Service objects &amp; templates</summary><div class="topic__body topic__body--placeholder"><p>Add content here, service objects, service object groups, service templates, and BOMs.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Service agreements &amp; orders</summary><div class="topic__body topic__body--placeholder"><p>Add content here, service agreement, service order, dispatch board, and the difference between project-based and free-text-invoice based service.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Repair management</summary><div class="topic__body topic__body--placeholder"><p>Add content here, repair lines, RMAs, and the link to inventory.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Service vs. Asset Management</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when service management is the right tool vs. when Asset Management work orders are a better fit.</p></div></details>
         </div>
       </article>
 
@@ -482,11 +482,11 @@
       <article class="item-pane" data-item-pane="subscription-billing">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Subscription Billing</h2><p class="item-pane__lead">Recurring contracts, usage-based billing, and revenue recognition under ASC 606 / IFRS 15.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — Subscription Billing module setup, billing schedules, the pricing engine, and revenue accounting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Billing schedules &amp; contracts</summary><div class="topic__body topic__body--placeholder"><p>Add content here — billing schedule, billing schedule lines, evergreen vs. fixed-term, and the customer / item link.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Recurring &amp; milestone billing</summary><div class="topic__body topic__body--placeholder"><p>Add content here — generate billing schedule lines, invoice generation, milestone billing, and the link to AR.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Revenue</span>Recognition &amp; deferrals</summary><div class="topic__body topic__body--placeholder"><p>Add content here — revenue and expense deferrals, multiple element arrangements, and ASC 606 / IFRS 15 application.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>ARR &amp; deferred revenue</summary><div class="topic__body topic__body--placeholder"><p>Add content here — annual recurring revenue, deferred revenue waterfalls, and the integration with financial reports.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, Subscription Billing module setup, billing schedules, the pricing engine, and revenue accounting.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Billing schedules &amp; contracts</summary><div class="topic__body topic__body--placeholder"><p>Add content here, billing schedule, billing schedule lines, evergreen vs. fixed-term, and the customer / item link.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Recurring &amp; milestone billing</summary><div class="topic__body topic__body--placeholder"><p>Add content here, generate billing schedule lines, invoice generation, milestone billing, and the link to AR.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Revenue</span>Recognition &amp; deferrals</summary><div class="topic__body topic__body--placeholder"><p>Add content here, revenue and expense deferrals, multiple element arrangements, and ASC 606 / IFRS 15 application.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>ARR &amp; deferred revenue</summary><div class="topic__body topic__body--placeholder"><p>Add content here, annual recurring revenue, deferred revenue waterfalls, and the integration with financial reports.</p></div></details>
         </div>
       </article>
 
@@ -494,23 +494,23 @@
       <article class="item-pane" data-item-pane="system-administration">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">System Administration</h2><p class="item-pane__lead">Users, security, batches, workflows, data management, and the platform hygiene that keeps the system healthy.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Users</span>Users &amp; security</summary><div class="topic__body topic__body--placeholder"><p>Add content here — users, security roles, duties, privileges, segregation of duties, extensible data security (XDS), and the audit-friendly role design.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Workflows</span>Workflow framework</summary><div class="topic__body topic__body--placeholder"><p>Add content here — workflow types, approval steps, parallel vs. serial, conditional branching, escalation, and the typical pitfalls (long-running approvals, broken delegations).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Batch</span>Batch jobs</summary><div class="topic__body topic__body--placeholder"><p>Add content here — batch groups, batch servers, recurring jobs, the batch scheduler, and the troubleshooting toolkit.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Data</span>Data management framework</summary><div class="topic__body topic__body--placeholder"><p>Add content here — data entities, import/export projects, recurring data jobs, source mappings, and using DMF for go-live data migration.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Hygiene</span>Telemetry &amp; LCS</summary><div class="topic__body topic__body--placeholder"><p>Add content here — LCS environments, telemetry / monitoring, performance counters, and the platform health story.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Users</span>Users &amp; security</summary><div class="topic__body topic__body--placeholder"><p>Add content here, users, security roles, duties, privileges, segregation of duties, extensible data security (XDS), and the audit-friendly role design.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Workflows</span>Workflow framework</summary><div class="topic__body topic__body--placeholder"><p>Add content here, workflow types, approval steps, parallel vs. serial, conditional branching, escalation, and the typical pitfalls (long-running approvals, broken delegations).</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Batch</span>Batch jobs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, batch groups, batch servers, recurring jobs, the batch scheduler, and the troubleshooting toolkit.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Data</span>Data management framework</summary><div class="topic__body topic__body--placeholder"><p>Add content here, data entities, import/export projects, recurring data jobs, source mappings, and using DMF for go-live data migration.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Hygiene</span>Telemetry &amp; LCS</summary><div class="topic__body topic__body--placeholder"><p>Add content here, LCS environments, telemetry / monitoring, performance counters, and the platform health story.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Tax ============== -->
       <article class="item-pane" data-item-pane="tax">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Tax</h2><p class="item-pane__lead">Indirect tax setup — sales tax / VAT / GST groups, codes, and reporting.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Tax</h2><p class="item-pane__lead">Indirect tax setup, sales tax / VAT / GST groups, codes, and reporting.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Sales tax codes &amp; ledger posting groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here — sales tax codes, sales tax authorities, settlement periods, ledger posting groups, and the rounding rules.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Sales tax groups &amp; item groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here — sales tax groups (per customer / vendor), item sales tax groups (per item), and the intersection that determines the final tax code.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Special</span>Withholding &amp; intrastat</summary><div class="topic__body topic__body--placeholder"><p>Add content here — withholding tax setup, intrastat reporting (EU), and country-specific overlays.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Settlement &amp; report</summary><div class="topic__body topic__body--placeholder"><p>Add content here — settle and post sales tax, the sales tax payment journal, and the link to electronic reporting for tax filings.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Localization</span>VAT / GST nuances</summary><div class="topic__body topic__body--placeholder"><p>Add content here — VAT vs. sales tax behavior, GST overlays (India, Australia), and reverse charge.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Sales tax codes &amp; ledger posting groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales tax codes, sales tax authorities, settlement periods, ledger posting groups, and the rounding rules.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Sales tax groups &amp; item groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales tax groups (per customer / vendor), item sales tax groups (per item), and the intersection that determines the final tax code.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Special</span>Withholding &amp; intrastat</summary><div class="topic__body topic__body--placeholder"><p>Add content here, withholding tax setup, intrastat reporting (EU), and country-specific overlays.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Settlement &amp; report</summary><div class="topic__body topic__body--placeholder"><p>Add content here, settle and post sales tax, the sales tax payment journal, and the link to electronic reporting for tax filings.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Localization</span>VAT / GST nuances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, VAT vs. sales tax behavior, GST overlays (India, Australia), and reverse charge.</p></div></details>
         </div>
       </article>
 
@@ -518,11 +518,11 @@
       <article class="item-pane" data-item-pane="transportation">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Transportation Management</h2><p class="item-pane__lead">Carriers, rate engines, route planning, freight reconciliation.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here — TMS parameters, hub master, transportation modes, container types, and the warehouse activation toggle.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Carriers &amp; rate masters</summary><div class="topic__body topic__body--placeholder"><p>Add content here — shipping carrier, carrier service, rate master, rate base, and rate engines.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Route planning &amp; loads</summary><div class="topic__body topic__body--placeholder"><p>Add content here — route planning, load building workbench, appointment scheduling, and the link to WMS waves.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Settlement</span>Freight reconciliation</summary><div class="topic__body topic__body--placeholder"><p>Add content here — freight bill, audit, freight reconciliation, and posting to AP.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>When TMS is justified</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when full TMS is justified vs. simpler shipping setups, and the data prerequisites.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here, TMS parameters, hub master, transportation modes, container types, and the warehouse activation toggle.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Carriers &amp; rate masters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, shipping carrier, carrier service, rate master, rate base, and rate engines.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Route planning &amp; loads</summary><div class="topic__body topic__body--placeholder"><p>Add content here, route planning, load building workbench, appointment scheduling, and the link to WMS waves.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Settlement</span>Freight reconciliation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, freight bill, audit, freight reconciliation, and posting to AP.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>When TMS is justified</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when full TMS is justified vs. simpler shipping setups, and the data prerequisites.</p></div></details>
         </div>
       </article>
 
@@ -530,24 +530,24 @@
       <article class="item-pane" data-item-pane="vendor-collaboration">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Vendor Collaboration</h2><p class="item-pane__lead">External-facing portal for vendors to view and respond to POs, RFQs, and invoices.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Enabling collaboration</summary><div class="topic__body topic__body--placeholder"><p>Add content here — enabling vendor collaboration on a vendor record, parameters, and B2B activation steps.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Users</span>External users &amp; security</summary><div class="topic__body topic__body--placeholder"><p>Add content here — vendor admin, vendor user roles (PO, invoice, profile), and the security boundary with the rest of F&amp;O.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>PO confirmation &amp; invoice</summary><div class="topic__body topic__body--placeholder"><p>Add content here — PO confirmation flow from the vendor side, RFQ response, and invoice submission.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Catalogs &amp; profile</summary><div class="topic__body topic__body--placeholder"><p>Add content here — vendor profile self-maintenance, catalog updates, and the approval flow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Adoption</summary><div class="topic__body topic__body--placeholder"><p>Add content here — vendor adoption strategy, communicating the change, and the realistic uptake curve.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Enabling collaboration</summary><div class="topic__body topic__body--placeholder"><p>Add content here, enabling vendor collaboration on a vendor record, parameters, and B2B activation steps.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Users</span>External users &amp; security</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor admin, vendor user roles (PO, invoice, profile), and the security boundary with the rest of F&amp;O.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>PO confirmation &amp; invoice</summary><div class="topic__body topic__body--placeholder"><p>Add content here, PO confirmation flow from the vendor side, RFQ response, and invoice submission.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Catalogs &amp; profile</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor profile self-maintenance, catalog updates, and the approval flow.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Adoption</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor adoption strategy, communicating the change, and the realistic uptake curve.</p></div></details>
         </div>
       </article>
 
       <!-- ============== Warehouse Management ============== -->
       <article class="item-pane" data-item-pane="warehouse-management">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Warehouse Management</h2><p class="item-pane__lead">Advanced WMS — locations, work, mobile devices, wave processing, and label printing.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Warehouse Management</h2><p class="item-pane__lead">Advanced WMS, locations, work, mobile devices, wave processing, and label printing.</p></header>
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>WMS-enabled warehouse</summary><div class="topic__body topic__body--placeholder"><p>Add content here — WMS warehouse vs. basic, parameters, location profiles, location formats, and the activation steps.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Locations &amp; license plates</summary><div class="topic__body topic__body--placeholder"><p>Add content here — location creation, location directives, license plates, and the labels story.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Work</span>Work templates &amp; waves</summary><div class="topic__body topic__body--placeholder"><p>Add content here — work templates (sales, purchase, transfer, replenishment), wave templates, wave processing, and work creation.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Mobile</span>Mobile device menus</summary><div class="topic__body topic__body--placeholder"><p>Add content here — mobile device menu items, work users, and the typical device flow (receive, put-away, pick, ship).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Cycle counting</summary><div class="topic__body topic__body--placeholder"><p>Add content here — cycle count plans, threshold-based and recurring counts, and the variance posting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Basic vs. WMS</summary><div class="topic__body topic__body--placeholder"><p>Add content here — when WMS is justified vs. when basic warehousing is enough — the data and process prerequisites for WMS.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>WMS-enabled warehouse</summary><div class="topic__body topic__body--placeholder"><p>Add content here, WMS warehouse vs. basic, parameters, location profiles, location formats, and the activation steps.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Locations &amp; license plates</summary><div class="topic__body topic__body--placeholder"><p>Add content here, location creation, location directives, license plates, and the labels story.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Work</span>Work templates &amp; waves</summary><div class="topic__body topic__body--placeholder"><p>Add content here, work templates (sales, purchase, transfer, replenishment), wave templates, wave processing, and work creation.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Mobile</span>Mobile device menus</summary><div class="topic__body topic__body--placeholder"><p>Add content here, mobile device menu items, work users, and the typical device flow (receive, put-away, pick, ship).</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Cycle counting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cycle count plans, threshold-based and recurring counts, and the variance posting.</p></div></details>
+          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Basic vs. WMS</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when WMS is justified vs. when basic warehousing is enough, the data and process prerequisites for WMS.</p></div></details>
         </div>
       </article>
 

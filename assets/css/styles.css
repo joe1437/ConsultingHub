@@ -1,5 +1,5 @@
 /* =========================================================
-   D365 F&O Consulting Hub — Shared stylesheet
+   D365 F&O Consulting Hub - Shared stylesheet
    ========================================================= */
 
 /* ---------- Design tokens ---------- */
@@ -690,7 +690,7 @@ hr {
 }
 
 /* ========================================================
-   Search — header trigger + modal
+   Search - header trigger + modal
    ======================================================== */
 .search-trigger {
   display: inline-flex;
@@ -935,7 +935,7 @@ body.has-search-open { overflow: hidden; }
   --color-border: #2a3650;
   --color-border-strong: #3d4c6b;
 
-  --color-primary: #142039;          /* header / brand bg — slightly darker */
+  --color-primary: #142039;          /* header / brand bg - slightly darker */
   --color-primary-hover: #1d2c4d;
   --color-primary-light: #25375d;
   --color-heading: #e6edf7;          /* text-emphasis flips to light */
@@ -986,7 +986,7 @@ body.has-search-open { overflow: hidden; }
 [data-theme="dark"] .theme-toggle .theme-toggle__moon { display: none; }
 
 /* ========================================================
-   Topics — collapsible accordion within a module / pane
+   Topics - collapsible accordion within a module / pane
    Uses native <details>/<summary> for accessibility & no-JS.
    Supports nested subtopics one level deep.
    ======================================================== */
@@ -1062,7 +1062,7 @@ body.has-search-open { overflow: hidden; }
   color: var(--color-heading);
 }
 
-/* Nested subtopics — slightly smaller, no extra background */
+/* Nested subtopics - slightly smaller, no extra background */
 .topic__body .topic {
   background: var(--color-surface-2);
   margin-bottom: 0.4rem;
