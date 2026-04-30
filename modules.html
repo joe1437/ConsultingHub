@@ -365,12 +365,84 @@
       <!-- ============== Asset Management ============== -->
       <article class="item-pane" data-item-pane="asset-management">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Asset Management</h2><p class="item-pane__lead">Maintenance and servicing of physical assets, distinct from Fixed Assets accounting.</p></header>
+
+        <p>Asset Management is the operational maintenance side of the asset lifecycle: who maintains what, when, on what cadence. It complements (not replaces) Fixed Assets, which handles the accounting valuation. Asset Management's first-class objects are assets, functional locations, work orders, and maintenance schedules. Common scenario: a manufacturing plant uses Asset Management to schedule preventive maintenance on production equipment that Fixed Assets values for depreciation.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module setup &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, Asset Management parameters, lifecycle states, work order types, work order types vs. job types, and the integration toggle with Fixed Assets.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Assets &amp; functional locations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, asset master, asset types, functional locations, location hierarchy, asset BOMs, and counters.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Work orders &amp; jobs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, preventive vs. corrective maintenance, work order lifecycle, scheduling and dispatching, job journals (hour, item, expense), and posting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Maintenance plans &amp; rounds</summary><div class="topic__body topic__body--placeholder"><p>Add content here, maintenance plans, maintenance rounds, condition assessments, and the role of IoT data.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Inventory &amp; procurement</summary><div class="topic__body topic__body--placeholder"><p>Add content here, spare parts on work orders, item requirements, integration with Fixed Assets for capitalization vs. expense, and the line between this module and Production Control.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters and lifecycle</summary>
+            <div class="topic__body">
+              <h4>Asset Management parameters</h4>
+              <p><strong>Where:</strong> <code>Asset management &gt; Setup &gt; Asset management parameters</code>. Default work order types, journal names, posting profiles, and toggles for Fixed Assets integration. The integration toggle controls whether maintenance costs above a threshold can be capitalized to the underlying fixed asset.</p>
+              <h4>Lifecycle states</h4>
+              <p><strong>Where:</strong> <code>Asset management &gt; Setup &gt; Asset and functional location &gt; Lifecycle states</code>. State machine for assets and work orders (Created &gt; Active &gt; Under maintenance &gt; Decommissioned &gt; Scrapped). Custom states allowed; transitions are governed by lifecycle models.</p>
+              <h4>Work order types and job types</h4>
+              <p>Work order types describe the work category (Preventive, Corrective, Inspection, Project). Job types describe specific tasks (Lubrication, Belt replacement). Both feed into work order line creation.</p>
+              <h4>Reason codes</h4>
+              <p>Per work order type: failure reason, downtime reason, asset history reasons. Drives root-cause reporting.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Assets, functional locations, BOMs</summary>
+            <div class="topic__body">
+              <h4>Functional locations</h4>
+              <p>Hierarchical taxonomy of where assets sit (Plant &gt; Building &gt; Production line &gt; Machine). Critical for spatial / process-step reporting.</p>
+              <h4>Assets</h4>
+              <p>Each maintained piece of equipment is an Asset. Assets can be linked to a functional location, a parent asset (for sub-assemblies), and to a Fixed Asset record (for accounting). Asset attributes capture make, model, serial, install date, warranty.</p>
+              <h4>Asset BOMs</h4>
+              <p>List of replaceable components on an asset (motor, belt, bearing). Drives spare-parts planning and maintenance task templates.</p>
+              <h4>Counters and meters</h4>
+              <p>For usage-based maintenance: hours run, miles driven, cycles. Counter readings trigger condition-based maintenance plans.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Work orders, jobs, posting</summary>
+            <div class="topic__body">
+              <h4>Work order lifecycle</h4>
+              <p>Created &gt; Scheduled &gt; In Progress &gt; Reported as Finished &gt; Ended. Each transition triggers state-machine actions: scheduling, resource booking, cost capture, asset history update.</p>
+              <h4>Work order job journals</h4>
+              <p>Three journal types per work order:</p>
+              <ul>
+                <li><strong>Hour journal:</strong> labor time captured against the work order.</li>
+                <li><strong>Item journal:</strong> spare parts consumed (from inventory).</li>
+                <li><strong>Expense journal:</strong> external services or fees.</li>
+              </ul>
+              <p>Journals post to the GL via Asset Management posting profile and to the asset history for future reporting.</p>
+              <h4>Scheduling</h4>
+              <p>Schedule board (similar to Field Service) shows worker availability and work-order assignments. Drag-drop assignment, capacity warnings, skill-matching.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Maintenance</span>Plans, rounds, condition</summary>
+            <div class="topic__body">
+              <h4>Maintenance plans</h4>
+              <p><strong>Where:</strong> <code>Asset management &gt; Setup &gt; Preventive maintenance &gt; Maintenance plans</code>. Time-based (every 90 days) or counter-based (every 1,000 hours) recurring work-order generation.</p>
+              <h4>Maintenance rounds</h4>
+              <p>Group of inspection / minor maintenance tasks performed in sequence (a daily walkdown of a production line). Generates one work order with multiple lines per round.</p>
+              <h4>Condition assessments</h4>
+              <p>Capture asset condition data (vibration reading, oil temperature) on a schedule; trigger maintenance when readings exceed thresholds. Foundation for IoT-based predictive maintenance integrations.</p>
+              <h4>IoT integration</h4>
+              <p>Microsoft has progressively added connectors for IoT data feeds (Azure IoT Hub, Connected Field Service patterns) that surface alerts and auto-create work orders. Implementation depends on the IoT solution chosen and is integration-grade work.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Integration</span>Inventory, procurement, fixed assets</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Inventory Management:</strong> spare parts consumed via item journals; reservations supported per work order.</li>
+                <li><strong>Procurement and Sourcing:</strong> spare parts purchased via PO directly to a work order; turnkey services purchased and matched to work order lines.</li>
+                <li><strong>Fixed Assets:</strong> when activated, maintenance costs above the capitalization threshold can be transferred to the linked Fixed Asset record (component replacement, major overhaul). Most maintenance is expensed; capital improvements are not.</li>
+                <li><strong>Production Control:</strong> resources used for both production and maintenance (a CNC operator who also does basic maintenance) require capacity coordination.</li>
+                <li><strong>Project Management and Accounting:</strong> long-running maintenance projects (annual shutdowns) often run as projects with Asset Management work orders inside.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -569,13 +641,98 @@
 
       <!-- ============== Cost Management ============== -->
       <article class="item-pane" data-item-pane="cost-management">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Management</h2><p class="item-pane__lead">Inventory and production costing, standard, FIFO, LIFO, weighted average, and the close.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Management</h2><p class="item-pane__lead">Inventory and production costing: standard, FIFO, weighted average, moving average, and the close.</p></header>
+
+        <p>Cost Management is where inventory and production transactions get valued. It controls how unit cost is calculated, how variances are recognized, and how the inventory subledger ties to the General Ledger. The choice of costing methodology (standard vs. FIFO vs. weighted average vs. moving average) is among the hardest configurations in F&amp;O to reverse and drives almost everything else in the manufacturing / distribution finance flow.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Costing methodology</summary><div class="topic__body topic__body--placeholder"><p>Add content here, choosing standard cost vs. moving average vs. FIFO vs. weighted average, item model groups, cost groups, and the implications for the close.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Costing sheet &amp; cost versions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, costing sheet (material, labor, overhead), cost versions (planned, active), and the BOM calculation process for standard costs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Inventory close &amp; recalculation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, inventory recalculation vs. inventory close, what changes vs. what's permanent, frozen periods, and the steps to schedule a healthy close.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Variances</span>Standard cost variances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, purchase price variance, cost change variance, lot size variance, production variances, and the GL accounts that should receive each.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>WIP &amp; COGS</summary><div class="topic__body topic__body--placeholder"><p>Add content here, production WIP reporting, COGS reconciliation (inventory subledger to GL), and the typical close reports.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Costing methodology and item model groups</summary>
+            <div class="topic__body">
+              <h4>Costing methods</h4>
+              <ul>
+                <li><strong>Standard cost:</strong> fixed unit cost; differences from actual become variances. Best for stable-price, repetitive manufacturing.</li>
+                <li><strong>FIFO:</strong> first-in, first-out, oldest cost flows to COGS first.</li>
+                <li><strong>LIFO:</strong> last-in, first-out (allowed under US GAAP, prohibited under IFRS).</li>
+                <li><strong>Weighted average:</strong> period-end average cost across all transactions.</li>
+                <li><strong>Moving average:</strong> recalculated unit cost on every receipt; no inventory close required.</li>
+              </ul>
+              <h4>Item model groups</h4>
+              <p><strong>Where:</strong> <code>Inventory management &gt; Setup &gt; Inventory &gt; Item model groups</code>. The most consequential setup in F&amp;O Cost Management. Drives:</p>
+              <ul>
+                <li>Inventory model (FIFO, LIFO, weighted avg, moving avg, standard).</li>
+                <li>Whether to post physical inventory (at receipt / packing slip) and financial inventory (at invoice).</li>
+                <li>Whether to allow negative inventory.</li>
+                <li>Whether to register costs at PO confirmation, packing slip, or invoice.</li>
+              </ul>
+              <h4>Cost groups</h4>
+              <p>Categorize cost contributions: material, labor, overhead, sub-contract. Used by the costing sheet to split unit cost into reportable buckets.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Costing sheet, cost versions</summary>
+            <div class="topic__body">
+              <h4>Costing sheet</h4>
+              <p><strong>Where:</strong> <code>Cost management &gt; Indirect cost component setup &gt; Costing sheet</code>. Defines how unit cost is built up: direct material + direct labor + manufacturing overhead (often as % of labor or per-unit rate). Drives the cost build-up shown on a finished good and the variance accounts hit.</p>
+              <h4>Cost versions</h4>
+              <p><strong>Where:</strong> <code>Cost management &gt; Predetermined costs &gt; Cost versions</code>. Hold the standard cost for items as of an effective date. Two states:</p>
+              <ul>
+                <li><strong>Planned:</strong> being prepared for the next standard cost roll, can be modified.</li>
+                <li><strong>Active:</strong> the live standard cost; only one version per item is active at a time.</li>
+              </ul>
+              <h4>BOM calculation</h4>
+              <p>For manufactured items, the BOM calculation walks the BOM hierarchy and sums material costs + route operations × labor / overhead rates to produce the finished-good standard cost. Run before activating a new cost version.</p>
+              <h4>Cost rolls</h4>
+              <p>Annual or semi-annual standard cost roll: prepare planned cost version, BOM-calculate, review, activate. The activation creates a revaluation journal that adjusts inventory value to the new standard.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Inventory close, recalculation, accounting</summary>
+            <div class="topic__body">
+              <h4>Inventory recalculation</h4>
+              <p><strong>Where:</strong> <code>Cost management &gt; Periodic tasks &gt; Inventory recalculation</code>. Reapplies the costing model and adjusts existing transactions for any cost changes (received cost, settle issues to receipts). Reversible until the period is closed.</p>
+              <h4>Inventory close</h4>
+              <p><strong>Where:</strong> <code>Cost management &gt; Periodic tasks &gt; Inventory close</code>. Final cost calculation for the period; settles all issues to specific receipts per costing model (FIFO / LIFO / weighted average). After close, the cost is locked for the period; only future-dated transactions can be adjusted.</p>
+              <h4>Frozen periods</h4>
+              <p>An inventory close locks the period; no posting allowed back-dated into it. Critical for audit integrity but can frustrate operations if the close is too eager. Coordinate with operations on close date.</p>
+              <h4>Subledger accounting (newer)</h4>
+              <p>F&amp;O has progressively migrated cost accounting events to the Subledger Accounting framework, which gives finer-grained control over which accounts receive which cost transactions. Adoption depends on F&amp;O version.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Variances</span>Standard cost variances</summary>
+            <div class="topic__body">
+              <p>Under standard costing, every difference between actual cost and standard becomes a recognized variance:</p>
+              <ul>
+                <li><strong>Purchase price variance (PPV):</strong> invoice price differs from PO standard.</li>
+                <li><strong>Cost change variance:</strong> standard cost was changed mid-period; existing inventory revalued.</li>
+                <li><strong>Lot size variance:</strong> for production, the standard fixed cost per setup is over-/under-absorbed when lot size differs.</li>
+                <li><strong>Quantity variance (production):</strong> actual material consumed differs from BOM.</li>
+                <li><strong>Substitution variance:</strong> different material used than BOM specified.</li>
+                <li><strong>Resource variance:</strong> actual labor / machine hours differ from route.</li>
+              </ul>
+              <p>Each variance posts to a separate GL account if configured (and almost always should be). Variances on the P&amp;L tell finance where standards are stale and where execution differs from plan.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>WIP, COGS, valuation</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Inventory value report:</strong> per item / warehouse / dimension, must reconcile to inventory control account.</li>
+                <li><strong>WIP report:</strong> open production order WIP balance, reconciles to WIP control account.</li>
+                <li><strong>COGS reconciliation:</strong> COGS GL = sum of inventory issues at cost. Mismatch = manual journal hit COGS or wrong item model group.</li>
+                <li><strong>Standard cost variance reports:</strong> by variance type, by period, by item.</li>
+                <li><strong>Inventory aging:</strong> stock by age bucket; supports obsolescence reserve calculation.</li>
+                <li><strong>Cost Management workspace:</strong> consolidated view of variances, WIP, valuation.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -1081,13 +1238,91 @@
 
       <!-- ============== PIM ============== -->
       <article class="item-pane" data-item-pane="pim">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Product Information Management</h2><p class="item-pane__lead">Centralized product master, definitions, variants, attributes, and release across legal entities.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Product Information Management</h2><p class="item-pane__lead">Centralized product master: definitions, variants, attributes, categories, release.</p></header>
+
+        <p>Product Information Management (PIM) owns the product master, the data backbone of every operational module: inventory, sales, procurement, manufacturing, retail, marketing. F&amp;O distinguishes <strong>shared products</strong> (cross-company definitions) from <strong>released products</strong> (per-legal-entity instances). PIM design choices, product subtype, dimension groups, item model groups, are nearly impossible to change after transactions exist.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Product types &amp; subtypes</summary><div class="topic__body topic__body--placeholder"><p>Add content here, item vs. service, product subtype (product, product master), and the implications for variants.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Product variants &amp; dimensions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, product dimensions (color, size, style, configuration), dimension groups, variant generation, and the impact on inventory and orders.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Categories</span>Hierarchies &amp; attributes</summary><div class="topic__body topic__body--placeholder"><p>Add content here, category hierarchies (procurement, sales, retail), attributes and attribute groups, and using categories for default account setup.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Release to legal entities</summary><div class="topic__body topic__body--placeholder"><p>Add content here, released products vs. shared product, the release wizard, the legal-entity-specific fields, and how to handle multi-company items.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Item model groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here, choosing item model groups (costing method, post physical / financial inventory), and the dimension group decisions that are hard to reverse.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Product types and subtypes</summary>
+            <div class="topic__body">
+              <h4>Product type</h4>
+              <ul>
+                <li><strong>Item:</strong> physical, stocked. Most goods.</li>
+                <li><strong>Service:</strong> non-stocked; used in service-billing scenarios. No physical inventory.</li>
+              </ul>
+              <h4>Product subtype</h4>
+              <ul>
+                <li><strong>Product:</strong> a single SKU without variants.</li>
+                <li><strong>Product master:</strong> a parent that has variants (color, size, style, configuration).</li>
+              </ul>
+              <p>Choosing wrong here forces a re-master later, recreate the items as the right subtype and migrate transactions. Decide based on whether the SKU has variants now or in the future.</p>
+              <h4>Number sequences</h4>
+              <p>Item numbers ideally come from a non-meaningful number sequence. "Smart" numbers (encoding category, color, year) seem helpful but always regret as the rules evolve.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Variants and dimensions</summary>
+            <div class="topic__body">
+              <h4>Product dimensions</h4>
+              <p>Up to four product dimensions per product master: <strong>Color, Size, Style, Configuration</strong>. Each combination becomes a variant (a Red-Large T-shirt is one variant of the T-shirt master). Custom dimensions beyond these four are not supported; use attributes for finer differentiation.</p>
+              <h4>Variant generation</h4>
+              <p>Variants can be generated from dimensions automatically (every combination) or manually (only the combinations actually sold). For high-dimensionality products (jewelry: 50 metals × 30 stones × 100 sizes), generating every combination produces millions of variants and breaks reporting; configure-to-order patterns are a better fit.</p>
+              <h4>Dimension groups (storage and tracking)</h4>
+              <p>Set per item; controls which dimensions are required at order entry, picking, costing. See Inventory Management for full discussion. Dimension groups are effectively unchangeable post-transactions, decide carefully.</p>
+              <h4>Item model groups</h4>
+              <p>The most consequential setup. Drives costing method, physical / financial inventory posting, allow-negative-inventory behavior. See Cost Management for full discussion.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Categories</span>Hierarchies and attributes</summary>
+            <div class="topic__body">
+              <h4>Category hierarchies</h4>
+              <p><strong>Where:</strong> <code>Product information management &gt; Setup &gt; Categories and attributes</code>. Multiple hierarchies per purpose:</p>
+              <ul>
+                <li><strong>Procurement category hierarchy:</strong> drives procurement category access, default accounts, signing limits.</li>
+                <li><strong>Sales category hierarchy:</strong> drives sales reporting groupings.</li>
+                <li><strong>Retail category hierarchy:</strong> drives navigation, assortment, and POS displays.</li>
+                <li><strong>Custom hierarchies:</strong> for any purpose-specific grouping.</li>
+              </ul>
+              <h4>Attributes and attribute groups</h4>
+              <p>Per category: define attributes (Color name, Material, Country of origin, Voltage). Attributes are searchable, filterable, displayable on the product card. Attribute groups bundle related attributes for inheritance.</p>
+              <h4>Default account setup via category</h4>
+              <p>Tying category to default account is a strong best practice; lets you route revenue / COGS by category without overriding per item.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Release to legal entities</summary>
+            <div class="topic__body">
+              <h4>Shared vs. released</h4>
+              <p>A <strong>shared product</strong> exists once across the organization. To use it in a specific legal entity, <strong>release</strong> it; the released-product record holds entity-specific fields (default tax group, item model group, financial dimensions, sales / purchase price).</p>
+              <h4>Release process</h4>
+              <p><strong>Where:</strong> <code>Product information management &gt; Products &gt; Released products &gt; Release products</code>. Wizard: select shared product &gt; select target legal entities &gt; configure the per-entity defaults &gt; release. Post-release, edits to the shared product propagate to all entities; entity-specific fields are owned per entity.</p>
+              <h4>Multi-entity considerations</h4>
+              <p>Decide what is global (item number, name, dimensions) versus local (price, tax group, default warehouse). Reverse-engineering a released product to be shared across more entities is straightforward; the opposite (de-releasing) is not.</p>
+              <h4>Product change management</h4>
+              <p>For governed environments, F&amp;O has a Product change cases feature that wraps changes in workflow approval, useful in regulated industries (medical devices, food).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Smart-number IDs.</strong> Always regretted; use neutral number sequences and let attributes carry meaning.</li>
+                <li><strong>Variants exploded as separate items.</strong> 500 SKUs that should be one product master with 500 variants. Inventory and reporting break.</li>
+                <li><strong>Wrong item model group.</strong> Switching costing methodology after go-live is the most painful re-master in F&amp;O.</li>
+                <li><strong>Wrong dimension groups.</strong> Adding a tracking dimension (batch, serial) post-launch is migration-grade work.</li>
+                <li><strong>Categories as flat list.</strong> Without category hierarchy, default accounts, procurement controls, and reporting all degrade.</li>
+                <li><strong>One category hierarchy for all purposes.</strong> Procurement, sales, retail have different needs; use multiple hierarchies.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -1401,14 +1636,104 @@
 
       <!-- ============== Warehouse Management ============== -->
       <article class="item-pane" data-item-pane="warehouse-management">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Warehouse Management</h2><p class="item-pane__lead">Advanced WMS, locations, work, mobile devices, wave processing, and label printing.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Warehouse Management</h2><p class="item-pane__lead">Advanced WMS: locations, work, waves, mobile devices, license plates, label printing.</p></header>
+
+        <p>Warehouse Management (WMS) extends Inventory Management with advanced execution: location-level picking, wave-based work creation, mobile device menus, license-plate tracking, label printing, and complex put-away strategies. WMS is the right answer for medium-to-high-throughput warehouses; for small / simple operations, basic warehousing in Inventory Management is often sufficient. The Warehouse Management mobile app is a separate Microsoft-shipped app that runs on Android handheld scanners.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>WMS-enabled warehouse</summary><div class="topic__body topic__body--placeholder"><p>Add content here, WMS warehouse vs. basic, parameters, location profiles, location formats, and the activation steps.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Locations &amp; license plates</summary><div class="topic__body topic__body--placeholder"><p>Add content here, location creation, location directives, license plates, and the labels story.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Work</span>Work templates &amp; waves</summary><div class="topic__body topic__body--placeholder"><p>Add content here, work templates (sales, purchase, transfer, replenishment), wave templates, wave processing, and work creation.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Mobile</span>Mobile device menus</summary><div class="topic__body topic__body--placeholder"><p>Add content here, mobile device menu items, work users, and the typical device flow (receive, put-away, pick, ship).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Cycle counting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cycle count plans, threshold-based and recurring counts, and the variance posting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Basic vs. WMS</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when WMS is justified vs. when basic warehousing is enough, the data and process prerequisites for WMS.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Activating advanced WMS</summary>
+            <div class="topic__body">
+              <h4>Warehouse activation</h4>
+              <p><strong>Where:</strong> on the warehouse, the "Use warehouse management processes" toggle. Once enabled, all transactions in that warehouse follow the WMS path; the legacy basic warehousing flow is no longer available. Activation is one-way once stock exists.</p>
+              <h4>Location formats and profiles</h4>
+              <p><strong>Where:</strong> <code>Warehouse management &gt; Setup &gt; Warehouse &gt; Location formats</code>. Location format defines the structure of location IDs (Aisle-Rack-Shelf-Bin). Location profiles define the physical attributes (allow license plates, allow batches, picking zone, capacity).</p>
+              <h4>Reservation hierarchy</h4>
+              <p>WMS-enabled items typically use a reservation hierarchy that reserves only Site / Warehouse / Inventory status at order entry, deferring location / batch / serial reservation until picking work runs. Critical for warehouse efficiency.</p>
+              <h4>Warehouse parameters</h4>
+              <p>Default work creation, allowed work types, mobile device session timeouts, label printing defaults all live in WHM parameters. Match to operational reality.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Locations, zones, license plates</summary>
+            <div class="topic__body">
+              <h4>Locations</h4>
+              <p>Created per location format, assigned a profile, optionally tied to a Zone (logical grouping for picking strategy). Capacity (volumetric / weight) and constraints (single-item, single-batch) drive put-away logic.</p>
+              <h4>Zones</h4>
+              <p>Logical groupings used by location directives and work templates: receiving zone, bulk storage, pick zone, shipping zone. Drives wave behavior and replenishment routing.</p>
+              <h4>License plates</h4>
+              <p>Container ID (pallet, tote, carton) carrying inventory. Used to move multi-line containers as a single unit, label-printed, scannable on mobile. License plate enabled per location profile.</p>
+              <h4>Wave templates and load planning</h4>
+              <p>Wave templates group sales / transfer orders for batched picking work. Loads aggregate orders for shipment via a single carrier / route. Pre-configure wave templates per warehouse activity pattern.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Work</span>Templates, directives, execution</summary>
+            <div class="topic__body">
+              <h4>Work templates</h4>
+              <p><strong>Where:</strong> <code>Warehouse management &gt; Setup &gt; Work &gt; Work templates</code>. Define work creation rules per work order type (sales pick, purchase put-away, transfer, replenishment, return). Each template contains work types (Pick, Put) and the conditions under which they apply.</p>
+              <h4>Location directives</h4>
+              <p>Per work type per warehouse, define which location to pick from / put to. FIFO / LIFO / fixed location strategies all configured here. The combinatorial complexity is real, keep directives manageable per warehouse.</p>
+              <h4>Wave processing</h4>
+              <p>Sales orders are released to the warehouse and waved (grouped). Wave template runs work creation, optionally allocation, optionally containerization. Waves can be auto-created on order release or manual.</p>
+              <h4>Work users and pools</h4>
+              <p>Workers are assigned to warehouse work pools determining what work types they can pick up. A worker logs into the mobile app, sees their queue, executes work step-by-step.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Mobile</span>Warehouse Management mobile app</summary>
+            <div class="topic__body">
+              <h4>App architecture</h4>
+              <p>The current Warehouse Management mobile app (Microsoft-shipped, replacing the older Warehouse Mobile App) connects to F&amp;O via a service endpoint. Workers log in with a Worker ID; menu items drive specific tasks: Receive, Put-away, Pick, Cycle count, Inquiry.</p>
+              <h4>Mobile device menu items</h4>
+              <p><strong>Where:</strong> <code>Warehouse management &gt; Setup &gt; Mobile device &gt; Mobile device menu items</code>. Each menu item maps to a work type and behavior (auto-confirm, prompt for license plate, etc.). Custom menu items extend default behavior; deep customization is possible but each customization is technical debt for upgrades.</p>
+              <h4>Common flows</h4>
+              <ul>
+                <li><strong>Receive:</strong> scan PO + items + license plate; the receipt auto-creates put-away work.</li>
+                <li><strong>Put-away:</strong> scan license plate, follow directives to drop location.</li>
+                <li><strong>Pick:</strong> follow waved work, scan items, confirm, drop at staging.</li>
+                <li><strong>Ship-confirm:</strong> close out the load, generate ASN to customer if applicable.</li>
+                <li><strong>Cycle count:</strong> scan location, confirm count, post variance.</li>
+              </ul>
+              <h4>Offline mode</h4>
+              <p>The mobile app does not have full offline capability; some basic work can be queued when network is unavailable, but most operations require connectivity. Plan warehouse Wi-Fi accordingly.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Cycle counting and replenishment</summary>
+            <div class="topic__body">
+              <h4>Cycle count plans</h4>
+              <p><strong>Where:</strong> <code>Warehouse management &gt; Setup &gt; Inventory &gt; Cycle counting</code>. Threshold-based (count when stock drops below X), zero-count (count empty locations to confirm), spot-count (manual ad-hoc), schedule-based (count by zone every N days).</p>
+              <h4>Replenishment</h4>
+              <p>Three patterns:</p>
+              <ul>
+                <li><strong>Wave demand replenishment:</strong> when a wave needs stock and pick locations are low, replenishment work is auto-created from bulk to pick.</li>
+                <li><strong>Min/max replenishment:</strong> location-based stock targets trigger replenishment from bulk.</li>
+                <li><strong>Load demand replenishment:</strong> for cross-dock scenarios, replenish from inbound directly to outbound.</li>
+              </ul>
+              <h4>WHS cleanup jobs</h4>
+              <p><strong>Where:</strong> <code>Warehouse management &gt; Periodic tasks &gt; Cleanup</code>. Critical batch jobs to remove old work, container statuses, mobile device session data. Without scheduled cleanup, WHS tables grow and the warehouse slows down.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>WMS adoption</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>WMS is a project of its own.</strong> Don't treat it as a sub-stream of an SCM go-live; the design / test / pilot / training cycle for WMS often equals the rest of the implementation.</li>
+                <li><strong>Volume justifies WMS.</strong> Below ~50 picks per day per warehouse, basic warehousing is often more efficient.</li>
+                <li><strong>Wave templates are tunable.</strong> Default templates rarely fit; expect 6-12 weeks of iteration on wave parameters during UAT.</li>
+                <li><strong>License plates require label printing.</strong> Label printers, label formats, and integration are warehouse infrastructure; budget for it.</li>
+                <li><strong>WHS cleanup not optional.</strong> If you don't schedule cleanup, the warehouse will eventually slow to a crawl.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
