@@ -93,14 +93,29 @@
 
       <!-- ============== Accounts Payable ============== -->
       <article class="item-pane" data-item-pane="accounts-payable">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Accounts Payable</h2><p class="item-pane__lead">Vendor invoices, payment proposals, and the AP side of source-to-pay.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Accounts Payable</h2><p class="item-pane__lead">Vendor master, invoices, payments, settlements, and the AP side of source-to-pay.</p></header>
+
+        <p>Accounts Payable manages vendor master data and the financial side of every vendor transaction: invoices, payments, settlements, prepayments, and reporting. It is the AP-side bookend of the procurement cycle. The module sits below Procurement and Sourcing operationally but is owned by Finance, the configuration choices made here drive how the company recognizes liabilities, manages cash outflow, and reports tax.</p>
 
         <div class="topics">
 
           <details class="topic">
-            <summary><span class="topic__eyebrow">Setup</span>Posting profiles &amp; defaults</summary>
-            <div class="topic__body topic__body--placeholder">
-              <p>Add content here, vendor posting profiles (Summary account, Settle, Arrival), payment terms, methods of payment, payment day, terms of payment, cash discounts, and the AP parameters that drive defaults.</p>
+            <summary><span class="topic__eyebrow">Setup</span>Vendor groups, posting profiles, parameters</summary>
+            <div class="topic__body">
+              <h4>Vendor groups</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Setup &gt; Vendor groups</code>. Vendor groups are the bridge between vendors and posting profiles. Each group represents a set of vendors that share posting behavior, terms of payment, and reporting buckets. Common groupings: domestic vendors, foreign vendors, intercompany, employee-expense vendors, capital-expenditure vendors. The vendor group also drives the Settle period and Posting profile defaults.</p>
+              <h4>Vendor posting profiles</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Setup &gt; Vendor posting profiles</code>. Posting profiles map AP transactions to GL accounts. Three account-code priority levels: Table (specific vendor), Group (vendor group), All (everyone). Most companies design at the Group level. Key accounts:</p>
+              <ul>
+                <li><strong>Summary account:</strong> the AP control account on the balance sheet. Marked as "Do not allow manual entry" so it can only move via the subledger.</li>
+                <li><strong>Settle account:</strong> liquidity ledger account, used by cash-flow forecast (only when cash flow forecasting is enabled).</li>
+                <li><strong>Arrival / Offset:</strong> for the Invoice register journal flow, where invoices are recorded before approval and posted to a temporary Arrival account, later transferred to the Summary on approval.</li>
+                <li><strong>Sales tax prepayments:</strong> for prepayment scenarios where tax is recoverable in advance.</li>
+              </ul>
+              <h4>Methods of payment, terms, cash discounts, payment days</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Payment setup</code>. Methods of payment define how cash leaves (check, electronic, wire, promissory note) and which payment format (NACHA, SEPA, ISO20022, country-specific ER) generates the file. Terms of payment carry the calculation rule (Net 30, Cash on delivery, end-of-month plus N days). Cash discounts reduce the invoice if paid early (2/10 net 30 style); set up the discount account here. Payment days adjust due dates for non-business days.</p>
+              <h4>AP parameters</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Setup &gt; Accounts payable parameters</code>. Drives defaults: invoice approval workflow, three-way matching policy (No / Two-way / Three-way), tolerance percentages for matching, the default posting profile for prepayment journal vouchers, and number sequences.</p>
             </div>
           </details>
 
@@ -115,71 +130,113 @@
                   <p><strong>Where:</strong> <code>Accounts payable &gt; Vendors &gt; All vendors &gt; New</code>.</p>
                   <h4>Required fields</h4>
                   <ul>
-                    <li><strong>Vendor account</strong>, usually pulled from a number sequence; only manual if you've set it that way.</li>
-                    <li><strong>Name</strong>, picks from or creates a Global Address Book party. Same legal entity name should never be a separate party.</li>
-                    <li><strong>Group</strong>, drives posting profile, terms of payment, and tax defaults. The most consequential field on the form.</li>
-                    <li><strong>Currency</strong>, invoice currency. Can differ from accounting currency; FX revaluation handles the rest.</li>
+                    <li><strong>Vendor account:</strong> usually pulled from a number sequence; only manual if you've set it that way.</li>
+                    <li><strong>Name:</strong> picks from or creates a Global Address Book party. Same legal entity name should never be a separate party.</li>
+                    <li><strong>Group:</strong> drives posting profile, terms of payment, and tax defaults. The most consequential field on the form.</li>
+                    <li><strong>Currency:</strong> invoice currency. Can differ from accounting currency; FX revaluation handles the rest.</li>
                   </ul>
                   <h4>Tabs to fill before going live</h4>
                   <ul>
-                    <li><strong>Addresses</strong>, at least one purpose=Invoice address. Without it, payment formats with address blocks fail silently.</li>
-                    <li><strong>Contact information</strong>, remit-to email for ACH advice, AP contact phone.</li>
-                    <li><strong>Purchase order defaults</strong>, delivery terms (Incoterms), mode of delivery.</li>
-                    <li><strong>Invoice and delivery</strong>, invoice account (third-party pay-to vendor if different), tax group, item sales tax group.</li>
-                    <li><strong>Payment</strong>, terms of payment, method of payment, cash discount, payment specification (e.g., ACH/CCD/CTX), bank account.</li>
-                    <li><strong>1099</strong>, only for US AP. 1099 box (NEC, MISC, INT, DIV) and 1099 status. Wrong here = wrong year-end form.</li>
+                    <li><strong>Addresses:</strong> at least one purpose=Invoice address. Without it, payment formats with address blocks fail silently.</li>
+                    <li><strong>Contact information:</strong> remit-to email for ACH advice, AP contact phone.</li>
+                    <li><strong>Purchase order defaults:</strong> delivery terms (Incoterms), mode of delivery.</li>
+                    <li><strong>Invoice and delivery:</strong> invoice account (third-party pay-to vendor if different), tax group, item sales tax group.</li>
+                    <li><strong>Payment:</strong> terms of payment, method of payment, cash discount, payment specification (such as ACH/CCD/CTX), bank account.</li>
+                    <li><strong>1099:</strong> only for US AP. 1099 box (NEC, MISC, INT, DIV) and 1099 status. Wrong here = wrong year-end form.</li>
                   </ul>
                   <h4>Common pitfalls</h4>
                   <ul>
                     <li><strong>Duplicate vendors.</strong> AP won't enforce uniqueness on Tax ID by default, turn on the "vendor search" warning in AP parameters and train AP clerks to search before creating.</li>
-                    <li><strong>Wrong group at creation.</strong> Group can be changed later, but historical postings already used the old posting profile, so reporting splits across two summary accounts. Get it right the first time.</li>
-                    <li><strong>Hold field forgotten.</strong> Hold = Payment is the safe default during onboarding (lets you receive invoices but blocks payment until verified).</li>
-                    <li><strong>One-time vendors abused.</strong> One-time vendor is for genuinely one-shot payments, don't use it as a shortcut, you lose all reporting history.</li>
+                    <li><strong>Wrong group at creation.</strong> Group can be changed later, but historical postings already used the old posting profile, so reporting splits across two summary accounts.</li>
+                    <li><strong>Hold field forgotten.</strong> Hold = Payment is a safe default during onboarding (lets you receive invoices but blocks payment until verified).</li>
+                    <li><strong>One-time vendors abused.</strong> One-time vendor is for genuinely one-shot payments, not a shortcut, you lose reporting history.</li>
                   </ul>
-                </div>
-              </details>
-
-              <details class="topic">
-                <summary>Vendor groups</summary>
-                <div class="topic__body topic__body--placeholder">
-                  <p>Add content here, designing vendor groups for posting profile separation and reporting (domestic vs. foreign, employee expense vendors, intercompany), and the relationship to the chart of accounts.</p>
                 </div>
               </details>
 
               <details class="topic">
                 <summary>Vendor bank accounts</summary>
-                <div class="topic__body topic__body--placeholder">
-                  <p>Add content here, adding a vendor bank, IBAN/SWIFT vs. routing/account, the "Use central bank purposes" toggle, and how the default bank flows to the payment proposal.</p>
+                <div class="topic__body">
+                  <p><strong>Where:</strong> on the vendor record, <code>Vendor &gt; Setup &gt; Bank accounts</code>. Capture either IBAN/SWIFT (international) or routing/account (US ACH). Mark one bank as the default so it flows to the payment proposal automatically. Vendor bank account approval workflow (in AP parameters) gives auditable control over who can change a vendor's bank, the change vector with the highest fraud risk in AP.</p>
                 </div>
               </details>
 
               <details class="topic">
                 <summary>Vendor on-hold options</summary>
-                <div class="topic__body topic__body--placeholder">
-                  <p>Add content here, No, Invoice, Payment, All, Requisition, Never, what each value blocks and the typical onboarding workflow (Hold = All → verify → Hold = No).</p>
+                <div class="topic__body">
+                  <p>The Hold field on the vendor record blocks specific transaction types: <strong>No</strong> (no block), <strong>Invoice</strong> (blocks invoice posting), <strong>Payment</strong> (blocks payment posting), <strong>All</strong> (blocks both invoice and payment), <strong>Requisition</strong> (blocks new POs and requisitions), <strong>Never</strong> (excluded from auto-hold via inactivation). Typical onboarding flow: Hold = All on creation, AP supervisor verifies bank and tax info, then sets Hold = No.</p>
+                </div>
+              </details>
+
+              <details class="topic">
+                <summary>Vendor onboarding via Vendor Collaboration</summary>
+                <div class="topic__body">
+                  <p>Prospective-vendor self-service is supported via the Vendor Collaboration portal: an external user signs up via Azure AD B2B, completes a registration wizard with company details and certifications, and triggers a New Vendor Request in F&amp;O. Procurement reviews and approves; on approval the vendor is created with the right group and posting profile. The flow is configured under <code>Procurement and sourcing &gt; Setup &gt; Vendor collaboration</code> and requires Public Sector or Vendor Collaboration license.</p>
                 </div>
               </details>
             </div>
           </details>
 
           <details class="topic">
-            <summary><span class="topic__eyebrow">Transactions</span>Invoicing &amp; payments</summary>
-            <div class="topic__body topic__body--placeholder">
-              <p>Add content here, invoice journal vs. pending vendor invoice, three-way matching (PO + receipt + invoice), invoice register / approval workflow, prepayments, and settlements.</p>
+            <summary><span class="topic__eyebrow">Transactions</span>Invoices &amp; matching</summary>
+            <div class="topic__body">
+              <h4>Three invoice paths</h4>
+              <ul>
+                <li><strong>Vendor invoice (PO-matched):</strong> <code>Accounts payable &gt; Invoices &gt; Pending vendor invoices</code>. Invoice header tied to the PO; matched against PO line and product receipt before posting. Three-way match enforces price (PO vs invoice) and quantity (receipt vs invoice) tolerances configured in AP parameters and per matching policy. Invoice match status is shown on the invoice header.</li>
+                <li><strong>Invoice journal:</strong> <code>Accounts payable &gt; Invoices &gt; Invoice journal</code>. Direct journal entry without a PO, used for non-PO invoices like utilities or rent. Distribution lines pick up the expense account and dimensions.</li>
+                <li><strong>Invoice register / Invoice approval journal:</strong> two-step entry where the Invoice register posts to an Arrival account on receipt, and the Approval journal moves it to the vendor liability after review. Used in environments with separation of duties between AP clerk and approver.</li>
+              </ul>
+              <h4>Vendor Invoice Automation (VIA) and electronic invoicing</h4>
+              <p>Microsoft now offers Vendor Invoice Automation that uses AI to extract header and line data from PDF invoices, plus the Electronic invoicing service for country-specific e-invoice schemas (Italy SDI, France Chorus Pro, Mexico CFDI, Saudi ZATCA). Both reduce manual entry and improve compliance.</p>
+              <h4>Prepayments</h4>
+              <p>Two flows: <strong>Prepayment invoice</strong> (a real AP invoice posted to a prepaid asset, with VAT recoverable per local rules, applied later against a standard invoice on the same PO) and <strong>Prepayment journal voucher</strong> (cash advance recorded directly without an invoice, ideal where local tax law does not allow VAT recovery on advances). Prepayment policy is configured per PO in the Prepayments tab.</p>
             </div>
           </details>
 
           <details class="topic">
-            <summary><span class="topic__eyebrow">Periodic</span>Payment proposals &amp; close</summary>
-            <div class="topic__body topic__body--placeholder">
-              <p>Add content here, payment proposal generation, payment journal, electronic payment file (NACHA, SEPA, ISO20022), and the AP month-end close steps.</p>
+            <summary><span class="topic__eyebrow">Payments</span>Payment journal, proposal, settlement</summary>
+            <div class="topic__body">
+              <h4>Payment journal</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Payments &gt; Payment journal</code>. Manual creation of payment lines per vendor / invoice. Method of payment drives the file format and the offset bank account. Approval workflow can be added on the payment journal name.</p>
+              <h4>Payment proposal</h4>
+              <p>Inside the payment journal, <strong>Functions &gt; Payment proposal</strong> auto-generates lines for vendor invoices that match selection criteria (due date, vendor group, currency, method of payment). The most efficient way to run a weekly check run.</p>
+              <h4>Settlement</h4>
+              <p>Settlement matches a payment to one or more invoices. Auto-settlement is enabled per posting profile via the Settlement option. Manual settlement uses <code>Vendor &gt; Settle &gt; Settle open transactions</code>. Cash discounts taken at payment post automatically if the discount window covers the payment date.</p>
+              <h4>PDC (Post-Dated Cheques)</h4>
+              <p>Common in Middle East and parts of Asia: a check dated in the future is recorded as PDC, settling at maturity. F&amp;O supports this via the PDC functionality on the payment journal where the check is registered as PDC at issuance, then realized on the maturity date. Configured under AP parameters &gt; Updates &gt; Use post-dated checks.</p>
             </div>
           </details>
 
           <details class="topic">
-            <summary><span class="topic__eyebrow">Reporting</span>Aging, balances, 1099</summary>
-            <div class="topic__body topic__body--placeholder">
-              <p>Add content here, vendor aging buckets, vendor balance list vs. trial balance reconciliation, 1099 year-end (US), and the standard inquiries every AP clerk should know.</p>
+            <summary><span class="topic__eyebrow">Periodic</span>FX revaluation, close, year-end</summary>
+            <div class="topic__body">
+              <h4>Foreign currency revaluation</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Periodic tasks &gt; Foreign currency revaluation</code>. Revalues open AP balances in non-functional currencies at month-end. Posts unrealized FX gain/loss against the AP account; reverses next period (depending on policy). Typical close-step ordering: AP &gt; AR &gt; Bank &gt; GL.</p>
+              <h4>1099 (US year-end)</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Periodic tasks &gt; 1099</code>. Generates 1099-NEC, 1099-MISC, 1099-INT, 1099-DIV forms based on vendor 1099 box assignments and posted invoices. Run year-end after all December activity is final. Verify amounts before generating; corrections post-generation are painful.</p>
+              <h4>AP close checklist</h4>
+              <ul>
+                <li>All vendor invoices entered and approved.</li>
+                <li>Three-way match exceptions resolved (no orphaned product receipts).</li>
+                <li>Period-end accruals booked for receipts not invoiced.</li>
+                <li>Payment proposal run, payments posted, settlement complete.</li>
+                <li>FX revaluation posted.</li>
+                <li>AP aging tied to GL trial balance.</li>
+                <li>AP period status closed in <code>General ledger &gt; Periods &gt; Ledger calendars</code>.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Aging, balances, inquiries</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Vendor aging</strong> (<code>Accounts payable &gt; Inquiries and reports &gt; Vendor aging report</code>): buckets by aging period (custom-defined per company). Reconciles to AP control account.</li>
+                <li><strong>Vendor balance list:</strong> by vendor as of a date. Quick reconciliation tool.</li>
+                <li><strong>Vendor account statement:</strong> all transactions for a vendor in a period (open and closed).</li>
+                <li><strong>Vendor transactions:</strong> the operational inquiry an AP clerk lives in; filterable by status, due date, etc.</li>
+                <li><strong>Power BI / Financial Reporter:</strong> for executive AP dashboards (DPO, top vendors, % auto-matched invoices).</li>
+              </ul>
             </div>
           </details>
 
@@ -188,13 +245,120 @@
 
       <!-- ============== Accounts Receivable ============== -->
       <article class="item-pane" data-item-pane="accounts-receivable">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Accounts Receivable</h2><p class="item-pane__lead">Customer invoices, payments, settlements, and the AR side of order-to-cash.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Accounts Receivable</h2><p class="item-pane__lead">Customer master, invoices, payments, settlements, and the AR side of order-to-cash.</p></header>
+
+        <p>Accounts Receivable manages customer master data and the financial side of every customer transaction: invoices generated from sales orders, free-text invoices, recurring invoices, customer payments, settlements, write-offs, credit memos, and reporting. AR sits below Sales operationally but is owned by Finance, the configuration choices made here drive how the company recognizes revenue, manages collection cash flow, and reports tax.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Posting profiles &amp; defaults</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer posting profiles, terms of payment, methods of payment, AR parameters, and the difference between sales-order invoices and free-text invoices defaults.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Customer master</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer creation, customer groups, addresses (invoice / delivery / one-time), tax setup, credit limit, salesperson, and the relationship to the global address book.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Invoicing &amp; payments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales-order invoice flow, free-text invoice (no SO), customer payment journal, settlements (auto and manual), credit memos, and write-offs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Statements, dunning, close</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer statements, dunning letters, the link to Credit &amp; Collections, and AR month-end activities.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Aging &amp; balances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, customer aging, AR trial balance reconciliation, days sales outstanding (DSO), and the standard AR inquiries.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Customer groups, posting profiles, parameters</summary>
+            <div class="topic__body">
+              <h4>Customer groups</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Setup &gt; Customer groups</code>. Customer groups bridge customers and posting profiles. Common groupings: domestic, foreign, intercompany, retail, wholesale, government. Group also drives default terms of payment, posting profile, and tax parameters.</p>
+              <h4>Customer posting profiles</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Setup &gt; Customer posting profiles</code>. Same Table / Group / All priority logic as AP. Key accounts:</p>
+              <ul>
+                <li><strong>Summary account:</strong> AR control account on the balance sheet (asset side). "Do not allow manual entry" by default.</li>
+                <li><strong>Settle account:</strong> liquidity ledger account for cash flow forecasting (when enabled).</li>
+                <li><strong>Liability account for deposits:</strong> for customer prepayments / advance receipts before invoicing.</li>
+                <li><strong>Sales tax prepayments:</strong> for customer prepayment invoices with tax.</li>
+              </ul>
+              <h4>Methods of payment, terms of payment, cash discounts</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Payments setup</code>. Methods of payment define how cash arrives (electronic deposit, check, credit card, lockbox). Terms of payment carry the calculation rule. Cash discounts incentivize early payment, the discount account is set on the discount record. Same mechanics as AP but inverted in account behavior.</p>
+              <h4>AR parameters</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Setup &gt; Accounts receivable parameters</code>. Drives defaults: invoice creation behavior, free-text invoice settings, customer write-off setup (account and limit), default posting profile for prepayment journal vouchers, dunning configuration, credit management options, and number sequences.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Customer master</summary>
+            <div class="topic__body">
+              <details class="topic">
+                <summary>Customer creation</summary>
+                <div class="topic__body">
+                  <p><strong>Where:</strong> <code>Accounts receivable &gt; Customers &gt; All customers &gt; New</code>.</p>
+                  <h4>Required fields</h4>
+                  <ul>
+                    <li><strong>Customer account:</strong> from a number sequence; manual only if configured that way.</li>
+                    <li><strong>Type:</strong> Organization or Person (drives address book behavior and tax handling).</li>
+                    <li><strong>Customer group:</strong> drives posting profile, terms, defaults.</li>
+                    <li><strong>Currency:</strong> invoice currency. Different from accounting currency triggers FX revaluation.</li>
+                  </ul>
+                  <h4>Tabs to fill before going live</h4>
+                  <ul>
+                    <li><strong>Addresses:</strong> Invoice address (purpose=Invoice), Delivery address (purpose=Delivery), and any custom address purposes the company uses.</li>
+                    <li><strong>Contact information:</strong> primary contact, AR contact, billing email for electronic invoice delivery.</li>
+                    <li><strong>Sales demographics:</strong> sales group, segment, salesperson commission setup, sales tax exempt number.</li>
+                    <li><strong>Invoice and delivery:</strong> delivery terms (Incoterms), mode of delivery, sales tax group, item sales tax group.</li>
+                    <li><strong>Payment defaults:</strong> terms of payment, method of payment, cash discount, payment specification.</li>
+                    <li><strong>Credit:</strong> credit limit, credit hold rules, credit rating (with Credit Management module), exception flags.</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="topic">
+                <summary>Customer addresses and one-time customers</summary>
+                <div class="topic__body">
+                  <p>Customers can have multiple addresses with different purposes (invoice, delivery, business, payment). The default Invoice address is what shows on the printed invoice. For genuinely one-shot transactions, use one-time customer (set up as a template under AR parameters), the customer record is created on the fly from a sales order without persisting in the master.</p>
+                </div>
+              </details>
+              <details class="topic">
+                <summary>Customer hold and exclusion</summary>
+                <div class="topic__body">
+                  <p>The Hold field on the customer blocks transactions: All, Invoice, Payment, Requisition, No, Never. The Hold value flows down to sales orders. For temporary credit blocks driven by limits, use Credit Management (covered in the Credit and Collections module) instead of manual Hold.</p>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Invoices, payments, settlements</summary>
+            <div class="topic__body">
+              <h4>Sales-order invoice</h4>
+              <p>Generated from a posted sales order. Driven by Sales and Marketing operationally; the AR posting profile determines the GL accounts hit (AR, revenue, sales tax, COGS, inventory). Most B2B invoicing follows this path.</p>
+              <h4>Free-text invoice</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Invoices &gt; All free text invoices</code>. A direct AR invoice without a sales order, used for non-inventory billing (services, rent, fees, miscellaneous charges). Lines reference main accounts and dimensions directly, not items. Recurring free-text invoices are configurable for subscription-style billing without the full Subscription Billing module.</p>
+              <h4>Customer payment journal</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Payments &gt; Customer payment journal</code>. Records customer payments, manual or imported. Settlement against open invoices is selected via the Settle transactions function. Auto-settlement is configured per posting profile.</p>
+              <h4>Credit memos and write-offs</h4>
+              <p>Credit memos are negative invoices that reverse revenue / AR (with an optional return-of-goods leg via the Return order if inventory is involved). Write-offs are configured under AR parameters with an account and an approval threshold; clear uncollectible balances to bad-debt expense or against an Allowance for Doubtful Accounts reserve.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Statements, dunning, FX, close</summary>
+            <div class="topic__body">
+              <h4>Customer statements</h4>
+              <p>Generated periodically, list all transactions on a customer's account for a period or as of a date. Used for customer reconciliation; not the same as a dunning letter.</p>
+              <h4>Dunning / collection letters</h4>
+              <p><strong>Where:</strong> <code>Credit and collections &gt; Setup &gt; Collections &gt; Collection letter</code>. Dunning rules send progressively firmer reminders to customers as invoices age. F&amp;O has migrated most collections functionality to the dedicated Credit and Collections module, but dunning configuration still includes letter templates, fee posting, and exclusion rules.</p>
+              <h4>Foreign currency revaluation</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Periodic tasks &gt; Foreign currency revaluation</code>. Revalues open AR balances at period-end. Posts unrealized FX gain/loss; reverses or persists per policy.</p>
+              <h4>AR close checklist</h4>
+              <ul>
+                <li>All sales orders and free-text invoices posted.</li>
+                <li>Customer payments applied (no aged unapplied receipts).</li>
+                <li>Credit memos and write-offs reviewed and posted.</li>
+                <li>FX revaluation posted.</li>
+                <li>AR aging tied to GL trial balance.</li>
+                <li>AR period closed.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Aging, DSO, customer inquiries</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Customer aging</strong> (<code>Accounts receivable &gt; Inquiries and reports &gt; Customer aging report</code>): aging buckets per defined periods; reconciles to AR control account.</li>
+                <li><strong>Customer balance list:</strong> snapshot of open balance per customer.</li>
+                <li><strong>Customer account statement:</strong> all transactions in a period, sent to the customer for verification.</li>
+                <li><strong>Days Sales Outstanding (DSO):</strong> derived metric from AR aging and revenue, the leading indicator of collection efficiency.</li>
+                <li><strong>Power BI / Financial Reporter:</strong> for AR dashboards, top customers by AR, aging trend, collection effectiveness.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -212,25 +376,182 @@
 
       <!-- ============== Budgeting ============== -->
       <article class="item-pane" data-item-pane="budgeting">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Budgeting</h2><p class="item-pane__lead">Budget planning, control, and registration entries, the guardrails on the GL.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Budgeting</h2><p class="item-pane__lead">Budget planning, control, and register entries, the guardrails on the GL.</p></header>
+
+        <p>Budgeting in F&amp;O has two layers: <strong>Basic budgeting</strong> uses budget register entries to put numbers in the ledger for budget-vs-actual reporting; <strong>Advanced budgeting</strong> adds Budget plans (full planning workflow with stages, scenarios, Excel integration) and Budget control (real-time checks against documents like POs and requisitions). The right level depends on the client's planning maturity.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Basic vs. advanced budgeting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when to use budget register entries only vs. full budget plans, budget codes, budget cycle time spans, and the parameters in GL that control budgeting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Budget plans</span>Plan creation &amp; workflow</summary><div class="topic__body topic__body--placeholder"><p>Add content here, budget planning processes, scenarios, stages and workflow, budget plan templates, and Excel integration for budget input.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Budget control</span>Configuration &amp; checks</summary><div class="topic__body topic__body--placeholder"><p>Add content here, budget control configuration, source documents covered (PO, requisition, expense, journal), available budget calculation, and over-budget warnings vs. blocks.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Budget vs. actuals</summary><div class="topic__body topic__body--placeholder"><p>Add content here, budget vs. actuals reports, financial reporter (Management Reporter) for budget reporting, and the consolidation of multi-entity budgets.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Common pitfalls</summary><div class="topic__body topic__body--placeholder"><p>Add content here, over-engineering budget control, dimension explosion in budget plans, and the rollforward process at year-end.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Budget codes, cycles, parameters</summary>
+            <div class="topic__body">
+              <h4>Budget parameters</h4>
+              <p><strong>Where:</strong> <code>Budgeting &gt; Setup &gt; Budgeting parameters</code>. Drives default journals, default budget code, number sequences, and the toggle for using budget plans / budget control.</p>
+              <h4>Budget codes</h4>
+              <p><strong>Where:</strong> <code>Budgeting &gt; Setup &gt; Budget codes</code>. Each code represents a type of budget entry (Original, Revision, Transfer, Encumbrance, Pre-encumbrance, Carry-forward). Pre-encumbrance and Encumbrance are public-sector / government features; commercial enterprises use Original / Revision / Transfer.</p>
+              <h4>Budget cycles</h4>
+              <p>Defined as time spans (typically 12 monthly periods making up a fiscal year). Budget plan and register-entry cycles align to fiscal calendar, so set the calendar correctly first.</p>
+              <h4>Dimensions in budgets</h4>
+              <p>Budgets carry the same financial dimensions as actual postings, allowing apples-to-apples comparison. Decide which dimensions are mandatory in budgets at design time, more dimensions = more granular control but more planner effort.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Basic budgeting</span>Budget register entries</summary>
+            <div class="topic__body">
+              <p><strong>Where:</strong> <code>Budgeting &gt; Budget register entries</code>. Direct entry of budget figures per main account, dimensions, period, currency, and budget code. The simplest pattern: an annual planning exercise produces a list of budgeted amounts per account / cost center, loaded as register entries via Excel.</p>
+              <p>Budget register entries flow to the budget data store and are visible in financial reporting (Trial balance with budget column, Financial Reporter budget statements) and in the Budget vs. actuals reports.</p>
+              <p>Use this approach when planning happens outside F&amp;O (in Excel, Anaplan, etc.) and the goal is just to hold the numbers in F&amp;O for reporting. No workflow, no scenarios, no real planning UI.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Advanced</span>Budget plans (planning workflow)</summary>
+            <div class="topic__body">
+              <h4>Budget planning process</h4>
+              <p><strong>Where:</strong> <code>Budgeting &gt; Setup &gt; Budget planning &gt; Budget planning processes</code>. Defines the lifecycle: stages (Draft, Manager Review, Director Review, Finalized), scenarios (Original budget, Revised forecast, What-if), allowed templates, and the workflow that moves a plan from stage to stage.</p>
+              <h4>Budget plan templates</h4>
+              <p>Excel-based templates linked to F&amp;O via dual-direction integration. Planners do work in Excel (familiar interface, formulas, copy/paste from prior year) and publish back to F&amp;O. Each plan is dimensioned per the planning process configuration.</p>
+              <h4>Allocation</h4>
+              <p>Budget plan allocation rules redistribute totals across periods or dimensions: monthly distribution from an annual figure, allocation across cost centers based on a basis. Reduces line-by-line entry effort.</p>
+              <h4>Generate budget register entries from plan</h4>
+              <p>Once a budget plan is finalized, generate budget register entries from it to push the figures into the ledger budget store. The link from plan to register entries preserves the audit trail.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Budget control</span>Real-time enforcement</summary>
+            <div class="topic__body">
+              <h4>What budget control does</h4>
+              <p>When enabled, F&amp;O checks the available budget at the moment a document is created (PO, requisition, expense report, journal) and either warns or blocks if the document would exceed the budget. The toughest control level in budgeting.</p>
+              <h4>Configuration</h4>
+              <p><strong>Where:</strong> <code>Budgeting &gt; Setup &gt; Budget control &gt; Budget control configuration</code>. Activate the source documents to check (PR, PO, journal, expense), the dimensions to check at, the over-budget threshold (warn at 90%, block at 100%), and the user permissions for override.</p>
+              <h4>Available budget calculation</h4>
+              <p>Available = Budget revisions, Actual expense, Encumbered (open POs), Pre-encumbered (requisitions). Each is configurable in the Budget funds available calculation.</p>
+              <h4>Over-budget vs. warn-vs-block</h4>
+              <p>Operational flexibility: most commercial implementations warn at 100% and block at 110%, allowing minor over-runs but stopping major violations. Pure-block configurations frustrate operations and lead to workarounds.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Budget vs. actuals</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Trial balance with budget column:</strong> built-in comparison view in GL.</li>
+                <li><strong>Financial Reporter:</strong> ships standard budget statements (income statement with actual / budget / variance columns), customizable by row / column / tree definitions.</li>
+                <li><strong>Budget control statistics:</strong> shows pre-encumbered, encumbered, actuals per dimension combination.</li>
+                <li><strong>Budget plan reports:</strong> exports of any plan stage to Excel for executive review.</li>
+                <li><strong>Power BI:</strong> for advanced budget-vs-actual dashboards, consolidations across legal entities, scenario modeling.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Over-engineered budget control:</strong> blocking POs at $5 over a $50,000 budget breaks operations. Tune thresholds and use warnings before hard blocks.</li>
+                <li><strong>Dimension overload in plans:</strong> 8-dimension budget plans take 10x longer to maintain than 3-dimension plans, with little reporting benefit.</li>
+                <li><strong>Year-end roll-forward forgotten:</strong> next-year budget must be loaded before Jan 1, or the new year shows 100% over-budget on day one.</li>
+                <li><strong>Plan vs. register-entry confusion:</strong> a plan that isn't finalized and pushed to register entries is invisible to financial reports.</li>
+                <li><strong>Forecast updates without scenario tracking:</strong> use Scenarios in Budget plans to track Original vs. Revised vs. Latest Estimate; don't overwrite the Original.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== Cash & Bank Management ============== -->
       <article class="item-pane" data-item-pane="cash-bank">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cash &amp; Bank Management</h2><p class="item-pane__lead">Bank accounts, deposits, bank reconciliation, and cash flow forecasting.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cash &amp; Bank Management</h2><p class="item-pane__lead">Bank accounts, deposits, bank reconciliation, electronic payment formats, cash flow forecasting.</p></header>
+
+        <p>Cash and Bank Management owns the bank-side data: bank accounts, check layouts, deposits, reconciliation against bank statements, and the configuration that lets AP and AR settle through real bank instruments. It also hosts cash flow forecasting, which pulls expected inflows and outflows from across the system. Modern F&amp;O has migrated most bank statement processing to Advanced bank reconciliation (BAI2, MT940, ISO20022 import) and is steadily adding bank document management automation.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Bank groups &amp; accounts</summary><div class="topic__body topic__body--placeholder"><p>Add content here, bank groups, bank account creation, main account linkage, currency, and the difference between bank account and ledger main account.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Check layouts &amp; payment formats</summary><div class="topic__body topic__body--placeholder"><p>Add content here, check layouts, electronic reporting (ER) for payment formats (NACHA, SEPA, BAI2 import), and how to extend a delivered configuration.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Deposits &amp; payments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, deposit slips, voiding checks, stop payments, NSF, and the cash receipt journal.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reconciliation</span>Manual vs. advanced</summary><div class="topic__body topic__body--placeholder"><p>Add content here, manual bank reconciliation, advanced bank reconciliation (BAI2 / MT940 / ISO20022 import), matching rules, and reconciling unposted items.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Cash flow</span>Forecasting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cash flow forecast setup, source data (AP open, AR open, sales orders, POs, budget), and dependencies on the GL accounts setup.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Bank groups, bank accounts, parameters</summary>
+            <div class="topic__body">
+              <h4>Bank groups</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Setup &gt; Bank groups</code>. Group bank accounts (typically by bank institution: Bank A, Bank B). Holds default routing / SWIFT / address values for the institution, inherited by every bank account in the group.</p>
+              <h4>Bank accounts</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Bank accounts &gt; Bank accounts</code>. Each bank account is tied to:</p>
+              <ul>
+                <li><strong>Main account:</strong> the GL account that this bank reflects (the cash account on the balance sheet).</li>
+                <li><strong>Currency:</strong> bank account currency. Multi-currency requires advanced bank reconciliation.</li>
+                <li><strong>Bank statement format:</strong> the import format used (BAI2, MT940, ISO20022 camt.053).</li>
+                <li><strong>Reconciliation type:</strong> Standard (legacy), Advanced (recommended).</li>
+                <li><strong>Bank account number / IBAN / SWIFT:</strong> identifiers for electronic payment files.</li>
+              </ul>
+              <h4>Cash and bank parameters</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Setup &gt; Cash and bank management parameters</code>. Drives default behavior: check number sequence, deposit slip ID, FX revaluation defaults, advanced bank reconciliation defaults, bank document management toggle.</p>
+              <h4>Bank account approvals</h4>
+              <p>Critical control: bank account changes (especially vendor / customer bank accounts) carry fraud risk. Approval workflow on bank account changes is a recommended best practice and a common audit finding when missing.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Check layouts, payment formats, ER</summary>
+            <div class="topic__body">
+              <h4>Check layouts</h4>
+              <p><strong>Where:</strong> on the bank account, <code>Bank account &gt; Check &gt; Layout</code>. Defines the physical check format: prenumbered or computer-numbered, position of payee, amount, signature. Layouts now use the SSRS / Electronic Reporting framework.</p>
+              <h4>Electronic Reporting (ER) for payment formats</h4>
+              <p>F&amp;O ships dozens of country-specific payment formats as ER configurations: NACHA (US ACH), SEPA Credit Transfer (EU), ISO20022 pain.001 (international XML), MT103 (SWIFT wire), BACS (UK). Each is configurable to add custom fields, change layouts, or branch behavior per bank requirement. Microsoft's Globalization Studio is replacing the older ER editor for new configurations.</p>
+              <h4>Bank statement formats</h4>
+              <p>Inbound: BAI2 (US bank standard), MT940 (SWIFT), camt.053 (ISO20022). Each format maps to a standard ER configuration; customize for bank-specific quirks.</p>
+              <h4>Bank document management (newer feature)</h4>
+              <p>Microsoft's Bank Document Management module automates the connection to bank portals (via Microsoft-managed connectors), removing manual statement import. Available for select banks; verify per region.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Deposits, payments, transfers</summary>
+            <div class="topic__body">
+              <h4>Deposit slips</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Bank statements &gt; Deposit slip</code>. Group customer payments into a single deposit slip that matches what hits the bank in one batch. Reconciliation matches the slip total to the bank deposit, individual payments inside the slip stay grouped.</p>
+              <h4>Check operations</h4>
+              <p>From the bank account: void check, refund check, stop payment, NSF processing. Each generates the appropriate reversal journal in AP and the bank account.</p>
+              <h4>Bank-to-bank transfers</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Periodic tasks &gt; Bank account transfer</code>. Move cash between own bank accounts. Posts to a clearing / transit account if accounts are in different currencies.</p>
+              <h4>PDC (Post-Dated Cheques)</h4>
+              <p>Where used (Middle East, parts of Asia), PDCs are tracked in F&amp;O against the bank account. Issuance posts a PDC liability; maturity processes the actual cash movement; rejection or cancellation reverses cleanly.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reconciliation</span>Manual vs Advanced bank reconciliation</summary>
+            <div class="topic__body">
+              <h4>Manual (Standard) reconciliation</h4>
+              <p><strong>Where:</strong> on the bank account, <code>Reconcile &gt; Account reconciliation</code>. Tick off ledger entries that match the bank statement. Acceptable for very low volume; otherwise unworkable.</p>
+              <h4>Advanced bank reconciliation</h4>
+              <p>The recommended pattern. Import the bank statement (BAI2, MT940, camt.053), match rules auto-pair statement lines to ledger transactions, exceptions go to a worksheet for manual handling. Match rules are configurable per bank account: by amount, by reference, by date range, etc.</p>
+              <h4>Reconciliation accounting</h4>
+              <p>When enabled, advanced bank reconciliation can auto-post journals for items that exist on the statement but not the ledger: bank fees, interest, NSF returns. Reduces month-end manual journal effort substantially.</p>
+              <h4>Best practice</h4>
+              <p>Reconcile weekly, not monthly. Aged unreconciled items become difficult to investigate after 30 days. Bank clearing / suspense accounts must reconcile to zero at every period end.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Cash flow</span>Forecasting</summary>
+            <div class="topic__body">
+              <h4>Cash flow forecast configuration</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Setup &gt; Cash flow forecasting setup</code>. Activate the cash flow forecast on each main account (with Type = Liquidity for bank, AR, AP control accounts). For ledger accounts, set the cash flow time fence (when the activity becomes a forecasted cash event).</p>
+              <h4>Source data</h4>
+              <ul>
+                <li>AP open invoices and POs, scheduled by due date.</li>
+                <li>AR open invoices and sales orders, scheduled by due date.</li>
+                <li>Budget figures, scheduled by period.</li>
+                <li>Manual cash flow entries for known but uncommitted events.</li>
+              </ul>
+              <h4>Forecast generation</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Periodic tasks &gt; Cash flow forecasts &gt; Calculate cash flow forecasts</code>. Schedules a batch run; results visible in the Cash overview workspace and exportable to Power BI.</p>
+              <h4>Predictive cash flow (newer feature)</h4>
+              <p>Microsoft has added AI-driven predictive cash flow features that forecast customer payment timing using historical payment behavior (under Finance Insights / agents). Improves forecast accuracy versus pure due-date logic.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -284,27 +605,226 @@
 
       <!-- ============== Fixed Assets ============== -->
       <article class="item-pane" data-item-pane="fixed-assets">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Fixed Assets</h2><p class="item-pane__lead">Acquisition, depreciation, value adjustment, and disposal of fixed assets.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Fixed Assets</h2><p class="item-pane__lead">Asset master, acquisition, depreciation, value adjustments, leases, disposals.</p></header>
+
+        <p>Fixed Assets handles the accounting lifecycle of long-term assets: capitalization, depreciation, revaluation, transfer, impairment, retirement. The module also hosts the Asset leasing sub-module for ASC 842 and IFRS 16 compliance, a major addition since 2018. Configuration choices, especially books and depreciation profiles, are difficult to change once transactions exist; design carefully.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Books &amp; depreciation profiles</summary><div class="topic__body topic__body--placeholder"><p>Add content here, books (multiple books for different valuations), posting layers (current, operations, tax), depreciation profiles (straight line, reducing balance, manual), and fixed asset groups.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Asset creation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, fixed asset record, financial dimensions, parent asset, location, and the data needed before first acquisition.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Acquisition methods</summary><div class="topic__body topic__body--placeholder"><p>Add content here, manual acquisition, acquisition via purchase order, acquisition from project, acquisition proposal, and the GL accounts hit by each path.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Depreciation runs &amp; adjustments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, depreciation proposal, value adjustments (write-up, write-down), bonus depreciation, and the multiple-books story for tax vs. book.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Disposal</span>Sale &amp; scrap</summary><div class="topic__body topic__body--placeholder"><p>Add content here, disposal, sale (via AR free-text invoice), disposal, scrap, and the gain/loss accounting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Roll-forward &amp; tax reports</summary><div class="topic__body topic__body--placeholder"><p>Add content here, fixed asset roll-forward, fixed asset note, and the country-specific tax depreciation reports.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Books, depreciation profiles, FA groups</summary>
+            <div class="topic__body">
+              <h4>Books (renamed from Value models / Depreciation books)</h4>
+              <p><strong>Where:</strong> <code>Fixed assets &gt; Setup &gt; Books</code>. Each book is a separate set of asset values for a specific reporting purpose. Common pattern: Corporate book (US GAAP / IFRS), Tax book (per country tax depreciation rules), Statutory book (local-GAAP). Each book has a posting layer (Current, Operations, Tax) controlling whether it hits the GL or sits parallel for reporting.</p>
+              <p>Note: in earlier F&amp;O releases, "value models" and "depreciation books" were separate; current versions consolidate these into a single Books concept. Books can be configured to derive transactions to other books, so a single posting can flow to multiple books simultaneously.</p>
+              <h4>Depreciation profiles</h4>
+              <p><strong>Where:</strong> <code>Fixed assets &gt; Setup &gt; Depreciation profiles</code>. Methods include Straight line, Straight line life remaining, Reducing balance, Consumption, Factor, Manual. Depreciation conventions: half-year, full-month, mid-quarter, etc., applied at first transaction.</p>
+              <h4>Fixed asset groups</h4>
+              <p><strong>Where:</strong> <code>Fixed assets &gt; Setup &gt; Fixed asset groups</code>. Group similar assets (Buildings, Vehicles, IT equipment, Furniture). Each group ties to default books, depreciation profiles, useful life, and posting profile (the GL accounts hit on acquisition / depreciation / disposal).</p>
+              <h4>FA posting profiles</h4>
+              <p><strong>Where:</strong> <code>Fixed assets &gt; Setup &gt; Fixed asset posting profiles</code>. Define accounts per asset group per book per transaction type (Acquisition, Depreciation, Disposal sale, Disposal scrap, Write-up, Write-down). The most detailed posting profile in F&amp;O.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Asset creation</summary>
+            <div class="topic__body">
+              <p><strong>Where:</strong> <code>Fixed assets &gt; Fixed assets &gt; Fixed assets &gt; New</code>.</p>
+              <h4>Required fields</h4>
+              <ul>
+                <li><strong>Fixed asset number:</strong> auto from number sequence per group, or manual.</li>
+                <li><strong>Group:</strong> drives book defaults, depreciation profile, useful life, posting profile.</li>
+                <li><strong>Name and description.</strong></li>
+                <li><strong>Financial dimensions:</strong> cost center, department, location, cost-center-driven reporting.</li>
+              </ul>
+              <h4>Books per asset</h4>
+              <p>Once the asset is created, each book inherits group defaults but can be overridden per asset. Set the Service date (placed in service), Acquisition date, useful life, and depreciation start date per book.</p>
+              <h4>Parent assets and components</h4>
+              <p>Group sub-components under a parent asset (a building's HVAC, elevator, plumbing as separate components under the Building parent). Allows component-level depreciation (required under IFRS) while still rolling up at the parent level.</p>
+              <h4>Asset attributes</h4>
+              <p>Custom attributes (asset tag, serial number, vendor, location, insured value, custodian) go on the Fixed asset record. Connect to physical asset tracking via Asset Management module if maintenance is in scope.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Acquisition paths</summary>
+            <div class="topic__body">
+              <h4>Manual acquisition</h4>
+              <p><strong>Where:</strong> on the asset, <code>Books &gt; Functions &gt; Acquire</code>. Direct journal entry; cost taken from a fixed amount or journal voucher.</p>
+              <h4>Acquisition from a Purchase Order</h4>
+              <p>Vendor invoice posted with an asset distribution (asset number on the invoice line). Posts to Asset clearing / bridge account, then the Acquisition proposal / Mass acquisition routine moves the cost into the FA cost account.</p>
+              <h4>Acquisition proposal</h4>
+              <p><strong>Where:</strong> <code>Fixed assets &gt; Journal entries &gt; Fixed asset journal &gt; Lines &gt; Proposals &gt; Acquisition proposal</code>. Pulls invoice lines from AP into the FA journal for capitalization. Bulk-process all asset acquisitions efficiently.</p>
+              <h4>Acquisition from a project</h4>
+              <p>Capital project accumulates cost as CIP (Construction in Progress); on placed-in-service, project Eliminate / Capitalize step transfers cost from CIP to FA cost. See Project to profit accounting examples.</p>
+              <h4>Acquisition from inventory</h4>
+              <p>Move stocked items into FA via inventory transfer journal that issues from inventory and acquires the asset. Useful when assembling assets from spare parts or transferring demo equipment.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Depreciation, adjustments, transfers</summary>
+            <div class="topic__body">
+              <h4>Depreciation proposal</h4>
+              <p><strong>Where:</strong> <code>Fixed assets &gt; Journal entries &gt; Fixed asset journal &gt; Lines &gt; Proposals &gt; Depreciation proposal</code>. Generates depreciation lines for selected assets and books based on the current period and depreciation profile. Review, then post.</p>
+              <h4>Value adjustments</h4>
+              <p>Write-up (increase NBV), write-down (decrease NBV, impairment), value correction (fix prior errors). Each posts to a dedicated account on the posting profile and is reflected in the asset's transactions and the depreciation schedule.</p>
+              <h4>Asset transfer</h4>
+              <p>Move asset between cost centers / departments / locations via the Transfer fixed asset routine. Natural account unchanged; only financial dimensions move. Future depreciation hits the new dimension.</p>
+              <h4>Bonus depreciation and tax-specific runs</h4>
+              <p>For tax books, F&amp;O supports bonus depreciation (US Section 168k), Section 179, and various country-specific accelerated depreciation rules via depreciation profiles and bonus depreciation setup.</p>
+              <h4>Mass updates</h4>
+              <p>Bulk update useful life, depreciation method, posting accounts across many assets via the Mass update workspace. Critical for handling regulatory changes that affect a whole asset class.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Leases</span>Asset leasing (ASC 842 / IFRS 16)</summary>
+            <div class="topic__body">
+              <p><strong>Where:</strong> <code>Asset leasing &gt; Leases &gt; Lease summary</code>. The Asset leasing sub-module (added post-2018 to support ASC 842 and IFRS 16) automates lease accounting:</p>
+              <ul>
+                <li><strong>Lease creation:</strong> capture lease terms, payment schedule, discount rate, classification (Finance vs Operating).</li>
+                <li><strong>Initial recognition:</strong> auto-generates the right-of-use (ROU) asset and lease liability; books the journal at commencement.</li>
+                <li><strong>Monthly posting:</strong> amortization of ROU asset, interest accretion on liability, payment recognition.</li>
+                <li><strong>Modifications:</strong> remeasurement journals when lease terms change.</li>
+                <li><strong>Transition:</strong> pre-built tools for moving from operating-lease (off-balance-sheet) accounting to ASC 842 / IFRS 16.</li>
+              </ul>
+              <p>Without Asset leasing, this entire flow is manual journal-driven and error-prone, recommend turning the module on if leases are material.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Disposal</span>Sale, scrap, and gain/loss</summary>
+            <div class="topic__body">
+              <h4>Disposal, sale</h4>
+              <p>Two paths: post a Disposal-sale journal in the FA journal directly (proceeds taken from a customer record or main account), or invoice the buyer through AR Free-text invoice with the asset reference (the FA journal generates automatically from the AR invoice). Net of accumulated depreciation and proceeds = gain or loss.</p>
+              <h4>Disposal, scrap</h4>
+              <p>Asset retired with no proceeds. Post via Disposal-scrap on the FA journal. Net book value at disposal = loss on disposal.</p>
+              <h4>Partial disposal</h4>
+              <p>For partial sale of an asset (selling 50% of a building, for example), F&amp;O supports the Partial disposal feature, recalculates remaining cost basis and depreciation prospectively.</p>
+              <h4>Multi-book disposals</h4>
+              <p>Disposal must be processed per book; the gain/loss differs between corporate and tax books because depreciation differs. Check each book carries the disposal correctly before closing.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Register, roll-forward, statutory</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Fixed asset register:</strong> the master list of assets with their cost, accumulated depreciation, NBV, status. The single most-asked-for FA report.</li>
+                <li><strong>Depreciation expense report:</strong> by group, by book, by period.</li>
+                <li><strong>Roll-forward:</strong> opening balance, additions, depreciation, disposals, closing balance for a period (per group, per book). The schedule auditors review.</li>
+                <li><strong>Fixed asset note disclosure:</strong> the details required for financial-statement footnotes.</li>
+                <li><strong>Country-specific tax depreciation reports:</strong> India, Japan, Mexico, Brazil, several EU countries ship pre-built tax reports as Electronic Reporting configurations.</li>
+                <li><strong>Power BI:</strong> for executive dashboards on capital deployment, depreciation trend, asset age.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== General Ledger ============== -->
       <article class="item-pane" data-item-pane="general-ledger">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">General Ledger</h2><p class="item-pane__lead">The financial backbone, chart of accounts, dimensions, journals, and period close.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">General Ledger</h2><p class="item-pane__lead">The financial backbone: chart of accounts, dimensions, journals, period close, consolidation, reporting.</p></header>
+
+        <p>General Ledger is the heart of F&amp;O finance. Every other subledger eventually feeds it, and every formal financial report is sourced from it. The configuration choices made here, chart of accounts depth, dimension model, account structures, fiscal calendar, ledger currency setup, are the most consequential and the most painful to change after go-live. Spend time here in design, document decisions, and reconcile relentlessly.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Ledger &amp; fiscal calendar</summary><div class="topic__body topic__body--placeholder"><p>Add content here, ledger setup (accounting currency, reporting currency, fiscal calendar), exchange rate types, and the consequences of getting any of these wrong post go-live.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Chart of accounts &amp; dimensions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, main accounts, account categories, financial dimensions (fixed vs. custom), account structures and advanced rule structures, and the trade-off between more accounts vs. more dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Journals &amp; allocations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, daily journal, periodic journal, allocation rules (fixed, basis, formula), reverse postings, and journal approval workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Period close &amp; revaluation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, period status (open / on hold / closed / permanently closed), foreign currency revaluation, year-end close (opening transactions), and the typical close calendar.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Cross-cutting</span>Consolidation &amp; intercompany</summary><div class="topic__body topic__body--placeholder"><p>Add content here, consolidation legal entity, online vs. import consolidation, intercompany accounting setup, and the auto-generated due-to / due-from postings.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Trial balance &amp; financial reporter</summary><div class="topic__body topic__body--placeholder"><p>Add content here, trial balance views, voucher transactions, Financial Reporter (Management Reporter) row/column/tree definitions, and Power BI for ledger reporting.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Ledger, fiscal calendar, currencies</summary>
+            <div class="topic__body">
+              <h4>Ledger</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Ledger setup &gt; Ledger</code>. Per legal entity, you set the chart of accounts, account structures, accounting currency, reporting currency, exchange rate type, fiscal calendar. Accounting currency is the GL functional currency; reporting currency is a parallel translation. Both are set at company creation and cannot be easily changed once transactions exist.</p>
+              <h4>Chart of accounts</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Chart of accounts &gt; Accounts &gt; Main accounts</code>. Cross-company chart, shared across legal entities that use the same COA. Each main account has type (Asset, Liability, Equity, Revenue, Expense, Balance, Total, Profit and loss, Reporting), category (used for financial reports), and posting controls (Do not allow manual entry, Active, Suspended).</p>
+              <h4>Fiscal calendar</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Calendars &gt; Fiscal calendars</code>. Defines fiscal years and periods (12, 13, or custom). 4-4-5, 4-5-4, 13-period calendars are all supported. The calendar links to the ledger; multiple legal entities can share or have separate calendars. Year-end roll-forward generates the new year.</p>
+              <h4>Exchange rate types and currencies</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Currencies</code>. Exchange rate types separate spot, average, budget, and reporting rates. Rates can be imported (per OANDA, ECB, central bank feeds via Electronic Reporting / dual-write). Multi-currency entities must define rate types for transactional, revaluation, and reporting purposes.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Dimensions and account structures</summary>
+            <div class="topic__body">
+              <h4>Financial dimensions</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Chart of accounts &gt; Dimensions &gt; Financial dimensions</code>. Custom dimensions (department, cost center, project, BU, location) plus system-backed dimensions (Worker, Vendor, Customer, Item) that resolve from existing master records. Each dimension is shared cross-company, used per ledger via the account structure.</p>
+              <h4>Account structures</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Chart of accounts &gt; Structures &gt; Configure account structures</code>. Define which combinations of main account + dimensions are valid. Use multiple structures (P&amp;L, BS, tax-only, etc.) per legal entity. Each structure has segments and rules; an Advanced rule structure adds conditional segments based on main account.</p>
+              <h4>Dimension sets and views</h4>
+              <p>Dimension sets aggregate dimensions for reporting. Trial balance and Financial Reporter use them to slice the ledger by chosen dimensions. Pre-build the sets you'll need before close to avoid scramble.</p>
+              <h4>Lean COA philosophy</h4>
+              <p>The modern approach: small COA (a few hundred main accounts), let dimensions carry detail. Old-school approach of department-encoded account numbers (5,000+ accounts) breaks reporting and complicates account structures. Push back on customers who insist on the old model.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Journals and allocations</summary>
+            <div class="topic__body">
+              <h4>Journal types</h4>
+              <ul>
+                <li><strong>Daily journal</strong> (<code>General ledger &gt; Journal entries &gt; General journals</code>): manual journal entries.</li>
+                <li><strong>Periodic journal:</strong> templates for recurring entries (monthly accruals, allocations).</li>
+                <li><strong>Allocation journal:</strong> generated from ledger allocation rules.</li>
+                <li><strong>Foreign currency revaluation journal:</strong> auto-generated by the FX reval routine.</li>
+                <li><strong>Year-end closing journal:</strong> generated at fiscal year close to roll P&amp;L into retained earnings.</li>
+              </ul>
+              <h4>Journal name configuration</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Journal setup &gt; Journal names</code>. Each name controls journal type, default offset account, voucher series, approval workflow, posting layer, and whether reversal is enabled.</p>
+              <h4>Ledger allocation rules</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Allocations &gt; Ledger allocation rules</code>. Define source (which accounts/dimensions to pull) and destination (where to push) with method (fixed percentage, fixed weight, basis, formula). Run periodically to allocate overhead, shared services, and similar to operating departments.</p>
+              <h4>Posting layers</h4>
+              <p>Three posting layers: Current (operational, reportable), Operations (statistical), Tax (tax-book postings parallel to current). Used for multi-book reporting where tax depreciation differs from book depreciation, for example.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Close, revaluation, year-end</summary>
+            <div class="topic__body">
+              <h4>Period status</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Periods &gt; Ledger calendars</code>. Each period per module per legal entity has a status: Open (everyone can post), On hold (only listed users can post), Closed (no posting, can be reopened), Permanently closed (no posting, cannot be reopened). Use Permanently closed only after audit sign-off.</p>
+              <h4>FX revaluation</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Periodic tasks &gt; Foreign currency revaluation</code>. Revalues open balances in foreign currencies at period-end. AP and AR have their own routines for sub-ledger balances; GL revaluation handles GL accounts directly.</p>
+              <h4>Year-end close</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Periodic tasks &gt; Year-end close</code>. Closes P&amp;L accounts to retained earnings, generates opening transactions in the new year. Run only after subledgers are fully closed and trial balance is finalized.</p>
+              <h4>Financial period close workspace</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Period close &gt; Financial period close</code>. A workspace introduced to coordinate close tasks across modules and legal entities, with task templates, dependencies, owners, and status tracking. Replaces ad-hoc Excel-based close calendars.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Cross-cutting</span>Intercompany and consolidation</summary>
+            <div class="topic__body">
+              <h4>Intercompany accounting</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Posting setup &gt; Intercompany accounting</code>. Set up due-to / due-from accounts per legal entity pair. When journals span legal entities (intercompany journal entry, intercompany sales / purchase), F&amp;O auto-generates the IC offset entries to keep each entity balanced.</p>
+              <h4>Consolidation</h4>
+              <p>Two patterns:</p>
+              <ul>
+                <li><strong>Consolidation legal entity (online):</strong> a dedicated consolidation entity that pulls translated balances from each subsidiary in real-time via dimension mapping. Used when entities run on the same F&amp;O instance.</li>
+                <li><strong>Consolidation (import):</strong> import balances from external systems into the consolidation entity. Used in mixed environments.</li>
+              </ul>
+              <p>Eliminations live as journals in the consolidation entity, see Record to Report accounting examples.</p>
+              <h4>Currency translation for consolidation</h4>
+              <p>Translate subsidiary balances at appropriate rates per FX policy (current rate for assets/liabilities, historical or average for income statement, historical for equity). The translation difference posts to a Cumulative Translation Adjustment (CTA) account in equity.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Trial balance, Financial Reporter, Power BI</summary>
+            <div class="topic__body">
+              <h4>Trial balance</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Inquiries and reports &gt; Trial balance</code>. Per period, per dimension set. The most-used report in finance, ties to subledger aging totals.</p>
+              <h4>Voucher transactions</h4>
+              <p>Drill from trial balance to voucher to source document. The audit trail every auditor wants.</p>
+              <h4>Financial Reporter</h4>
+              <p>Embedded report designer for income statements, balance sheets, cash flow, custom statutory reports. Uses Row, Column, and Reporting Tree definitions. Less full-featured than the legacy Management Reporter standalone tool, but no separate deployment.</p>
+              <h4>Power BI and Finance Insights</h4>
+              <p>Embedded Power BI workspaces for ledger analytics. Microsoft also ships Finance Insights / agents (newer additions) that surface anomaly detection on ledger data, vendor invoice forecasting, and customer payment predictions, capabilities continuously expanded under the Copilot umbrella.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -322,13 +842,104 @@
 
       <!-- ============== Inventory Management ============== -->
       <article class="item-pane" data-item-pane="inventory-management">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Inventory Management</h2><p class="item-pane__lead">On-hand visibility, inventory journals, transfers, and counting.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Inventory Management</h2><p class="item-pane__lead">On-hand visibility, dimensions, journals, transfers, reservations, counting.</p></header>
+
+        <p>Inventory Management is the operational data layer for stocked items: where they are, how they're tracked, and the transactions that move them. The module pairs with Cost Management (which values the inventory) and Warehouse Management (advanced WMS workflows). Configuration choices, particularly storage and tracking dimensions, are nearly impossible to change after transactions exist. Spend time on dimension design.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Sites, warehouses, locations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, inventory hierarchy (site → warehouse → location), the difference between basic and advanced (WMS) warehouses, and the design choices that lock you in.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Dimensions</span>Storage &amp; tracking</summary><div class="topic__body topic__body--placeholder"><p>Add content here, storage dimensions (site, warehouse, location, license plate) vs. tracking dimensions (batch, serial), dimension groups, and the implications for costing.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Inventory journals</summary><div class="topic__body topic__body--placeholder"><p>Add content here, movement journal, profit/loss journal, transfer journal, BOM journal, counting journal, and when to use each.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reservations</span>Reservation behavior</summary><div class="topic__body topic__body--placeholder"><p>Add content here, manual vs. automatic reservations, reservation hierarchy, the impact on master planning, and unreserving on shipment.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>On-hand &amp; reconciliation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, on-hand views, inventory aging, inventory value report by warehouse / item / dimension, and reconciling inventory subledger to GL.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Sites, warehouses, locations</summary>
+            <div class="topic__body">
+              <h4>Inventory hierarchy</h4>
+              <p>Three levels: <strong>Site</strong> (a financial entity, drives accounting splits and intercompany) &gt; <strong>Warehouse</strong> (a physical or virtual stocking location) &gt; <strong>Location</strong> (specific bin / aisle / rack within a warehouse).</p>
+              <ul>
+                <li><strong>Site</strong> is mandatory; carries financial dimensions and ties to the legal entity.</li>
+                <li><strong>Warehouse</strong> can be basic (simple storage) or advanced WMS-enabled (full work / wave / mobile flow).</li>
+                <li><strong>Location</strong> is required for advanced WMS; optional but recommended for basic warehousing.</li>
+              </ul>
+              <h4>Basic vs. advanced WMS</h4>
+              <p>The single most consequential design decision in SCM. Basic warehousing handles simple put-away and picking with manual journals; advanced WMS adds work creation, wave templates, mobile execution, license plates, location directives. Once a warehouse is enabled for advanced WMS, transactions in that warehouse are locked into the WMS path.</p>
+              <h4>Inventory parameters</h4>
+              <p><strong>Where:</strong> <code>Inventory management &gt; Setup &gt; Inventory and warehouse management parameters</code>. Site activation, default journal names, reservation behavior, on-hand list defaults, FX revaluation defaults, batch / serial number control settings.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Dimensions</span>Storage &amp; tracking</summary>
+            <div class="topic__body">
+              <h4>Storage dimensions</h4>
+              <p>Site, Warehouse, Location, Inventory status, License plate. Define where inventory physically is. Storage dimension groups configure which dimensions are mandatory / coverage-relevant / financial-tracking-relevant per item.</p>
+              <h4>Tracking dimensions</h4>
+              <p>Batch number, Serial number. Define what specific unit of inventory you're tracking. Tracking dimension groups control whether batches / serials are required at sale, purchase, production.</p>
+              <h4>Inventory status</h4>
+              <p>A storage dimension introduced for advanced WMS that flags whether stock is Available, On hold (quality), Blocked (damaged), Transit. Drives whether the stock can be picked without further intervention.</p>
+              <h4>The dimension lock-in</h4>
+              <p>Storage and tracking dimension groups are set per item and effectively cannot be changed after transactions post. Adding a tracking dimension after go-live = data migration project. Decide for the product family during requirements, not per SKU.</p>
+              <h4>Coverage groups (planning)</h4>
+              <p>Inventory dimensions also drive Master Planning behavior, see Master Planning module.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Inventory journals</summary>
+            <div class="topic__body">
+              <p>F&amp;O ships several inventory journal types, each with a specific purpose:</p>
+              <ul>
+                <li><strong>Movement journal:</strong> manual stock adjustment with custom offset account. Use for ad-hoc stock changes that don't fit other journals.</li>
+                <li><strong>Inventory adjustment / Profit-Loss journal:</strong> stock changes that should hit a P&amp;L account directly (write-offs, found stock).</li>
+                <li><strong>Transfer journal:</strong> move stock between warehouses / locations / dimensions within the same legal entity. No GL impact unless dimensions changed.</li>
+                <li><strong>BOM journal:</strong> light manufacturing assembly without a production order. Components consumed, parent item produced.</li>
+                <li><strong>Counting journal:</strong> physical inventory count. Variances post to count adjustment account.</li>
+                <li><strong>Tag counting journal:</strong> ticket-based counting for warehouses that use physical count tags.</li>
+              </ul>
+              <h4>Transfer orders</h4>
+              <p><strong>Where:</strong> <code>Inventory management &gt; Outbound orders &gt; Transfer orders</code>. Inter-site or inter-warehouse transfers with formal Ship and Receive events. Optional Inventory in transit handling for cut-off control. Use Transfer orders when timing matters; Transfer journals when the move is instantaneous.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reservations</span>Reservation behavior</summary>
+            <div class="topic__body">
+              <h4>Manual vs. automatic</h4>
+              <p>Manual: user explicitly reserves inventory for a sales order line. Automatic: F&amp;O reserves on order entry per the customer / item / order policy. Auto-reservation feels safer but locks stock that other orders may need; tune carefully.</p>
+              <h4>Reservation hierarchy</h4>
+              <p>Defines which dimensions are reserved at what time. Default hierarchy: Site / Warehouse / Inventory status, then Location at picking, then Batch / Serial at issue. Custom hierarchies are possible but rarely needed.</p>
+              <h4>Marking</h4>
+              <p>Stronger than reservation: a hard link between a sales order line and a specific inventory transaction (typically used to maintain cost flow integrity, marking a sale to a specific PO receipt for FIFO accuracy).</p>
+              <h4>Master planning impact</h4>
+              <p>Reservations consume planned supply, so when you reserve 100 units for a customer, MRP doesn't propose new supply for that demand. Over-reservation can cause planning to miss real shortages.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Counting and reconciliation</summary>
+            <div class="topic__body">
+              <h4>Counting plans</h4>
+              <p><strong>Where:</strong> <code>Inventory management &gt; Setup &gt; Inventory &gt; Counting</code>. Schedule counts by ABC class, by frequency, by exception (every time stock hits zero). Mature warehouses count perpetually rather than once a year.</p>
+              <h4>Counting journal flow</h4>
+              <p>Generate counting journal &gt; print count tickets &gt; physical count &gt; enter counted quantities &gt; review variances &gt; post adjustments. Variance accounts split between shrinkage, scrap, mis-count if reason codes are configured.</p>
+              <h4>Inventory-to-GL reconciliation</h4>
+              <p>Inventory valuation report (per item, per warehouse, per dimension) must tie to the inventory control accounts in the GL. Mismatch means manual journals hit the inventory account or a misposted transaction. Reconcile every period close.</p>
+              <h4>Inventory closing</h4>
+              <p>For costing methods that require it (FIFO, weighted average), Cost Management's inventory close finalizes unit cost for the period and adjusts COGS / inventory value for any open transactions. See Cost Management module.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>On-hand &amp; valuation</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>On-hand list:</strong> current stock by item, warehouse, location, batch, serial. The most-used inventory inquiry.</li>
+                <li><strong>Inventory aging:</strong> stock by age bucket; identifies slow-moving / dead stock candidates.</li>
+                <li><strong>Inventory value report:</strong> stock at cost per item / warehouse / dimension. Reconciles to GL.</li>
+                <li><strong>Inventory transactions:</strong> all transactions for an item; the audit trail.</li>
+                <li><strong>Cycle count statistics:</strong> count accuracy by warehouse / period.</li>
+                <li><strong>Power BI:</strong> for executive inventory dashboards (turns, days of supply, ABC mix).</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -382,13 +993,89 @@
 
       <!-- ============== Procurement & Sourcing ============== -->
       <article class="item-pane" data-item-pane="procurement-sourcing">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Procurement &amp; Sourcing</h2><p class="item-pane__lead">Purchase requisitions, RFQs, purchase orders, and the procurement workflow.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Procurement &amp; Sourcing</h2><p class="item-pane__lead">Procurement strategy, requisitions, RFQs, agreements, purchase orders, receipts.</p></header>
+
+        <p>Procurement and Sourcing manages every step of a purchase from need identification through receipt. The module sits operationally upstream of Accounts Payable: AP handles the financial side once a vendor invoice arrives, P&amp;S handles everything before. Configuration choices, especially the requisition-to-PO model, signing limits, and category structure, drive how much control and friction exists in the buying process.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Procurement parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, procurement &amp; sourcing parameters, procurement categories, purchasing policies, and the activation policy story.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Vendor onboarding &amp; catalogs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor onboarding workflow, procurement category hierarchy, vendor catalogs (external + internal), and procurement category–based vendors.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Requisitions, RFQ, PO</summary><div class="topic__body topic__body--placeholder"><p>Add content here, purchase requisition workflow, RFQ to award, purchase agreement, purchase order types (standard, blanket, planned), PO change management, and three-way match.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Receipt</span>Product receipt</summary><div class="topic__body topic__body--placeholder"><p>Add content here, product receipt vs. PO confirmation, the accounting hit at receipt, and the link to landed cost / inventory cost.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Spend analysis</summary><div class="topic__body topic__body--placeholder"><p>Add content here, purchase spend by category / vendor, open PO commitments, and the procurement KPIs.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters, categories, policies</summary>
+            <div class="topic__body">
+              <h4>Procurement parameters</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Setup &gt; Procurement and sourcing parameters</code>. Drives PO defaults, change management activation, three-way match defaults, requisition / RFQ behavior, and number sequences.</p>
+              <h4>Procurement category hierarchy</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Catalogs &gt; Procurement category hierarchy</code>. Multi-level taxonomy for what's purchased (IT &gt; Hardware &gt; Laptops; Office &gt; Supplies &gt; Paper). Categories drive default account, allowed vendors, signing limits, and reporting groupings. The single most important master-data design decision in the module.</p>
+              <h4>Purchasing policies</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Setup &gt; Policies &gt; Purchasing policies</code>. Per organization unit, define the allowed catalog model (open catalog, restricted to approved vendors), category access, requisition vs. PO requirements, and PO change management activation. Powerful and configurable, but easy to over-engineer.</p>
+              <h4>Activation policies</h4>
+              <p>Determine which policies apply to whom: per legal entity, per department, per operating unit. Allows mixed models (e.g., strict requisition policy in HQ, looser in field offices).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Vendor catalogs and procurement</summary>
+            <div class="topic__body">
+              <h4>Vendor categorization</h4>
+              <p>Vendors are linked to procurement categories via the Vendor &gt; Procurement categories tab. Determines which vendors can be selected when a requisition / PO is in a given category, prevents accidental sourcing from unapproved vendors.</p>
+              <h4>Internal catalogs</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Catalogs &gt; Procurement catalogs</code>. Curated list of items / categories an internal user can request via Self-service requisitions. Reduces shadow purchasing.</p>
+              <h4>External catalogs (punch-out)</h4>
+              <p>Punch-out catalogs send the requester to a vendor's website (Office Depot, Grainger, Amazon Business) to shop, then return the cart back into a F&amp;O requisition. Standard cXML / OCI integration; requires per-vendor connector setup.</p>
+              <h4>Vendor onboarding via Vendor Collaboration</h4>
+              <p>Self-service vendor sign-up and profile maintenance, see Vendor Collaboration module.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Requisitions, RFQ, agreements, PO</summary>
+            <div class="topic__body">
+              <h4>Purchase requisitions</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Purchase requisitions &gt; All purchase requisitions</code>. The internal request for goods / services. Workflow approval based on amount, category, organization. On approval, automatically converted to one of: PO, RFQ, consolidated PO line on existing order.</p>
+              <h4>Request for Quotation (RFQ)</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Purchasing &gt; Requests for quotation &gt; All requests for quotation</code>. Send the same RFQ to multiple vendors, collect bids, score, and award. Award generates a PO automatically.</p>
+              <h4>Purchase agreements</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Purchase agreements</code>. Pre-negotiated term + price + quantity commitment with a vendor over a period. Releases (POs) consume the agreement. Three commitment types: Product quantity commitment, Product value commitment, Product category commitment.</p>
+              <h4>Purchase order types</h4>
+              <ul>
+                <li><strong>Standard PO:</strong> single-event order.</li>
+                <li><strong>Blanket / agreement-driven PO:</strong> against a purchase agreement.</li>
+                <li><strong>Planned PO:</strong> from Master planning, becomes a real PO on firming.</li>
+                <li><strong>Returned PO:</strong> for return-to-vendor flow.</li>
+                <li><strong>Subscription PO:</strong> recurring delivery, used in subscription scenarios.</li>
+              </ul>
+              <h4>PO change management</h4>
+              <p>When activated, every change to an approved PO triggers re-approval workflow. Audits price increases, quantity changes, vendor swaps. Required in regulated industries; optional elsewhere.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Receipt</span>Product receipt and matching</summary>
+            <div class="topic__body">
+              <h4>PO confirmation</h4>
+              <p>Vendor confirms acceptance of the order; PO status moves to Confirmed. Triggers vendor commitment on the GL if encumbrance is enabled.</p>
+              <h4>Product receipt</h4>
+              <p><strong>Where:</strong> <code>Receiving</code> functions on the PO, or <code>Inventory management &gt; Inbound orders &gt; Receive</code> for warehouse-controlled flows. Posts the inventory receipt and the GRNI / purchase accrual liability. Replaces the legacy "Packing slip" terminology in current versions.</p>
+              <h4>Receipt registration</h4>
+              <p>Lighter-touch receipt that records arrival without formally posting; useful for inspection-required items. Posting happens after inspection passes.</p>
+              <h4>Three-way match</h4>
+              <p>At AP invoice posting, F&amp;O compares: PO line price + receipt quantity + invoice values. Tolerances configured per item / vendor / matching policy. Mismatches park the invoice for review. The control that catches both vendor errors and internal posting errors.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Spend analysis and procurement KPIs</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Spend analysis workspace:</strong> spend by category, vendor, period; PO commitments vs. actual.</li>
+                <li><strong>Open PO commitments:</strong> backlog of unbilled receipts and unfulfilled PO lines.</li>
+                <li><strong>Vendor performance:</strong> on-time delivery, in-full delivery, lead time variance.</li>
+                <li><strong>Three-way match exception report:</strong> matching exceptions by aging.</li>
+                <li><strong>Power BI:</strong> for executive procurement dashboards (top vendors, categories, savings).</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -419,14 +1106,121 @@
 
       <!-- ============== Project Management & Accounting ============== -->
       <article class="item-pane" data-item-pane="project-mgmt-accounting">
-        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Project Management &amp; Accounting</h2><p class="item-pane__lead">Project execution and the accounting for hours, expenses, items, and revenue recognition.</p></header>
+        <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Project Management &amp; Accounting</h2><p class="item-pane__lead">Project lifecycle: structure, transactions, billing, revenue recognition, closing.</p></header>
+
+        <p>Project Management and Accounting (PMA) handles two distinct worlds: <strong>internal projects</strong> (capital projects, R&amp;D, internal initiatives, investment, cost-only) and <strong>external projects</strong> (customer-funded delivery, T&amp;M, fixed price). Accounting differs significantly between them. For services firms, PMA pairs with <strong>Dynamics 365 Project Operations</strong> (Dataverse-based) which adds the front-of-house opportunity-to-resource-plan flow on top of PMA's back-end accounting.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Project types &amp; categories</summary><div class="topic__body topic__body--placeholder"><p>Add content here, project types (time, time &amp; material, fixed price, internal, investment, cost), shared categories, project categories, and the posting setup that ties them to the GL.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Project structure</summary><div class="topic__body topic__body--placeholder"><p>Add content here, project group, project, sub-project, WBS, project budgets and forecasts, and the line property (chargeable, non-chargeable, capitalized, etc.).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Hours, expenses, items, fees</summary><div class="topic__body topic__body--placeholder"><p>Add content here, the five transaction types, hour journal vs. timesheet, expense from Expense Management, item from inventory / PO, fee transaction, and on-account.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Revenue</span>Recognition methods</summary><div class="topic__body topic__body--placeholder"><p>Add content here, revenue recognition for fixed-price (POC, completed contract), revenue recognition for time &amp; material, ASC 606 / IFRS 15 considerations, and estimate processing.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Billing</span>Invoice proposals &amp; rules</summary><div class="topic__body topic__body--placeholder"><p>Add content here, invoice proposal generation, billing rules (chargeable, milestone), customer retention, and the on-account scenario.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Project closing</summary><div class="topic__body topic__body--placeholder"><p>Add content here, eliminate WIP, project end date, and the close checklist.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Project types, categories, posting</summary>
+            <div class="topic__body">
+              <h4>Project types</h4>
+              <p>Six built-in types, each with distinct accounting:</p>
+              <ul>
+                <li><strong>Time:</strong> internal time-tracking only, no billing or revenue.</li>
+                <li><strong>Time and material (T&amp;M):</strong> external, billed at cost / rate; revenue recognized as costs are incurred.</li>
+                <li><strong>Fixed price:</strong> external, billed per milestones or invoice schedule; revenue recognized via POC (cost-to-cost) or completed contract.</li>
+                <li><strong>Investment:</strong> internal capital project; cost accumulates as CIP, capitalized to FA on placed-in-service.</li>
+                <li><strong>Cost project:</strong> internal cost capture, P&amp;L expense with no balance-sheet implication.</li>
+                <li><strong>Internal:</strong> non-billable internal work tracking.</li>
+              </ul>
+              <h4>Project groups</h4>
+              <p><strong>Where:</strong> <code>Project management and accounting &gt; Setup &gt; Posting &gt; Project groups</code>. Drives default ledger posting (which accounts the project transactions hit), revenue recognition method, line property defaults, and accruals behavior.</p>
+              <h4>Project categories and shared categories</h4>
+              <p>Two-level structure: <strong>Shared categories</strong> are cross-company; <strong>Project categories</strong> are per-company refinements. Each project transaction (hour / expense / item / fee) is classified by category, which drives the GL account hit and the reporting roll-up.</p>
+              <h4>Posting setup</h4>
+              <p>The most underestimated configuration in PMA. Project ledger posting (under Project groups) ties transaction types and categories to specific GL accounts: cost accounts, WIP cost, accrued revenue, billed revenue, deferred revenue. Get this wrong and project margins are reported wrong.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Project structure (WBS, budgets, forecasts)</summary>
+            <div class="topic__body">
+              <h4>Project hierarchy</h4>
+              <p>Project &gt; Sub-project (one level deep, useful for splitting major phases) &gt; Activities (the WBS structure, multi-level). The WBS is where work is planned and tracked; activities can have hours, expenses, items consumed against them.</p>
+              <h4>Project budgets vs. forecasts</h4>
+              <ul>
+                <li><strong>Project budget:</strong> top-down cost / revenue plan for the project, with workflow approval. Used for budget vs. actual comparison.</li>
+                <li><strong>Project forecast:</strong> bottom-up estimate of remaining work, more granular and updateable. Drives revenue recognition on POC projects.</li>
+              </ul>
+              <p>Both are important; budget for executive reporting, forecast for revenue recognition accuracy.</p>
+              <h4>Line property</h4>
+              <p>Per category / project, drives whether costs are chargeable (billable to customer), non-chargeable (absorbed), or capitalized (CIP) by default. Can be overridden per transaction.</p>
+              <h4>Project contracts (external projects)</h4>
+              <p>For external projects, a Project contract holds customer info, billing terms, retention percentage, hour rates / fee schedule. Multiple projects can share a contract for batch billing.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Hours, expenses, items, fees, on-account</summary>
+            <div class="topic__body">
+              <h4>Hour transactions</h4>
+              <p>Two paths: <strong>Hour journal</strong> (back-office entry) or <strong>Timesheet</strong> (worker self-service entry, with manager approval workflow). Approved timesheets create hour transactions on the project. F&amp;O timesheet, Project Operations time entry, or third-party (Replicon, Tempo) all flow back to PMA hour transactions ultimately.</p>
+              <h4>Expense transactions</h4>
+              <p>From Expense Management with project distribution. Expense report approved &gt; posts to AP &gt; project transaction created with the matched expense category.</p>
+              <h4>Item transactions</h4>
+              <p>Materials consumed on the project: from inventory (Item journal &gt; Project), from a PO directly to project (PO line with project), or from an inventory transfer. Posts to project material cost.</p>
+              <h4>Fee transactions</h4>
+              <p>Non-cost revenue events for fixed-price projects: milestone fee at delivery, retainer fee monthly. Generates invoice without underlying time/expense.</p>
+              <h4>On-account transactions</h4>
+              <p>Customer advance against future work: invoice issued upfront, sits as deferred revenue, consumed against subsequent fee / hour transactions.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Revenue</span>Recognition methods</summary>
+            <div class="topic__body">
+              <h4>T&amp;M revenue</h4>
+              <p>Recognized as costs are incurred (cost-based). The hour / expense / item transaction posts the cost and accrues revenue at the billable rate. Invoice proposal turns the accrued revenue into billed revenue.</p>
+              <h4>Fixed-price revenue methods</h4>
+              <ul>
+                <li><strong>Percentage of completion (POC, cost-to-cost):</strong> revenue recognized as actual cost / forecast cost ratio. Most common for long-running projects.</li>
+                <li><strong>Completed contract:</strong> all revenue recognized at project completion. Used for short or risky projects.</li>
+                <li><strong>Sales value:</strong> recognize revenue based on completed milestones rather than cost ratio.</li>
+                <li><strong>No WIP:</strong> simple recognition without WIP accruals.</li>
+              </ul>
+              <h4>Estimate process</h4>
+              <p><strong>Where:</strong> <code>Project management and accounting &gt; Periodic &gt; Estimates &gt; Estimate</code>. Periodic process that calculates POC, books WIP / accrued revenue journals, reverses prior estimates. Run monthly (or per close cadence). The accuracy of revenue recognition depends on the project forecast being current; train PMs to update the forecast before estimate runs.</p>
+              <h4>ASC 606 / IFRS 15 considerations</h4>
+              <p>Both standards converge on the 5-step revenue model. F&amp;O's flexibility (multiple revenue methods, contract structures) supports compliance, but the policy decisions (when does control transfer, how are performance obligations identified) are accounting-policy decisions, not configuration choices.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Billing</span>Invoice proposals, retention</summary>
+            <div class="topic__body">
+              <h4>Invoice proposal</h4>
+              <p><strong>Where:</strong> on a project contract or project, <code>Manage &gt; Invoice proposal &gt; Create</code>. Generates draft invoice from billable transactions (hours, expenses, items, fees, on-account) since the last invoice. Review, adjust, post.</p>
+              <h4>Billing rules</h4>
+              <p><strong>Where:</strong> on the project contract. Configurable rules for what to bill: chargeable hours, fees per milestone, progress billing for fixed-price, time-and-material billing per period.</p>
+              <h4>Customer retention</h4>
+              <p>For construction or long-running projects with retention clauses, configure retention percentage per project / contract. F&amp;O withholds the percentage from each invoice and releases it at project completion.</p>
+              <h4>Multi-currency project billing</h4>
+              <p>Project transactions can be in one currency, customer billing in another, with FX revaluation on retained / open project balances.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Project closing</summary>
+            <div class="topic__body">
+              <h4>Eliminate WIP</h4>
+              <p>For Investment projects ready for capitalization: the Eliminate routine moves CIP to FA cost. Required step before the project can be closed.</p>
+              <h4>Set project end date</h4>
+              <p>Once all work is complete and final billing posted, set the project end date to lock further posting. Critical for revenue recognition on completed contract projects.</p>
+              <h4>Project close checklist</h4>
+              <ul>
+                <li>All hour / expense / item transactions posted.</li>
+                <li>Final invoice posted.</li>
+                <li>Estimate run for the final period; WIP balance zero (or moved to capital, deferred, etc. per project type).</li>
+                <li>Retention released if applicable.</li>
+                <li>Project status moved to Finished, then Closed.</li>
+              </ul>
+              <h4>Project Operations integration</h4>
+              <p>For services firms using Project Operations on top of PMA: opportunity, contract, project plan, resource booking, time entry all happen in the Dataverse-based front-end; financial transactions (estimate, invoice, revenue recognition) flow into F&amp;O PMA via dual-write. Ensure the integration is healthy at each close, drift between systems is the most common project-financials reconciliation issue.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -529,12 +1323,79 @@
       <!-- ============== Vendor Collaboration ============== -->
       <article class="item-pane" data-item-pane="vendor-collaboration">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Vendor Collaboration</h2><p class="item-pane__lead">External-facing portal for vendors to view and respond to POs, RFQs, and invoices.</p></header>
+
+        <p>Vendor Collaboration is the public-facing portal where external vendors interact with your F&amp;O instance directly. It supports vendor onboarding (self-service registration), PO confirmation, RFQ response, invoice submission, and consignment / inventory visibility, all without needing a CRM-style intermediary. Authentication is via Azure AD B2B, vendors sign in with their own corporate credentials.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Enabling collaboration</summary><div class="topic__body topic__body--placeholder"><p>Add content here, enabling vendor collaboration on a vendor record, parameters, and B2B activation steps.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Users</span>External users &amp; security</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor admin, vendor user roles (PO, invoice, profile), and the security boundary with the rest of F&amp;O.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>PO confirmation &amp; invoice</summary><div class="topic__body topic__body--placeholder"><p>Add content here, PO confirmation flow from the vendor side, RFQ response, and invoice submission.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Catalogs &amp; profile</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor profile self-maintenance, catalog updates, and the approval flow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Adoption</summary><div class="topic__body topic__body--placeholder"><p>Add content here, vendor adoption strategy, communicating the change, and the realistic uptake curve.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Enabling collaboration</summary>
+            <div class="topic__body">
+              <h4>Activate at the vendor level</h4>
+              <p><strong>Where:</strong> on the vendor record, <code>Vendor collaboration &gt; Configuration</code>. Set the Vendor collaboration activation field per vendor: not active (no portal access), active for invoice processing, active for procurement, active for the full set.</p>
+              <h4>Procurement parameters</h4>
+              <p>Under <code>Procurement and sourcing &gt; Setup &gt; Procurement and sourcing parameters &gt; Vendor collaboration</code>, configure approval workflow for new vendor requests, defaults for prospective vendor records, and the legal entity scope.</p>
+              <h4>Azure AD B2B</h4>
+              <p>External vendor users authenticate via Azure AD B2B (their own organization's identity, invited as a guest in your tenant). Setup follows the standard B2B invitation flow; the user is then assigned vendor security roles in F&amp;O.</p>
+              <h4>Vendor security roles</h4>
+              <ul>
+                <li><strong>Vendor admin:</strong> manages other vendor users, vendor profile, banks.</li>
+                <li><strong>Vendor (procurement):</strong> sees POs, confirms / rejects, responds to RFQs.</li>
+                <li><strong>Vendor (accounts payable):</strong> submits invoices, views payment status.</li>
+                <li>Custom vendor roles can extend or restrict per company policy.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Onboarding</span>Prospective vendor self-registration</summary>
+            <div class="topic__body">
+              <p>The full onboarding flow:</p>
+              <ol>
+                <li>Prospective vendor visits the registration URL and submits company details, certifications, banking info.</li>
+                <li>F&amp;O creates a Prospective vendor request and routes it through approval workflow (procurement &gt; legal &gt; finance).</li>
+                <li>On approval, a Vendor Account is auto-created with the configured group, posting profile, hold status.</li>
+                <li>The vendor receives portal access via Azure AD B2B; they can then update their own profile, bank accounts (with approval), and certifications going forward.</li>
+              </ol>
+              <p>The flow eliminates manual vendor-creation work for the procurement team and produces a clean audit trail of who approved each new vendor.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>POs, RFQs, invoices</summary>
+            <div class="topic__body">
+              <h4>Purchase order confirmation</h4>
+              <p>Vendor sees pending POs on their portal home page. They can confirm, partially confirm, or reject with reason. Confirmation triggers a PO confirmation event in F&amp;O; rejection routes back to the buyer.</p>
+              <h4>RFQ response</h4>
+              <p>Vendor receives RFQ invitation, enters bid pricing and lead times directly in the portal. Bids close at the deadline; F&amp;O's bidding workspace then handles award.</p>
+              <h4>Invoice submission</h4>
+              <p>Vendor uploads invoices directly (PDF + line data), referencing PO numbers. F&amp;O matches against the PO automatically; on success the invoice posts as a Pending vendor invoice for AP review.</p>
+              <h4>Consignment inventory visibility</h4>
+              <p>For consignment models, vendors can view stock-on-hand at the customer site, replenishment alerts, and consumption reports, eliminating phone calls and email exchanges.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Self-service</span>Profile and catalogs</summary>
+            <div class="topic__body">
+              <p>Vendors maintain their own contact info, addresses, tax registrations, certifications, insurance documents, and bank accounts (with approval workflow for bank changes). Catalog updates (new SKUs, price changes) are submitted through the portal and routed through procurement approval before going live in F&amp;O.</p>
+              <p>This shifts data-entry burden from the buying organization to the vendor, where data quality is best (the vendor knows their own info).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Adoption</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Soft launch with a pilot.</strong> Roll out to 10-20 friendly vendors first; iron out the registration / portal UX before mass invitation.</li>
+                <li><strong>Communicate clearly.</strong> Vendors will resist new platforms unless they see value (faster payment, real-time PO visibility). Make the value explicit.</li>
+                <li><strong>Adoption ramps slowly.</strong> Expect 30-50% adoption in year one; the laggards often respond only when payment-related communication is portal-only.</li>
+                <li><strong>Don't over-customize.</strong> The portal UI is configurable to a point; deep customizations break with future updates and burn maintenance budget.</li>
+                <li><strong>Beware bank-account-change fraud.</strong> Vendor portal makes bank changes easy, ensure the approval workflow on bank-account changes is rigorous (multi-person approval, callback verification).</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
