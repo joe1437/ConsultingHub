@@ -739,24 +739,219 @@
       <!-- ============== Credit & Collections ============== -->
       <article class="item-pane" data-item-pane="credit-collections">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Credit &amp; Collections</h2><p class="item-pane__lead">Credit limits, blocking rules, and the workflow of chasing overdue invoices.</p></header>
+
+        <p>Credit and Collections are two related but separable capabilities. <strong>Credit Management</strong> evaluates risk before the sale: should the customer's order be blocked because they're over their credit limit, on hold, or have a payment issue? <strong>Collections</strong> works after the sale: aging is overdue, who chases it, what's been said, and what gets written off. F&amp;O has a dedicated <strong>Credit management</strong> module (separate from Accounts Receivable since 2019) that improved on the previous AR-embedded approach.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Credit groups &amp; limits</summary><div class="topic__body topic__body--placeholder"><p>Add content here, credit groups, credit limit definition, credit limit type (none, balance, balance + open orders), and over-limit rules.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Workflow</span>Credit hold</summary><div class="topic__body topic__body--placeholder"><p>Add content here, credit hold rules, the credit management workspace, override approvals, and the exception flow when an order is blocked at picking.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Collections</span>Aging snapshots &amp; activities</summary><div class="topic__body topic__body--placeholder"><p>Add content here, aging snapshots, collections agents and customer pools, collection letters / dunning, and the integration with the customer master.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Write-offs &amp; NSF</summary><div class="topic__body topic__body--placeholder"><p>Add content here, write-off journal, NSF processing, and the link back to AR settlements.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Aging &amp; collection metrics</summary><div class="topic__body topic__body--placeholder"><p>Add content here, aging buckets, collection effectiveness index (CEI), DSO, and the collections KPI workspace.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Credit setup</span>Groups, limits &amp; rules</summary>
+            <div class="topic__body">
+              <h4>Credit management parameters</h4>
+              <p><strong>Where:</strong> <code>Credit management &gt; Setup &gt; Credit management parameters</code>. Default credit limit, currency, blocking rules at sales order / picking / packing slip / invoicing, escalation thresholds.</p>
+              <h4>Credit groups</h4>
+              <p>Group customers (by industry, region, risk class) for shared credit policy. Per-group default limits, terms, blocking rules.</p>
+              <h4>Credit limit type</h4>
+              <ul>
+                <li><strong>None:</strong> no check (used for prepay-only customers).</li>
+                <li><strong>Balance:</strong> check against open AR balance only.</li>
+                <li><strong>Balance + delivery + delivery note:</strong> include shipped-not-invoiced exposure.</li>
+                <li><strong>Balance + all:</strong> include open sales orders not yet shipped (fullest exposure view).</li>
+              </ul>
+              <h4>Risk score &amp; rating</h4>
+              <p>Customer risk score: configurable formula combining payment history, days-late metrics, external scores (e.g., D&amp;B import). Drives credit limit suggestions and rule weighting. Risk rating: discrete tier (A, B, C) overlaid on score.</p>
+              <h4>Blocking rules</h4>
+              <p>Per rule: applies-to (customer subset), trigger (over limit, expired credit, on hold), action (block, warn, escalate). Rules evaluated at sales-order events and produce credit blocks.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Workflow</span>Credit hold &amp; release</summary>
+            <div class="topic__body">
+              <h4>Credit management workspace</h4>
+              <p><strong>Where:</strong> <code>Credit management &gt; Workspaces &gt; Credit management</code>. Credit analysts see blocked orders, customers near limit, expired credit insurance, and risk-score changes. The daily cockpit for credit teams.</p>
+              <h4>Credit hold types</h4>
+              <ul>
+                <li><strong>System-driven:</strong> auto-applied when limit exceeded or rule triggers.</li>
+                <li><strong>Manual:</strong> credit team applies for due-diligence reasons.</li>
+                <li><strong>Customer-level:</strong> entire customer on hold (all orders).</li>
+                <li><strong>Order-level:</strong> specific order blocked, others flow.</li>
+              </ul>
+              <h4>Release workflow</h4>
+              <p>Configurable approval workflow for credit hold release. Typical: credit analyst proposes &gt; CFO / VP Sales approves &gt; release applied. Audit trail captures justification.</p>
+              <h4>Temporary limit increase</h4>
+              <p>Time-bound credit limit override (effective from / to dates). Used for one-time large orders without permanently raising the limit.</p>
+              <h4>Order block at picking</h4>
+              <p>Common scenario: order entered when customer was within limit, but by picking time another order or invoice pushed them over. Block fires at picking; warehouse gets a clean stop, credit team negotiates.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Collections setup</span>Pools, agents, activities</summary>
+            <div class="topic__body">
+              <h4>Collections parameters</h4>
+              <p><strong>Where:</strong> <code>Credit and collections &gt; Setup &gt; Collections parameters</code>. Currency rounding, default reason codes, automatic case creation rules, write-off thresholds.</p>
+              <h4>Collections agents</h4>
+              <p>Workers tagged as collections agents, each owning one or more <strong>customer pools</strong>. Pool definitions are query-based (customer group, industry, region, balance threshold). Assignment is many-to-many capable.</p>
+              <h4>Aging period definitions</h4>
+              <p>Bucket definitions (e.g., Current, 1-30, 31-60, 61-90, 91+). Multiple aging-period definitions allow management view, audit view, and customer-statement view.</p>
+              <h4>Activities</h4>
+              <p>Phone call, email, letter, customer-visit log entries against a customer or invoice. Each activity stamped with date, agent, outcome, follow-up. The audit trail of collection effort.</p>
+              <h4>Cases</h4>
+              <p>For complex disputes (price discrepancy, delivery short, billing argument), a case structure tracks the issue separately from the underlying invoice and ties to the resolution.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Aging snapshots &amp; dunning</summary>
+            <div class="topic__body">
+              <h4>Aging snapshots</h4>
+              <p>Periodic process: <code>Credit and collections &gt; Periodic &gt; Aging snapshot</code>. Captures point-in-time aging per customer per pool; agents work from the snapshot. Snapshots avoid the moving target of live aging.</p>
+              <h4>Collections list</h4>
+              <p>Worklist generated from snapshot; sorted by amount, age, customer. Agents work through, log activities, take actions (call, send letter, dispute, write off).</p>
+              <h4>Collection letters (dunning)</h4>
+              <p>Multi-stage letter sequence per terms-of-payment: courtesy reminder &gt; first letter &gt; final demand. Configurable text, format (e-mail or print). Triggered automatically based on age or manually per customer.</p>
+              <h4>Interest notes</h4>
+              <p>Charge interest on overdue invoices per terms / interest code. Posted as separate invoice or accrued. Some industries / regions auto-apply, others negotiate per customer.</p>
+              <h4>Customer payment proposals (when paying)</h4>
+              <p>The opposite end: when customer pays, payment-journal proposals match cash to invoices. Auto-matching uses remittance advice fields (invoice number on lockbox file).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Write-offs &amp; NSF</summary>
+            <div class="topic__body">
+              <h4>Write-off journal</h4>
+              <p><strong>Where:</strong> from the customer or invoice, <code>Collect &gt; Write off</code>. Posts a credit note clearing the invoice, with the offset to bad debt expense (or a reserve account). Configurable: full write-off, partial, with sales-tax recovery handling per region.</p>
+              <h4>NSF (returned check) processing</h4>
+              <p>Customer payment bounced. F&amp;O reverses the original payment posting, restores the invoice as open, optionally adds NSF fee. Triggers customer-status change (no further sales until resolved).</p>
+              <h4>Allowance / bad-debt reserve</h4>
+              <p>Periodic reserve calculation (% of receivables, or per aging bucket). Manual journal typically; some customers automate via DMF and external calculation.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Aging &amp; KPIs</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Customer aging report:</strong> standard aging by bucket, per customer / per pool, currency / functional.</li>
+                <li><strong>Days Sales Outstanding (DSO):</strong> AR balance / (revenue / period days). Trend tracking shows collection effectiveness.</li>
+                <li><strong>Collection Effectiveness Index (CEI):</strong> (beginning AR + credit sales - ending total AR) / (beginning AR + credit sales - ending current AR). Measures actual collection performance.</li>
+                <li><strong>Bad-debt expense % of revenue:</strong> the strategic-level KPI for credit policy effectiveness.</li>
+                <li><strong>Collections Workspace KPIs:</strong> per-agent effectiveness, calls per day, promise-to-pay rate.</li>
+              </ul>
+              <h4>Power BI / Finance Insights</h4>
+              <p>Built-in collections analytics with ML-based payment-prediction (when will this invoice pay) feeds prioritization and cash forecasting.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== Expense Management ============== -->
       <article class="item-pane" data-item-pane="expense-management">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Expense Management</h2><p class="item-pane__lead">Expense reports, travel requisitions, per diems, and the link to AP and projects.</p></header>
+
+        <p>Expense Management is the T&amp;E (travel and expense) workspace: workers create expense reports, attach receipts, route through approval, and on posting the expenses hit AP (vendor invoice for reimbursement) and optionally Projects (cost capture for billable / non-billable work). Microsoft launched a <strong>redesigned modern Expense experience</strong> with mobile-first capture and Copilot-assisted receipt OCR; older expense forms remain available but deprecate over time.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Categories &amp; policies</summary><div class="topic__body topic__body--placeholder"><p>Add content here, expense categories and shared categories, expense policies (warning vs. error), per diem rules, mileage rates, and policy by department/project.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Worker &amp; delegate setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here, workers as expense filers, delegates, position-based defaults, and the link to financial dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Travel requisition &amp; expense report</summary><div class="topic__body topic__body--placeholder"><p>Add content here, travel requisition, cash advance, expense report (mobile + web), credit card import (VCF 4.0), itemization, and receipts.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Approval</span>Workflow &amp; posting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, approval workflow design, line-level vs. header approval, posting to AP / project, and the credit card transaction matching workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Project &amp; AP</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when expenses post to projects vs. AP only, intercompany expense, and the relationship with PO-funded T&amp;E.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters &amp; categories</summary>
+            <div class="topic__body">
+              <h4>Expense parameters</h4>
+              <p><strong>Where:</strong> <code>Expense management &gt; Setup &gt; General &gt; Expense management parameters</code>. Number sequences, default vendor (used as the AP vendor for the worker), receipt requirements (attach mandatory above $X), itemization rules, intercompany handling.</p>
+              <h4>Expense categories &amp; shared categories</h4>
+              <p>Same two-tier model as Projects. <strong>Shared categories</strong> are cross-company (Airfare, Hotel, Meals, Mileage); per-legal-entity <strong>expense categories</strong> map shared categories to local ledger accounts and tax codes. Sub-categories (Domestic Hotel vs. International Hotel) refine reporting.</p>
+              <h4>Expense policies</h4>
+              <p><strong>Where:</strong> <code>Expense management &gt; Setup &gt; Policies &gt; Expense report</code>. Rules per category: limits ("Hotel above $300/night"), required fields, attendees required for meals, receipt attachment threshold. Policy violations can <strong>warn</strong> (worker may proceed with justification) or <strong>error</strong> (block submission).</p>
+              <h4>Per diem rules</h4>
+              <p>Per diem rates per location, with reductions for partial days, meals provided, lodging not used. Rates per region (US GSA rates can be loaded; international per CONUS / OCONUS or company policy).</p>
+              <h4>Mileage rates</h4>
+              <p>Per region / vehicle type. Tiered rates (first 5,000 miles at $0.65/mi, beyond at $0.55/mi). Tax rules per region (US IRS standard mileage vs. company rate).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Worker &amp; delegates</summary>
+            <div class="topic__body">
+              <h4>Workers as expense filers</h4>
+              <p>Each worker linked to an AP vendor (the reimbursement target). Vendor is per legal entity; intercompany expenses use the vendor in the worker's home company.</p>
+              <h4>Delegates</h4>
+              <p>Worker can delegate report creation to an admin / EA. Effective-dated; delegate sees the worker's expense list. Common pattern for executives.</p>
+              <h4>Default financial dimensions</h4>
+              <p>Position drives default cost center / department; expense report inherits but can be overridden per line. Project allocation is at line level.</p>
+              <h4>Approval routing</h4>
+              <p>Configured via workflow (Expense report workflow). Common: line manager &gt; project manager (if project) &gt; finance review (if over threshold). Position hierarchy publishing required for accurate routing.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Travel requisition &amp; expense report</summary>
+            <div class="topic__body">
+              <h4>Travel requisition (optional)</h4>
+              <p>Pre-trip approval workflow with estimated costs. Once approved, drives downstream cash advance issuance and links to the eventual expense report. Mandatory in some governance models; many companies skip it for routine domestic travel.</p>
+              <h4>Cash advance</h4>
+              <p>Pre-trip cash issued (per diem, expected expenses). Posts as worker advance (debit) / cash (credit). Reconciled when expense report submitted; under-spend refunded, over-spend reimbursed via the report.</p>
+              <h4>Expense report creation</h4>
+              <p>Worker creates report (web or mobile), adds line per transaction. Each line: category, date, amount, currency, paid-by (personal funds vs. corp card), project, dimensions, attachment.</p>
+              <h4>Receipt capture</h4>
+              <p>Mobile app: photo of receipt, OCR extracts merchant / amount / date / category; Copilot capability proposes the expense line. Web: drag-drop attach. Multiple receipts per line for itemization (hotel folio split across nights / categories).</p>
+              <h4>Itemization</h4>
+              <p>Hotel folio of $1,200 split into Lodging $900, Meals $200, Internet $80, Tax $20. Each itemized line can have its own category / project / tax treatment.</p>
+              <h4>Credit card imports</h4>
+              <p>Corporate card transactions (VCF 4.0 or equivalent file) imported daily. Workers attach card transactions to expense lines (vs. typing manually). Reduces fraud risk and accelerates reporting. Unmatched card transactions trigger reminders.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Approval</span>Workflow &amp; posting</summary>
+            <div class="topic__body">
+              <h4>Workflow design</h4>
+              <p>Line-level approval (project manager approves only project lines) vs. header-level (one approver for the whole report). Combine via parallel branches in workflow.</p>
+              <h4>Audit policies</h4>
+              <p><strong>Where:</strong> <code>Expense management &gt; Setup &gt; Policies &gt; Audit</code>. Sample-based audit rules: random sampling, threshold-based, category-based. Adds an audit step in workflow for sampled reports.</p>
+              <h4>Posting</h4>
+              <p>Approved &amp; posted reports generate:</p>
+              <ul>
+                <li>Vendor invoice (the AP-side liability for the worker reimbursement).</li>
+                <li>Project transactions (if any project lines).</li>
+                <li>Tax recovery (recoverable VAT / GST per category and policy).</li>
+                <li>Card clearing entries (if corp-card paid; offsets the card statement liability).</li>
+              </ul>
+              <h4>Reimbursement</h4>
+              <p>The vendor invoice becomes part of the next AP payment run; worker is paid via direct deposit or check from the AP module.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Integration</span>Project, AP, intercompany</summary>
+            <div class="topic__body">
+              <h4>Project posting</h4>
+              <p>Lines tagged to a project route to PMA on posting; cost posts at category cost rate, billable lines accrue revenue. Most common in services firms.</p>
+              <h4>Intercompany expense</h4>
+              <p>Worker in Company A incurs expense for project in Company B. F&amp;O posts the expense in Company A and a corresponding intercompany journal in Company B (cost in B, IC payable to A). Requires intercompany configuration.</p>
+              <h4>PO-funded T&amp;E</h4>
+              <p>For prepaid travel (corporate-booked airfare, hotel charged to ghost card), the cost goes through AP as a vendor invoice, not Expense. Avoid double-counting; train workers on the boundary.</p>
+              <h4>Tax recovery</h4>
+              <p>Recoverable VAT / GST extracted at posting based on category tax setup. Especially relevant for EU travel.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Modern</span>Mobile, OCR &amp; Copilot</summary>
+            <div class="topic__body">
+              <h4>Modernized Expense experience</h4>
+              <p>Microsoft introduced a redesigned Expense reports page (modernized list) and a mobile capture-first flow. Compatible with most existing setups; enable via Feature management.</p>
+              <h4>OCR receipt capture</h4>
+              <p>Photo &gt; AI extracts amount, merchant, date, suggests category. Worker confirms, attaches to expense line. Reduces manual entry significantly.</p>
+              <h4>Copilot in Expense (where available)</h4>
+              <p>Summary of pending reports, anomaly detection ("3 dinners in one day"), policy violation explanations, Q&amp;A on expense status. Rolling out in waves; check release notes.</p>
+              <h4>Travel partner integrations</h4>
+              <p>Concur Travel, Egencia, etc. integrate as data sources, populating expense reports from booked itineraries (no manual entry of the airfare leg).</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -988,12 +1183,101 @@
       <!-- ============== Human Resources ============== -->
       <article class="item-pane" data-item-pane="human-resources">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Human Resources</h2><p class="item-pane__lead">Workers, positions, jobs, leave, and the data backbone for payroll and project resourcing.</p></header>
+
+        <p>Microsoft has consolidated the HR story: <strong>Dynamics 365 Human Resources</strong> is now merged back into the F&amp;O app (the standalone Dataverse-only HR product was unified in 2022). For F&amp;O implementations, HR provides the worker / position / job structure that anchors Payroll, Expense, Project Resources, Workflow approvals, and signing-limit security. Even projects that don't use HR for full-blown HR processes will use it for the worker master.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters &amp; structure</summary><div class="topic__body topic__body--placeholder"><p>Add content here, HR parameters, departments, positions, jobs, and the relationship between job → position → worker.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Workers &amp; positions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, employee vs. contractor, hire process, position assignment with effective dates, reporting line, and worker financial dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Leave</span>Leave plans &amp; absence</summary><div class="topic__body topic__body--placeholder"><p>Add content here, leave plans, accrual rules, leave types, leave requests workflow, and the link to payroll.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Compensation</span>Plans &amp; cycles</summary><div class="topic__body topic__body--placeholder"><p>Add content here, compensation plans (fixed, variable), grids and reference points, and the compensation event workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Dataverse HR &amp; payroll</summary><div class="topic__body topic__body--placeholder"><p>Add content here, the F&amp;O HR vs. Dataverse HR (formerly Talent) story, and how worker data flows to Payroll, Project, and Expense.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters &amp; structure</summary>
+            <div class="topic__body">
+              <h4>HR parameters &amp; shared parameters</h4>
+              <p><strong>Where:</strong> <code>Human resources &gt; Setup &gt; Human resources parameters</code> (per legal entity) and <code>Shared parameters</code> (cross-company defaults). Shared parameters drive global worker number sequence and the worker / position relationships that span companies.</p>
+              <h4>Job, position, worker hierarchy</h4>
+              <ul>
+                <li><strong>Job:</strong> generic role definition (Senior Accountant, Warehouse Associate). Job-level skills, education, certificates.</li>
+                <li><strong>Position:</strong> a specific instance of a job at a department / location, with effective dates. The position holds the financial dimension default that tags transactions.</li>
+                <li><strong>Worker:</strong> the individual (employee or contractor). Workers are assigned to positions over time.</li>
+              </ul>
+              <h4>Departments &amp; operating units</h4>
+              <p>Departments are operating units (configured in Organization administration). Position &gt; Department links the position into the org hierarchy that drives reporting and approvals.</p>
+              <h4>Worker types</h4>
+              <p><strong>Employee</strong> (formal hire, eligible for payroll / benefits) vs. <strong>Contractor</strong> (limited workflow, typically no payroll). Cannot mix freely; transition employee &lt;&gt; contractor changes downstream behavior.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Workers &amp; positions</summary>
+            <div class="topic__body">
+              <h4>Hire process</h4>
+              <p><strong>Where:</strong> <code>Human resources &gt; Workers &gt; Hire</code>. Wizard captures personal info, address, contact, compensation, position assignment, default financial dimensions. Generates worker number and personnel number per legal entity.</p>
+              <h4>Position assignments</h4>
+              <p>Effective-dated. A worker can hold multiple positions (primary plus additional); a position can be held by one worker at a time (with effective-date succession). Reporting line follows the primary position.</p>
+              <h4>Worker financial dimensions</h4>
+              <p>Defaults flow: position dimensions &gt; worker dimensions &gt; transactions. Used for: payroll cost distribution, expense report defaulting, time entry posting. Set carefully; mid-year changes reroute costs.</p>
+              <h4>Personnel actions</h4>
+              <p>Optional workflow framework for hire / transfer / terminate / change-position events. Not required, but useful for HR-driven approval and audit trails.</p>
+              <h4>Termination</h4>
+              <p>Sets termination date, ends position assignment, optionally inactivates user. Termination is reversible (rehire) but should be intentional; many downstream impacts (workflow delegations, security).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Leave</span>Leave &amp; absence</summary>
+            <div class="topic__body">
+              <h4>Leave plans</h4>
+              <p><strong>Where:</strong> <code>Human resources &gt; Leave and absence &gt; Leave plans</code>. Define accrual rules (per period, fixed amount or formula), entitlement, carryover policy, leave year boundaries.</p>
+              <h4>Leave types</h4>
+              <p>Vacation, Sick, Personal, Bereavement, Jury duty, etc. Each tied to a leave plan; some unpaid and not accruing.</p>
+              <h4>Leave requests</h4>
+              <p>Worker self-service via Employee self-service workspace. Approval workflow to manager. Approved requests reduce balance and feed Payroll (if used) and time-tracking.</p>
+              <h4>Leave balance</h4>
+              <p>Real-time per worker per leave type, with accrued / used / available. Year-end carryover or forfeit per plan rules. Adjustments via journal for corrections.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Compensation</span>Plans, grids &amp; events</summary>
+            <div class="topic__body">
+              <h4>Compensation plans</h4>
+              <p>Two types: <strong>Fixed</strong> (base pay) and <strong>Variable</strong> (bonus, equity). Each tied to a structure (grid / step / band) defining ranges per level.</p>
+              <h4>Grids and reference points</h4>
+              <p>Grid defines pay ranges by level / region; reference point sets the "midpoint" used as the baseline for percent comparisons (compa-ratio, range penetration).</p>
+              <h4>Compensation events</h4>
+              <p>Mass cycle for annual increases, merit cycles, promotions. Manager allocates within budget; HR approves. Posts new comp records effective-dated. Required for any company doing structured comp planning.</p>
+              <h4>Eligibility rules</h4>
+              <p>Per plan: who's eligible (job level, department, country). Drives cycle inclusion and self-service visibility.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Self-service</span>Employee &amp; manager workspaces</summary>
+            <div class="topic__body">
+              <h4>Employee self-service</h4>
+              <p>Browser / Teams workspace: profile, time-off, expense, learning, performance, pay statements (if Payroll). Mobile-friendly.</p>
+              <h4>Manager self-service</h4>
+              <p>Team view: direct reports, approve requests (leave, expense, timesheet), team competencies, comp planning. The most-used HR workspace by line managers.</p>
+              <h4>Performance &amp; goals</h4>
+              <p>Optional module: goals, reviews, 1:1 templates. Lighter than dedicated talent products (Workday, SuccessFactors); often replaced by ISVs for sophisticated talent processes.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Integration</span>Downstream consumers</summary>
+            <div class="topic__body">
+              <h4>Payroll</h4>
+              <p>F&amp;O Payroll (US-only native) reads worker, position, compensation, earnings codes, tax setup directly. For other regions, HR data flows via integration to Ceridian Dayforce, ADP, Workday, or similar.</p>
+              <h4>Project resources</h4>
+              <p>Workers tagged as resources for Project Management. Skills, calendar, hourly cost rate flow into project planning and revenue calculation.</p>
+              <h4>Expense Management</h4>
+              <p>Worker linked to user; expense reports default to worker's default dimensions. Approval workflow uses position-based hierarchy.</p>
+              <h4>Workflow &amp; signing limits</h4>
+              <p>Position hierarchy (configured in Organization administration) drives approval routing and signing-limit checks across PR, PO, AP invoice, expense.</p>
+              <h4>Dual-write to Dataverse</h4>
+              <p>Worker entity syncs to Dataverse / Customer Engagement, allowing CE customer-service apps to recognize internal users / agents.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -1103,24 +1387,233 @@
       <!-- ============== Landed Cost ============== -->
       <article class="item-pane" data-item-pane="landed-cost">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Landed Cost</h2><p class="item-pane__lead">Tracking the true cost of imported goods, freight, duty, insurance, and overhead.</p></header>
+
+        <p>The Landed Cost module (a successor to the older Transportation-management-only approach) lets importers track every cost component that lands on a unit of inventory: ocean freight, customs duty, insurance, terminal handling, brokerage, drayage, internal overhead. The module organizes these around a <strong>voyage</strong> (a shipment with one or more containers carrying lines from one or more POs) and apportions costs to each PO line on landing. For companies that don't import, simpler <strong>miscellaneous charges</strong> on a PO often cover the same need with far less complexity.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Costing &amp; voyage parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, landed cost parameters, costing types (freight, insurance, duty, overhead), apportionment methods (weight, volume, quantity, value), and the GL accounts hit.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Voyages &amp; containers</summary><div class="topic__body topic__body--placeholder"><p>Add content here, voyage, journey templates, shipping containers, and the link to PO lines.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Cost apportionment</summary><div class="topic__body topic__body--placeholder"><p>Add content here, auto cost calculation, manual cost adjustments, customs entry, and the AP invoice matching workflow.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Landed cost &amp; variance</summary><div class="topic__body topic__body--placeholder"><p>Add content here, voyage cost report, landed cost variances, and the impact on inventory cost.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Landed cost vs. miscellaneous charges</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when full Landed Cost is justified vs. simply using miscellaneous charges on a PO.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters &amp; cost types</summary>
+            <div class="topic__body">
+              <h4>Landed cost parameters</h4>
+              <p><strong>Where:</strong> <code>Landed cost &gt; Setup &gt; Landed cost parameters</code>. Number sequences (voyage, container, journey), default journey template, posting accounts for accrued landed cost, default cost variance thresholds.</p>
+              <h4>Cost types</h4>
+              <p><strong>Where:</strong> <code>Landed cost &gt; Setup &gt; Costing setup &gt; Cost types</code>. Each cost component (Ocean freight, Customs duty, Insurance, Brokerage, etc.) is a cost type with:</p>
+              <ul>
+                <li><strong>Apportionment basis:</strong> Quantity, Weight, Volume, or Value (CIF basis is common for duty).</li>
+                <li><strong>Posting accounts:</strong> accrued landed cost (debit at receipt) and clearing (credit on AP invoice match).</li>
+                <li><strong>Vendor link:</strong> default vendor for that cost type (forwarder, customs broker, insurer).</li>
+              </ul>
+              <h4>Cost templates &amp; auto cost</h4>
+              <p>Templates predefine cost types and rates per route / origin / commodity. Auto cost rules add costs automatically when a PO line / container is added to a voyage. Reduces manual data entry significantly.</p>
+              <h4>Journey templates</h4>
+              <p>Define typical legs (origin port, ocean leg, destination port, drayage to DC) with default lead times and carriers. Used for planning ETD / ETA dates and accrual triggers.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Voyages &amp; containers</summary>
+            <div class="topic__body">
+              <h4>Voyage</h4>
+              <p>The shipment header. Holds journey, vessel name, ETD / ETA, status (Created &rarr; In transit &rarr; Arrived &rarr; Closed). Multiple POs and multiple containers can roll up to one voyage.</p>
+              <h4>Shipping containers</h4>
+              <p>Physical containers (TEU / FEU equivalents). PO lines are assigned to specific containers; auto cost can apportion container-level charges (drayage, terminal handling) to the lines inside.</p>
+              <h4>Folio / customs entry</h4>
+              <p>Folio is the customs / import declaration document number, captured on the voyage for audit / regulatory traceability.</p>
+              <h4>Voyage statuses</h4>
+              <p>Status transitions trigger different actions: <strong>In transit</strong> creates the in-transit inventory; <strong>Arrived</strong> reverses in-transit and posts to inventory at receiving warehouse.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Lifecycle &amp; cost apportionment</summary>
+            <div class="topic__body">
+              <h4>Standard voyage flow</h4>
+              <ol>
+                <li>PO created and confirmed with origin vendor; PO lines added to a voyage.</li>
+                <li>Voyage set to In transit; in-transit inventory increments at the destination warehouse.</li>
+                <li>Estimated landed costs (auto cost) accrue on the voyage.</li>
+                <li>Voyage Arrived; in-transit reversed, inventory received, accrued landed cost capitalized to inventory cost.</li>
+                <li>AP invoices for freight / duty / insurance arrive over weeks; matched to voyage cost lines.</li>
+                <li>Voyage closed when all costs invoiced and variances recognized.</li>
+              </ol>
+              <h4>Apportionment math</h4>
+              <p>Cost / Total apportionment basis &times; line apportionment basis. Example: $5,000 freight, total weight 10,000 kg, line A is 3,000 kg; line A absorbs $1,500 freight. Each cost type apportions independently per its configured basis.</p>
+              <h4>AP invoice matching</h4>
+              <p>Freight invoice from forwarder posted to landed-cost cost line, not directly to GL. F&amp;O matches invoice amount to accrued amount; difference posts to landed cost variance. Three-way match equivalent for landed costs.</p>
+              <h4>Customs entry &amp; duty</h4>
+              <p>Duty rates per HS code, per origin country (free trade agreements). F&amp;O can store the rates and apply to PO lines, or rates can be flat per shipment.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Accounting</span>GL impact &amp; variances</summary>
+            <div class="topic__body">
+              <h4>Receipt accounting</h4>
+              <p>At Arrived: inventory debited at PO cost <strong>plus</strong> apportioned estimated landed cost. Credits split between AP accrual (PO cost) and accrued landed cost (estimate).</p>
+              <h4>Invoice matching accounting</h4>
+              <p>Vendor invoice for freight: AP credit, accrued landed cost debit. Difference (actual vs. accrued) posts to <strong>landed cost variance</strong> account; configurable to also adjust inventory cost (rebalance) for material amounts.</p>
+              <h4>Cost variance close</h4>
+              <p>Voyage close finalizes variances and locks the voyage. Periodic variance review identifies vendors / lanes consistently mis-estimated and feeds back into cost templates.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Voyage costs &amp; KPIs</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Voyage cost report:</strong> all costs (estimated, accrued, actual) per voyage; the audit document.</li>
+                <li><strong>Landed cost variance:</strong> per cost type, per vendor, per route; identifies estimate accuracy.</li>
+                <li><strong>Item landed cost analysis:</strong> per-item average landed cost over time; drives sourcing decisions.</li>
+                <li><strong>Open voyages aging:</strong> voyages with arrived status but unmatched invoices; the AP/GL reconciliation tool.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>When to use Landed Cost</summary>
+            <div class="topic__body">
+              <h4>Justified when</h4>
+              <ul>
+                <li>Significant import volume; landed cost is &gt;5-10% of PO cost.</li>
+                <li>Multiple cost components per shipment (freight, duty, insurance, brokerage).</li>
+                <li>Cost components arrive on separate vendor invoices, days/weeks after the goods.</li>
+                <li>Need to cost-allocate at line level, not just lump on the PO.</li>
+              </ul>
+              <h4>Overkill when</h4>
+              <ul>
+                <li>Domestic-only purchasing; one freight charge per PO.</li>
+                <li>Vendor sells DDP (delivered duty paid); all cost is in PO price.</li>
+                <li>Use <strong>miscellaneous charges</strong> on the PO instead, posted to inventory cost via charge codes.</li>
+              </ul>
+              <h4>Pitfalls</h4>
+              <ul>
+                <li><strong>Voyages left open:</strong> AP team forgets to match against the voyage; AP entry hits a generic freight account, voyage stays in accrual.</li>
+                <li><strong>Cost templates not maintained:</strong> rates from year one still in place; estimates drift; variances grow.</li>
+                <li><strong>Apportionment basis mismatch:</strong> apportioning freight by quantity for items with very different sizes overstates cost on small items.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== Master Planning ============== -->
       <article class="item-pane" data-item-pane="master-planning">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Master Planning</h2><p class="item-pane__lead">MRP / planning runs that produce planned purchase, transfer, and production orders from demand.</p></header>
+
+        <p>Master Planning translates demand (sales orders, forecasts, transfers, production demand from BOMs) into supply (planned purchase orders, planned production orders, planned transfer orders, planned kanbans). Microsoft has shifted the architecture: <strong>Planning Optimization</strong> is the modern engine (runs as an Azure microservice outside the F&amp;O database, dramatically faster), and the legacy MRP engine is being retired. New implementations should standardize on Planning Optimization unless a feature gap blocks adoption.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Plans &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, master plan vs. forecast plan, dynamic plan, planning parameters per item / item group, and Planning Optimization vs. legacy MRP.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Coverage groups &amp; settings</summary><div class="topic__body topic__body--placeholder"><p>Add content here, coverage groups (period, requirement, min/max), time fences, action messages, and reorder points.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Run</span>Planning execution</summary><div class="topic__body topic__body--placeholder"><p>Add content here, running master planning, regeneration vs. net change, the planned order results, and firming.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Action messages</span>Pegging &amp; futures</summary><div class="topic__body topic__body--placeholder"><p>Add content here, pegging tree, futures messages, action messages, and how to triage them with planners.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Plan output &amp; KPIs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, planned order workspace, the supply scheduling story, and the Planning Optimization metrics.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Architecture</span>Planning Optimization vs. legacy MRP</summary>
+            <div class="topic__body">
+              <h4>Planning Optimization (current)</h4>
+              <p>Runs in a dedicated Azure service. Reads F&amp;O data, computes plans, writes planned orders back. Benefits: 10x+ performance, runs during business hours without locking, supports incremental planning, and the only engine receiving new investment.</p>
+              <h4>Legacy MRP (in-process, deprecating)</h4>
+              <p>Runs inside F&amp;O batch framework. Limited by SQL contention; typically scheduled overnight. Microsoft has set deprecation milestones; verify on the Master Planning fit-analysis tool which features your scenario uses.</p>
+              <h4>Fit analysis</h4>
+              <p><strong>Where:</strong> <code>Master planning &gt; Setup &gt; Planning Optimization &gt; Fit analysis</code>. Runs against your data and reports unsupported scenarios (some legacy features, e.g., advanced inventory close coordination, may not yet be in scope). Run early in design; use to plan migration.</p>
+              <h4>Demand forecasting</h4>
+              <p>Separate module for statistical forecasting (Azure ML based). Generates baseline demand forecasts that feed Master Planning as forecast demand. Optional but powerful for distribution / make-to-stock environments.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Plans &amp; parameters</summary>
+            <div class="topic__body">
+              <h4>Plan types</h4>
+              <ul>
+                <li><strong>Static plan:</strong> the operational plan, frozen from the last planning run; what shop floor and buyers see. Most companies have one static plan.</li>
+                <li><strong>Dynamic plan:</strong> what-if plan, can be regenerated continuously. Used for scenario testing without disturbing operations.</li>
+                <li><strong>Forecast plan:</strong> longer-horizon plan based on forecast demand only, drives material commitment and capacity reservation.</li>
+              </ul>
+              <h4>Master plan parameters</h4>
+              <p><strong>Where:</strong> <code>Master planning &gt; Setup &gt; Plans &gt; Master plans</code>. Defines: include forecast yes/no, include sales orders, include intercompany, planning horizon (days), action message horizon, futures horizon, freeze time fence per coverage group.</p>
+              <h4>Planning Optimization configuration</h4>
+              <p><strong>Where:</strong> <code>Master planning &gt; Setup &gt; Planning Optimization</code>. Connect F&amp;O to the Planning Optimization service via the Power Platform admin connection. After setup, plans run against the service rather than local batch.</p>
+              <h4>Master planning parameters</h4>
+              <p><strong>Where:</strong> <code>Master planning &gt; Setup &gt; Master planning parameters</code>. Number sequences, default plans for sales / purchase orders, BOM version requirements, available-to-promise (ATP) settings.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Coverage groups &amp; item settings</summary>
+            <div class="topic__body">
+              <h4>Coverage groups</h4>
+              <p><strong>Where:</strong> <code>Master planning &gt; Setup &gt; Coverage &gt; Coverage groups</code>. The most important master-planning configuration. Per-item or per-item-group, defines:</p>
+              <ul>
+                <li><strong>Coverage code:</strong> Period (lot per period), Requirement (lot per requirement), Min/Max (reorder point with target), Manual (planner controls).</li>
+                <li><strong>Coverage time fence:</strong> how far out the engine looks for demand.</li>
+                <li><strong>Negative / positive days:</strong> tolerance for using earlier / later supply.</li>
+                <li><strong>Action message time fence:</strong> how far out to suggest reschedule actions.</li>
+                <li><strong>Futures time fence:</strong> how far out to compute delay impacts.</li>
+                <li><strong>Freeze time fence:</strong> period inside which the plan is frozen (no new planned orders).</li>
+              </ul>
+              <h4>Item-coverage overrides</h4>
+              <p>Item-level coverage overrides on the released product (per warehouse) refine planning per location. E.g., regional DC has min/max, central plant has requirement coverage.</p>
+              <h4>Lead times &amp; throughput</h4>
+              <p>Purchase lead time (vendor), production lead time (manufacturing), transfer lead time (between sites). Throughput per resource (capacity) feeds finite scheduling. Inaccurate lead times produce inaccurate plans; this is the most common cause of planning complaints.</p>
+              <h4>Safety stock</h4>
+              <p>Per item or via the Safety stock journal (recalculate periodically). Optional dynamic safety stock based on forecast demand variability via Demand Forecasting.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Run</span>Planning execution</summary>
+            <div class="topic__body">
+              <h4>Run modes</h4>
+              <ul>
+                <li><strong>Regeneration:</strong> full plan rebuild. With Planning Optimization, fast enough to run during the day.</li>
+                <li><strong>Net change (legacy):</strong> only items with changed demand / supply re-planned. Faster on legacy but can miss cascading impacts.</li>
+                <li><strong>Incremental planning (Planning Optimization):</strong> Microsoft's modern equivalent of net change, designed to run continuously.</li>
+              </ul>
+              <h4>Filters</h4>
+              <p>Filter by item, item group, coverage group, warehouse. Useful for partial runs (single warehouse, ABC class A items). Less needed with Planning Optimization given the speed.</p>
+              <h4>Firming planned orders</h4>
+              <p>Planned orders are suggestions; firming converts them to actual purchase / production / transfer orders. <strong>Where:</strong> from the planned orders list, <code>Firm</code> action. Manual review (planner workstation) is best practice; automatic firming is risky for anything but pure replenishment.</p>
+              <h4>Available to promise (ATP)</h4>
+              <p>Sales-side calculation: when can we promise this order. Pulls from forward supply (existing PO / planned orders). Configurable per item; not all sales scenarios use ATP.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Output</span>Action messages, futures, pegging</summary>
+            <div class="topic__body">
+              <h4>Action messages</h4>
+              <p>Suggestions for existing orders: advance, postpone, increase, decrease, cancel. Generated when supply timing or quantity differs from demand. Planner reviews and accepts / rejects. <strong>Where:</strong> <code>Master planning &gt; Planned orders &gt; Action messages</code>.</p>
+              <h4>Futures messages</h4>
+              <p>Notifies of demand that cannot be met by the requested date given current lead times. The "we're going to be late" message. Triggers escalation to expedite, find alternate supply, or notify customer.</p>
+              <h4>Pegging</h4>
+              <p>The trace of supply &lt;&gt; demand: which sales order is this planned PO covering, which BOM line drives this raw material need. Pegging tree shows multi-level upstream / downstream. Critical for planner triage.</p>
+              <h4>Planner workspace</h4>
+              <p>Modern UI: filtered planned orders, action messages by priority, KPIs (on-time, planning accuracy), bulk firm / accept actions. Better experience than the older list pages.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Metrics &amp; KPIs</summary>
+            <div class="topic__body">
+              <h4>Planning Optimization metrics</h4>
+              <p>Run history with duration, items planned, actions generated. Available in the Lifecycle Services dashboard for the Planning Optimization service. Use to track plan stability and engine health.</p>
+              <h4>Operational KPIs</h4>
+              <ul>
+                <li>Forecast accuracy (forecast vs. actual demand).</li>
+                <li>On-time delivery from planned vs. confirmed dates.</li>
+                <li>Inventory turn vs. service level.</li>
+                <li>Planner action volume (high volume signals master data issues, not planner laziness).</li>
+              </ul>
+              <h4>Common pitfalls</h4>
+              <ul>
+                <li><strong>Lead time decay:</strong> initial lead times are estimated, never updated; over time the plan drifts.</li>
+                <li><strong>Coverage groups too coarse:</strong> one coverage group for everything; results in either overstock or stockouts.</li>
+                <li><strong>Forecast not consumed:</strong> when sales orders don't consume forecast (parameter not set), the plan double-counts.</li>
+                <li><strong>Frozen plans not refreshed:</strong> static plan held too long without regeneration; supply diverges from demand.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -1139,12 +1632,114 @@
       <!-- ============== Payroll ============== -->
       <article class="item-pane" data-item-pane="payroll">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Payroll</h2><p class="item-pane__lead">Pay processing for the supported regions, with earnings, deductions, and benefits.</p></header>
+
+        <p>F&amp;O includes native payroll for the <strong>United States</strong> only. Most multinational implementations integrate to a dedicated payroll provider (Ceridian Dayforce, ADP, Workday Payroll, SAP SuccessFactors, regional providers) for non-US regions, with HR data flowing out and pay results / GL posting flowing back. Even US-only customers often choose a third-party provider for tax and compliance scale; native US Payroll is a reasonable fit for mid-market US-based companies who want a single system.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Regional scope &amp; parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, supported regions for native F&amp;O payroll (US payroll feature), and the third-party / partner integration story for unsupported regions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Earnings, deductions, benefits</summary><div class="topic__body topic__body--placeholder"><p>Add content here, earnings codes, deduction codes, benefit plans, taxes, and the link to worker / position.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Cycles</span>Pay processing</summary><div class="topic__body topic__body--placeholder"><p>Add content here, pay cycles, pay periods, pay statements, worker payments, and corrections.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">GL posting</span>Payroll to ledger</summary><div class="topic__body topic__body--placeholder"><p>Add content here, payroll posting setup, payroll-to-GL reconciliation, and the typical accruals.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Compliance</span>Year-end &amp; reporting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, W-2 / 1099 (US), tax filings, and the typical year-end checklist.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Regional scope &amp; parameters</summary>
+            <div class="topic__body">
+              <h4>Native US Payroll</h4>
+              <p>F&amp;O ships native US Payroll: federal, state, local taxes, garnishments, benefits, multiple work-state allocation. Quarterly tax filings and W-2 generation are supported.</p>
+              <h4>Other regions</h4>
+              <p>For Canada, UK, EU, AU, etc., F&amp;O does NOT process payroll natively. Standard pattern:</p>
+              <ul>
+                <li>Master data (worker, position, comp, leave, hours) flows from F&amp;O HR / Time to the payroll provider via integration.</li>
+                <li>Provider processes net pay, tax, statutory deductions.</li>
+                <li>GL summary posts back to F&amp;O via journal upload (DMF or Power Automate).</li>
+              </ul>
+              <h4>Payroll parameters</h4>
+              <p><strong>Where:</strong> <code>Payroll &gt; Setup &gt; Parameters &gt; Payroll parameters</code>. Number sequences, default tax engine, holiday calendar, retro calculation rules.</p>
+              <h4>Tax engine integration</h4>
+              <p>US tax calculation uses an integrated provider (Vertex, Avalara payroll, or symmetry). Setup links F&amp;O to the engine; tax rules update through the provider's content service.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Earnings, deductions, benefits, taxes</summary>
+            <div class="topic__body">
+              <h4>Earning codes</h4>
+              <p>Per type: regular, overtime, bonus, commission, double-time, holiday, PTO. Each tied to a productive / non-productive flag (FLSA), tax behavior, accumulator, pay-frequency rules.</p>
+              <h4>Deduction codes</h4>
+              <p>Pre-tax (401k, HSA, FSA, certain medical) vs. post-tax (Roth, garnishments, charity). Deduction calculation: flat, percent, hours, formula. Limits per pay / per year / lifetime.</p>
+              <h4>Benefit plans</h4>
+              <p><strong>Where:</strong> <code>Human resources &gt; Benefits</code> integrates with payroll. Plan defines employer / employee cost split, eligibility, dependent rules. Open enrollment workflow assigns workers; payroll computes deductions automatically.</p>
+              <h4>Tax codes &amp; jurisdictions</h4>
+              <p>Federal, state (per work state and resident state), local (city, county, school district). Multi-state allocation supports remote workers and traveling sales reps.</p>
+              <h4>Worker tax setup</h4>
+              <p>Form W-4 information per worker (filing status, allowances, additional withholding). State equivalents per state. Updates effective-dated.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Cycles</span>Pay processing</summary>
+            <div class="topic__body">
+              <h4>Pay cycles &amp; periods</h4>
+              <p><strong>Where:</strong> <code>Payroll &gt; Setup &gt; Pay cycles</code>. Cycle (weekly, biweekly, semimonthly, monthly) with multiple pay periods per year. Each period has start, end, payment, cutoff dates.</p>
+              <h4>Pay run process</h4>
+              <ol>
+                <li>Generate earnings (from approved time entries, salaries, scheduled bonuses).</li>
+                <li>Calculate pay statements (gross to net, taxes, deductions, benefits).</li>
+                <li>Review &amp; approve (audit reports, exception lists).</li>
+                <li>Issue payments (ACH file, check print) and tax disbursements.</li>
+                <li>Post to GL (per posting setup) and close pay period.</li>
+              </ol>
+              <h4>Pay statement</h4>
+              <p>The per-worker per-period record. Reviewable, reversible (with audit) before posting; once paid, corrections require off-cycle adjustment.</p>
+              <h4>Off-cycle &amp; manual checks</h4>
+              <p>For terminations, bonuses, error corrections. Run independently of regular cycle; consume same setup but use off-cycle pay run type.</p>
+              <h4>Retro pay</h4>
+              <p>Compensation change effective-dated to the past triggers retro calculation. F&amp;O recalculates affected periods and surfaces the difference as a retro earning on the next pay statement.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">GL posting</span>Payroll to ledger</summary>
+            <div class="topic__body">
+              <h4>Posting setup</h4>
+              <p><strong>Where:</strong> <code>Payroll &gt; Setup &gt; Posting</code>. Per earning, deduction, tax, benefit: which GL account is debited / credited. Department / cost center allocation drives the financial dimension on each line.</p>
+              <h4>Standard payroll journal</h4>
+              <ul>
+                <li>Salary / wage expense (debit), broken by department dimension.</li>
+                <li>Tax expense (employer share) (debit).</li>
+                <li>Benefit expense (employer share) (debit).</li>
+                <li>Net pay liability / cash (credit).</li>
+                <li>Tax liabilities (credit, paid to authorities later).</li>
+                <li>Deduction liabilities (credit, paid to vendors / 401k provider later).</li>
+              </ul>
+              <h4>Accruals</h4>
+              <p>Pay periods spanning month-end require accrual. F&amp;O can auto-accrue based on calendar days or you can post manual accrual journals reversed in the next period.</p>
+              <h4>Reconciliation</h4>
+              <p>Payroll-to-GL reconciliation: pay statement totals must agree to GL postings. Run after each pay run; investigate variances before next cycle.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Compliance</span>Tax filings &amp; year-end</summary>
+            <div class="topic__body">
+              <h4>Quarterly tax filings (US)</h4>
+              <p>941 (federal income tax + FICA), state quarterly returns, FUTA / SUTA. F&amp;O generates the data; filing typically electronic via tax engine integration.</p>
+              <h4>Year-end</h4>
+              <ul>
+                <li>W-2 generation per worker (federal + state).</li>
+                <li>1099-NEC for contractor payments (overlaps with AP for non-payroll vendors).</li>
+                <li>ACA reporting (1094 / 1095) for employers subject to ACA.</li>
+                <li>State and local equivalents.</li>
+              </ul>
+              <h4>Year-end checklist</h4>
+              <ul>
+                <li>Reconcile pay statement totals to GL.</li>
+                <li>Verify worker addresses / SSNs.</li>
+                <li>Process final adjustments (bonuses, true-ups).</li>
+                <li>Run W-2 preview, distribute corrections, finalize.</li>
+                <li>Roll year (close prior year, open new year, update tax tables).</li>
+              </ul>
+              <h4>Garnishments</h4>
+              <p>Court-ordered deductions (child support, levy). Setup per worker with order details, max-percentage rules per CCPA, priority sequencing if multiple. Compliance-critical; errors create personal liability for the employer.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -1329,13 +1924,149 @@
       <!-- ============== Production Control ============== -->
       <article class="item-pane" data-item-pane="production-control">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Production Control</h2><p class="item-pane__lead">Production orders, batch orders, kanbans, BOMs, routes, and shop-floor execution.</p></header>
+
+        <p>Production Control covers four manufacturing paradigms in a single module: <strong>discrete</strong> (production orders, made-to-stock or made-to-order), <strong>process</strong> (batch orders with formulas, co-products, by-products), <strong>lean</strong> (kanban-driven pull), and <strong>project</strong> (project-bound production for engineer-to-order). The methodology is set per released product and drives which order type is used. Most implementations standardize on one or two paradigms; mixing all four is rare and increases complexity.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Production methodology</summary><div class="topic__body topic__body--placeholder"><p>Add content here, discrete (production order) vs. process (batch order) vs. lean (kanban), and the parameters per production type.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>BOMs &amp; routes</summary><div class="topic__body topic__body--placeholder"><p>Add content here, BOM versions and BOM lines, route operations, resources and resource groups, and the BOM calculation for cost.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Production order lifecycle</summary><div class="topic__body topic__body--placeholder"><p>Add content here, created → estimated → scheduled → released → start → report-as-finished → ended, the picking list and route card journals, and the GL hits at each step.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Process</span>Batch orders</summary><div class="topic__body topic__body--placeholder"><p>Add content here, batch order specifics for process manufacturing (formula, co-product / by-product), and shelf-life dates.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Lean</span>Kanban &amp; pull</summary><div class="topic__body topic__body--placeholder"><p>Add content here, kanban rules, manufacturing kanbans, sales / withdrawal kanbans, and when lean is the right choice.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>WIP &amp; variances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, WIP report, production variances (quantity, price, substitution, lot size), and reconciliation to GL.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Production methodology &amp; parameters</summary>
+            <div class="topic__body">
+              <h4>Production type per item</h4>
+              <p><strong>Where:</strong> released product, <code>Engineer &gt; Production type</code>. Options: <strong>None</strong>, <strong>BOM</strong> (discrete production order), <strong>Formula</strong> (batch order), <strong>Planning item</strong> (phantom for planning only), <strong>Co-product</strong> / <strong>By-product</strong> (linked to a planning item).</p>
+              <h4>Production control parameters</h4>
+              <p><strong>Where:</strong> <code>Production control &gt; Setup &gt; Production control parameters</code>. Defines defaults: automatic update on report-as-finished, automatic BOM consumption (flushing principle), backflushing, route consumption, ledger posting timing.</p>
+              <h4>Posting profiles &amp; ledger integration</h4>
+              <p><strong>Where:</strong> <code>Production control &gt; Setup &gt; Posting</code>. Defines GL accounts for WIP issue, WIP receipt, picking list, report-as-finished, and end. Tied to inventory item groups (or item-level overrides). Errors here are the most common cause of inventory-to-GL reconciliation issues.</p>
+              <h4>Production status flow</h4>
+              <p>Created &rarr; Estimated &rarr; Scheduled &rarr; Released &rarr; Started &rarr; Reported as finished &rarr; Ended. Each transition can post inventory and ledger journals depending on parameters. Ended is irreversible; it triggers final variance posting.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>BOMs, formulas &amp; routes</summary>
+            <div class="topic__body">
+              <h4>BOMs and BOM versions</h4>
+              <p>A <strong>BOM</strong> is the parts list; a <strong>BOM version</strong> ties it to a finished item, with from/to dates and from/to quantities (for engineering-change control). Multiple active versions allow phased cutover.</p>
+              <h4>Formulas (process)</h4>
+              <p>Equivalent of BOM for batch orders. Formula lines support <strong>scalable</strong> ingredients (scale with batch size), <strong>fixed</strong> ingredients (constant per batch), <strong>step consumption</strong> (tiered by batch size). Formulas also handle <strong>co-products</strong> and <strong>by-products</strong>.</p>
+              <h4>Routes and route versions</h4>
+              <p>A <strong>route</strong> is the sequence of operations; a <strong>route version</strong> ties it to a finished item. Route operations reference <strong>operations resources</strong> (machines, work cells, labor pools). Setup time, run time, queue time per operation drive scheduling.</p>
+              <h4>Resources and resource groups</h4>
+              <p><strong>Where:</strong> <code>Production control &gt; Setup &gt; Resources &gt; Resources</code>. Resource types: machine, human resource, tool, location, vendor, facility. Resource capabilities (skills) match against operation requirements during scheduling.</p>
+              <h4>BOM calculation</h4>
+              <p>Standard cost roll-up uses the BOM and route to compute manufactured cost. Run periodically; results feed cost version (planned cost) or activated standard. Required for standard-cost manufacturers.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Scheduling</span>Operations &amp; jobs</summary>
+            <div class="topic__body">
+              <h4>Operations scheduling</h4>
+              <p>Schedules at the operation level (one start / end date per operation). Faster, less granular. Used for capacity-rough-cut planning.</p>
+              <h4>Job scheduling</h4>
+              <p>Schedules at the job level (setup / process / queue / transport jobs per operation). Slower, more granular, supports finite resource capacity. Used for execution-level dispatch.</p>
+              <h4>Forward vs. backward scheduling</h4>
+              <p><strong>Forward:</strong> from start date forward; tells you when production will finish. <strong>Backward:</strong> from due date backward; tells you when to start. Master Planning typically schedules backward from the demand date.</p>
+              <h4>Finite vs. infinite capacity</h4>
+              <p>Infinite ignores resource conflicts (assume capacity); finite respects existing reservations. Finite is mandatory for accurate dispatch but increases scheduling time.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Execution</span>Order lifecycle &amp; journals</summary>
+            <div class="topic__body">
+              <h4>Estimation</h4>
+              <p>Calculates standard cost based on BOM / formula and route. Sets the baseline for variance reporting. No GL impact.</p>
+              <h4>Release</h4>
+              <p>Frees inventory reservations, prints work documents (production schedule, picking list, route card / job card). Optional ledger posting depending on parameters.</p>
+              <h4>Start</h4>
+              <p>Triggers automatic consumption (if backflushing enabled) of materials and resources. Posts the picking list and route card journals. Inventory posts <strong>WIP cost &gt; raw material credit</strong>; production resources post <strong>WIP labor</strong>.</p>
+              <h4>Report as finished (RAF)</h4>
+              <p>Records produced quantity to inventory. Posts <strong>finished goods debit &gt; WIP credit</strong> at standard cost. Can be partial; allows multiple RAF events per order.</p>
+              <h4>End</h4>
+              <p>Final closing of the order: variances posted (quantity, price, substitution, lot size), order locked. Sequence-dependent; if ended out of order with related orders (multi-level BOMs), variances may be miscalculated. Tools: <strong>End production order</strong> via Periodic.</p>
+              <h4>Production journals</h4>
+              <p>Picking list (raw material consumption), route card (operation time per route step), job card (operation time per job), report-as-finished (output). Each can be edited before posting.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Batch orders &amp; co/by-products</summary>
+            <div class="topic__body">
+              <h4>Batch order specifics</h4>
+              <p>Triggered when production type is Formula. Lifecycle similar to discrete, but supports batch attributes (potency, density), shelf-life dates (expiration assigned at RAF), batch disposition codes.</p>
+              <h4>Co-products and by-products</h4>
+              <p><strong>Co-product:</strong> intentional secondary output, cost allocated based on weight / volume / value. <strong>By-product:</strong> incidental output, cost-burden or cost-credit. Defined in the formula on the planning item.</p>
+              <h4>Catch weight</h4>
+              <p>For variable-weight items (meat, fish, chemicals): formula nominal weight, actual weight captured at RAF. Inventory tracks both.</p>
+              <h4>Process-specific reporting</h4>
+              <p>Yield reports, batch genealogy (forward / backward trace), regulatory reporting (FDA 21 CFR Part 11, EU REACH).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Lean</span>Kanban &amp; pull</summary>
+            <div class="topic__body">
+              <h4>Kanban rules</h4>
+              <p><strong>Where:</strong> <code>Production control &gt; Setup &gt; Lean manufacturing &gt; Kanban rules</code>. Defines a replenishment loop: trigger (demand), production activity (work to perform), quantities, fixed kanbans circulating.</p>
+              <h4>Kanban types</h4>
+              <ul>
+                <li><strong>Manufacturing kanban:</strong> triggers production at a work cell.</li>
+                <li><strong>Withdrawal kanban:</strong> triggers movement from one location to another.</li>
+                <li><strong>Sales (event) kanban:</strong> triggered on demand (sales order, transfer, etc.) for non-stocked items.</li>
+              </ul>
+              <h4>Kanban board</h4>
+              <p>Visual queue at the work cell showing pending kanbans, in-progress, completed. Workers update status from the board. Replaces the traditional production schedule for lean cells.</p>
+              <h4>When lean is the right choice</h4>
+              <p>High-volume, repetitive production; stable demand; short cycle times. Lean excels here. For low-volume / high-mix or engineer-to-order, traditional production orders fit better.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Shop floor</span>Execution &amp; MES integration</summary>
+            <div class="topic__body">
+              <h4>Production floor execution (PFE)</h4>
+              <p>Browser-based shop-floor app shipped with F&amp;O. Workers clock in / out of jobs, report progress, capture quality, view drawings. Replaces older Job Card terminal.</p>
+              <h4>Manufacturing Execution System (MES) integration</h4>
+              <p>For complex shop floors, integrate with a dedicated MES (Critical Manufacturing, Plex, Aegis FactoryLogix). Standard interfaces: production order release out, job time / quantity in. Often via Azure Service Bus or DMF recurring integrations.</p>
+              <h4>Shop floor barcode &amp; mobile</h4>
+              <p>Combine PFE with barcode scanners or mobile devices for hands-free reporting. Common pattern: badge scan to clock in, BOM material scan to confirm consumption, finished-goods barcode at RAF.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Costing</span>WIP &amp; variances</summary>
+            <div class="topic__body">
+              <h4>WIP accounting</h4>
+              <p>Picking list and route card post to WIP accounts. RAF reverses WIP and posts to finished goods. End calculates final variances. Ideal: WIP balance at month-end matches the WIP report; reality: timing differences require reconciliation.</p>
+              <h4>Production variances (standard cost)</h4>
+              <ul>
+                <li><strong>Quantity variance:</strong> actual material qty consumed vs. BOM standard.</li>
+                <li><strong>Price variance:</strong> actual material cost vs. standard cost.</li>
+                <li><strong>Substitution variance:</strong> different item used vs. BOM specified.</li>
+                <li><strong>Lot size variance:</strong> setup / fixed costs spread over actual qty vs. standard lot size.</li>
+                <li><strong>Routing variance:</strong> actual operation time vs. routed time.</li>
+              </ul>
+              <h4>Reconciliation &amp; reporting</h4>
+              <p>Periodic: <code>Inventory close &amp; adjustment</code> (closes the costing layer). Reports: <strong>Production variance</strong>, <strong>WIP report</strong>, <strong>Production posting</strong>. Aim for monthly close discipline; reopening prior periods to fix production orders is painful.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Common pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>End production order discipline:</strong> orders left at RAF (not Ended) leave variances unposted; periodic end-production routine is mandatory.</li>
+                <li><strong>BOM and route version dates:</strong> mis-set from / to dates cause "no active BOM" errors mid-period; always check effective dates on cutover.</li>
+                <li><strong>Backflushing risk:</strong> if BOM is wrong, backflushing posts wrong consumption silently; reconciliation only catches it at month-end.</li>
+                <li><strong>Resource calendar accuracy:</strong> scheduling assumes calendars are correct; holidays / shift patterns missing cause infeasible schedules.</li>
+                <li><strong>Multi-level BOMs and order linking:</strong> sub-orders linked to a parent must be ended in correct sequence, or top-level cost rolls up wrong.</li>
+                <li><strong>Process vs. discrete decision:</strong> teams often pick "BOM" because it's simpler, then hit the wall when shelf-life or co-product features are needed; choose based on actual process, not familiarity.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -1474,24 +2205,229 @@
       <!-- ============== Retail & Commerce ============== -->
       <article class="item-pane" data-item-pane="retail-commerce">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Retail &amp; Commerce</h2><p class="item-pane__lead">POS, channels, assortments, and the omni-channel commerce stack.</p></header>
+
+        <p>Microsoft has rebranded this module as <strong>Dynamics 365 Commerce</strong>, with F&amp;O serving as the back-office headquarters and Commerce providing channel-side capability (POS, e-commerce, call center). It's a full omnichannel platform: brick-and-mortar stores with Modern POS (MPOS) or Cloud POS, an integrated e-commerce site (Commerce Scale Unit, headless options, B2B / B2C templates), and call-center order entry. Implementation effort is substantially larger than the typical F&amp;O finance project; budget separately and staff with Commerce specialists.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Channels &amp; stores</summary><div class="topic__body topic__body--placeholder"><p>Add content here, channels (retail store, online, call center), stores, terminals and registers, and the headquarters / channel data sync.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Products &amp; assortments</summary><div class="topic__body topic__body--placeholder"><p>Add content here, assortments, retail catalog, navigation hierarchy, and category-based product release.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Pricing</span>Discounts &amp; promotions</summary><div class="topic__body topic__body--placeholder"><p>Add content here, price groups, discounts (quantity, threshold, mix &amp; match), promotions, and affiliations / loyalty.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">POS</span>Configuration &amp; offline</summary><div class="topic__body topic__body--placeholder"><p>Add content here, POS layouts and screen designer, functionality profile, hardware profile, and the offline mode (CSU).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Statement posting</summary><div class="topic__body topic__body--placeholder"><p>Add content here, calculation of statements, statement posting to GL / AR, and the typical reconciliation issues.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Architecture</span>Headquarters, scale unit, channel</summary>
+            <div class="topic__body">
+              <h4>Headquarters (HQ)</h4>
+              <p>F&amp;O instance: master data (products, prices, customers), back-office (replenishment, financials), reporting. The system of record.</p>
+              <h4>Commerce Scale Unit (CSU)</h4>
+              <p>Cloud-hosted regional scale unit (Azure microservice). Hosts the Retail Server (transactional API for POS) and channel database. Stores connect here for real-time lookups; HQ syncs to CSU asynchronously.</p>
+              <h4>Channel database</h4>
+              <p>Per-CSU regional copy of channel-relevant data: products, prices, customers, employees, settings. Decouples store operations from HQ availability. Bidirectional CDX (Commerce Data Exchange) handles the sync.</p>
+              <h4>POS clients</h4>
+              <p><strong>Modern POS (MPOS)</strong>: Windows desktop / tablet client, supports offline mode. <strong>Cloud POS</strong>: browser-based, always online. Both share configuration. <strong>Store Commerce app</strong> (newer unified client) is replacing both.</p>
+              <h4>E-commerce</h4>
+              <p>Microsoft-hosted B2C / B2B storefront platform with module library (header, hero, PLP, PDP, cart, checkout). Headless option exposes APIs for fully custom front-ends.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Channels &amp; stores</summary>
+            <div class="topic__body">
+              <h4>Channel types</h4>
+              <ul>
+                <li><strong>Retail store:</strong> physical store with terminals.</li>
+                <li><strong>Online store:</strong> e-commerce channel.</li>
+                <li><strong>Call center:</strong> agent-driven order entry (catalog companies, B2B reorders).</li>
+              </ul>
+              <h4>Stores, terminals, registers</h4>
+              <p>Store &gt; Terminal &gt; Register hierarchy. Terminal binds to a hardware profile (cash drawer, scanner, printer). Register holds the running shift / drawer balance.</p>
+              <h4>Profiles</h4>
+              <ul>
+                <li><strong>Functionality profile:</strong> POS behavior (return reasons, password complexity, blind close).</li>
+                <li><strong>Hardware profile:</strong> connected peripherals.</li>
+                <li><strong>Visual profile:</strong> POS branding, themes.</li>
+                <li><strong>Offline profile:</strong> what data MPOS holds for offline operation.</li>
+              </ul>
+              <h4>Distribution schedule (CDX)</h4>
+              <p>Job-based sync: P-jobs push HQ &gt; channel; A-jobs pull channel &gt; HQ. Schedules per job (real-time vs. batched). Tuning these is one of the harder operational areas.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Products, assortments, catalogs</summary>
+            <div class="topic__body">
+              <h4>Retail product release</h4>
+              <p>Products released via category hierarchy (Commerce category) with channel-relevant attributes (online description, image, SEO). Variants (color / size) handled via product master.</p>
+              <h4>Assortments</h4>
+              <p>Define which products are sellable in which channels. An assortment is a set of categories or specific items, effective-dated, scoped to channels / orgs. Without assortment assignment, product won't appear at POS.</p>
+              <h4>Navigation hierarchy</h4>
+              <p>Per channel: visual category tree shown in POS / e-commerce. Independent of internal procurement category tree.</p>
+              <h4>Catalogs (call center)</h4>
+              <p>Catalog defines effective dates, eligible customers, products, prices, source codes for response tracking. Mailings = a catalog drop.</p>
+              <h4>Attributes &amp; specs</h4>
+              <p>Product attributes (color family, brand, target gender) drive faceted search on the e-commerce side.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Pricing</span>Discounts, promotions, loyalty</summary>
+            <div class="topic__body">
+              <h4>Price groups</h4>
+              <p>Group customers / channels for differentiated pricing. Wholesale vs. retail; member vs. non-member.</p>
+              <h4>Trade agreements</h4>
+              <p>Standard F&amp;O trade agreements (price / line discount / multiline discount / total discount) flow through to channel pricing.</p>
+              <h4>Retail discounts</h4>
+              <ul>
+                <li><strong>Quantity discount:</strong> buy 3, get 10% off.</li>
+                <li><strong>Threshold discount:</strong> spend $100, get $20 off.</li>
+                <li><strong>Mix &amp; match:</strong> any 3 from set X for $25.</li>
+                <li><strong>Coupon-driven:</strong> code-based, per-customer or open.</li>
+                <li><strong>Best price / compounded:</strong> apply best, or stack with priority.</li>
+              </ul>
+              <h4>Affiliations &amp; loyalty</h4>
+              <p>Affiliation = membership tag (employee, AAA member). Loyalty programs award points per spend, redeemable for discounts. Tier-based programs supported.</p>
+              <h4>Pricing engine</h4>
+              <p>Calculation order: trade agreement price &gt; manual override &gt; line discount &gt; multiline discount &gt; total discount. Modern enhancements include Discount Concurrency Control for complex stacking.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">POS</span>Layouts, offline, payments</summary>
+            <div class="topic__body">
+              <h4>POS layouts &amp; screen designer</h4>
+              <p>Per-functionality profile, design transaction screen with action buttons (item lookup, add customer, return, suspend). Screen designer is drag-drop; mobile / tablet / desktop variants.</p>
+              <h4>Operations</h4>
+              <p>Retail "operations" are pre-defined actions (print receipt, open cash drawer, no-sale, payment, return). Layouts assign operations to buttons.</p>
+              <h4>Offline mode</h4>
+              <p>MPOS continues operating when channel database is unreachable: caches products, prices, customers per offline profile. Sales queued, sync when online. Critical for store reliability; tune what data is offline-capable.</p>
+              <h4>Payment connectors</h4>
+              <p>Adyen and Stripe certified out of box. Each store / register pairs to a payment terminal; tender types map to GL accounts.</p>
+              <h4>Inventory lookup</h4>
+              <p>POS can query channel database (offline-capable) or call HQ for real-time on-hand across stores. Cross-store availability supports save-the-sale workflows.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Omnichannel</span>Click-and-collect, ship-from-store</summary>
+            <div class="topic__body">
+              <h4>Click-and-collect / BOPIS</h4>
+              <p>Customer orders online, picks up in store. Order routes to selected store; store associate picks; customer receives notification. Status tracked from web checkout through pickup.</p>
+              <h4>Ship-from-store</h4>
+              <p>Online order fulfilled from a store rather than DC, optimized for proximity / inventory balance. Store associate picks and ships using the parcel carrier integration.</p>
+              <h4>Customer order in store</h4>
+              <p>Out-of-stock at the store but available elsewhere: order in POS &gt; ship to customer. Crosses channel boundary in one transaction.</p>
+              <h4>Distributed Order Management (DOM)</h4>
+              <p>Rule-based engine that picks the optimal fulfillment location (store vs. DC) per order line based on inventory, cost, distance, store performance.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Statement</span>Closing &amp; posting</summary>
+            <div class="topic__body">
+              <h4>Statement posting</h4>
+              <p>End-of-day per store / shift: close shift &gt; calculate statement &gt; post to GL / AR. Statement aggregates the day's transactions into journal lines.</p>
+              <h4>Trickle feed (modernized)</h4>
+              <p>Modern alternative to traditional batch statements: transactions post to HQ near-real-time, eliminating the daily statement bottleneck. Recommended for most new implementations.</p>
+              <h4>Reconciliation</h4>
+              <p>Cash declaration vs. expected; tender variance per type. Common issues: payment timing differences (Adyen settlements lag), tax rounding deltas, gift-card liability tracking.</p>
+              <h4>Returns &amp; exchanges</h4>
+              <p>POS supports returns with original-receipt lookup, or blind returns (with reason / approval). Cross-channel returns (bought online, returned at store) supported with proper channel posting setup.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Scope &amp; pitfalls</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Don't scope it as "another module":</strong> Commerce is a multi-month dedicated workstream with infrastructure (CSU), payment certification, hardware integration, training.</li>
+                <li><strong>POS goes live last:</strong> back-office, master data, pricing must stabilize first; train and pilot in test stores before full rollout.</li>
+                <li><strong>Offline mode discipline:</strong> what data is offline-capable defines store resilience; test offline scenarios in UAT.</li>
+                <li><strong>CDX troubleshooting skills:</strong> teams need a CDX expert; sync issues are a top operational risk.</li>
+                <li><strong>Loyalty design upfront:</strong> changing loyalty program rules post-launch has customer trust implications; design carefully.</li>
+                <li><strong>E-commerce scope:</strong> using Microsoft's e-commerce platform is faster but less flexible than headless + custom; pick early.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== Sales & Marketing ============== -->
       <article class="item-pane" data-item-pane="sales-marketing">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Sales &amp; Marketing</h2><p class="item-pane__lead">Light CRM in F&amp;O, leads, opportunities, campaigns, and the bridge to Dataverse Sales.</p></header>
+
+        <p>Sales and Marketing in F&amp;O is a <strong>light CRM</strong>: leads, opportunities, quotations, campaigns, telemarketing. It exists for companies that want a single system for the full quote-to-cash flow without a separate CRM platform. For companies running serious sales pipelines, the better answer is <strong>Dynamics 365 Sales</strong> (Dataverse-based) integrated to F&amp;O via <strong>dual-write</strong>; sales reps work in CE, accounts and quotes flow to F&amp;O for fulfillment. Recommend the F&amp;O module only when CRM volume is low or budget rules out a separate license.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales and marketing parameters, business relations, and the high-level structure.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Leads &amp; opportunities</summary><div class="topic__body topic__body--placeholder"><p>Add content here, leads, qualifying to opportunity, opportunity stages, and the conversion to a sales quotation.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Campaigns</span>Telemarketing &amp; campaigns</summary><div class="topic__body topic__body--placeholder"><p>Add content here, campaigns, target groups, telemarketing scripts, and the basic outreach functionality.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Sales quotation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales quotation creation, conversion to sales order, and the agreements link.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Integration</span>Dataverse / D365 Sales</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when to use F&amp;O sales &amp; marketing vs. Dataverse-based Dynamics 365 Sales, and the integration patterns.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Module parameters &amp; structure</summary>
+            <div class="topic__body">
+              <h4>Sales and marketing parameters</h4>
+              <p><strong>Where:</strong> <code>Sales and marketing &gt; Setup &gt; Sales and marketing parameters</code>. Number sequences (lead, opportunity, quotation, campaign), default sales taxes, default delivery terms, defaults for quotation expiration.</p>
+              <h4>Business relations vs. customer</h4>
+              <p>A <strong>business relation</strong> is a prospect (party + contact info, no AR record). When the deal closes, the business relation is <strong>converted to a customer</strong>. Until then, the company can be in your pipeline without polluting the AR ledger.</p>
+              <h4>Sales unit hierarchy</h4>
+              <p>Optional sales-team structure (units &amp; teams) for territory ownership and quota tracking. Linked to workers; opportunities are assigned to a sales unit / responsible worker.</p>
+              <h4>Activity types</h4>
+              <p>Phone call, meeting, task, e-mail, document. Activities log under leads, opportunities, customers; create the contact-history audit trail.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Leads &amp; opportunities</summary>
+            <div class="topic__body">
+              <h4>Lead</h4>
+              <p>An unqualified prospect: came from a campaign, web form, trade show. Captures contact info, source, owner. Lifecycle: new &gt; contacted &gt; qualified &gt; (converted to opportunity, or disqualified).</p>
+              <h4>Opportunity</h4>
+              <p>A qualified deal in progress: estimated revenue, expected close, sales stage, probability. Stages configurable per sales process. Pipeline view rolls opportunities by stage and probability.</p>
+              <h4>Conversion to quotation / sales order</h4>
+              <p>Opportunity won &gt; create a sales quotation (with proposed lines, prices, terms) &gt; customer accepts &gt; convert to sales order in Sales &amp; AR. Smooth path; the same module continues into fulfillment.</p>
+              <h4>Stages and probability</h4>
+              <p>Customizable stage sequence (Prospecting, Qualifying, Proposing, Negotiating, Closed-won / Closed-lost) with a default probability per stage. Drives weighted pipeline = sum(opportunity revenue * probability).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Campaigns</span>Targeting &amp; outreach</summary>
+            <div class="topic__body">
+              <h4>Campaigns</h4>
+              <p>Marketing initiative wrapper. Includes target group, communication type (e-mail, telemarketing, direct mail), budget, expected response. Activities and leads can be linked back to a campaign for ROI tracking.</p>
+              <h4>Target groups</h4>
+              <p>Query-based audience definition: customers / prospects matching criteria (industry, region, last purchase date). Refresh dynamically.</p>
+              <h4>Telemarketing</h4>
+              <p>Call-list with scripts, dispositions, follow-up activity creation. Light-weight; serious telemarketing operations use dedicated tools (Genesys, Five9) and integrate via Power Platform.</p>
+              <h4>Limitations</h4>
+              <p>The campaign / marketing capabilities are basic. For modern marketing automation (e-mail journeys, scoring, ABM), <strong>Dynamics 365 Customer Insights - Journeys</strong> (formerly Marketing) is the right tool, integrated via Dataverse.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Quotations</span>Sales quotations</summary>
+            <div class="topic__body">
+              <h4>Sales quotation</h4>
+              <p><strong>Where:</strong> <code>Sales and marketing &gt; Sales quotations &gt; All quotations</code>. Header: customer / prospect, expiration, validity. Lines: items, quantities, prices, deliveries. Generates a quotation document for customer signature.</p>
+              <h4>Quotation versions</h4>
+              <p>Each amendment captured as a new version with audit history. Revisions can be sent during negotiation.</p>
+              <h4>Conversion</h4>
+              <p>Accepted &gt; <code>Generate sales order</code>. Quotation status updated to confirmed; the new sales order references back. Lost quotations are flagged with reason codes for win/loss analysis.</p>
+              <h4>Trade agreements link</h4>
+              <p>Quotation pricing pulls from trade agreements (price / discount journals) and sales agreements when applicable, ensuring consistency with the eventual order.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Integration</span>D365 Sales &amp; dual-write</summary>
+            <div class="topic__body">
+              <h4>When to use F&amp;O Sales &amp; Marketing</h4>
+              <p>Small / mid sales teams; transactional pipelines; minimal need for marketing automation; want one system. Avoids the cost and complexity of a separate CRM.</p>
+              <h4>When to use Dynamics 365 Sales (CE / Dataverse)</h4>
+              <p>Larger pipelines, complex stages, account-based selling, advanced forecasting, integration with LinkedIn Sales Navigator, opportunity insights, marketing automation. The standard pattern at enterprise scale.</p>
+              <h4>Dual-write integration</h4>
+              <p><strong>Dual-write</strong> synchronizes accounts, contacts, products, opportunities, quotations between CE Sales and F&amp;O in near real-time. Sales reps work in Sales; AR / fulfillment teams work in F&amp;O; both see the same data.</p>
+              <h4>Project Operations bridge</h4>
+              <p>For services firms, <strong>Project Operations</strong> (Dataverse-based) sits on top of CE for opportunity-to-resource-plan, with the project / time / billing back in F&amp;O Project Management and Accounting. Dual-write maps it together.</p>
+              <h4>Data ownership decision</h4>
+              <p>Master data (customer, product) typically owned by F&amp;O when both modules exist; activities / opportunities owned by CE. Dual-write maps must reflect that ownership cleanly to avoid update conflicts.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
