@@ -182,7 +182,7 @@
             <div class="topic__body">
               <h4>Three invoice paths</h4>
               <ul>
-                <li><strong>Vendor invoice (PO-matched):</strong> <code>Accounts payable &gt; Invoices &gt; Pending vendor invoices</code>. Invoice header tied to the PO; matched against PO line and product receipt before posting. Three-way match enforces price (PO vs invoice) and quantity (receipt vs invoice) tolerances configured in AP parameters and per matching policy. Invoice match status is shown on the invoice header.</li>
+                <li><strong>Vendor invoice (PO-matched):</strong> <code>Accounts payable &gt; Invoices &gt; Pending vendor invoices</code>. Invoice header tied to the PO; matched against PO line and product receipt before posting. Three-way match enforces price (PO vs invoice) and quantity (receipt vs invoice) tolerances configured in AP parameters and per matching policy. Invoice match status is shown on the invoice header. Invoice can also be generated on the PO level.</li>
                 <li><strong>Invoice journal:</strong> <code>Accounts payable &gt; Invoices &gt; Invoice journal</code>. Direct journal entry without a PO, used for non-PO invoices like utilities or rent. Distribution lines pick up the expense account and dimensions.</li>
                 <li><strong>Invoice register / Invoice approval journal:</strong> two-step entry where the Invoice register posts to an Arrival account on receipt, and the Approval journal moves it to the vendor liability after review. Used in environments with separation of duties between AP clerk and approver.</li>
               </ul>
