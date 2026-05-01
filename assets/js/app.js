@@ -141,6 +141,119 @@
     });
   }
 
+  /* ---------- Modern motion layer ---------- */
+  const prefersReducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Page enter on load */
+  document.body.classList.add('page-enter');
+  window.addEventListener('load', () => {
+    // Let it play, then drop the class so it doesn't replay if classes are toggled later
+    setTimeout(() => document.body.classList.remove('page-enter'), 600);
+  });
+
+  /* Page exit on internal navigation */
+  if (!prefersReducedMotion) {
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (!href) return;
+      // Skip: external, new tab, hash-only, mailto/tel, modified clicks, download
+      if (a.target === '_blank') return;
+      if (a.hasAttribute('download')) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      if (/^(mailto:|tel:|javascript:)/i.test(href)) return;
+      if (href.startsWith('#')) return;
+      // Only intercept same-origin links
+      let url;
+      try { url = new URL(a.href, location.href); } catch (err) { return; }
+      if (url.origin !== location.origin) return;
+      // Same page (different hash)? skip
+      if (url.pathname === location.pathname && url.search === location.search) return;
+
+      e.preventDefault();
+      document.body.classList.add('page-exit');
+      setTimeout(() => { window.location.href = a.href; }, 220);
+    });
+
+    // If the user navigates back, make sure the exit class isn't stuck
+    window.addEventListener('pageshow', () => {
+      document.body.classList.remove('page-exit');
+    });
+  }
+
+  /* Header elevation on scroll */
+  const header = document.querySelector('.site-header');
+  if (header) {
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        header.classList.toggle('is-scrolled', window.scrollY > 8);
+        ticking = false;
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /* Theme toggle: brief spin animation on click */
+  const themeBtn = document.querySelector('.theme-toggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      themeBtn.classList.add('is-spinning');
+      setTimeout(() => themeBtn.classList.remove('is-spinning'), 360);
+    });
+  }
+
+  /* Scroll reveal via IntersectionObserver */
+  if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+    // Auto-tag common building blocks so existing pages get reveals for free
+    const autoTargets = document.querySelectorAll(
+      '.card-grid, .timeline, .section-block > .container > .article, ' +
+      '.section-block > .container > h2'
+    );
+    autoTargets.forEach(el => {
+      if (el.classList.contains('card-grid')) {
+        el.classList.add('reveal-stagger');
+      } else if (el.classList.contains('timeline')) {
+        // timeline uses its own per-step animation; just toggle is-visible
+      } else {
+        el.classList.add('reveal');
+      }
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+    document.querySelectorAll('.reveal, .reveal-stagger, .timeline').forEach(el => io.observe(el));
+  } else {
+    // Reduced motion or no IO: make sure nothing stays hidden
+    document.querySelectorAll('.reveal, .reveal-stagger, .timeline').forEach(el => {
+      el.classList.add('is-visible');
+    });
+  }
+
+  /* Article-page TOC: smooth scroll with a tiny accent flash */
+  document.querySelectorAll('.article-page__toc a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+
   /* ---------- Article-page TOC scroll-spy ---------- */
   const tocLinks = document.querySelectorAll('.article-page__toc a[href^="#"]');
   if (tocLinks.length) {
