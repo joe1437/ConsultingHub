@@ -112,8 +112,20 @@
                 <li><strong>Arrival / Offset:</strong> for the Invoice register journal flow, where invoices are recorded before approval and posted to a temporary Arrival account, later transferred to the Summary on approval.</li>
                 <li><strong>Sales tax prepayments:</strong> for prepayment scenarios where tax is recoverable in advance.</li>
               </ul>
-              <h4>Methods of payment, terms, cash discounts, payment days</h4>
-              <p><strong>Where:</strong> <code>Accounts payable &gt; Payment setup</code>. Methods of payment define how cash leaves (check, electronic, wire, promissory note) and which payment format (NACHA, SEPA, ISO20022, country-specific ER) generates the file. Terms of payment carry the calculation rule (Net 30, Cash on delivery, end-of-month plus N days). Cash discounts reduce the invoice if paid early (2/10 net 30 style); set up the discount account here. Payment days adjust due dates for non-business days.</p>
+              <h4>Methods of payment</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Payment setup &gt; Methods of payment</code>. Defines how cash leaves (check, electronic, wire, promissory note). Per method:</p>
+              <ul>
+                <li><strong>Account type:</strong> Bank, Vendor, Ledger.</li>
+                <li><strong>Payment status flow:</strong> None / Sent / Approved / Rejected; controls reconciliation back to bank statement.</li>
+                <li><strong>File format:</strong> the Electronic Reporting (ER) format used for export, control report, return, and remittance, e.g., NACHA (US ACH), ISO20022 pain.001 (used by SEPA and most modern bank standards), country-specific ER configurations.</li>
+                <li><strong>Bridging account:</strong> intermediate account used between payment release and bank clearing.</li>
+                <li><strong>Payment specification:</strong> ACH transaction codes (CCD, CTX, PPD).</li>
+                <li><strong>Period:</strong> per-invoice or total-vendor settlement.</li>
+              </ul>
+              <h4>Terms of payment, payment days &amp; cash discounts</h4>
+              <p><strong>Where:</strong> <code>Accounts payable &gt; Payment setup &gt; Terms of payment / Payment days / Cash discounts</code>. Terms calculation methods: Net (X days from invoice), Current month (X days from end of month), COD, Specific date. Payment days mapping bumps the due date to the next configured payment day (e.g., always Friday). Cash discounts (2/10 net 30); F&amp;O auto-stacks the next discount when the earlier tier expires. Payment schedules support installment payment with allocation method = total / fixed amount / percentage.</p>
+              <h4>Charges codes &amp; auto charges</h4>
+              <p><strong>Where:</strong> <code>Accounts payable</code> uses the Procurement-side <code>Charges code</code> (<code>Procurement and sourcing &gt; Setup &gt; Charges &gt; Charges code</code>). On vendor invoice posting, charges from the PO carry through; standalone vendor invoices (without a PO) can have charges added directly. Tolerance for charge variance vs. PO is set on AP parameters; significant variances flag for review.</p>
               <h4>AP parameters</h4>
               <p><strong>Where:</strong> <code>Accounts payable &gt; Setup &gt; Accounts payable parameters</code>. Drives defaults: invoice approval workflow, three-way matching policy (No / Two-way / Three-way), tolerance percentages for matching, the default posting profile for prepayment journal vouchers, and number sequences.</p>
             </div>
@@ -264,10 +276,21 @@
                 <li><strong>Liability account for deposits:</strong> for customer prepayments / advance receipts before invoicing.</li>
                 <li><strong>Sales tax prepayments:</strong> for customer prepayment invoices with tax.</li>
               </ul>
-              <h4>Methods of payment, terms of payment, cash discounts</h4>
-              <p><strong>Where:</strong> <code>Accounts receivable &gt; Payments setup</code>. Methods of payment define how cash arrives (electronic deposit, check, credit card, lockbox). Terms of payment carry the calculation rule. Cash discounts incentivize early payment, the discount account is set on the discount record. Same mechanics as AP but inverted in account behavior.</p>
+              <h4>Methods of payment</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Payments setup &gt; Methods of payment</code>. Defines how cash arrives (electronic deposit, check, credit card, lockbox). Per method:</p>
+              <ul>
+                <li><strong>Account type:</strong> Bank, Customer, Ledger, Vendor.</li>
+                <li><strong>Payment status flow:</strong> None / Sent / Received / Approved / Rejected (drives reconciliation).</li>
+                <li><strong>File format:</strong> the Electronic Reporting (ER) format used for export, control report, and return; different formats per region (lockbox BAI2, NACHA return file, ISO20022 pain.001).</li>
+                <li><strong>Bridging account:</strong> intermediate account used between deposit and bank clearing.</li>
+                <li><strong>Period:</strong> per-invoice settlement vs. total customer balance.</li>
+              </ul>
+              <h4>Terms of payment, payment days &amp; cash discounts</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Payments setup &gt; Terms of payment / Payment days / Cash discounts</code>. Terms calculation methods: Net (X days from invoice), Current month (X days from end of month), COD (cash on delivery), Specific date. Payment days refine due date by mapping to a specific weekday or day-of-month (e.g., always due on the 25th). Cash discounts incentivize early payment with a tiered discount (2/10 net 30); F&amp;O auto-stacks the next discount when an earlier tier expires. Payment schedules support installments with allocation method = total / fixed amount / percentage.</p>
+              <h4>Charges codes &amp; auto charges (sales side)</h4>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Charges setup &gt; Charges code</code> and <code>Auto charges</code>. Mirror of the procurement-side mechanism. Customer charges (freight, handling, restocking, fuel surcharge) are added to a sales order at the header or per line, automatically via auto-charge rules keyed on Account code (Table / Group / All) and Item code. <strong>Debit type</strong> on the charge code determines posting: Customer (charge to customer's invoice), Ledger (post offset to internal account). On invoice posting, the charge appears as a separate line on the customer invoice.</p>
               <h4>AR parameters</h4>
-              <p><strong>Where:</strong> <code>Accounts receivable &gt; Setup &gt; Accounts receivable parameters</code>. Drives defaults: invoice creation behavior, free-text invoice settings, customer write-off setup (account and limit), default posting profile for prepayment journal vouchers, dunning configuration, credit management options, and number sequences.</p>
+              <p><strong>Where:</strong> <code>Accounts receivable &gt; Setup &gt; Accounts receivable parameters</code>. Drives defaults: invoice creation behavior, free-text invoice settings, customer write-off setup (account and limit), default posting profile for prepayment journal vouchers, dunning configuration, and number sequences. (Credit management options moved to the dedicated Credit Management module since 2019; see the Credit &amp; Collections module.)</p>
             </div>
           </details>
 
@@ -556,6 +579,10 @@
                 <li><strong>Reconciliation type:</strong> Standard (legacy), Advanced (recommended).</li>
                 <li><strong>Bank account number / IBAN / SWIFT:</strong> identifiers for electronic payment files.</li>
               </ul>
+              <h4>Bank transaction types</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Setup &gt; Bank transaction types</code>. Classifies each ledger journal line that hits a bank account: deposit, fee, interest earned, NSF return, transfer in, transfer out, wire fee, etc. Each transaction type maps to a default offset main account, so when a user records a bank fee they pick the type and F&amp;O posts the correct GL contra. Required setup before Advanced bank reconciliation can match statement lines automatically.</p>
+              <h4>Bank transaction groups</h4>
+              <p><strong>Where:</strong> <code>Cash and bank management &gt; Setup &gt; Bank transaction groups</code>. Aggregate bank transaction types for reporting (e.g., "Bank fees" group includes wire fee, ACH fee, monthly maintenance) and for advanced bank reconciliation matching rules. Match rules can target a transaction group rather than every individual type, reducing rule volume.</p>
               <h4>Cash and bank parameters</h4>
               <p><strong>Where:</strong> <code>Cash and bank management &gt; Setup &gt; Cash and bank management parameters</code>. Drives default behavior: check number sequence, deposit slip ID, FX revaluation defaults, advanced bank reconciliation defaults, bank document management toggle.</p>
               <h4>Bank account approvals</h4>
@@ -923,7 +950,7 @@
               <ul>
                 <li><strong>Customer aging report:</strong> standard aging by bucket, per customer / per pool, currency / functional.</li>
                 <li><strong>Days Sales Outstanding (DSO):</strong> AR balance / (revenue / period days). Trend tracking shows collection effectiveness.</li>
-                <li><strong>Collection Effectiveness Index (CEI):</strong> (beginning AR + credit sales - ending total AR) / (beginning AR + credit sales - ending current AR). Measures actual collection performance.</li>
+                <li><strong>Collection Effectiveness Index (CEI):</strong> (beginning AR plus credit sales minus ending total AR) divided by (beginning AR plus credit sales minus ending current AR). Measures actual collection performance.</li>
                 <li><strong>Bad-debt expense % of revenue:</strong> the strategic-level KPI for credit policy effectiveness.</li>
                 <li><strong>Collections Workspace KPIs:</strong> per-agent effectiveness, calls per day, promise-to-pay rate.</li>
               </ul>
@@ -1186,16 +1213,84 @@
           </details>
 
           <details class="topic">
-            <summary><span class="topic__eyebrow">Master data</span>Dimensions and account structures</summary>
+            <summary><span class="topic__eyebrow">Master data</span>Dimensions &amp; account structures</summary>
             <div class="topic__body">
               <h4>Financial dimensions</h4>
               <p><strong>Where:</strong> <code>General ledger &gt; Chart of accounts &gt; Dimensions &gt; Financial dimensions</code>. Custom dimensions (department, cost center, project, BU, location) plus system-backed dimensions (Worker, Vendor, Customer, Item) that resolve from existing master records. Each dimension is shared cross-company, used per ledger via the account structure.</p>
               <h4>Account structures</h4>
-              <p><strong>Where:</strong> <code>General ledger &gt; Chart of accounts &gt; Structures &gt; Configure account structures</code>. Define which combinations of main account + dimensions are valid. Use multiple structures (P&amp;L, BS, tax-only, etc.) per legal entity. Each structure has segments and rules; an Advanced rule structure adds conditional segments based on main account.</p>
+              <p><strong>Where:</strong> <code>General ledger &gt; Chart of accounts &gt; Structures &gt; Configure account structures</code>. Define which combinations of main account + dimensions are valid. Per structure:</p>
+              <ul>
+                <li><strong>Up to 11 segments:</strong> 1 main account + 10 dimensions. Advanced rules can add up to 5 more for a total of 16.</li>
+                <li><strong>Main account first</strong> (or early): drives validation performance.</li>
+                <li><strong>Allowed value lookups</strong> per segment: ranges (1000..1999), wildcards, fixed values, derived values.</li>
+                <li><strong>Draft &gt; Activate</strong> workflow: changes go through draft state and are validated before activation; once active, structure cannot be deleted while in use.</li>
+                <li><strong>One main account, one structure</strong>: a given main account cannot appear in more than one active account structure.</li>
+              </ul>
+              <h4>Advanced rules</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Chart of accounts &gt; Structures &gt; Advanced rule structures</code>. Add <em>conditional</em> segments based on main account ranges. Example: when main account is 5000-5999 (Travel expenses), add a Project dimension. Apply via <code>Advanced rules</code> on the parent account structure, with criteria (main account between X and Y).</p>
+              <p>Common gotcha: advanced rules apply <strong>after</strong> the base structure segments, alphabetically. If the base structure already has the dimension fixed, the advanced rule won't override it. Test with sample postings during design.</p>
+              <h4>Fixed, derived &amp; balancing dimensions</h4>
+              <ul>
+                <li><strong>Fixed dimension:</strong> set on the main account (per legal entity override). Forces a specific value regardless of the entered code (e.g., main account 4100 always uses Department = 100).</li>
+                <li><strong>Derived dimension:</strong> populates one dimension based on another (e.g., Cost Center derived from Department).</li>
+                <li><strong>Balancing dimension:</strong> auto-creates due-to / due-from offset entries when a single voucher straddles different values of one dimension. Used for inter-department or inter-business-unit transactions to keep each segment balanced.</li>
+              </ul>
+              <h4>Default dimensions &amp; the defaulting hierarchy</h4>
+              <p>Every master record (vendor, customer, item, worker, position, project, FA, bank, posting profile, journal name) carries default financial dimensions. At posting, F&amp;O resolves the dimension values in this order:</p>
+              <ol>
+                <li><strong>Fixed dimension on the main account</strong> (always wins).</li>
+                <li><strong>Master record</strong> (vendor / customer / item / worker / project) on the source document.</li>
+                <li><strong>Posting profile</strong> dimensions, if applicable.</li>
+                <li><strong>Journal header / source-document header</strong> defaults.</li>
+                <li><strong>Account structure validation</strong> (rejects invalid combinations).</li>
+                <li><strong>Advanced rules</strong> (inject conditional segments).</li>
+                <li><strong>Balancing dimension</strong> (auto-offsets if needed).</li>
+              </ol>
+              <p>Most "wrong dimension on a posting" issues come from misunderstanding this order. Default Dimension Templates (per worker / position / customer / vendor) standardize the master-record defaults across the org.</p>
               <h4>Dimension sets and views</h4>
               <p>Dimension sets aggregate dimensions for reporting. Trial balance and Financial Reporter use them to slice the ledger by chosen dimensions. Pre-build the sets you'll need before close to avoid scramble.</p>
               <h4>Lean COA philosophy</h4>
               <p>The modern approach: small COA (a few hundred main accounts), let dimensions carry detail. Old-school approach of department-encoded account numbers (5,000+ accounts) breaks reporting and complicates account structures. Push back on customers who insist on the old model.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Architecture</span>Source documents &amp; subledger journal</summary>
+            <div class="topic__body">
+              <h4>The two-stage posting model</h4>
+              <p>Modern F&amp;O uses an <strong>accounting framework</strong> where source documents (PO, SO, vendor invoice, free-text invoice, expense report, project invoice proposal, asset acquisition) generate <strong>accounting distributions</strong> before posting, then a <strong>subledger journal</strong> that journalizes to the GL. One-to-one voucher reference between subledger and ledger.</p>
+              <h4>Accounting distributions</h4>
+              <p><strong>Where:</strong> on a source document line, <code>Financials &gt; Distribute amounts</code> (or via the document, <code>View distributions</code>). Shows the proposed debits and credits before posting. Lets users override the default GL account and dimensions per line, with validation against the account structure. Distributions are calculated when amounts and dimensions on the source change.</p>
+              <h4>Subledger journal</h4>
+              <p><strong>Where:</strong> <code>Subledger journal</code> button on the source document, or <code>General ledger &gt; Periodic tasks &gt; Subledger journal entries not yet transferred to general ledger</code>. The intermediate accounting record between source document and ledger voucher. Visible for review / preview before posting.</p>
+              <h4>Documents pending accounting</h4>
+              <p><strong>Where:</strong> <code>General ledger &gt; Periodic tasks &gt; Documents pending accounting</code>. Shows source documents with subledger entries that haven't yet posted to GL (for performance, posting can be deferred to batch). The reconciliation point: nothing should age long here.</p>
+              <h4>Why this matters for consultants</h4>
+              <ul>
+                <li>Lets users see and adjust the accounting impact <strong>before</strong> posting, reducing reversal journals.</li>
+                <li>Enables <strong>distribution overrides</strong> (split a PO line across multiple departments / projects with different dimensions).</li>
+                <li>Decouples source-document posting from GL load (performance feature for high-volume environments).</li>
+                <li>Improves audit trail: every ledger voucher traces back to a single source document.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Architecture</span>Posting profiles overview</summary>
+            <div class="topic__body">
+              <p>Every subledger has a <strong>posting profile</strong> that maps subledger transactions to GL accounts. They share a Table / Group / All priority pattern:</p>
+              <ul>
+                <li><strong>AP Vendor posting profile:</strong> vendor &gt; vendor group &gt; all. Drives AP control account, settle account, prepayments, arrival / offset.</li>
+                <li><strong>AR Customer posting profile:</strong> customer &gt; customer group &gt; all. Drives AR control, settle, prepayments.</li>
+                <li><strong>Inventory posting profile:</strong> item &gt; item group &gt; category &gt; all. Drives every inventory transaction (PO receipt, SO COGS, transfers, count adjustments, WIP).</li>
+                <li><strong>Fixed asset posting profile:</strong> asset group &gt; book &gt; transaction type. The most granular profile in F&amp;O.</li>
+                <li><strong>Project posting profile:</strong> per project group, drives WIP, accrued revenue, billed revenue, deferred revenue accounts.</li>
+                <li><strong>Bank posting (Cash and Bank):</strong> per bank account, drives the GL account behind the bank.</li>
+                <li><strong>Sales tax ledger posting groups:</strong> per tax code, drives tax payable / receivable.</li>
+                <li><strong>Production posting:</strong> uses the Inventory posting profile (Production tab) keyed to item groups for picking list, RAF, WIP, variances.</li>
+                <li><strong>Cost accounting posting (legacy):</strong> retired in favor of the Cost accounting module's own ledger.</li>
+              </ul>
+              <p>For each profile, design at the Group level (vendor group, customer group, item group, asset group). Specific (Table-level) overrides only when business logic demands. Set rows for Item-code = All / Account-code = All as catch-alls so no transaction can fail to find a row.</p>
             </div>
           </details>
 
@@ -1758,7 +1853,7 @@
               <h4>Legal entity</h4>
               <p>A company / organization that posts to a separate ledger and reports separately. Identified by a Data Area ID (up to 4 characters; effectively immutable once transactions exist). Legal entity holds: ledger, currency, fiscal calendar (chosen, not unique), tax jurisdiction defaults, country / region context.</p>
               <h4>Choosing legal entities</h4>
-              <p>One per legal company filing separate financials. Don't create LEs for divisions, branches, or product lines — those are <strong>operating units</strong> or <strong>financial dimensions</strong>. Adding an LE later is supported but expensive (master data setup, fiscal calendars, opening balances, security).</p>
+              <p>One per legal company filing separate financials. Don't create LEs for divisions, branches, or product lines, those belong as <strong>operating units</strong> or <strong>financial dimensions</strong>. Adding an LE later is supported but expensive (master data setup, fiscal calendars, opening balances, security).</p>
               <h4>Operating units</h4>
               <p>Subdivisions inside a legal entity that aren't LEs themselves. Types:</p>
               <ul>
@@ -1795,7 +1890,7 @@
           </details>
 
           <details class="topic">
-            <summary><span class="topic__eyebrow">Master data</span>Global address book &amp; parties</summary>
+            <summary><span class="topic__eyebrow">Master data</span>Global address book, parties &amp; address purposes</summary>
             <div class="topic__body">
               <h4>Global address book (GAB)</h4>
               <p>Cross-company master of <strong>parties</strong> (organizations, persons). One party can play multiple roles: a single party can be Customer in LE A, Vendor in LE B, Worker in LE C.</p>
@@ -1809,8 +1904,44 @@
                 <li><strong>Contact:</strong> for sales/marketing.</li>
                 <li><strong>Competitor, prospect:</strong> CRM roles.</li>
               </ul>
+              <h4>Address purposes</h4>
+              <p><strong>Where:</strong> <code>Organization administration &gt; Global address book &gt; Address and contact information setup &gt; Purpose</code>. Each address on a party / customer / vendor / worker is tagged with one or more purposes:</p>
+              <ul>
+                <li><strong>Invoice:</strong> appears on invoice headers.</li>
+                <li><strong>Delivery:</strong> ship-to address; drives sales-tax destination, transit time.</li>
+                <li><strong>Business:</strong> primary location.</li>
+                <li><strong>Payment / Remit-to:</strong> where to send payment.</li>
+                <li><strong>Statement:</strong> where customer statements go.</li>
+                <li><strong>Service:</strong> for service management dispatch.</li>
+                <li><strong>Other:</strong> custom purposes the company defines.</li>
+              </ul>
+              <p>Address purpose drives which address is used per document. Misconfigured purposes cause invoices to mail to the warehouse, or sales tax to compute on the wrong jurisdiction. Each party can have multiple addresses with different purposes; one is flagged as the primary per purpose.</p>
+              <h4>Multiple address books</h4>
+              <p>Beyond the GAB, you can define <strong>address books</strong> as visibility scopes (e.g., separate per region, per business unit). Customer / vendor records are tagged to one or more address books, controlling who can see them in lookups.</p>
               <h4>Deduplication</h4>
               <p>Periodic dedup process matches parties (name, address, phone). Critical to run regularly; without it, GAB silts up and one customer ends up as five parties. New customer / vendor creation should check GAB first to avoid creating duplicates.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Cross-cutting</span>Reason codes (Financial reasons)</summary>
+            <div class="topic__body">
+              <h4>Single shared list</h4>
+              <p><strong>Where:</strong> <code>Organization administration &gt; Setup &gt; Financial reasons</code>. One cross-company list of reason codes, with checkboxes that control which modules each code is selectable in: <strong>Ledger, Asset, Bank, Customer, Vendor</strong>. Modular activation lets a single "Audit adjustment" code be available everywhere, while a "Customer credit memo" code is restricted to AR.</p>
+              <h4>Where reason codes appear</h4>
+              <ul>
+                <li>General journal lines (mandatory or optional per journal name).</li>
+                <li>Vendor invoice register / invoice journal / invoice approval.</li>
+                <li>Sales orders, free-text invoices, project invoice proposals.</li>
+                <li>Payment reversal, customer / vendor write-off.</li>
+                <li>Fixed asset transactions (acquisition, disposal, write-down).</li>
+                <li>Bank reconciliation adjustments.</li>
+                <li>Tax transactions (stored on the tax record for audit).</li>
+              </ul>
+              <h4>Why centralize</h4>
+              <p>Pre-Org-Admin centralization, each module had its own reason-code table. The shared Financial reasons list standardizes the catalog and ensures the same code means the same thing across modules, important for audit, SOX testing, and cross-module reporting.</p>
+              <h4>Required vs. optional</h4>
+              <p>Per journal name (and per module) you can mark reason code as required, blocking posting until set. Use sparingly; over-required reason codes train users to pick "Other" without thinking.</p>
             </div>
           </details>
 
@@ -2038,12 +2169,48 @@
           </details>
 
           <details class="topic">
+            <summary><span class="topic__eyebrow">Pricing</span>Trade agreements &amp; charges</summary>
+            <div class="topic__body">
+              <h4>Trade agreements (purchase prices &amp; discounts)</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Prices and discounts &gt; Trade agreement journals</code>. Maintain prices and discounts via a journal posting model. Four agreement types:</p>
+              <ul>
+                <li><strong>Price (purch.):</strong> per-unit purchase price.</li>
+                <li><strong>Line discount (purch.):</strong> per-line discount.</li>
+                <li><strong>Multiline discount (purch.):</strong> discount triggered by total quantity / value across lines.</li>
+                <li><strong>Total discount (purch.):</strong> header-level discount on the full PO.</li>
+              </ul>
+              <p>Each row keys on Account code (Table = specific vendor / Group / All) &times; Item code (Table / Group / All) &times; effective dates &times; quantity break. Activate via the journal's <strong>Post</strong> action. Hierarchy of evaluation: Table beats Group beats All; specific date / quantity beats general.</p>
+              <h4>Sales agreements vs. trade agreements (purchase side)</h4>
+              <p>Purchase agreements (covered above) are <strong>commitments</strong> with consumed quantity / value tracking. Trade agreements are <strong>open price lists</strong> without commitment. Use trade agreements for general pricing, purchase agreements when a real volume / value commitment is negotiated.</p>
+              <h4>Charges codes</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Setup &gt; Charges &gt; Charges code</code>. Define each charge type (Freight, Brokerage, Customs, Handling, Restocking, Insurance fee, etc.). Per code:</p>
+              <ul>
+                <li><strong>Debit type:</strong> Ledger (post to expense account), Item (allocate to inventory cost), Customer / Vendor (post to customer / vendor account).</li>
+                <li><strong>Credit type:</strong> mirror options for the offset.</li>
+                <li><strong>Posting:</strong> the GL accounts hit per debit / credit type.</li>
+                <li><strong>Compare PO and invoice values:</strong> for matching tolerance.</li>
+              </ul>
+              <p>Critical: <strong>Debit = Item</strong> rolls the charge into inventory cost (raises landed cost of the line); <strong>Debit = Ledger</strong> expenses the charge directly. Choose deliberately per charge type.</p>
+              <h4>Auto charges</h4>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Setup &gt; Charges &gt; Auto charges</code>. Rules that automatically apply charges to PO header or PO line based on:</p>
+              <ul>
+                <li><strong>Account code:</strong> Table (specific vendor) / Group / All.</li>
+                <li><strong>Item code:</strong> Table / Group / All.</li>
+                <li><strong>Header vs. line:</strong> applied to whole PO or per-line.</li>
+              </ul>
+              <p>Hierarchy: a Table-level rule beats Group beats All; a more specific match beats a general one. Auto charges remove the manual step of adding freight / brokerage to every PO and standardize how charges flow.</p>
+              <h4>Manual charges</h4>
+              <p>Outside auto charges, charges can be added manually on a PO (<code>Header &gt; Charges</code> or per line, <code>Line &gt; Charges</code>) for one-off costs. Same Charges-code rules apply.</p>
+            </div>
+          </details>
+
+          <details class="topic">
             <summary><span class="topic__eyebrow">Receipt</span>Product receipt and matching</summary>
             <div class="topic__body">
               <h4>PO confirmation</h4>
               <p>Vendor confirms acceptance of the order; PO status moves to Confirmed. Triggers vendor commitment on the GL if encumbrance is enabled.</p>
               <h4>Product receipt</h4>
-              <p><strong>Where:</strong> from the PO, <code>Receive &gt; Product receipt</code>. For advanced WMS warehouses, receiving happens via the Warehouse Management mobile app (Purchase order receiving / License plate receiving menu items) and the product receipt posts when the load arrives at the final put-away location. Product receipt posts the inventory receipt and the purchase accrual (GRNI) liability. Note: "Product receipt" is the inbound (PO) term; "Packing slip" is the outbound (sales / inventory) term — both are current and refer to opposite sides of the inventory transaction.</p>
+              <p><strong>Where:</strong> from the PO, <code>Receive &gt; Product receipt</code>. For advanced WMS warehouses, receiving happens via the Warehouse Management mobile app (Purchase order receiving / License plate receiving menu items) and the product receipt posts when the load arrives at the final put-away location. Product receipt posts the inventory receipt and the purchase accrual (GRNI) liability. Note: "Product receipt" is the inbound (PO) term; "Packing slip" is the outbound (sales / inventory) term, both are current and refer to opposite sides of the inventory transaction.</p>
               <h4>Receipt registration</h4>
               <p>Lighter-touch receipt that records arrival without formally posting; useful for inspection-required items. Posting happens after inspection passes.</p>
               <h4>Three-way match</h4>
@@ -2130,13 +2297,49 @@
             <summary><span class="topic__eyebrow">Process</span>Release to legal entities</summary>
             <div class="topic__body">
               <h4>Shared vs. released</h4>
-              <p>A <strong>shared product</strong> exists once across the organization. To use it in a specific legal entity, <strong>release</strong> it; the released-product record holds entity-specific fields (default tax group, item model group, financial dimensions, sales / purchase price).</p>
+              <p>A <strong>shared product</strong> exists once across the organization (<code>Product information management &gt; Products &gt; All products and product masters</code>). To use it in a specific legal entity, <strong>release</strong> it; the released-product record (<code>Product information management &gt; Products &gt; Released products</code>) holds entity-specific fields:</p>
+              <ul>
+                <li><strong>Item group</strong> (mandatory): drives inventory posting profile to GL.</li>
+                <li><strong>Item model group</strong>: costing method, stocked status, accruals.</li>
+                <li><strong>Storage / Tracking dimension groups</strong>: per-entity if not already on shared.</li>
+                <li><strong>Default tax groups, item sales / purchase tax groups</strong>.</li>
+                <li><strong>Default financial dimensions</strong>.</li>
+                <li><strong>Default order settings</strong> (see below).</li>
+                <li><strong>Sales / purchase prices, trade agreements scope</strong>.</li>
+              </ul>
               <h4>Release process</h4>
-              <p><strong>Where:</strong> <code>Product information management &gt; Products &gt; Released products &gt; Release products</code>. Wizard: select shared product &gt; select target legal entities &gt; configure the per-entity defaults &gt; release. Post-release, edits to the shared product propagate to all entities; entity-specific fields are owned per entity.</p>
+              <p><strong>Where:</strong> <code>Product information management &gt; Products &gt; Released products &gt; Release products</code>, or from a shared product, <code>Release products</code>. Wizard: select shared product &gt; select target legal entities &gt; configure the per-entity defaults &gt; release. Post-release, edits to the shared product propagate to all entities; entity-specific fields are owned per entity.</p>
               <h4>Multi-entity considerations</h4>
-              <p>Decide what is global (item number, name, dimensions) versus local (price, tax group, default warehouse). Reverse-engineering a released product to be shared across more entities is straightforward; the opposite (de-releasing) is not.</p>
+              <p>Decide what is global (item number, name, product dimensions) versus local (price, tax group, default warehouse). Reverse-engineering a released product to be shared across more entities is straightforward; the opposite (de-releasing) is not.</p>
               <h4>Product change management</h4>
               <p>For governed environments, F&amp;O has a Product change cases feature that wraps changes in workflow approval, useful in regulated industries (medical devices, food).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Default order settings</summary>
+            <div class="topic__body">
+              <h4>What it is</h4>
+              <p><strong>Where:</strong> on a released product, <code>Plan &gt; Default order settings</code> (or via the released-product list, <code>Plan &gt; Default order settings</code>). Three FastTabs:</p>
+              <ul>
+                <li><strong>Purchase:</strong> default site, warehouse, vendor, min / max / multiple / standard order quantity, lead time, stop flag.</li>
+                <li><strong>Sales:</strong> default site, warehouse, min / max / multiple / standard sales quantity, lead time, stop flag.</li>
+                <li><strong>Inventory (transfer):</strong> default site, warehouse, min / max / multiple / standard transfer quantity, transfer lead time, stop flag.</li>
+              </ul>
+              <h4>Site-specific order settings</h4>
+              <p>Override defaults per site via <code>Plan &gt; Site specific order settings</code>. Required when the same item ships from different sites with different lead times, vendors, or quantities. Site-specific rules win over default order settings when both apply.</p>
+              <h4>Where it's consumed</h4>
+              <ul>
+                <li>PO line creation pulls vendor / warehouse / lead time defaults.</li>
+                <li>SO line creation pulls warehouse / lead time defaults.</li>
+                <li>Transfer order creation pulls transfer lead time.</li>
+                <li>Master Planning uses lead times and min / max / multiple to size planned orders.</li>
+                <li>Sales agreement, purchase agreement, RFQ, and requisition lines all default through these settings.</li>
+              </ul>
+              <h4>Stop flag</h4>
+              <p>Stops new purchase / sales / transfer orders for the item, useful for end-of-life, recall, or quality hold. Different from item Hold (which blocks transactions wholesale); stop is per direction (purchase only, sales only).</p>
+              <h4>Item coverage (planning override)</h4>
+              <p><strong>Where:</strong> from the released product, <code>Plan &gt; Item coverage</code>. Per warehouse, override coverage group, lead time, min / max for planning purposes only. Common pattern: Default order settings hold operational defaults; Item coverage adds warehouse-specific planning behavior.</p>
             </div>
           </details>
 
@@ -2732,6 +2935,34 @@
           </details>
 
           <details class="topic">
+            <summary><span class="topic__eyebrow">Pricing</span>Trade agreements &amp; sales agreements</summary>
+            <div class="topic__body">
+              <h4>Trade agreements (sales prices &amp; discounts)</h4>
+              <p><strong>Where:</strong> <code>Sales and marketing &gt; Prices and discounts &gt; Trade agreement journals</code>. Sales-side equivalent of the procurement trade agreements. Four agreement types:</p>
+              <ul>
+                <li><strong>Price (sales):</strong> per-unit sales price.</li>
+                <li><strong>Line discount (sales):</strong> per-line discount.</li>
+                <li><strong>Multiline discount (sales):</strong> discount triggered by total quantity / value across lines.</li>
+                <li><strong>Total discount (sales):</strong> header-level discount on the full SO.</li>
+              </ul>
+              <p>Each row keys on Account code (Table = specific customer / Group / All) &times; Item code (Table / Group / All) &times; effective dates &times; quantity break. Activated via the journal's <strong>Post</strong> action; only posted journal lines drive runtime pricing. Best-price logic: Table beats Group beats All; specific date / quantity break beats general.</p>
+              <h4>Unified Pricing Management (UPM)</h4>
+              <p>Microsoft is gradually superseding classic trade agreements with <strong>Unified Pricing Management</strong> under <code>Pricing management</code>. UPM uses price component codes, structured price models, and concurrence rules (compounding / best-price selection) for richer scenarios. New implementations should evaluate UPM; classic trade agreements remain supported and continue to work.</p>
+              <h4>Sales agreements</h4>
+              <p><strong>Where:</strong> <code>Sales and marketing &gt; Sales agreements &gt; Sales agreements</code>. Long-term commitment for a customer to buy. Same four commitment types as the purchase side:</p>
+              <ul>
+                <li><strong>Product quantity commitment:</strong> fixed quantity of a specific product.</li>
+                <li><strong>Product value commitment:</strong> fixed monetary value of a specific product.</li>
+                <li><strong>Product category value commitment:</strong> fixed monetary value within a sales category.</li>
+                <li><strong>Value commitment:</strong> total monetary value, any product / category.</li>
+              </ul>
+              <p>Pricing terms on the agreement <strong>override trade agreements</strong> for the duration. Header policies: enforce max, fix price/discount, min/max release amount per release sales order. Release orders consume the commitment; reporting tracks consumption vs. remaining.</p>
+              <h4>Trade vs. sales agreement, deciding</h4>
+              <p>Use <strong>trade agreements</strong> for ongoing price lists with no commitment; use <strong>sales agreements</strong> when there is an actual signed commitment with volume / value tracking. Both can coexist; sales agreement pricing wins when both apply.</p>
+            </div>
+          </details>
+
+          <details class="topic">
             <summary><span class="topic__eyebrow">Integration</span>D365 Sales &amp; dual-write</summary>
             <div class="topic__body">
               <h4>When to use F&amp;O Sales &amp; Marketing</h4>
@@ -2958,7 +3189,7 @@
               <h4>MRR &amp; movement</h4>
               <p>Monthly recurring revenue with movement detail: new ARR (new customers), expansion ARR (upsells), contraction ARR (downsells), churn ARR (cancellations). The retention story.</p>
               <h4>Deferred revenue waterfall</h4>
-              <p>Beginning balance + new bookings - recognition = ending balance, by period and contract. Audit-critical for ASC 606 disclosures.</p>
+              <p>Beginning balance plus new bookings minus recognition equals ending balance, by period and contract. Audit-critical for ASC 606 disclosures.</p>
               <h4>Backlog</h4>
               <p>Unbilled committed revenue (signed contracts not yet invoiced). The forward-looking revenue indicator.</p>
               <h4>Integration with financial reports</h4>
@@ -3088,6 +3319,33 @@
               </ul>
               <h4>Go-live data migration</h4>
               <p>The standard pattern for cutover: open balances, master data, open transactions all loaded via DMF projects. Multiple dry-run loads in test environments before final cutover. Master data refreshed continuously up to cutover; transactions loaded in the cutover window.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Features</span>Feature management</summary>
+            <div class="topic__body">
+              <h4>What it is</h4>
+              <p><strong>Where:</strong> <code>System administration &gt; Workspaces &gt; Feature management</code>. The toggle workspace for new and changing F&amp;O capabilities. Microsoft ships features behind flags, allowing customers to opt in (or be auto-enabled at a future release) on their own timeline.</p>
+              <h4>Feature states</h4>
+              <ul>
+                <li><strong>Preview:</strong> early access; not for production use unless explicitly stated.</li>
+                <li><strong>Available:</strong> generally available; opt-in.</li>
+                <li><strong>On by default (mandatory):</strong> auto-enabled at a stated release; cannot be turned off.</li>
+                <li><strong>Deprecated:</strong> being removed; turn-off date communicated in advance.</li>
+              </ul>
+              <h4>Why it matters operationally</h4>
+              <p>Service updates (8+/year) bring new features. Without active management:</p>
+              <ul>
+                <li>Mandatory features turn on without notice and break unrelated process.</li>
+                <li>New optional features that should be enabled (Planning Optimization, modern Expense, Subledger automation) sit unused.</li>
+                <li>Deprecated features get turned off mid-cycle, surprising users.</li>
+              </ul>
+              <p>Plan a quarterly Feature management review, comparing your enabled features to release notes; document approved features in a change log.</p>
+              <h4>Per-environment vs. global</h4>
+              <p>Most features toggle per environment (sandbox first, production after testing). A few are tenant-wide. Always test in sandbox before enabling in production, even when the feature is marked GA.</p>
+              <h4>Feature dependencies</h4>
+              <p>Some features require prerequisites (a parent feature, a configuration setting, a data migration step). Feature management surfaces dependencies; honor them or activation fails.</p>
             </div>
           </details>
 
