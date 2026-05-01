@@ -1117,14 +1117,20 @@ body.has-search-open { overflow: hidden; }
   to   { opacity: 0; transform: translateY(-6px); }
 }
 
-body.page-enter main,
-body.page-enter .hero,
-body.page-enter .page-header {
+body.page-enter > main,
+body.page-enter > .hero,
+body.page-enter > .page-header,
+body.page-enter > .container,
+body.page-enter > section,
+body.page-enter > div:not(.site-header):not(.site-footer) {
   animation: pageEnter var(--motion-base) var(--ease-out-snap) both;
 }
-body.page-exit main,
-body.page-exit .hero,
-body.page-exit .page-header {
+body.page-exit > main,
+body.page-exit > .hero,
+body.page-exit > .page-header,
+body.page-exit > .container,
+body.page-exit > section,
+body.page-exit > div:not(.site-header):not(.site-footer) {
   animation: pageExit 220ms var(--ease-in-out-soft) both;
 }
 body.page-exit { pointer-events: none; }
