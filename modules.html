@@ -630,12 +630,99 @@
       <!-- ============== Cost Accounting ============== -->
       <article class="item-pane" data-item-pane="cost-accounting">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Cost Accounting</h2><p class="item-pane__lead">A separate ledger for managerial accounting, cost objects, allocations, and contribution analysis.</p></header>
+
+        <p>Cost Accounting is a <strong>separate ledger</strong> from the General Ledger, designed for managerial reporting that doesn't fit cleanly inside statutory accounting. It supports multi-step <strong>cost allocations</strong>, <strong>statistical drivers</strong> (headcount, square footage, machine hours), and <strong>contribution-margin reporting</strong> at any cost-object level (department, product, customer). The trade-off is complexity: a separate set of master data, integration jobs, and reconciliation. Most mid-market clients are better served by careful financial-dimension design in GL; Cost Accounting becomes worthwhile when allocation logic exceeds what GL allocations / Subledger Accounting can express.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Cost accounting ledger</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cost accounting ledger vs. general ledger, dimension hierarchies (cost element, cost object, statistical), and the data integration jobs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Sources</span>Source data providers</summary><div class="topic__body topic__body--placeholder"><p>Add content here, GL transactions as a source, statistical providers (headcount, square footage), budget integration, and frequency of data refresh.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Allocations</span>Cost allocation policies</summary><div class="topic__body topic__body--placeholder"><p>Add content here, formula allocation bases, hierarchy allocation, overhead calculation, and the order of operations in the calculation process.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Cost control workspace</summary><div class="topic__body topic__body--placeholder"><p>Add content here, cost control workspace, contribution margin analysis, and Power BI integration.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>When to use it</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when cost accounting is justified vs. when financial dimensions on the GL are enough, and the maturity threshold a client should hit before adopting.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Ledger &amp; dimensions</summary>
+            <div class="topic__body">
+              <h4>Cost accounting ledger</h4>
+              <p><strong>Where:</strong> <code>Cost accounting &gt; Setup &gt; Cost accounting ledger</code>. Ledger holds: cost element dimensions, cost object dimensions, statistical dimensions, fiscal calendar, currency, the version structure (actual / budget / forecast).</p>
+              <h4>Dimension hierarchies</h4>
+              <ul>
+                <li><strong>Cost elements:</strong> the "what" (what kind of cost). Map from GL accounts.</li>
+                <li><strong>Cost objects:</strong> the "where" (department, cost center, product line). Map from GL financial dimensions.</li>
+                <li><strong>Statistical dimensions:</strong> the "how to allocate" (headcount, square footage, machine hours, units produced). Map from external sources.</li>
+              </ul>
+              <h4>Versions</h4>
+              <p>Actual, budget, forecast can each be a version. Comparison reports cross versions (actual vs. budget contribution margin).</p>
+              <h4>Cost control unit</h4>
+              <p>The combination of dimensions used for allocation and reporting in a particular run. Multiple cost control units allow different views (manufacturing vs. service business) of the same source data.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Sources</span>Data providers</summary>
+            <div class="topic__body">
+              <h4>GL as source</h4>
+              <p>Cost transactions imported from GL via integration job (typically monthly). Maps GL account &gt; cost element, GL dimensions &gt; cost objects.</p>
+              <h4>Statistical providers</h4>
+              <p>Statistical measures (headcount per department, square footage per facility) imported from HR, fixed assets, or external Excel / DMF. Frequency: usually monthly or quarterly.</p>
+              <h4>Budget integration</h4>
+              <p>Budget Control budgets feed budget version of cost accounting. Allows variance analysis at cost-object level.</p>
+              <h4>Refresh cadence</h4>
+              <p>Typical pattern: monthly refresh after GL close. Cost accounting is point-in-time view; running it more often is possible but adds processing overhead.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Allocations</span>Policies &amp; calculations</summary>
+            <div class="topic__body">
+              <h4>Allocation policies</h4>
+              <p>Define how indirect costs flow from one cost object to others. Driven by formula or hierarchy.</p>
+              <h4>Formula allocation</h4>
+              <p>"Allocate facility cost to departments based on square footage." Source = facility cost; basis = square footage statistical; targets = departments. Engine computes per-target share and posts allocation lines.</p>
+              <h4>Hierarchy allocation</h4>
+              <p>Multi-step: corporate &gt; division &gt; department. Each level applies its own driver (e.g., division allocates by revenue, department by headcount). Run order matters; the engine respects the configured sequence.</p>
+              <h4>Overhead calculation</h4>
+              <p>Apply standard overhead rates to direct costs (typical for product costing rolling up overhead at cost-object level for product cost).</p>
+              <h4>Calculation run</h4>
+              <p>Submit a calculation job: imports source data, runs allocations in order, posts to cost accounting ledger. Audit trail shows each allocation step. Reversible by deleting the run.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Cost control workspace &amp; analytics</summary>
+            <div class="topic__body">
+              <h4>Cost control workspace</h4>
+              <p>Cost-object owner's view: actual vs. budget by cost element, drill-down into transactions / allocations. Designed for managers who own a cost center.</p>
+              <h4>Contribution margin analysis</h4>
+              <p>Revenue minus direct cost minus allocated overhead per product / customer / segment. Reveals true profitability after support costs distributed.</p>
+              <h4>Power BI integration</h4>
+              <p>Cost accounting data exposed via entity store; Power BI dashboards for executive contribution-margin analysis, allocation transparency, what-if scenarios.</p>
+              <h4>Statement</h4>
+              <p>Cost accounting "statement" report: source data &gt; allocations applied &gt; final cost-object totals. The audit document for managerial reporting.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>When to use it</summary>
+            <div class="topic__body">
+              <h4>Justified when</h4>
+              <ul>
+                <li>Allocation logic has 3+ steps, with statistical drivers that don't exist as GL postings.</li>
+                <li>Multiple managerial views needed (legal entity vs. product line vs. customer segment).</li>
+                <li>Mature finance team has a Director of FP&amp;A or similar role to own the model.</li>
+                <li>Existing GL allocation rules / Subledger Accounting can't express the policy cleanly.</li>
+              </ul>
+              <h4>Overkill when</h4>
+              <ul>
+                <li>Single dimension allocation (department X gets 10% of corporate; can be done in GL).</li>
+                <li>Mid-market client without dedicated managerial reporting function.</li>
+                <li>Reporting needs can be met by Power BI on top of GL data.</li>
+              </ul>
+              <h4>Implementation pitfalls</h4>
+              <ul>
+                <li>Source-mapping drift: GL accounts created later not mapped to cost elements; data leaks.</li>
+                <li>Statistical refresh discipline: drivers stale, allocations skewed.</li>
+                <li>Reconciliation neglected: cost accounting actuals diverge from GL; trust erodes.</li>
+                <li>Over-engineered: 5-level hierarchies that nobody can explain to a department manager.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -968,7 +1055,7 @@
             <div class="topic__body">
               <h4>Books (renamed from Value models / Depreciation books)</h4>
               <p><strong>Where:</strong> <code>Fixed assets &gt; Setup &gt; Books</code>. Each book is a separate set of asset values for a specific reporting purpose. Common pattern: Corporate book (US GAAP / IFRS), Tax book (per country tax depreciation rules), Statutory book (local-GAAP). Each book has a posting layer (Current, Operations, Tax) controlling whether it hits the GL or sits parallel for reporting.</p>
-              <p>Note: in earlier F&amp;O releases, "value models" and "depreciation books" were separate; current versions consolidate these into a single Books concept. Books can be configured to derive transactions to other books, so a single posting can flow to multiple books simultaneously.</p>
+              <p>Note: pre-2019 versions had two separate constructs, <strong>Value models</strong> (which posted to the GL) and <strong>Depreciation books</strong> (tax / reporting only, no GL impact). Microsoft merged them into Books in version 10.0.x; the <strong>Posting layer</strong> on the book (Current / Operations / Tax / None) controls whether it posts to GL. Books can be configured to derive transactions to other books, so a single posting flows to multiple books simultaneously.</p>
               <h4>Depreciation profiles</h4>
               <p><strong>Where:</strong> <code>Fixed assets &gt; Setup &gt; Depreciation profiles</code>. Methods include Straight line, Straight line life remaining, Reducing balance, Consumption, Factor, Manual. Depreciation conventions: half-year, full-month, mid-quarter, etc., applied at first transaction.</p>
               <h4>Fixed asset groups</h4>
@@ -1293,9 +1380,9 @@
             <summary><span class="topic__eyebrow">Setup</span>Sites, warehouses, locations</summary>
             <div class="topic__body">
               <h4>Inventory hierarchy</h4>
-              <p>Three levels: <strong>Site</strong> (a financial entity, drives accounting splits and intercompany) &gt; <strong>Warehouse</strong> (a physical or virtual stocking location) &gt; <strong>Location</strong> (specific bin / aisle / rack within a warehouse).</p>
+              <p>Three levels: <strong>Site</strong> (a mandatory financial inventory dimension that drives ledger posting splits and ties to a legal entity) &gt; <strong>Warehouse</strong> (a physical or virtual stocking location) &gt; <strong>Location</strong> (specific bin / aisle / rack within a warehouse).</p>
               <ul>
-                <li><strong>Site</strong> is mandatory; carries financial dimensions and ties to the legal entity.</li>
+                <li><strong>Site</strong> is the only mandatory inventory dimension and is always financially tracked; carries default financial dimensions and ties to the legal entity.</li>
                 <li><strong>Warehouse</strong> can be basic (simple storage) or advanced WMS-enabled (full work / wave / mobile flow).</li>
                 <li><strong>Location</strong> is required for advanced WMS; optional but recommended for basic warehousing.</li>
               </ul>
@@ -1303,6 +1390,46 @@
               <p>The single most consequential design decision in SCM. Basic warehousing handles simple put-away and picking with manual journals; advanced WMS adds work creation, wave templates, mobile execution, license plates, location directives. Once a warehouse is enabled for advanced WMS, transactions in that warehouse are locked into the WMS path.</p>
               <h4>Inventory parameters</h4>
               <p><strong>Where:</strong> <code>Inventory management &gt; Setup &gt; Inventory and warehouse management parameters</code>. Site activation, default journal names, reservation behavior, on-hand list defaults, FX revaluation defaults, batch / serial number control settings.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Item groups &amp; inventory posting profile</summary>
+            <div class="topic__body">
+              <h4>Item groups</h4>
+              <p><strong>Where:</strong> <code>Inventory management &gt; Setup &gt; Inventory &gt; Item groups</code>. Item groups are the master-data bridge between released products and the inventory posting profile. Every released product must be assigned an item group (the field is mandatory on the released product). The group is what the inventory posting profile keys on for the "Group" account-code level. Item groups are distinct from <strong>Item model groups</strong>: item groups drive ledger posting, item model groups drive costing method / stocked-status / reservation behavior.</p>
+              <h4>Designing item groups</h4>
+              <p>Group items by accounting behavior, not procurement category or marketing taxonomy. Common splits:</p>
+              <ul>
+                <li><strong>Raw materials</strong> (manufactured goods inputs, hits raw-material inventory account).</li>
+                <li><strong>Finished goods</strong> (own production output).</li>
+                <li><strong>Trade goods / Resale</strong> (purchased for resale).</li>
+                <li><strong>Service items</strong> (non-stocked, no inventory account).</li>
+                <li><strong>Spares / MRO</strong> (maintenance items).</li>
+                <li><strong>Capital items</strong> (will be capitalized as fixed assets).</li>
+              </ul>
+              <p>10-20 item groups is typical for mid-market; large manufacturers go higher when they need multiple raw-material pools (chemicals vs. metals vs. components) reporting separately on the balance sheet.</p>
+              <h4>Inventory posting profile</h4>
+              <p><strong>Where:</strong> <code>Inventory management &gt; Setup &gt; Posting &gt; Posting</code>. The matrix that maps every inventory transaction to a GL account. Three keying levels per row:</p>
+              <ul>
+                <li><strong>Item code:</strong> Table (specific item), Group (item group), All, Category (procurement category).</li>
+                <li><strong>Account code:</strong> Table (specific customer / vendor), Group, All.</li>
+                <li><strong>Posting type:</strong> the transaction (Purchase expenditure for product, Cost of purchased materials received, Cost of goods sold, Issue, Receipt, Revenue, Discount, WIP, Profit/Loss, etc.).</li>
+              </ul>
+              <p>Most companies set rows at the Item-code = Group level (per item group) for normal posting types and Item-code = All for the catch-all rows. Specific overrides at Item-code = Table only for exceptions.</p>
+              <h4>Posting type cheat-sheet</h4>
+              <ul>
+                <li><strong>Purchase expenditure for product</strong> + <strong>Purchase accrual</strong>: PO product receipt (GRNI accrual to liability).</li>
+                <li><strong>Cost of purchased materials received</strong> + <strong>Cost of purchased materials invoiced</strong>: PO product-receipt vs. invoice variance handling.</li>
+                <li><strong>Issue</strong> / <strong>Receipt</strong>: inventory-only journals (transfer, movement).</li>
+                <li><strong>Cost of units delivered</strong> / <strong>Cost of units invoiced</strong>: SO packing slip / invoice (relieves inventory, posts COGS).</li>
+                <li><strong>Revenue</strong> / <strong>Discount</strong>: SO invoice (debit AR, credit revenue).</li>
+                <li><strong>WIP</strong>: production order picking list / RAF.</li>
+                <li><strong>Profit</strong> / <strong>Loss</strong>: counting variances, write-offs.</li>
+              </ul>
+              <p>Which posting types fire depends on the <strong>Item model group</strong> toggles (Post physical inventory, Post financial inventory, Accrue liability on product receipt). Misalignment between item-model-group toggles and posting-profile rows is the #1 cause of "missing combination of financial dimensions" errors at posting.</p>
+              <h4>Reconciliation discipline</h4>
+              <p>The inventory value report (per item / warehouse / dimension) must tie to the inventory control accounts in the GL. Mismatch usually means: (1) manual journal hit the inventory account directly, (2) posting profile gap (a rare combination has no row matching), or (3) an item moved to a new group mid-period. Reconcile every period close.</p>
             </div>
           </details>
 
@@ -1388,7 +1515,7 @@
       <article class="item-pane" data-item-pane="landed-cost">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Landed Cost</h2><p class="item-pane__lead">Tracking the true cost of imported goods, freight, duty, insurance, and overhead.</p></header>
 
-        <p>The Landed Cost module (a successor to the older Transportation-management-only approach) lets importers track every cost component that lands on a unit of inventory: ocean freight, customs duty, insurance, terminal handling, brokerage, drayage, internal overhead. The module organizes these around a <strong>voyage</strong> (a shipment with one or more containers carrying lines from one or more POs) and apportions costs to each PO line on landing. For companies that don't import, simpler <strong>miscellaneous charges</strong> on a PO often cover the same need with far less complexity.</p>
+        <p>The Landed Cost module (a successor to the older Transportation-management-only approach) lets importers track every cost component that lands on a unit of inventory: ocean freight, customs duty, insurance, terminal handling, brokerage, drayage, internal overhead. The module organizes these around a <strong>voyage</strong> (a shipment with one or more containers carrying lines from one or more POs) and apportions costs to each PO line on landing. For companies that don't import, simpler <strong>Charges</strong> on a PO (see Procurement &amp; Sourcing, Charges codes / Auto charges) often cover the same need with far less complexity.</p>
 
         <div class="topics">
 
@@ -1484,7 +1611,7 @@
               <ul>
                 <li>Domestic-only purchasing; one freight charge per PO.</li>
                 <li>Vendor sells DDP (delivered duty paid); all cost is in PO price.</li>
-                <li>Use <strong>miscellaneous charges</strong> on the PO instead, posted to inventory cost via charge codes.</li>
+                <li>Use <strong>Charges</strong> (Charges codes) on the PO instead, with debit type <em>Item</em> to roll into inventory cost or <em>Ledger</em> to expense directly.</li>
               </ul>
               <h4>Pitfalls</h4>
               <ul>
@@ -1511,8 +1638,8 @@
             <div class="topic__body">
               <h4>Planning Optimization (current)</h4>
               <p>Runs in a dedicated Azure service. Reads F&amp;O data, computes plans, writes planned orders back. Benefits: 10x+ performance, runs during business hours without locking, supports incremental planning, and the only engine receiving new investment.</p>
-              <h4>Legacy MRP (in-process, deprecating)</h4>
-              <p>Runs inside F&amp;O batch framework. Limited by SQL contention; typically scheduled overnight. Microsoft has set deprecation milestones; verify on the Master Planning fit-analysis tool which features your scenario uses.</p>
+              <h4>Legacy MRP (in-process, deprecated)</h4>
+              <p>Runs inside F&amp;O batch framework. Limited by SQL contention; typically scheduled overnight. Microsoft formally announced deprecation in October 2023 with a multi-year removal timeline; new implementations <strong>must</strong> use Planning Optimization. Use the Master Planning fit-analysis tool to confirm coverage of your scenario before migrating existing customers.</p>
               <h4>Fit analysis</h4>
               <p><strong>Where:</strong> <code>Master planning &gt; Setup &gt; Planning Optimization &gt; Fit analysis</code>. Runs against your data and reports unsupported scenarios (some legacy features, e.g., advanced inventory close coordination, may not yet be in scope). Run early in design; use to plan migration.</p>
               <h4>Demand forecasting</h4>
@@ -1620,12 +1747,114 @@
       <!-- ============== Organization Administration ============== -->
       <article class="item-pane" data-item-pane="org-administration">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Organization Administration</h2><p class="item-pane__lead">Legal entities, operating units, organization hierarchies, number sequences, and the cross-cutting setup.</p></header>
+
+        <p>Organization Administration is the foundation that every other module sits on. Get this wrong and you spend the rest of the implementation working around it. The decisions here are deceptively simple-looking but largely <strong>irreversible</strong>: legal entities (companies in the database), the global address book (cross-company party master), the dimension structure (active account structures), and number sequences. Spend disproportionate design time here; mistakes here cascade everywhere.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Legal entity &amp; operating units</summary><div class="topic__body topic__body--placeholder"><p>Add content here, legal entity setup, operating units (department, cost center, value stream, business unit), and the link to financial dimensions.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Organization hierarchies</summary><div class="topic__body topic__body--placeholder"><p>Add content here, hierarchy purposes (signing limit, security, organization chart), publishing a hierarchy, and the typical purposes you'll need on day one.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Address book &amp; parties</summary><div class="topic__body topic__body--placeholder"><p>Add content here, global address book, parties, party roles (customer, vendor, employee), and dedup considerations.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Numbering</span>Number sequences</summary><div class="topic__body topic__body--placeholder"><p>Add content here, scope (shared, company, fiscal calendar, fiscal calendar period), continuous vs. non-continuous, and the wizard.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Calendars</span>Working calendars</summary><div class="topic__body topic__body--placeholder"><p>Add content here, calendars and working time templates, the difference from the fiscal calendar, and where each is consumed (planning, transportation, project).</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Legal entity &amp; operating units</summary>
+            <div class="topic__body">
+              <h4>Legal entity</h4>
+              <p>A company / organization that posts to a separate ledger and reports separately. Identified by a Data Area ID (up to 4 characters; effectively immutable once transactions exist). Legal entity holds: ledger, currency, fiscal calendar (chosen, not unique), tax jurisdiction defaults, country / region context.</p>
+              <h4>Choosing legal entities</h4>
+              <p>One per legal company filing separate financials. Don't create LEs for divisions, branches, or product lines — those are <strong>operating units</strong> or <strong>financial dimensions</strong>. Adding an LE later is supported but expensive (master data setup, fiscal calendars, opening balances, security).</p>
+              <h4>Operating units</h4>
+              <p>Subdivisions inside a legal entity that aren't LEs themselves. Types:</p>
+              <ul>
+                <li><strong>Department:</strong> functional grouping (Engineering, Sales).</li>
+                <li><strong>Cost center:</strong> budgetary unit.</li>
+                <li><strong>Business unit:</strong> P&amp;L unit, often with its own management.</li>
+                <li><strong>Value stream:</strong> lean-manufacturing flow.</li>
+                <li><strong>Retail channel:</strong> sales channel (used by Commerce).</li>
+              </ul>
+              <h4>Operating units &lt;&gt; financial dimensions</h4>
+              <p>Operating units are typically also financial dimensions, allowing GL transactions to be coded to them. Set up the OU and the dimension together; many implementations forget the dimension link, then can't report by OU.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Hierarchies</span>Organization hierarchies</summary>
+            <div class="topic__body">
+              <h4>Hierarchy purposes</h4>
+              <p>One hierarchy can serve multiple purposes; common purposes:</p>
+              <ul>
+                <li><strong>Organization chart:</strong> reporting visualization.</li>
+                <li><strong>Centralized payments:</strong> cash-pool flow across LEs.</li>
+                <li><strong>Security:</strong> XDS scope by hierarchy.</li>
+                <li><strong>Signing limit:</strong> approval routing per position level.</li>
+                <li><strong>Retail assortment:</strong> assortments scoped to a hierarchy node.</li>
+              </ul>
+              <h4>Publishing</h4>
+              <p>Hierarchies must be <strong>published</strong> with a draft &gt; published transition (effective-dated). Workflow / signing limits use the published version. Edits create a new draft until published.</p>
+              <h4>Day-one essentials</h4>
+              <p>Most implementations need: organization chart (positions), signing limit (approval), security (XDS where relevant). The others can be added later. Don't over-design hierarchies for hypothetical future uses.</p>
+              <h4>Position vs. department hierarchy</h4>
+              <p>Hierarchy can be over <strong>positions</strong> (one position per node, ideal for approval) or <strong>departments</strong> (org structure, useful for financial reporting). Multiple hierarchies coexist; pick the right basis per purpose.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Global address book &amp; parties</summary>
+            <div class="topic__body">
+              <h4>Global address book (GAB)</h4>
+              <p>Cross-company master of <strong>parties</strong> (organizations, persons). One party can play multiple roles: a single party can be Customer in LE A, Vendor in LE B, Worker in LE C.</p>
+              <h4>Party records</h4>
+              <p>Holds name, address(es), contact info, type (Person / Organization), language, profile image. Customer / vendor / worker records reference the party for shared data.</p>
+              <h4>Party roles</h4>
+              <ul>
+                <li><strong>Customer:</strong> per LE, with AR-specific data (terms, credit limit).</li>
+                <li><strong>Vendor:</strong> per LE, with AP-specific data (payment terms, banking).</li>
+                <li><strong>Worker:</strong> cross-LE if shared services; per-LE personnel number.</li>
+                <li><strong>Contact:</strong> for sales/marketing.</li>
+                <li><strong>Competitor, prospect:</strong> CRM roles.</li>
+              </ul>
+              <h4>Deduplication</h4>
+              <p>Periodic dedup process matches parties (name, address, phone). Critical to run regularly; without it, GAB silts up and one customer ends up as five parties. New customer / vendor creation should check GAB first to avoid creating duplicates.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Numbering</span>Number sequences</summary>
+            <div class="topic__body">
+              <h4>Number sequence wizard</h4>
+              <p><strong>Where:</strong> <code>Organization administration &gt; Number sequences &gt; Number sequences &gt; Generate number sequences</code>. The wizard creates default sequences for all references that need one. Run early in setup; customize after.</p>
+              <h4>Scope</h4>
+              <ul>
+                <li><strong>Shared:</strong> one sequence across all LEs (e.g., worker number).</li>
+                <li><strong>Company:</strong> per LE (e.g., sales order number).</li>
+                <li><strong>Fiscal calendar / period:</strong> resets each year / period (some statutory references).</li>
+                <li><strong>Legal entity, fiscal calendar period:</strong> combinations for granular control.</li>
+              </ul>
+              <h4>Continuous vs. non-continuous</h4>
+              <p><strong>Continuous</strong> guarantees no gaps but locks the database during sequence allocation; performance bottleneck on high-volume sequences. <strong>Non-continuous</strong> allows gaps but doesn't lock; recommended unless statutory requirement forces continuous (e.g., some EU invoice-numbering rules).</p>
+              <h4>Format</h4>
+              <p>Format string with prefix, segments, padding (e.g., <code>SO-#####</code>). Once transactions use the sequence, format changes are restricted; design carefully.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Calendars</span>Working calendars vs. fiscal calendars</summary>
+            <div class="topic__body">
+              <h4>Working calendars</h4>
+              <p><strong>Where:</strong> <code>Organization administration &gt; Setup &gt; Calendars &gt; Calendars</code>. Define working hours per day / week, holidays, exceptions. Used by master planning, production scheduling, project resource availability, transportation.</p>
+              <h4>Working time templates</h4>
+              <p>Reusable shift patterns (standard 8-hour day, 24x7 plant, 4-day workweek). Calendar built by applying a template across a date range.</p>
+              <h4>Fiscal calendar</h4>
+              <p>Different concept: defines fiscal years and periods for ledger posting. <strong>Where:</strong> <code>General ledger &gt; Calendars &gt; Fiscal calendars</code>. Multiple LEs can share one fiscal calendar.</p>
+              <h4>Where consumed</h4>
+              <ul>
+                <li><strong>Master planning:</strong> uses calendars for lead time / due date math.</li>
+                <li><strong>Production:</strong> uses resource calendars for finite scheduling.</li>
+                <li><strong>Transportation:</strong> uses calendars for transit time.</li>
+                <li><strong>Project:</strong> uses worker calendars for resource availability.</li>
+                <li><strong>HR:</strong> calendar holidays drive leave-day calculation.</li>
+              </ul>
+              <h4>Day-one calendar setup</h4>
+              <p>Build the standard working calendar with current and next year holidays before go-live. Production / planning issues are often calendar issues in disguise.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -1641,7 +1870,7 @@
             <summary><span class="topic__eyebrow">Setup</span>Regional scope &amp; parameters</summary>
             <div class="topic__body">
               <h4>Native US Payroll</h4>
-              <p>F&amp;O ships native US Payroll: federal, state, local taxes, garnishments, benefits, multiple work-state allocation. Quarterly tax filings and W-2 generation are supported.</p>
+              <p>F&amp;O ships native US Payroll: federal, state, local taxes, garnishments, benefits, multiple work-state allocation. Quarterly tax filings and W-2 generation are supported. Note: Microsoft has been steering new customers toward partner integrations (Dayforce, ADP) rather than native US Payroll; verify the strategic fit and roadmap before committing to native for a new implementation.</p>
               <h4>Other regions</h4>
               <p>For Canada, UK, EU, AU, etc., F&amp;O does NOT process payroll natively. Standard pattern:</p>
               <ul>
@@ -1787,7 +2016,14 @@
               <h4>Request for Quotation (RFQ)</h4>
               <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Purchasing &gt; Requests for quotation &gt; All requests for quotation</code>. Send the same RFQ to multiple vendors, collect bids, score, and award. Award generates a PO automatically.</p>
               <h4>Purchase agreements</h4>
-              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Purchase agreements</code>. Pre-negotiated term + price + quantity commitment with a vendor over a period. Releases (POs) consume the agreement. Three commitment types: Product quantity commitment, Product value commitment, Product category commitment.</p>
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Purchase agreements &gt; Purchase agreements</code>. Pre-negotiated commitment with a vendor over a period; release orders (POs) consume the commitment. Four commitment types:</p>
+              <ul>
+                <li><strong>Product quantity commitment:</strong> fixed quantity of a specific product over the period.</li>
+                <li><strong>Product value commitment:</strong> fixed monetary value of a specific product.</li>
+                <li><strong>Product category value commitment:</strong> fixed monetary value within a procurement category (any product in the category).</li>
+                <li><strong>Value commitment:</strong> total monetary value, any product or category.</li>
+              </ul>
+              <p>Pricing terms on a purchase agreement (price / discount on the lines) <strong>override trade agreements</strong> for the duration. Header policies control fulfillment: enforce max, fix price/discount, min/max release amount per release order. Intercompany pairs with a Sales agreement on the partner LE.</p>
               <h4>Purchase order types</h4>
               <ul>
                 <li><strong>Standard PO:</strong> single-event order.</li>
@@ -1807,7 +2043,7 @@
               <h4>PO confirmation</h4>
               <p>Vendor confirms acceptance of the order; PO status moves to Confirmed. Triggers vendor commitment on the GL if encumbrance is enabled.</p>
               <h4>Product receipt</h4>
-              <p><strong>Where:</strong> <code>Receiving</code> functions on the PO, or <code>Inventory management &gt; Inbound orders &gt; Receive</code> for warehouse-controlled flows. Posts the inventory receipt and the GRNI / purchase accrual liability. Replaces the legacy "Packing slip" terminology in current versions.</p>
+              <p><strong>Where:</strong> from the PO, <code>Receive &gt; Product receipt</code>. For advanced WMS warehouses, receiving happens via the Warehouse Management mobile app (Purchase order receiving / License plate receiving menu items) and the product receipt posts when the load arrives at the final put-away location. Product receipt posts the inventory receipt and the purchase accrual (GRNI) liability. Note: "Product receipt" is the inbound (PO) term; "Packing slip" is the outbound (sales / inventory) term — both are current and refer to opposite sides of the inventory transaction.</p>
               <h4>Receipt registration</h4>
               <p>Lighter-touch receipt that records arrival without formally posting; useful for inspection-required items. Posting happens after inspection passes.</p>
               <h4>Three-way match</h4>
@@ -2049,7 +2285,7 @@
                 <li><strong>Routing variance:</strong> actual operation time vs. routed time.</li>
               </ul>
               <h4>Reconciliation &amp; reporting</h4>
-              <p>Periodic: <code>Inventory close &amp; adjustment</code> (closes the costing layer). Reports: <strong>Production variance</strong>, <strong>WIP report</strong>, <strong>Production posting</strong>. Aim for monthly close discipline; reopening prior periods to fix production orders is painful.</p>
+              <p>Periodic: <code>Cost management &gt; Periodic tasks &gt; Inventory close</code> (closes the costing layer). Reports: <strong>Production variance</strong>, <strong>WIP report</strong>, <strong>Production posting</strong>. Aim for monthly close discipline; reopening prior periods to fix production orders is painful.</p>
             </div>
           </details>
 
@@ -2193,12 +2429,95 @@
       <!-- ============== Rebate Management ============== -->
       <article class="item-pane" data-item-pane="rebate-management">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Rebate Management</h2><p class="item-pane__lead">Trade allowances and customer / vendor rebates, accruing, processing, and settling.</p></header>
+
+        <p>F&amp;O ships a modern <strong>Rebate management</strong> module (introduced as a successor to the older Trade allowance / Rebate features) that handles both <strong>customer rebates</strong> (you owe customer for hitting a volume threshold) and <strong>vendor rebates</strong> (vendor owes you for purchases). The discipline matters: rebate accruals are real liabilities (or assets); under-accruing distorts margin and over-accruing surprises in close. The module replaces the manual spreadsheet model that most distributors / wholesalers had been running before.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Rebate vs. trade allowance</summary><div class="topic__body topic__body--placeholder"><p>Add content here, Rebate management module vs. Trade allowance management, when each applies, and the parameters for accruals.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Rebate programs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, rebate program type, customer or vendor selection, item / category coverage, rebate rates and tiers, and effective dates.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Accruals &amp; calculations</summary><div class="topic__body topic__body--placeholder"><p>Add content here, accrual posting at sales / purchase invoice, recalculation, the GL accounts for accrued rebate.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Settlement</span>Claim &amp; payment</summary><div class="topic__body topic__body--placeholder"><p>Add content here, claim creation, settlement to credit memo / invoice, and the link back to AR / AP.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>Rebate exposure</summary><div class="topic__body topic__body--placeholder"><p>Add content here, accrued rebate liability, settled vs. open, and customer / vendor rebate analysis.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Module choice &amp; parameters</summary>
+            <div class="topic__body">
+              <h4>Rebate management module (modern)</h4>
+              <p><strong>Where:</strong> <code>Rebate management</code>. Modern, declarative module supporting tiered rebate programs, customer / vendor symmetric, with accruals, claims, settlement workflow.</p>
+              <h4>Trade allowance management (legacy / still relevant)</h4>
+              <p>Older module focused on <strong>customer trade promotions</strong>: lump-sum funds, off-invoice promotions, performance-based allowances. Used by CPG companies for retailer trade spend. Continues to ship; choose modern Rebate management for new implementations unless trade-allowance-specific features are required.</p>
+              <h4>Rebate parameters</h4>
+              <p>Number sequences, default GL accounts for accrued rebate (asset for vendor side, liability for customer side), default rebate accrual frequency, claim approval workflow.</p>
+              <h4>Rebate program type</h4>
+              <p>Volume-based (qty thresholds), value-based ($ thresholds), tier-based (escalating rates), retroactive (rate applied to all units once threshold hit) vs. forward (rate from threshold onward).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Programs &amp; eligibility</summary>
+            <div class="topic__body">
+              <h4>Rebate program / agreement</h4>
+              <p>Header holds: counterparty (customer or vendor), effective dates, currency, accrual frequency, settlement method. Lines define eligible items / categories and rate structures.</p>
+              <h4>Eligibility</h4>
+              <p>Customer / vendor scope: single party, customer group, or all. Item / category scope: specific items, item group, or category.</p>
+              <h4>Rate structures</h4>
+              <ul>
+                <li><strong>Flat rate:</strong> 2% of invoiced value, on every transaction.</li>
+                <li><strong>Tiered:</strong> 1% &lt; 1,000 units, 2% &lt; 5,000, 3% above. Retro or forward.</li>
+                <li><strong>Lump sum:</strong> $50,000 once threshold hit.</li>
+              </ul>
+              <h4>Effective dates &amp; periods</h4>
+              <p>Programs run from / to dates, with cumulative tracking inside. Year-over-year programs typically reset annually but rebate periods can span multiple calendar years.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Transactions</span>Accruals &amp; calculations</summary>
+            <div class="topic__body">
+              <h4>Accrual on invoice</h4>
+              <p>Sales (or purchase) invoice posts and the rebate engine evaluates: does this transaction qualify under any active program? If yes, accrual journal posts: rebate expense (debit) / accrued rebate liability (credit) for customer rebates. Vice versa for vendor rebates: receivable / income.</p>
+              <h4>Recalculation</h4>
+              <p>For tiered or threshold programs, the cumulative position can change. Recalc job re-evaluates open programs, books the catch-up adjustment for newly-crossed tiers (especially retro tiers).</p>
+              <h4>Period close</h4>
+              <p>End-of-period: ensure all in-flight invoices accrued; review accrual balance vs. expected; investigate variances. Close the rebate period to lock further posting.</p>
+              <h4>GL impact (customer rebate side)</h4>
+              <ul>
+                <li>Sales invoice: AR debit, revenue credit (gross).</li>
+                <li>Rebate accrual: rebate expense (contra-revenue) debit, accrued rebate liability credit.</li>
+                <li>Settlement (credit memo issued): accrued rebate liability debit, AR credit.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Settlement</span>Claims &amp; payment</summary>
+            <div class="topic__body">
+              <h4>Claim creation</h4>
+              <p>At settlement event (period end, threshold reached, customer claim received), generate a settlement claim. Claim aggregates accrued amounts per program / counterparty / period.</p>
+              <h4>Settlement methods</h4>
+              <ul>
+                <li><strong>Credit memo (customer rebate):</strong> issue AR credit memo applied against customer's open balance.</li>
+                <li><strong>Check / payment (customer rebate):</strong> issue AP-like payment to customer.</li>
+                <li><strong>Vendor invoice (vendor rebate):</strong> create a debit memo / invoice receivable from vendor.</li>
+                <li><strong>Offset against invoices (vendor rebate):</strong> deduct from next vendor payment.</li>
+              </ul>
+              <h4>Approval workflow</h4>
+              <p>Claims typically route to finance for approval (validates against program, accrual matches expectation). Approved claim posts the settlement; accrual liability cleared.</p>
+              <h4>Customer self-claim</h4>
+              <p>Some programs let customer submit a claim for what they think they earned; F&amp;O reconciles against system-calculated accrual; variances investigated.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>Rebate exposure &amp; analytics</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Accrued rebate liability:</strong> open balance per program / counterparty; the rebate-related liability on the balance sheet.</li>
+                <li><strong>Settled vs. open:</strong> aging of unclaimed / unsettled rebate, identifies stale programs to investigate.</li>
+                <li><strong>Customer / vendor rebate analysis:</strong> rebates earned / paid per counterparty, year-over-year, identifies most expensive programs and most rebated customers.</li>
+                <li><strong>Margin impact:</strong> revenue net of rebate vs. gross revenue, the true margin view.</li>
+                <li><strong>Effectiveness:</strong> did the program drive incremental volume? Compare pre- and post-program purchase patterns.</li>
+              </ul>
+              <h4>Audit trail</h4>
+              <p>Each accrual / recalc / settlement journal references the source program and transaction. SOX-relevant for the rebate process; document the calculation methodology.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
@@ -2434,60 +2753,559 @@
       <!-- ============== Service Management ============== -->
       <article class="item-pane" data-item-pane="service-management">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Service Management</h2><p class="item-pane__lead">Service agreements, service orders, and dispatching field work.</p></header>
+
+        <p>Service Management handles <strong>customer-facing service work</strong>: agreements (annual maintenance contracts), service orders (a specific job), dispatching technicians, billing for time and parts. The module overlaps with two other capabilities and the right choice depends on the use case: <strong>Asset Management</strong> for internal maintenance (your own assets, work orders, preventive maintenance), and <strong>Dynamics 365 Field Service</strong> (Dataverse-based) for sophisticated field operations (mobile, scheduling AI, IoT). F&amp;O Service Management sits between, suited for moderate field-service volume with billing tied to F&amp;O Project Management or AR.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Service module setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here, service management parameters, stages, and the relationship to projects.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Service objects &amp; templates</summary><div class="topic__body topic__body--placeholder"><p>Add content here, service objects, service object groups, service templates, and BOMs.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Service agreements &amp; orders</summary><div class="topic__body topic__body--placeholder"><p>Add content here, service agreement, service order, dispatch board, and the difference between project-based and free-text-invoice based service.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Repair management</summary><div class="topic__body topic__body--placeholder"><p>Add content here, repair lines, RMAs, and the link to inventory.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>Service vs. Asset Management</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when service management is the right tool vs. when Asset Management work orders are a better fit.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters &amp; foundations</summary>
+            <div class="topic__body">
+              <h4>Service management parameters</h4>
+              <p><strong>Where:</strong> <code>Service management &gt; Setup &gt; Service management parameters</code>. Number sequences, default project type for service orders (typically Time and material), default activity types, and the integration toggle to project posting.</p>
+              <h4>Stages</h4>
+              <p>Service order lifecycle stages (Created, Assigned, In progress, Completed, Posted, Closed). Customizable per business need. Stage transitions can require workflow / signoff.</p>
+              <h4>Service relation to projects</h4>
+              <p>Each service order is backed by a <strong>project</strong> (T&amp;M typically). Time, expense, item postings on the service order flow to the project; billing uses project invoice proposal.</p>
+              <h4>Reason codes &amp; priority</h4>
+              <p>Reason codes drive analytics (why was service requested, why escalated). Priority drives scheduling order on the dispatch board.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Service objects, templates, BOMs</summary>
+            <div class="topic__body">
+              <h4>Service objects</h4>
+              <p>The thing being serviced (a piece of equipment at a customer site, a vehicle, an installed system). Identified by serial number when applicable. Carries history of past service.</p>
+              <h4>Service object groups</h4>
+              <p>Categorize objects (HVAC unit, elevator, conveyor) for templating and reporting.</p>
+              <h4>Service templates</h4>
+              <p>Pre-defined work scope per object group: standard tasks, expected duration, required parts. Applied when creating a service order to pre-populate lines.</p>
+              <h4>Service BOMs</h4>
+              <p>Parts list typically required for a service. Drives material reservation and replenishment for service trucks / depots.</p>
+              <h4>Skills &amp; resources</h4>
+              <p>Service workers tagged with skills (HVAC certified, electrical license). Dispatch matches required skills to available workers.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Agreements &amp; orders</summary>
+            <div class="topic__body">
+              <h4>Service agreement</h4>
+              <p>Long-running contract between you and customer (annual PM, warranty support). Defines scheduled visits, included items / labor, prepaid hours, billing cadence. Generates service orders per scheduled visit.</p>
+              <h4>Service order</h4>
+              <p>A specific job: customer, object, scope, scheduled date / time, assigned worker, lines (labor, parts, expenses, fees). Created from agreement, from a customer call (ad-hoc), or from a corrective action linked to a complaint.</p>
+              <h4>Dispatch board</h4>
+              <p>Visual scheduling: workers along one axis, time along the other; drag service orders into slots. Considers worker skills, location, route. F&amp;O's dispatch board is functional but less sophisticated than D365 Field Service's resource scheduler.</p>
+              <h4>Service order lifecycle</h4>
+              <ol>
+                <li>Created &gt; Assigned to worker.</li>
+                <li>Worker arrives, captures time / parts / notes.</li>
+                <li>Marked complete; customer signoff.</li>
+                <li>Posted: time / parts post to project; project invoice proposal generates customer invoice.</li>
+                <li>Closed.</li>
+              </ol>
+              <h4>Subcontracting</h4>
+              <p>Service work farmed to a partner: PO to subcontractor links to the service order; cost flows through and is billed to customer (or absorbed under agreement).</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Repair</span>Returns &amp; depot repair</summary>
+            <div class="topic__body">
+              <h4>RMA (Returns Management)</h4>
+              <p>Customer returns failed item: RMA created &gt; replacement shipped &gt; failed item received and inspected &gt; disposition (repair, scrap, replace under warranty). Cross-references to original sales order.</p>
+              <h4>Repair lines</h4>
+              <p>For depot repair: failed item received, repair work order created, labor / parts logged, repaired unit returned to customer. Tracks repair cost vs. replacement decision.</p>
+              <h4>Loaner tracking</h4>
+              <p>Loaner unit shipped while customer's unit is in repair; tracked as a temporary asset transfer with return expectation.</p>
+              <h4>Warranty determination</h4>
+              <p>Service object carries warranty terms (start, duration). Service order line auto-flags warranty: covered (no charge to customer), or out-of-warranty (billable). Avoids manual lookup mistakes.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Billing</span>Project link &amp; invoice</summary>
+            <div class="topic__body">
+              <h4>Project-backed billing</h4>
+              <p>Service order time / expense / item posts as project transactions; billing via standard project invoice proposal. Supports multi-currency, retention, milestone billing.</p>
+              <h4>Free-text invoice (alternative)</h4>
+              <p>For fixed-price service charges without underlying project tracking, post a free-text invoice. Simpler but loses the cost-vs.-revenue visibility per service order.</p>
+              <h4>Prepaid hours from agreement</h4>
+              <p>Service agreement with prepaid block (e.g., 100 hours per year). Each service order draws hours; billing only when block is exhausted or per agreement terms.</p>
+              <h4>Recurring invoicing</h4>
+              <p>Maintenance contracts often bill monthly / quarterly regardless of activity. Subscription Billing module is the modern path for that pattern; Service Management agreements handle simpler recurrences directly.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Choosing the right tool</summary>
+            <div class="topic__body">
+              <h4>Service Management (F&amp;O) when</h4>
+              <ul>
+                <li>Customer-facing field or depot service is moderate-volume.</li>
+                <li>Billing tied to projects already managed in F&amp;O.</li>
+                <li>Don't need mobile-first technician app or AI scheduling.</li>
+              </ul>
+              <h4>Asset Management when</h4>
+              <ul>
+                <li>Maintaining your own assets (plant equipment, fleet).</li>
+                <li>Internal work orders, no customer billing.</li>
+                <li>Preventive maintenance schedules with full asset history.</li>
+              </ul>
+              <h4>Dynamics 365 Field Service when</h4>
+              <ul>
+                <li>Large-scale field operations (50+ technicians, complex routing).</li>
+                <li>Customer self-service, IoT-connected device telemetry.</li>
+                <li>Deep mobile experience with offline, photos, signature capture.</li>
+                <li>Sophisticated scheduling (Resource Scheduling Optimization).</li>
+              </ul>
+              <h4>Common mistake</h4>
+              <p>Picking F&amp;O Service Management to save license cost, then over-extending it for an enterprise field-service operation. Field Service was purpose-built; for any non-trivial service business, evaluate it seriously.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== Subscription Billing ============== -->
       <article class="item-pane" data-item-pane="subscription-billing">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Subscription Billing</h2><p class="item-pane__lead">Recurring contracts, usage-based billing, and revenue recognition under ASC 606 / IFRS 15.</p></header>
+
+        <p>Subscription Billing is Microsoft's modern recurring-billing module, built from the acquired <strong>Binary Stream</strong> capabilities. It covers three distinct but related needs that classic AR free-text invoicing doesn't handle well: <strong>recurring contracts</strong> (subscription / SaaS models), <strong>milestone / event-based billing</strong> (project-style billing schedules), and <strong>revenue and expense deferrals</strong> for ASC 606 / IFRS 15 compliance. The module replaces the legacy "Recurring contract billing" and "Multiple element arrangements" extensions and is the recommended path for any contract-based or subscription-based business.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module parameters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, Subscription Billing module setup, billing schedules, the pricing engine, and revenue accounting.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Billing schedules &amp; contracts</summary><div class="topic__body topic__body--placeholder"><p>Add content here, billing schedule, billing schedule lines, evergreen vs. fixed-term, and the customer / item link.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Recurring &amp; milestone billing</summary><div class="topic__body topic__body--placeholder"><p>Add content here, generate billing schedule lines, invoice generation, milestone billing, and the link to AR.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Revenue</span>Recognition &amp; deferrals</summary><div class="topic__body topic__body--placeholder"><p>Add content here, revenue and expense deferrals, multiple element arrangements, and ASC 606 / IFRS 15 application.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Reporting</span>ARR &amp; deferred revenue</summary><div class="topic__body topic__body--placeholder"><p>Add content here, annual recurring revenue, deferred revenue waterfalls, and the integration with financial reports.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters &amp; foundations</summary>
+            <div class="topic__body">
+              <h4>Three sub-capabilities</h4>
+              <p>Subscription Billing groups three feature areas, each with its own parameters:</p>
+              <ul>
+                <li><strong>Billing schedules:</strong> recurring invoice generation.</li>
+                <li><strong>Revenue and expense deferrals:</strong> period-spread of revenue / expense per ASC 606 rules.</li>
+                <li><strong>Multiple element arrangements (MEA):</strong> contracts with bundled performance obligations needing standalone-selling-price allocation.</li>
+              </ul>
+              <h4>Module parameters</h4>
+              <p><strong>Where:</strong> <code>Subscription billing &gt; Setup &gt; Parameters</code>. Number sequences, default templates per billing type, default revenue accounts for deferral, milestone-billing default behavior.</p>
+              <h4>Pricing engine</h4>
+              <p>Subscription pricing supports tiered (per-user step pricing), volume-based (rate per unit at total volume), per-event, flat fee, percent of base, prorated. Engine evaluates per billing cycle.</p>
+              <h4>Templates</h4>
+              <p>Pre-defined billing schedule templates (annual prepaid, monthly recurring, quarterly anniversary). Speeds setup; standardizes patterns across customers.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Billing schedules</summary>
+            <div class="topic__body">
+              <h4>Billing schedule (header)</h4>
+              <p>The contract: customer, currency, start / end dates, status, billing cycle (monthly / quarterly / annual), invoice timing (in-advance vs. in-arrears), proration policy, escalators (annual % increase).</p>
+              <h4>Billing schedule lines</h4>
+              <p>Per item / service in the contract: item, qty, rate, billing frequency, period start / end, optional revenue-recognition method per line. Each line generates its own invoice line each cycle.</p>
+              <h4>Evergreen vs. fixed-term</h4>
+              <ul>
+                <li><strong>Evergreen:</strong> auto-renews until cancelled. Common for SaaS month-to-month or annual auto-renewals.</li>
+                <li><strong>Fixed-term:</strong> defined end date; no further billing after.</li>
+              </ul>
+              <h4>Co-terminus dates</h4>
+              <p>For amendments: add-on lines aligned to existing contract end-date so all bills synchronize. Engine prorates first-period charges.</p>
+              <h4>Linkage to sales / customer</h4>
+              <p>Billing schedule references customer; can link to a sales order or sales agreement for pricing source. AR posts invoice via standard customer flow.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Generation &amp; invoicing</summary>
+            <div class="topic__body">
+              <h4>Generate billing schedule lines</h4>
+              <p>Periodic job: <code>Subscription billing &gt; Periodic &gt; Generate billing schedule lines</code>. Walks active schedules, calculates due-this-period billing lines, queues for invoicing.</p>
+              <h4>Invoice generation</h4>
+              <p>Generated lines roll into customer invoices (one invoice per customer per billing cycle, configurable). Posts to AR like any other free-text or sales invoice.</p>
+              <h4>Milestone billing</h4>
+              <p>For event-driven billing (delivery completed, signoff received): milestone billing schedules trigger billing on date or event reached, not a fixed cycle. Useful for project / construction / professional-services revenue.</p>
+              <h4>Usage-based billing</h4>
+              <p>Bring usage data (API calls, storage GB, transactions) via integration; engine applies tiered pricing per period; bills the consumption charge.</p>
+              <h4>Amendments &amp; mid-cycle changes</h4>
+              <p>Quantity increase / decrease, item add / remove, rate change, early termination. Each amendment recalculates affected periods (proration), generates catch-up or credit invoice as needed.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Revenue</span>Deferrals &amp; ASC 606</summary>
+            <div class="topic__body">
+              <h4>Revenue / expense deferral</h4>
+              <p>For prepaid annual contracts: invoice posts to AR / Deferred revenue (liability) initially; recognition spreads cash / accrual basis over service period. F&amp;O auto-creates deferral schedule from the billing line and posts month-end recognition journals.</p>
+              <h4>Recognition methods</h4>
+              <ul>
+                <li><strong>Straight line:</strong> equal monthly recognition over service period.</li>
+                <li><strong>Daily proration:</strong> proportional to days in period.</li>
+                <li><strong>Custom event-based:</strong> recognition triggered by external event (delivery, milestone).</li>
+              </ul>
+              <h4>Multiple Element Arrangements (MEA)</h4>
+              <p>Contract with multiple performance obligations (software license + implementation + support) requires <strong>standalone selling price (SSP)</strong> allocation under ASC 606. Module supports SSP master, allocation calculation (residual, relative-fair-value), and per-obligation deferral. Removes the spreadsheet-based allocation that finance teams used to do manually.</p>
+              <h4>5-step ASC 606 / IFRS 15 model</h4>
+              <p>Standards align: identify contract, identify obligations, determine transaction price, allocate to obligations, recognize as obligations satisfied. Subscription Billing structures the data to support each step; the policy decisions (when does control transfer, what's a distinct obligation) remain accounting decisions.</p>
+              <h4>Adjustment scenarios</h4>
+              <p>Cancellation: remaining deferred revenue may need acceleration or refund. Amendment: SSP re-allocation if contract value changes. Module supports both with audit trail.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Reporting</span>ARR &amp; deferred revenue</summary>
+            <div class="topic__body">
+              <h4>Annual Recurring Revenue (ARR)</h4>
+              <p>Sum of annualized active subscription value. Standard SaaS metric; module aggregates across active billing schedules, segmented by customer / product / period.</p>
+              <h4>MRR &amp; movement</h4>
+              <p>Monthly recurring revenue with movement detail: new ARR (new customers), expansion ARR (upsells), contraction ARR (downsells), churn ARR (cancellations). The retention story.</p>
+              <h4>Deferred revenue waterfall</h4>
+              <p>Beginning balance + new bookings - recognition = ending balance, by period and contract. Audit-critical for ASC 606 disclosures.</p>
+              <h4>Backlog</h4>
+              <p>Unbilled committed revenue (signed contracts not yet invoiced). The forward-looking revenue indicator.</p>
+              <h4>Integration with financial reports</h4>
+              <p>Deferred revenue accounts feed financial statements directly. Subscription Billing reports drill down to the contract / line level for audit support.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Implementation considerations</summary>
+            <div class="topic__body">
+              <ul>
+                <li><strong>Replace, don't supplement:</strong> if currently on legacy Recurring Contract Billing or third-party (BillingPlatform, Zuora), plan migration path; running parallel is hard.</li>
+                <li><strong>Master billing setup:</strong> data quality matters; existing customer / item / pricing master must be clean before subscription overlay.</li>
+                <li><strong>SSP discipline:</strong> for MEA, the standalone selling price master is core; require finance ownership of SSP updates as products / pricing change.</li>
+                <li><strong>Period-end discipline:</strong> revenue deferral close requires the deferral schedule processing job to run before close; build into close calendar.</li>
+                <li><strong>Reconciliation point:</strong> deferred revenue balance per Subscription Billing reports must equal GL deferred revenue account; reconcile monthly.</li>
+                <li><strong>Customer-friendly invoices:</strong> subscription invoices need clear period coverage and pro-ration explanation; design invoice format with customer-facing clarity in mind.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== System Administration ============== -->
       <article class="item-pane" data-item-pane="system-administration">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">System Administration</h2><p class="item-pane__lead">Users, security, batches, workflows, data management, and the platform hygiene that keeps the system healthy.</p></header>
+
+        <p>System Administration covers the platform plumbing: user / security model, workflow framework, batch (scheduled jobs), Data Management Framework (DMF) for imports / exports, and the connection to <strong>Lifecycle Services (LCS)</strong> for environment management. Functional consultants don't typically own this module but must understand it; security design is a functional decision, batch failures break business processes, and DMF is the bread-and-butter of go-live data migration.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Users</span>Users &amp; security</summary><div class="topic__body topic__body--placeholder"><p>Add content here, users, security roles, duties, privileges, segregation of duties, extensible data security (XDS), and the audit-friendly role design.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Workflows</span>Workflow framework</summary><div class="topic__body topic__body--placeholder"><p>Add content here, workflow types, approval steps, parallel vs. serial, conditional branching, escalation, and the typical pitfalls (long-running approvals, broken delegations).</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Batch</span>Batch jobs</summary><div class="topic__body topic__body--placeholder"><p>Add content here, batch groups, batch servers, recurring jobs, the batch scheduler, and the troubleshooting toolkit.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Data</span>Data management framework</summary><div class="topic__body topic__body--placeholder"><p>Add content here, data entities, import/export projects, recurring data jobs, source mappings, and using DMF for go-live data migration.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Hygiene</span>Telemetry &amp; LCS</summary><div class="topic__body topic__body--placeholder"><p>Add content here, LCS environments, telemetry / monitoring, performance counters, and the platform health story.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Users</span>Security model</summary>
+            <div class="topic__body">
+              <h4>Security hierarchy</h4>
+              <p>Standard role-based access with four layers:</p>
+              <ul>
+                <li><strong>Privileges:</strong> the smallest unit, grants access to a menu item / table / field at a specific permission level.</li>
+                <li><strong>Duties:</strong> a bundle of privileges representing a job task ("Maintain customer master").</li>
+                <li><strong>Roles:</strong> a bundle of duties representing a job ("Accounts Receivable Clerk").</li>
+                <li><strong>Users:</strong> assigned one or more roles.</li>
+              </ul>
+              <h4>Segregation of Duties (SoD)</h4>
+              <p>Compliance feature: define rules that flag when one user holds duties that should be separated (e.g., "Create vendor" + "Process payment"). Violations surface for review / approval. Critical for SOX and external audit.</p>
+              <h4>Extensible Data Security (XDS)</h4>
+              <p>Row-level security: restrict data visibility based on context (e.g., a buyer sees only POs for their assigned commodity). Defined as policies with constraints; applied via role assignment.</p>
+              <h4>Audit-friendly design</h4>
+              <ul>
+                <li>Custom roles, never modify out-of-box duties / privileges (upgrade-safe).</li>
+                <li>Naming convention prefix (e.g., <code>CUS_</code>) to identify customizations.</li>
+                <li>Document each role's intent and approver.</li>
+                <li>Quarterly access review: who has what role, validated by managers.</li>
+              </ul>
+              <h4>Azure AD integration</h4>
+              <p>Users authenticate via Entra ID (Azure AD); license assignment per user. SSO with the rest of Microsoft 365 / Power Platform.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Workflows</span>Approval framework</summary>
+            <div class="topic__body">
+              <h4>Workflow types</h4>
+              <p>Out-of-box workflow types per business object (purchase requisition, expense report, vendor invoice, journal, project budget, etc.). Each type has its own designer with object-specific actions.</p>
+              <h4>Workflow elements</h4>
+              <ul>
+                <li><strong>Tasks:</strong> manual steps (review, approve).</li>
+                <li><strong>Approvals:</strong> multi-step approval chain.</li>
+                <li><strong>Automated tasks:</strong> system actions (e.g., post a journal).</li>
+                <li><strong>Conditional decisions:</strong> branches based on field values (e.g., amount &gt; $X).</li>
+                <li><strong>Manual decisions:</strong> human routing choice.</li>
+              </ul>
+              <h4>Approval routing</h4>
+              <ul>
+                <li><strong>Position-based:</strong> route up the position hierarchy (manager, manager's manager).</li>
+                <li><strong>User-based:</strong> specific user.</li>
+                <li><strong>Group-based:</strong> any member of a workflow user group.</li>
+                <li><strong>Hierarchy-based:</strong> spending limits via signing-limit hierarchy.</li>
+                <li><strong>Queue-based:</strong> any user in the queue can pick up.</li>
+              </ul>
+              <h4>Parallel vs. serial</h4>
+              <p>Parallel: multiple approvers work simultaneously, all must approve. Serial: one after another, in order. Mix both with branches.</p>
+              <h4>Common pitfalls</h4>
+              <ul>
+                <li>Long-running approvals because escalation timeouts not configured.</li>
+                <li>Delegation broken (worker on PTO; no delegate set; approvals stack).</li>
+                <li>Position hierarchy not published &gt; routing fails.</li>
+                <li>Workflow disabled by mistake during testing &gt; documents skip approval.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Batch</span>Batch jobs &amp; scheduling</summary>
+            <div class="topic__body">
+              <h4>Batch framework</h4>
+              <p>Long-running and scheduled work happens in batch. Examples: master planning runs, financial period close, recurring data imports, electronic reporting, posting accumulated transactions.</p>
+              <h4>Batch groups</h4>
+              <p>Logical grouping mapped to batch processing servers / capacity. E.g., "DataIntegration" group, "Planning" group. Allows isolation: heavy planning jobs don't starve quick integration jobs.</p>
+              <h4>Recurring batches</h4>
+              <p>Scheduled job that re-creates itself on completion (or per cron expression). Pattern for daily loads, hourly polls, periodic close steps.</p>
+              <h4>Monitoring</h4>
+              <p><strong>Where:</strong> <code>System administration &gt; Inquiries &gt; Batch jobs</code>. Status (Waiting, Executing, Ended, Error). Common-issue page: history of failures, error stack. Alerts can be configured to notify admins of failures.</p>
+              <h4>Troubleshooting</h4>
+              <ul>
+                <li>Batch stuck "Executing" with no progress &gt; usually an orphaned job; cancel and re-run.</li>
+                <li>Batch fails consistently &gt; check error log in batch history; common causes are SQL deadlocks or missing input data.</li>
+                <li>Performance: long-running jobs &gt; profile via SQL trace and optimize the underlying X++ logic or indexing.</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Data</span>Data Management Framework (DMF)</summary>
+            <div class="topic__body">
+              <h4>Data entities</h4>
+              <p>Pre-built denormalized views over the underlying tables, designed for import / export. Hundreds shipped; extensible. Each entity has a target structure (Excel / CSV / XML / JSON) and a hidden mapping to base tables.</p>
+              <h4>Import / export projects</h4>
+              <p>Project = a collection of entities to load/extract together with a defined sequence (order matters: customer groups before customers, customers before customer transactions). Source format and field mapping per entity. Run as one logical unit.</p>
+              <h4>Recurring data jobs</h4>
+              <p>API-based recurring import (REST endpoint) or scheduled file pickup (Azure Blob, SFTP). Used for nightly integrations from external systems.</p>
+              <h4>Performance &amp; tuning</h4>
+              <ul>
+                <li><strong>Set-based vs. record-based:</strong> entities default to set-based (bulk SQL); some require record-based (slower); the decision matters for million-row loads.</li>
+                <li><strong>Multi-threading:</strong> partition source data; run parallel imports.</li>
+                <li><strong>Skip staging:</strong> for trusted source, skip the staging-table validation step (faster but risky).</li>
+              </ul>
+              <h4>Go-live data migration</h4>
+              <p>The standard pattern for cutover: open balances, master data, open transactions all loaded via DMF projects. Multiple dry-run loads in test environments before final cutover. Master data refreshed continuously up to cutover; transactions loaded in the cutover window.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Platform</span>LCS, telemetry &amp; updates</summary>
+            <div class="topic__body">
+              <h4>Lifecycle Services (LCS)</h4>
+              <p>Microsoft's environment management portal. Provisions / refreshes / patches environments (TIER1 / TIER2 / SANDBOX / PROD). Holds Business Process Modeler (BPM) libraries, methodology templates, asset library (deployable packages, models), telemetry feeds.</p>
+              <h4>Environments</h4>
+              <ul>
+                <li><strong>Tier 1 (developer):</strong> single-box, used for development. Customer-managed.</li>
+                <li><strong>Tier 2-5 (sandbox):</strong> Microsoft-managed, multi-box. UAT and integration testing.</li>
+                <li><strong>Production:</strong> Microsoft-managed, high-SLA. Refresh from prod &gt; sandbox supported.</li>
+              </ul>
+              <h4>One Version &amp; service updates</h4>
+              <p>Microsoft pushes service updates (~8 per year, monthly cadence) automatically to all customers. Customers can pause one update; cannot skip indefinitely. Implies a continuous regression-testing discipline (RSAT, automated tests on key business processes).</p>
+              <h4>Telemetry &amp; monitoring</h4>
+              <p>Performance metrics, errors, usage exposed via LCS Environment Monitoring &gt; Application Insights. Production performance issues are diagnosed through these tools. F&amp;O has its own SQL-execution-plan analyzer for query tuning.</p>
+              <h4>Performance counters</h4>
+              <p>Active users, batch throughput, page load time, SQL DTU consumption. Performance baseline established post-go-live; deviations tracked.</p>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== Tax ============== -->
       <article class="item-pane" data-item-pane="tax">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Tax</h2><p class="item-pane__lead">Indirect tax setup, sales tax / VAT / GST groups, codes, and reporting.</p></header>
+
+        <p>Tax in F&amp;O covers <strong>indirect taxes</strong>: US sales / use tax, EU VAT, GST (Canada, Australia, India, Singapore), and country-specific variants. Setup is universal in structure (codes &gt; groups &gt; intersection) but jurisdiction logic varies wildly. For US sales tax with multiple states, most companies integrate to <strong>Vertex</strong> or <strong>Avalara</strong>; native rate management at scale is impractical. For VAT / GST, native F&amp;O works well, augmented by <strong>Electronic Reporting (ER)</strong> for statutory filings.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Sales tax codes &amp; ledger posting groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales tax codes, sales tax authorities, settlement periods, ledger posting groups, and the rounding rules.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Sales tax groups &amp; item groups</summary><div class="topic__body topic__body--placeholder"><p>Add content here, sales tax groups (per customer / vendor), item sales tax groups (per item), and the intersection that determines the final tax code.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Special</span>Withholding &amp; intrastat</summary><div class="topic__body topic__body--placeholder"><p>Add content here, withholding tax setup, intrastat reporting (EU), and country-specific overlays.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Periodic</span>Settlement &amp; report</summary><div class="topic__body topic__body--placeholder"><p>Add content here, settle and post sales tax, the sales tax payment journal, and the link to electronic reporting for tax filings.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Localization</span>VAT / GST nuances</summary><div class="topic__body topic__body--placeholder"><p>Add content here, VAT vs. sales tax behavior, GST overlays (India, Australia), and reverse charge.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Codes, authorities, posting groups</summary>
+            <div class="topic__body">
+              <h4>Sales tax authorities</h4>
+              <p><strong>Where:</strong> <code>Tax &gt; Indirect taxes &gt; Sales tax &gt; Sales tax authorities</code>. The agency owed (state Dept. of Revenue, IRS, HMRC, etc.). Holds vendor account for payment, rounding, report layout.</p>
+              <h4>Settlement periods</h4>
+              <p>Frequency of filing per authority (monthly, quarterly, annual). Drives the periodic settle-and-post run.</p>
+              <h4>Sales tax codes</h4>
+              <p>The actual rate definitions: rate %, calculation method (per unit / per amount / interval-based), period link, ledger posting group. One code per rate variant per jurisdiction.</p>
+              <h4>Ledger posting groups</h4>
+              <p>Map sales tax codes to GL accounts: tax payable, tax receivable, use tax expense, tax adjustment. Multiple posting groups for different scenarios (interstate vs. intrastate, B2B vs. B2C).</p>
+              <h4>Rounding</h4>
+              <p>Per code: round to currency precision, half-up vs. banker's rounding, total-level vs. line-level rounding. Tax-authority rules vary; misalignment causes 1-cent variances in returns.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Tax groups &amp; intersection</summary>
+            <div class="topic__body">
+              <h4>Sales tax groups</h4>
+              <p>Assigned to customer (sales side) or vendor (purchase side). Defines which tax codes <em>could</em> apply to that party. Often by jurisdiction: US-CA, US-NY, EU-DE, etc.</p>
+              <h4>Item sales tax groups</h4>
+              <p>Assigned to the item / service. Defines which tax codes <em>could</em> apply to that thing being sold. E.g., Food (taxable in some states, exempt in others), Service, Resale-eligible-item.</p>
+              <h4>The intersection</h4>
+              <p>The tax code applied = intersection of customer's group ∩ item's group. Both must contain the code for it to fire. Powerful: the same item is taxed differently by different customer types (direct vs. wholesaler), and the same customer pays different rates on different items, all without case logic.</p>
+              <h4>Tax exemptions</h4>
+              <p>Customer flagged exempt (resale certificate on file) or item flagged exempt (food) overrides the calculation. Document tax exemption certificate per customer with expiration tracking.</p>
+              <h4>Ship-to vs. ship-from</h4>
+              <p>For US sales tax (destination-based), the ship-to address determines jurisdiction. Customer address book stores tax group per address; sales order pulls from the delivery address.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Special</span>Withholding, reverse charge, Intrastat</summary>
+            <div class="topic__body">
+              <h4>Withholding tax</h4>
+              <p>Buyer-deducted tax on certain payments (services, royalties). Setup: codes per withholding type, vendor flagged as subject to WHT. F&amp;O reduces vendor payment by WHT amount and accrues the WHT liability.</p>
+              <h4>Use tax (US)</h4>
+              <p>Buyer self-assesses tax on out-of-state purchases when seller didn't collect. Configured as expected sales tax on the purchase side; the offset accrues use tax payable to the relevant state.</p>
+              <h4>Reverse charge VAT (EU / UK / etc.)</h4>
+              <p>For B2B cross-border: buyer self-accounts both the VAT charge AND VAT recovery (net zero ledger impact, but reported on VAT return). Configured per code with reverse-charge flag; F&amp;O posts both legs automatically.</p>
+              <h4>Intrastat (EU)</h4>
+              <p>Statistical report of intra-EU goods movement (acquisitions and dispatches). F&amp;O captures Intrastat-relevant fields on PO / SO (commodity code, weight, mode of transport, country of origin), generates the Intrastat report per period, files via Electronic Reporting.</p>
+              <h4>Country-specific overlays</h4>
+              <p>India GST: complex SGST / CGST / IGST split, e-invoice, e-way bill. Brazil: SPED, NF-e. Mexico: CFDI. Each handled via the Globalization Studio / ER configurations Microsoft delivers.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Periodic</span>Settlement &amp; reporting</summary>
+            <div class="topic__body">
+              <h4>Settle and post sales tax</h4>
+              <p><strong>Where:</strong> <code>Tax &gt; Declarations &gt; Sales tax &gt; Settle and post sales tax</code>. Run per settlement period. Aggregates all tax transactions in the period, posts a settlement journal moving balances from per-transaction tax accounts to the authority payable.</p>
+              <h4>Sales tax payment</h4>
+              <p>From settlement payable, generate AP payment to the tax authority's vendor record. Payment posts against the authority payable balance.</p>
+              <h4>Tax reports &amp; ER</h4>
+              <p>Standard reports: Sales tax list, Sales tax specification by ledger transaction. Country-specific filings via <strong>Electronic Reporting (ER)</strong>: GL boxes mapped to tax-return boxes, output as the format required (XML, JSON, CSV, PDF). Most countries with formal e-filing have a delivered ER configuration.</p>
+              <h4>Reconciliation</h4>
+              <p>Tax payable per GL must agree to the authority report and the eventual filed return. Periodic process: pull tax-listing report, compare to GL balance, investigate and adjust before submission.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Integration</span>External tax engines</summary>
+            <div class="topic__body">
+              <h4>Tax Calculation service</h4>
+              <p>Microsoft's modern tax determination service (Globalization Studio). Handles complex multi-jurisdiction rules (US sales tax with thousands of jurisdictions). Available out of box for customers on the right SKU.</p>
+              <h4>Vertex / Avalara integration</h4>
+              <p>For US multi-state and many international scenarios, integrate via certified connector. F&amp;O sends the transaction context (ship-from, ship-to, items, amounts); engine returns rate / tax. Engine maintains rate currency; F&amp;O posts the result.</p>
+              <h4>When to use external engines</h4>
+              <ul>
+                <li>US sales tax with 5+ states.</li>
+                <li>Use-tax determination at scale.</li>
+                <li>VAT registration in many EU countries.</li>
+                <li>Need exemption-certificate management (Avalara CertCapture).</li>
+              </ul>
+              <h4>When native is enough</h4>
+              <ul>
+                <li>Single-country VAT with stable rates.</li>
+                <li>One or two US states.</li>
+                <li>Basic GST regime.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
       <!-- ============== Transportation Management ============== -->
       <article class="item-pane" data-item-pane="transportation">
         <header class="item-pane__header"><span class="item-pane__eyebrow">Module</span><h2 class="item-pane__title">Transportation Management</h2><p class="item-pane__lead">Carriers, rate engines, route planning, freight reconciliation.</p></header>
+
+        <p>Transportation Management (TMS) handles inbound and outbound freight: carrier selection, rate calculation, route planning, load building, appointment scheduling, and freight bill audit / reconciliation. It's a deep module with significant configuration, only justified when freight cost is a meaningful spend lever. For lighter shipping needs, parcel-carrier integrations (UPS, FedEx, DHL via the standard shipping connector) often suffice without enabling full TMS. Microsoft's investment direction has shifted toward Dynamics 365 SCM transportation capabilities and partner TMS integrations; verify long-term roadmap before investing heavily.</p>
+
         <div class="topics">
-          <details class="topic"><summary><span class="topic__eyebrow">Setup</span>Module setup</summary><div class="topic__body topic__body--placeholder"><p>Add content here, TMS parameters, hub master, transportation modes, container types, and the warehouse activation toggle.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Master data</span>Carriers &amp; rate masters</summary><div class="topic__body topic__body--placeholder"><p>Add content here, shipping carrier, carrier service, rate master, rate base, and rate engines.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Transactions</span>Route planning &amp; loads</summary><div class="topic__body topic__body--placeholder"><p>Add content here, route planning, load building workbench, appointment scheduling, and the link to WMS waves.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Settlement</span>Freight reconciliation</summary><div class="topic__body topic__body--placeholder"><p>Add content here, freight bill, audit, freight reconciliation, and posting to AP.</p></div></details>
-          <details class="topic"><summary><span class="topic__eyebrow">Consultant tips</span>When TMS is justified</summary><div class="topic__body topic__body--placeholder"><p>Add content here, when full TMS is justified vs. simpler shipping setups, and the data prerequisites.</p></div></details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Setup</span>Parameters &amp; foundations</summary>
+            <div class="topic__body">
+              <h4>TMS parameters</h4>
+              <p><strong>Where:</strong> <code>Transportation management &gt; Setup &gt; Transportation management parameters</code>. Number sequences (loads, shipments, freight bills), default modes, default carrier-selection method.</p>
+              <h4>Hub master</h4>
+              <p>Physical locations in the network (own DCs, customer ship-tos, vendor pickup points, cross-docks). Hubs are typed (warehouse, customer, vendor) and used in route planning.</p>
+              <h4>Transportation modes</h4>
+              <p>Truck, rail, ocean, air. Per mode: equipment types (53' trailer, 20' container), service-level options.</p>
+              <h4>Container types</h4>
+              <p>Physical containers (TEU / FEU / LTL pallet) with dimensions / weight capacity. Drives load-build constraints.</p>
+              <h4>Warehouse activation toggle</h4>
+              <p>Per warehouse, "Use transportation management" enables TMS-driven rate calc / load planning for that warehouse. Without it, the warehouse uses simpler shipping setups.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Master data</span>Carriers &amp; rates</summary>
+            <div class="topic__body">
+              <h4>Shipping carriers &amp; services</h4>
+              <p>Carrier (UPS, FedEx, BNSF, Maersk) holds vendor link, contact info, modes supported. Carrier service (UPS Ground, FedEx Express) defines transit / commitments per carrier.</p>
+              <h4>Rate masters &amp; rate bases</h4>
+              <p>Rate master = the contract / tariff. Rate base = the rate-lookup structure (origin / destination zones, weight breaks, surcharges). Calculate per shipment by traversing the rate-base tree.</p>
+              <h4>Rate engines</h4>
+              <p>Pluggable engines: standard table-driven, percent-based, weight-based, third-party integration. Per carrier, designate the engine that calculates its rates. Most operations use a mix (table for LTL, third-party API for parcel).</p>
+              <h4>Zone master</h4>
+              <p>Origin / destination zones (groups of zip / postal codes). Rate base lookups use zones to scale the master rate table.</p>
+              <h4>Accessorial charges</h4>
+              <p>Surcharges (fuel, residential, lift gate, hazmat). Per carrier and per condition; compounded into the final rate.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Process</span>Rate, route, load</summary>
+            <div class="topic__body">
+              <h4>Rate shopping</h4>
+              <p>For a sales-order shipment, F&amp;O queries all eligible carriers and returns rates / transit times. Selection rule (cheapest, fastest, preferred) chooses one. Result attached to the sales-order shipment.</p>
+              <h4>Route planning</h4>
+              <p>Multi-stop routes for a single truck visiting multiple ship-tos. Route plan auto-builds based on geography, time windows, capacity. Manual overrides allowed.</p>
+              <h4>Load building workbench</h4>
+              <p>Visual tool to combine sales orders / transfer orders into a load (truck-equivalent). Drag-drop with weight / cube / pallet capacity feedback. Saves built loads for execution.</p>
+              <h4>Appointment scheduling</h4>
+              <p>For inbound: vendor / carrier requests dock appointment; scheduler approves based on dock capacity. For outbound: arrange customer-receiving appointment.</p>
+              <h4>Link to WMS waves</h4>
+              <p>Loads drive wave creation in Warehouse Management. Pick-pack flows align to load departure schedule, ensuring the right work is prioritized.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Settlement</span>Freight reconciliation</summary>
+            <div class="topic__body">
+              <h4>Freight bill</h4>
+              <p>The carrier's invoice for a shipment. Generated from confirmed shipment data (using rate engine result) or imported from carrier (EDI 210, file).</p>
+              <h4>Audit</h4>
+              <p>Compare carrier-invoiced amount to F&amp;O-calculated amount. Variances flagged for review: incorrect rate, missed accessorial, weight discrepancy. Approved amount becomes the AP-bound charge.</p>
+              <h4>Freight reconciliation</h4>
+              <p>Match shipments &lt;&gt; freight bills &lt;&gt; AP invoices. Open shipments without a freight bill flagged; freight bills without shipment matched flagged. Run periodically to keep AP / freight ledger clean.</p>
+              <h4>Posting to AP</h4>
+              <p>Approved freight bills generate AP vendor invoices to the carrier. Cost charges to inventory (inbound) via misc charges or to expense (outbound) per posting profile.</p>
+            </div>
+          </details>
+
+          <details class="topic">
+            <summary><span class="topic__eyebrow">Consultant tips</span>Justification &amp; alternatives</summary>
+            <div class="topic__body">
+              <h4>Full TMS justified when</h4>
+              <ul>
+                <li>Annual freight spend is significant (rough threshold: $5M+ where 1-2% optimization pays for the project).</li>
+                <li>Multi-stop routing or load building drives meaningful efficiency.</li>
+                <li>Multiple carriers / modes with negotiated contracts (rate audit catches errors).</li>
+                <li>Internal freight team to maintain rate masters, audit invoices.</li>
+              </ul>
+              <h4>Skip / simpler alternatives</h4>
+              <ul>
+                <li><strong>Standard parcel:</strong> Use the standard UPS / FedEx / DHL connectors for label / rate without TMS.</li>
+                <li><strong>Misc charges on PO / SO:</strong> for simple known-rate freight.</li>
+                <li><strong>External TMS (project44, Manhattan, BluJay/E2open):</strong> for complex enterprise TMS; integrate with F&amp;O via API / EDI.</li>
+              </ul>
+              <h4>Data prerequisites</h4>
+              <ul>
+                <li>Item dimensions (weight, cube) accurate, or load building fails.</li>
+                <li>Address geocoding / zone alignment correct.</li>
+                <li>Customer ship-to addresses with delivery windows.</li>
+                <li>Carrier rate sheets in usable format for rate-base load.</li>
+              </ul>
+            </div>
+          </details>
+
         </div>
       </article>
 
