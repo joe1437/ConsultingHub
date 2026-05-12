@@ -410,6 +410,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Assets, functional locations, BOMs</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Asset management &gt; Common &gt; Assets &gt; All assets</code> and <code>Asset management &gt; Common &gt; Functional locations &gt; All functional locations</code>.</p>
               <h4>Functional locations</h4>
               <p>Hierarchical taxonomy of where assets sit (Plant &gt; Building &gt; Production line &gt; Machine). Critical for spatial / process-step reporting.</p>
               <h4>Assets</h4>
@@ -424,6 +425,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Transactions</span>Work orders, jobs, posting</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Asset management &gt; Common &gt; Work orders &gt; All work orders</code>.</p>
               <h4>Work order lifecycle</h4>
               <p>Created &gt; Scheduled &gt; In Progress &gt; Reported as Finished &gt; Ended. Each transition triggers state-machine actions: scheduling, resource booking, cost capture, asset history update.</p>
               <h4>Work order job journals</h4>
@@ -1421,6 +1423,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Compensation</span>Plans, grids &amp; events</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Human resources &gt; Compensation &gt; Fixed plans</code> and <code>Human resources &gt; Compensation &gt; Variable plans</code>.</p>
               <h4>Compensation plans</h4>
               <p>Two types: <strong>Fixed</strong> (base pay) and <strong>Variable</strong> (bonus, equity). Each tied to a structure (grid / step / band) defining ranges per level.</p>
               <h4>Grids and reference points</h4>
@@ -1531,6 +1534,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Dimensions</span>Storage &amp; tracking</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Product information management &gt; Setup &gt; Dimension and variant groups &gt; Storage dimension groups / Tracking dimension groups</code>.</p>
               <h4>Storage dimensions</h4>
               <p>Site, Warehouse, Location, Inventory status, License plate. Define where inventory physically is. Storage dimension groups configure which dimensions are mandatory / coverage-relevant / financial-tracking-relevant per item.</p>
               <h4>Tracking dimensions</h4>
@@ -1871,6 +1875,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Hierarchies</span>Organization hierarchies</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Organization administration &gt; Organizations &gt; Organization hierarchies</code>.</p>
               <h4>Hierarchy purposes</h4>
               <p>One hierarchy can serve multiple purposes; common purposes:</p>
               <ul>
@@ -2019,6 +2024,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Earnings, deductions, benefits, taxes</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Payroll &gt; Setup &gt; Earning codes</code>, <code>Payroll &gt; Setup &gt; Deductions and contributions</code>, <code>Payroll &gt; Setup &gt; Taxes</code>.</p>
               <h4>Earning codes</h4>
               <p>Per type: regular, overtime, bonus, commission, double-time, holiday, PTO. Each tied to a productive / non-productive flag (FLSA), tax behavior, accumulator, pay-frequency rules.</p>
               <h4>Deduction codes</h4>
@@ -2245,6 +2251,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Setup</span>Product types and subtypes</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Product information management &gt; Products &gt; All products and product masters &gt; New</code>.</p>
               <h4>Product type</h4>
               <ul>
                 <li><strong>Item:</strong> physical, stocked. Most goods.</li>
@@ -2542,6 +2549,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Project structure (WBS, budgets, forecasts)</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Project management and accounting &gt; Projects &gt; All projects</code>.</p>
               <h4>Project hierarchy</h4>
               <p>Project &gt; Sub-project (one level deep, useful for splitting major phases) &gt; Activities (the WBS structure, multi-level). The WBS is where work is planned and tracked; activities can have hours, expenses, items consumed against them.</p>
               <h4>Project budgets vs. forecasts</h4>
@@ -2560,6 +2568,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Transactions</span>Hours, expenses, items, fees, on-account</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Project management and accounting &gt; Project journals</code> (Hour, Expense, Item, Fee, On-account).</p>
               <h4>Hour transactions</h4>
               <p>Two paths: <strong>Hour journal</strong> (back-office entry) or <strong>Timesheet</strong> (worker self-service entry, with manager approval workflow). Approved timesheets create hour transactions on the project. F&amp;O timesheet, Project Operations time entry, or third-party (Replicon, Tempo) all flow back to PMA hour transactions ultimately.</p>
               <h4>Expense transactions</h4>
@@ -2654,6 +2663,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Programs &amp; eligibility</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Rebate management &gt; Rebate program agreements</code>.</p>
               <h4>Rebate program / agreement</h4>
               <p>Header holds: counterparty (customer or vendor), effective dates, currency, accrual frequency, settlement method. Lines define eligible items / categories and rate structures.</p>
               <h4>Eligibility</h4>
@@ -2751,6 +2761,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Setup</span>Channels &amp; stores</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Retail and Commerce &gt; Channels &gt; Stores &gt; All stores</code> (and <code>Online stores</code>, <code>Call centers</code>).</p>
               <h4>Channel types</h4>
               <ul>
                 <li><strong>Retail store:</strong> physical store with terminals.</li>
@@ -2895,6 +2906,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Leads &amp; opportunities</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Sales and marketing &gt; Leads &gt; All leads</code> and <code>Sales and marketing &gt; Opportunities &gt; All opportunities</code>.</p>
               <h4>Lead</h4>
               <p>An unqualified prospect: came from a campaign, web form, trade show. Captures contact info, source, owner. Lifecycle: new &gt; contacted &gt; qualified &gt; (converted to opportunity, or disqualified).</p>
               <h4>Opportunity</h4>
@@ -2909,6 +2921,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Campaigns</span>Targeting &amp; outreach</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Sales and marketing &gt; Campaigns &gt; All campaigns</code>.</p>
               <h4>Campaigns</h4>
               <p>Marketing initiative wrapper. Includes target group, communication type (e-mail, telemarketing, direct mail), budget, expected response. Activities and leads can be linked back to a campaign for ROI tracking.</p>
               <h4>Target groups</h4>
@@ -3006,6 +3019,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Service objects, templates, BOMs</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Service management &gt; Setup &gt; Service objects &gt; Service objects</code> and <code>Service management &gt; Setup &gt; Service templates</code>.</p>
               <h4>Service objects</h4>
               <p>The thing being serviced (a piece of equipment at a customer site, a vehicle, an installed system). Identified by serial number when applicable. Carries history of past service.</p>
               <h4>Service object groups</h4>
@@ -3022,6 +3036,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Process</span>Agreements &amp; orders</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Service management &gt; Service agreements &gt; Service agreements</code> and <code>Service management &gt; Service orders &gt; Service orders</code>.</p>
               <h4>Service agreement</h4>
               <p>Long-running contract between you and customer (annual PM, warranty support). Defines scheduled visits, included items / labor, prepaid hours, billing cadence. Generates service orders per scheduled visit.</p>
               <h4>Service order</h4>
@@ -3129,6 +3144,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Billing schedules</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Subscription billing &gt; Billing schedules &gt; All billing schedules</code>.</p>
               <h4>Billing schedule (header)</h4>
               <p>The contract: customer, currency, start / end dates, status, billing cycle (monthly / quarterly / annual), invoice timing (in-advance vs. in-arrears), proration policy, escalators (annual % increase).</p>
               <h4>Billing schedule lines</h4>
@@ -3225,6 +3241,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Users</span>Security model</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>System administration &gt; Security &gt; Assign users to roles</code> and <code>System administration &gt; Security &gt; Security configuration</code>.</p>
               <h4>Security hierarchy</h4>
               <p>Standard role-based access with four layers:</p>
               <ul>
@@ -3252,6 +3269,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Workflows</span>Approval framework</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Organization administration &gt; Workflow &gt; Workflows</code> (cross-cutting), plus per-module workflow setup pages (e.g., <code>Accounts payable &gt; Setup &gt; Accounts payable workflows</code>).</p>
               <h4>Workflow types</h4>
               <p>Out-of-box workflow types per business object (purchase requisition, expense report, vendor invoice, journal, project budget, etc.). Each type has its own designer with object-specific actions.</p>
               <h4>Workflow elements</h4>
@@ -3305,6 +3323,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Data</span>Data Management Framework (DMF)</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>System administration &gt; Workspaces &gt; Data management</code>.</p>
               <h4>Data entities</h4>
               <p>Pre-built denormalized views over the underlying tables, designed for import / export. Hundreds shipped; extensible. Each entity has a target structure (Excel / CSV / XML / JSON) and a hidden mapping to base tables.</p>
               <h4>Import / export projects</h4>
@@ -3399,6 +3418,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Tax groups &amp; intersection</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Tax &gt; Indirect taxes &gt; Sales tax &gt; Sales tax groups</code> and <code>Tax &gt; Indirect taxes &gt; Sales tax &gt; Item sales tax groups</code>.</p>
               <h4>Sales tax groups</h4>
               <p>Assigned to customer (sales side) or vendor (purchase side). Defines which tax codes <em>could</em> apply to that party. Often by jurisdiction: US-CA, US-NY, EU-DE, etc.</p>
               <h4>Item sales tax groups</h4>
@@ -3415,6 +3435,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Special</span>Withholding, reverse charge, Intrastat</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Tax &gt; Indirect taxes &gt; Withholding tax &gt; Withholding tax codes</code>; Intrastat under <code>Tax &gt; Declarations &gt; Foreign trade &gt; Intrastat</code>.</p>
               <h4>Withholding tax</h4>
               <p>Buyer-deducted tax on certain payments (services, royalties). Setup: codes per withholding type, vendor flagged as subject to WHT. F&amp;O reduces vendor payment by WHT amount and accrues the WHT liability.</p>
               <h4>Use tax (US)</h4>
@@ -3495,6 +3516,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Master data</span>Carriers &amp; rates</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Transportation management &gt; Setup &gt; Carriers &gt; Shipping carriers</code> and <code>Transportation management &gt; Setup &gt; Rating &gt; Rate masters</code>.</p>
               <h4>Shipping carriers &amp; services</h4>
               <p>Carrier (UPS, FedEx, BNSF, Maersk) holds vendor link, contact info, modes supported. Carrier service (UPS Ground, FedEx Express) defines transit / commitments per carrier.</p>
               <h4>Rate masters &amp; rate bases</h4>
@@ -3511,6 +3533,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Process</span>Rate, route, load</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Transportation management &gt; Planning &gt; Load planning workbench</code> and <code>Transportation management &gt; Planning &gt; Route plans</code>.</p>
               <h4>Rate shopping</h4>
               <p>For a sales-order shipment, F&amp;O queries all eligible carriers and returns rates / transit times. Selection rule (cheapest, fastest, preferred) chooses one. Result attached to the sales-order shipment.</p>
               <h4>Route planning</h4>
@@ -3527,6 +3550,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Settlement</span>Freight reconciliation</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Transportation management &gt; Periodic tasks &gt; Match freight bills and reconcile</code> and <code>Transportation management &gt; Inquiries and reports &gt; Freight bill details</code>.</p>
               <h4>Freight bill</h4>
               <p>The carrier's invoice for a shipment. Generated from confirmed shipment data (using rate engine result) or imported from carrier (EDI 210, file).</p>
               <h4>Audit</h4>
@@ -3597,6 +3621,7 @@
           <details class="topic">
             <summary><span class="topic__eyebrow">Onboarding</span>Prospective vendor self-registration</summary>
             <div class="topic__body">
+              <p><strong>Where:</strong> <code>Procurement and sourcing &gt; Vendors &gt; Prospective vendors</code> and the public registration URL configured in <code>Procurement and sourcing &gt; Setup &gt; Procurement and sourcing parameters &gt; Vendor collaboration</code>.</p>
               <p>The full onboarding flow:</p>
               <ol>
                 <li>Prospective vendor visits the registration URL and submits company details, certifications, banking info.</li>

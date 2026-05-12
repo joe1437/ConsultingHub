@@ -55,6 +55,7 @@
         <p class="workspace__sidebar-title">Processes</p>
         <ul class="workspace__nav">
           <li><a class="workspace__nav-link" data-item-link="accounting-basics" href="#accounting-basics">Accounting basics</a></li>
+          <li><a class="workspace__nav-link" data-item-link="inventory-posting" href="#inventory-posting">Inventory Posting</a></li>
           <li><a class="workspace__nav-link" data-item-link="acquire-to-dispose" href="#acquire-to-dispose">Acquire to dispose</a></li>
           <li><a class="workspace__nav-link" data-item-link="case-to-resolution" href="#case-to-resolution">Case to resolution</a></li>
           <li><a class="workspace__nav-link" data-item-link="concept-to-market" href="#concept-to-market">Concept to market</a></li>
@@ -275,7 +276,7 @@
               <h4>Input tax</h4>
               <p>Tax paid to the supplier on a purchase invoice. Posted to a Sales tax recoverable account, which is recoverable against output tax (in true VAT regimes) or expensed (in US sales tax, where buyers are usually exempt and only end-consumers pay).</p>
               <h4>Periodic settlement (declaration)</h4>
-              <p>At each tax-period end (monthly or quarterly per jurisdiction), the consultant runs the "Settle and post sales tax" process. F&amp;O nets output against input and posts the difference to a VAT settlement account, which is then paid to the authority.</p>
+              <p>At each tax-period end (monthly or quarterly per jurisdiction), the consultant runs Tax &gt; Periodic tasks &gt; Declarations &gt; Sales tax &gt; "Settle and post sales tax". F&amp;O nets output against input per Sales tax authority and posts the difference to the Settlement account on the Ledger posting group, which is then paid to the authority. If the authority is linked to a vendor, the balance can be transferred to the vendor as an open invoice via the same process.</p>
               <div class="entry-table-wrap">
                 <table class="entry-table">
                   <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
@@ -394,6 +395,682 @@
         </div>
       </article>
 
+      <!-- ============== Inventory Posting ============== -->
+      <article class="item-pane" data-item-pane="inventory-posting">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Inventory</span>
+          <h2 class="item-pane__title">Inventory Posting</h2>
+          <p class="item-pane__lead">An introduction to inventory posting profiles, explaining how inventory transactions map to the general ledger across sales, purchasing, production, and cost variances.</p>
+        </header>
+        <div class="topics">
+        <details class="topic">
+          <summary><span class="topic__eyebrow">Posting Profile</span>Sales order</summary>
+          <div class="topic__body">
+            <p>Sales order tab   Inventory posting profile. Controls how SALES order packing slips (physical) and invoices (financial) hit the GL. Path: Inventory management > Setup > Posting > Posting > Sales order.</p>
+            <div class="entry-table-wrap" style="overflow-x: auto;">
+            <table class="entry-table" style="min-width: 1000px;">
+              <thead><tr><th>Posting Type</th><th>Purpose</th><th>When It Posts</th><th>Account Type</th><th>Dr/Cr</th><th>P/F</th><th>Prerequisites</th><th>Guidance</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Cost of units, delivered</strong></td>
+                  <td>Records the inventory value being shipped out when a sales order packing slip is posted. Provides visibility of inventory leaving the warehouse before invoicing.</td>
+                  <td>Sales order packing slip posting (physical update). Reversed automatically when the sales invoice is posted.</td>
+                  <td>Asset (Inventory / Materials shipped not invoiced)</td>
+                  <td>Credit. Offset = Cost of goods sold, delivered.</td>
+                  <td>Physical (P). Clearing account   reverses at invoice.</td>
+                  <td>Inventory & warehouse management parameters: 'Post packing slip in ledger' = Yes. Item model group: 'Post physical inventory' = Yes.</td>
+                  <td>Provide an interim inventory clearing account (e.g., 'Materials shipped not invoiced'). Many clients reuse the main Inventory account; controller decides whether to split out a clearing GL.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost of goods sold, delivered</strong></td>
+                  <td>Records the estimated/temporary COGS on packing slip, so the P&L can reflect cost-of-sale as soon as goods physically ship.</td>
+                  <td>Sales order packing slip posting (physical update). Reversed when invoice posts.</td>
+                  <td>Expense (Deferred / accrued COGS)</td>
+                  <td>Debit. Offset = Cost of units, delivered.</td>
+                  <td>Physical (P). Clearing   reverses at invoice.</td>
+                  <td>Same prerequisites as Cost of units, delivered.</td>
+                  <td>Provide a 'Deferred COGS' or 'COGS – packing slip' P&L account. Reverses to actual COGS at invoice.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost of units, invoiced</strong></td>
+                  <td>Records the actual/permanent reduction of inventory on the balance sheet when the customer invoice posts.</td>
+                  <td>Sales order invoice posting (financial update).</td>
+                  <td>Asset (Inventory)</td>
+                  <td>Credit. Offset = Cost of goods sold, invoiced.</td>
+                  <td>Financial (F). Not a clearing account.</td>
+                  <td>Item model group: 'Post financial inventory' = Yes.</td>
+                  <td>Provide the main Inventory asset GL account on the balance sheet. Typically the SAME account used for 'Cost of purchased materials invoiced' (PO) and 'Inventory issue/receipt'.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost of goods sold, invoiced</strong></td>
+                  <td>Records the actual Cost of Goods Sold expense on the P&L when the customer invoice is posted.</td>
+                  <td>Sales order invoice posting (financial update).</td>
+                  <td>Expense (COGS)</td>
+                  <td>Debit. Offset = Cost of units, invoiced.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Item model group: 'Post financial inventory' = Yes.</td>
+                  <td>Provide the COGS P&L account. Usually segmented by item group / product category for reporting (e.g., COGS – Raw materials, COGS – Finished goods).</td>
+                </tr>
+                <tr>
+                  <td><strong>Revenue</strong></td>
+                  <td>Records the sales revenue earned when the customer invoice posts.</td>
+                  <td>Sales order invoice posting.</td>
+                  <td>Revenue</td>
+                  <td>Credit. Offset = Customer balance (Summary) account on the AR posting profile.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Standard sales invoice.</td>
+                  <td>Provide the Revenue GL account(s). Almost always segmented by product line / item group / business unit. Ask the controller for the revenue mapping by category or item group.</td>
+                </tr>
+                <tr>
+                  <td><strong>Commission</strong></td>
+                  <td>Records sales commission expense earned by the sales rep / agent for the invoiced order line.</td>
+                  <td>Sales order invoice posting, when commission is calculated.</td>
+                  <td>Expense</td>
+                  <td>Debit. Offset = Commission offset (Commissions payable).</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Commission groups configured on customer + product; commission calculation defined.</td>
+                  <td>Provide a 'Sales commission expense' P&L account. Leave blank only if commissions are not used in this implementation.</td>
+                </tr>
+                <tr>
+                  <td><strong>Discount</strong></td>
+                  <td>Records the portion of sales price discounted, if the controller wants discounts visible on a separate GL rather than netted into Revenue.</td>
+                  <td>Sales order invoice posting, when line or total discounts exist.</td>
+                  <td>Revenue (contra) or Expense</td>
+                  <td>Debit (reduces revenue). Offset = Revenue / Customer balance.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Sales line/total discount entered or calculated.</td>
+                  <td>OPTIONAL. Most GAAP/IFRS clients leave this BLANK so discounts net into Revenue. Fill only if the controller wants discounts visible on a separate contra-revenue GL.</td>
+                </tr>
+                <tr>
+                  <td><strong>Commission offset</strong></td>
+                  <td>Records the commission liability payable to the sales rep / agent.</td>
+                  <td>Sales order invoice posting (when commission is calculated).</td>
+                  <td>Liability</td>
+                  <td>Credit. Offset = Commission expense.</td>
+                  <td>Financial (F). Clearing.</td>
+                  <td>Commission groups configured.</td>
+                  <td>Provide a 'Commissions payable' liability account. Required only if commissions are used.</td>
+                </tr>
+                <tr>
+                  <td><strong>Deferred revenue on delivery</strong></td>
+                  <td>Records ESTIMATED (accrued) revenue at packing slip, deferred until invoicing   for clients that want revenue visibility on shipment for month-end accruals.</td>
+                  <td>Sales order packing slip posting (when deferred revenue on sales delivery is enabled). Auto-reverses at invoice.</td>
+                  <td>Revenue (clearing   accrued sales)</td>
+                  <td>Credit. Offset = Deferred revenue offset on delivery.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Item model group: 'Post to Deferred Revenue Account on Sales Delivery' = Yes. AR parameters 'Post packing slip in ledger' = Yes. Inventory & warehouse mgmt 'Post physical sales tax' = Yes.</td>
+                  <td>Provide an 'Accrued sales' / unbilled revenue account. Required only if the client wants packing-slip revenue accrual. Many clients skip this and use Revenue Recognition module instead.</td>
+                </tr>
+                <tr>
+                  <td><strong>Deferred revenue offset on delivery</strong></td>
+                  <td>Asset / unbilled-AR counterpart to 'Deferred revenue on delivery'   records the unbilled receivable on the balance sheet between shipment and invoicing.</td>
+                  <td>Sales order packing slip posting (same trigger as Deferred revenue on delivery).</td>
+                  <td>Asset (Unbilled AR)</td>
+                  <td>Debit. Offset = Deferred revenue on delivery.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Same as Deferred revenue on delivery.</td>
+                  <td>Provide an 'Accounts receivable – not invoiced' / unbilled AR asset account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Deferred sales tax on delivery</strong></td>
+                  <td>Records estimated sales tax when packing slip posts, in jurisdictions/configurations that require posting tax on physical update.</td>
+                  <td>Sales order packing slip posting (with Post physical sales tax enabled). Reverses at invoice.</td>
+                  <td>Liability (Deferred tax)</td>
+                  <td>Credit.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Inventory & warehouse management parameters: 'Post physical sales tax' = Yes.</td>
+                  <td>Provide a 'Deferred sales tax payable' liability account. Required only if physical tax posting is enabled (uncommon outside specific tax regimes).</td>
+                </tr>
+                <tr>
+                  <td><strong>Customer prepayment</strong></td>
+                  <td>Records advance customer deposits captured via the Prepayment customer invoice feature (sales-side deposit before final invoice).</td>
+                  <td>Posting a prepayment invoice on a sales order; reversed at final sales invoice.</td>
+                  <td>Liability (Customer deposits / unearned)</td>
+                  <td>Credit (on prepayment receipt); offset = Customer balance.</td>
+                  <td>Financial (F). Clearing (settles at final invoice).</td>
+                  <td>Feature management: 'Prepayment customer invoice' = Enabled. AR parameters configured.</td>
+                  <td>Provide a 'Customer deposits' / 'Unearned revenue' liability account. Required only if the prepayment-customer-invoice feature is in scope.</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </details>
+        <details class="topic">
+          <summary><span class="topic__eyebrow">Posting Profile</span>Purchase order</summary>
+          <div class="topic__body">
+            <p>Purchase order tab   Inventory posting profile. Controls how PO product receipts (physical) and vendor invoices (financial) hit the GL. Path: Inventory management > Setup > Posting > Posting > Purchase order.</p>
+            <div class="entry-table-wrap" style="overflow-x: auto;">
+            <table class="entry-table" style="min-width: 1000px;">
+              <thead><tr><th>Posting Type</th><th>Purpose</th><th>When It Posts</th><th>Account Type</th><th>Dr/Cr</th><th>P/F</th><th>Prerequisites</th><th>Guidance</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Cost of purchased materials received</strong></td>
+                  <td>Records the inventory value of goods physically received but not yet invoiced   i.e., the inventory side of GRNI (goods received not invoiced).</td>
+                  <td>Purchase order product receipt posting (physical). Auto-reverses at invoice.</td>
+                  <td>Asset (Inventory clearing / Materials received not invoiced)</td>
+                  <td>Debit. Offset = Purchase expenditure, un-invoiced.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Inventory & warehouse management parameters: 'Post product receipt in ledger' = Yes. Item model group: 'Post physical inventory' + 'Accrue liability on product receipt' = Yes.</td>
+                  <td>Provide an inventory clearing account   typically 'Materials received not invoiced' or the same as main Inventory. Reverses at vendor invoice.</td>
+                </tr>
+                <tr>
+                  <td><strong>Purchase expenditure, un-invoiced</strong></td>
+                  <td>P&L clearing account that captures the product-receipt expenditure side pending invoice. Used by D365 to generate the second voucher that tracks purchase price variances on standard-cost items.</td>
+                  <td>Purchase order product receipt posting (physical) and PO invoice (reversal).</td>
+                  <td>Expense (clearing)</td>
+                  <td>Debit on receipt; reversed (credit) on invoice.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Same prerequisites as 'Cost of purchased materials received'.</td>
+                  <td>Provide a 'Material receipts' / 'Purchase clearing' P&L account. CRITICAL   should net to ~zero each period if everything is invoiced. Common choice: a dedicated clearing GL the controller monitors at close.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost of purchased materials invoiced</strong></td>
+                  <td>Records the permanent inventory value on the balance sheet when the vendor invoice is posted.</td>
+                  <td>PO invoice posting (financial).</td>
+                  <td>Asset (Inventory)</td>
+                  <td>Debit. Offset = Purchase expenditure for product.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Item model group: 'Post financial inventory' = Yes.</td>
+                  <td>Provide the main Inventory asset GL account. SAME account as 'Cost of units invoiced' (sales) and 'Inventory issue/receipt'.</td>
+                </tr>
+                <tr>
+                  <td><strong>Purchase expenditure for product</strong></td>
+                  <td>P&L clearing counterpart for invoiced inventory. For standard-cost items, the net of this account and 'Purchase expenditure, un-invoiced' captures the purchase price variance.</td>
+                  <td>PO invoice posting (financial). Two vouchers generated for standard-cost items.</td>
+                  <td>Expense (clearing)</td>
+                  <td>Credit. Offset = Purchase expenditure, un-invoiced (received side).</td>
+                  <td>Financial (F). Clearing.</td>
+                  <td>Standard PO invoice.</td>
+                  <td>Provide a 'Materials receipt' clearing P&L account   typically the SAME account as 'Purchase expenditure, un-invoiced' so the net is the variance only.</td>
+                </tr>
+                <tr>
+                  <td><strong>Discount</strong></td>
+                  <td>Records vendor purchase discount when the controller wants discounts visible separately from inventory cost.</td>
+                  <td>PO invoice posting where a vendor discount applies.</td>
+                  <td>Expense (contra) / Revenue</td>
+                  <td>Credit. Offset = Inventory or Purchase expenditure.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Vendor discount on PO line.</td>
+                  <td>OPTIONAL. Leave BLANK unless the controller wants 'Purchase discounts received' visible as a separate GL. Otherwise discounts net into the inventory/expense cost.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fixed receipt price profit</strong></td>
+                  <td>(INVENTORY tab) Favorable variance on inventory receipt journals (not PO) when fixed receipt price is used.</td>
+                  <td>Inventory journal receipt for items using Fixed receipt price.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Credit.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Item model group: 'Fixed receipt price' = Yes.</td>
+                  <td>Provide same PPV / variance account used for the PO version.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fixed receipt price loss</strong></td>
+                  <td>(INVENTORY tab) Unfavorable variance on inventory receipt journals using fixed receipt price.</td>
+                  <td>Inventory journal receipt for items using Fixed receipt price.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Debit.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Same as above.</td>
+                  <td>Same PPV / variance account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fixed receipt price offset</strong></td>
+                  <td>Balancing entry to fixed-receipt-price profit/loss postings.</td>
+                  <td>PO invoice posting on Fixed receipt price items.</td>
+                  <td>Asset (Stock variation offset)</td>
+                  <td>Either Debit or Credit (depending on profit/loss direction).</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Fixed receipt price configured.</td>
+                  <td>Provide a 'Stock variation' or inventory adjustment offset account. Often a balance-sheet stock variation GL.</td>
+                </tr>
+                <tr>
+                  <td><strong>Charge</strong></td>
+                  <td>DEPRECATED. Microsoft has retired this posting type. Use 'Stock variation' instead (when 'Post to charge account in ledger' is enabled).</td>
+                  <td>Not applicable   no longer used in current versions.</td>
+                  <td>N/A</td>
+                  <td>N/A</td>
+                  <td>N/A</td>
+                  <td>None   superseded.</td>
+                  <td>LEAVE BLANK. Per Microsoft documentation: 'This account is no longer used. Use Stock variation instead.' No GL required.</td>
+                </tr>
+                <tr>
+                  <td><strong>Stock variation</strong></td>
+                  <td>Captures differences between product receipt and invoice   unit price differences, miscellaneous charges, and indirect costs added to purchased items.</td>
+                  <td>PO product receipt / invoice where there is a unit price diff, charges, or indirect cost.</td>
+                  <td>Expense (Stock variation)</td>
+                  <td>Credit. Offset = Purchase expenditure, un-invoiced.</td>
+                  <td>Physical & Financial (Both). Not clearing.</td>
+                  <td>AP parameters: 'Post to charge account in ledger' = Yes. Procurement & sourcing: 'Generate charges on product receipt' = Yes. Inventory & warehouse: 'Post packing slip in ledger' = Yes. Item model group: 'Post physical' + 'Post financial' + 'Accrue liabil</td>
+                  <td>Provide a 'Stock variation' / cost-of-materials-variance P&L account. Required when using procurement charges or when receipt/invoice prices may differ.</td>
+                </tr>
+                <tr>
+                  <td><strong>Purchase, accrual</strong></td>
+                  <td>Records the accrued vendor liability (GRNI   Goods Received Not Invoiced) at product receipt.</td>
+                  <td>PO product receipt posting (when accrual is enabled). Reverses at invoice.</td>
+                  <td>Liability (Accrued purchases / GRNI)</td>
+                  <td>Credit. Offset = Purchase expenditure, un-invoiced.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Item model group: 'Accrue liability on product receipt' = Yes.</td>
+                  <td>Provide an 'Accrued purchases' / GRNI liability account. ONE OF THE MOST IMPORTANT BALANCE-SHEET CLEARING ACCOUNTS   the controller must monitor this every month-end to ensure receipts get invoiced.</td>
+                </tr>
+                <tr>
+                  <td><strong>Accrued sales tax on receipt</strong></td>
+                  <td>Records sales/use tax accrued at PO product receipt for taxable purchases (where tax is recognized on physical update).</td>
+                  <td>PO product receipt where 'Post physical tax' is enabled and the line has tax. Reverses at invoice.</td>
+                  <td>Liability (Accrued tax)</td>
+                  <td>Credit.</td>
+                  <td>Both physical and financial. Clearing.</td>
+                  <td>Inventory & warehouse management parameters: 'Post physical tax' = Yes.</td>
+                  <td>Provide an 'Accrued sales tax' liability account. Required ONLY if posting physical tax on receipt is enabled (uncommon outside specific tax regimes).</td>
+                </tr>
+                <tr>
+                  <td><strong>Fixed asset receipt</strong></td>
+                  <td>Records the acquisition of a fixed asset when a PO line is configured to acquire an FA on product receipt or invoice.</td>
+                  <td>PO product receipt or invoice on FA-linked PO line (per the FA integration setting).</td>
+                  <td>Asset (Fixed asset acquisition)</td>
+                  <td>Debit.</td>
+                  <td>Both. Not clearing.</td>
+                  <td>PO line set up for Fixed asset acquisition; FA integration parameter set to 'Acquire on receipt' or 'Acquire on invoice'.</td>
+                  <td>Provide the Fixed Asset acquisition account. COORDINATE with FA posting profile setup so the FA module and the inventory posting profile agree on the acquisition GL.</td>
+                </tr>
+                <tr>
+                  <td><strong>Purchase expenditure for expense</strong></td>
+                  <td>P&L account used for non-stocked items, service purchases, or category-based (procurement category) PO lines.</td>
+                  <td>PO receipt/invoice for non-stocked items or procurement-category lines.</td>
+                  <td>Expense (varies   based on category)</td>
+                  <td>Debit. Offset = Purchase accrual / Vendor balance.</td>
+                  <td>Both. Not clearing.</td>
+                  <td>Item is non-stocked OR procurement category is used on the line (no item number).</td>
+                  <td>CRITICAL for chart of accounts mapping   set up MULTIPLE records of this posting type, one per procurement category. Each category should map to its target expense GL (e.g., Office supplies, IT services, Travel). Get the category-to-GL mapping from the co</td>
+                </tr>
+                <tr>
+                  <td><strong>Prepayment</strong></td>
+                  <td>Records a vendor prepayment (advance to supplier) when a PO prepayment invoice is posted.</td>
+                  <td>PO prepayment invoice posting; settles when final vendor invoice posts.</td>
+                  <td>Asset (Prepaid expense)</td>
+                  <td>Debit. Offset = Vendor balance.</td>
+                  <td>Both. Not clearing   settles at final invoice.</td>
+                  <td>Prepayment feature configured; prepayment posting profile assigned.</td>
+                  <td>Provide a 'Prepaid expense – vendor' asset account. Required only if PO prepayment invoices are in scope.</td>
+                </tr>
+                <tr>
+                  <td><strong>Landed cost goods in transit</strong></td>
+                  <td>Records inventory in transit when a Landed cost PO is INVOICED before goods physically arrive   replaces standard GRNI for landed-cost flows. Goods are owned (asset) but not yet at destination warehouse.</td>
+                  <td>Landed cost PO invoice posting (when goods-in-transit is enabled). Clears when goods are physically received at destination.</td>
+                  <td>Asset (Inventory in transit)</td>
+                  <td>Debit.</td>
+                  <td>Financial (F). Clearing.</td>
+                  <td>Landed cost module enabled; 'Goods in transit management' = Yes on Terms of delivery; goods-in-transit warehouse configured.</td>
+                  <td>Provide an 'Inventory in transit' / 'Goods in transit' asset account. Required ONLY if the Landed Cost module is in scope for this implementation.</td>
+                </tr>
+                <tr>
+                  <td><strong>Landed cost charge accrual</strong></td>
+                  <td>Accrues the ESTIMATED landed cost charges (freight, duty, insurance) at PO invoice time. Reversed when the actual cost vendor invoice is posted.</td>
+                  <td>Landed cost PO invoice posting   estimated voyage costs are accrued; cleared by actual cost invoice.</td>
+                  <td>Liability (Landed cost accrual / clearing)</td>
+                  <td>Credit.</td>
+                  <td>Financial (F). Clearing.</td>
+                  <td>Landed cost module; cost type codes and auto-cost setup configured.</td>
+                  <td>Provide a 'Landed cost accrual' liability/clearing account. Required ONLY if Landed Cost module is in scope.</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </details>
+        <details class="topic">
+          <summary><span class="topic__eyebrow">Posting Profile</span>Inventory</summary>
+          <div class="topic__body">
+            <p>Inventory tab   Inventory posting profile. Controls how inventory journals (movement, adjustment, transfer, BOM, counting, quality, quarantine) hit the GL   i.e., transactions NOT originating from sales, purchase or production.</p>
+            <div class="entry-table-wrap" style="overflow-x: auto;">
+            <table class="entry-table" style="min-width: 1000px;">
+              <thead><tr><th>Posting Type</th><th>Purpose</th><th>When It Posts</th><th>Account Type</th><th>Dr/Cr</th><th>P/F</th><th>Prerequisites</th><th>Guidance</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Fixed receipt price profit</strong></td>
+                  <td>(Inventory tab) Favorable variance on inventory journal receipt for items using Fixed receipt price (standard-cost alternative).</td>
+                  <td>Inventory journal receipt for items using Fixed receipt price.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Credit.</td>
+                  <td>Both. Not clearing.</td>
+                  <td>Item model group: 'Fixed receipt price' = Yes; 'Post physical inventory' = Yes.</td>
+                  <td>Use the same PPV/variance GL as the PO version of Fixed receipt price profit.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fixed receipt price loss</strong></td>
+                  <td>(Inventory tab) Unfavorable variance on inventory journal receipt for items using Fixed receipt price.</td>
+                  <td>Inventory journal receipt for items using Fixed receipt price.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Debit.</td>
+                  <td>Both. Not clearing.</td>
+                  <td>Same as above.</td>
+                  <td>Same PPV/variance GL as Fixed receipt price loss on PO tab.</td>
+                </tr>
+                <tr>
+                  <td><strong>Inventory issue</strong></td>
+                  <td>Records the reduction of inventory for journal-based transactions (movement, adjustment, transfer journals) that are NOT linked to sales, purchase, or production.</td>
+                  <td>Inventory journals (movement, adjustment, transfer, BOM journal) with a negative quantity.</td>
+                  <td>Asset (Inventory)</td>
+                  <td>Credit. Offset = Inventory expenditure, loss.</td>
+                  <td>Both. Not clearing.</td>
+                  <td>Standard inventory journals.</td>
+                  <td>Provide the main Inventory asset account on the balance sheet. Should match 'Cost of units invoiced' (sales) and 'Cost of purchased materials invoiced' (PO) for consistency.</td>
+                </tr>
+                <tr>
+                  <td><strong>Inventory expenditure, loss</strong></td>
+                  <td>Records the P&L impact when inventory leaves stock via a non-sales adjustment (write-off, sample, shrinkage).</td>
+                  <td>Inventory issue (negative qty) journal posting.</td>
+                  <td>Expense (Inventory adjustment / shrinkage)</td>
+                  <td>Debit. Offset = Inventory issue.</td>
+                  <td>Both. Not clearing.</td>
+                  <td>Same.</td>
+                  <td>Provide an 'Inventory adjustment – loss / shrinkage' expense account. Many clients use the SAME account for loss and profit; controller can split if wanted.</td>
+                </tr>
+                <tr>
+                  <td><strong>Inventory receipt</strong></td>
+                  <td>Records the increase to inventory for journal-based receipts not linked to PO/production (movement, counting gain, BOM finished good).</td>
+                  <td>Inventory journals with positive quantity.</td>
+                  <td>Asset (Inventory)</td>
+                  <td>Debit. Offset = Inventory expenditure, profit.</td>
+                  <td>Both.</td>
+                  <td>Standard inventory journals.</td>
+                  <td>Provide same Inventory asset account as 'Inventory issue'.</td>
+                </tr>
+                <tr>
+                  <td><strong>Inventory expenditure, profit</strong></td>
+                  <td>Records the P&L impact when inventory is added via an adjustment (counting gain, write-up).</td>
+                  <td>Inventory receipt (positive qty) journal posting.</td>
+                  <td>Other income / Expense (gain)</td>
+                  <td>Credit. Offset = Inventory receipt.</td>
+                  <td>Both.</td>
+                  <td>Same.</td>
+                  <td>Provide an 'Inventory adjustment – gain' account, often the SAME account as 'Inventory expenditure, loss'.</td>
+                </tr>
+                <tr>
+                  <td><strong>Inter-unit payable</strong></td>
+                  <td>Records inter-site / inter-warehouse balancing entry when an item is transferred between sites where the cost differs.</td>
+                  <td>Inventory transfer journal between sites where standard cost differs between sites.</td>
+                  <td>Liability</td>
+                  <td>Debit.</td>
+                  <td>Both.</td>
+                  <td>Multi-site setup with site-specific costs; usually used with standard cost or fixed receipt price.</td>
+                  <td>Provide an 'Inter-unit / inter-site payable' liability account. Required ONLY if running multiple sites with different costs.</td>
+                </tr>
+                <tr>
+                  <td><strong>Inter-unit receivable</strong></td>
+                  <td>Asset-side counterpart to inter-unit payable for inter-site cost-difference transfers.</td>
+                  <td>Same as above.</td>
+                  <td>Asset</td>
+                  <td>Credit.</td>
+                  <td>Both.</td>
+                  <td>Same.</td>
+                  <td>Provide an 'Inter-unit / inter-site receivable' asset account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Catch weight loss account</strong></td>
+                  <td>Records inventory loss when the issued weight of a catch-weight item is LESS than the received weight.</td>
+                  <td>Catch-weight item inventory transaction with weight variance (low side).</td>
+                  <td>Expense (Inventory adjustment)</td>
+                  <td>Either.</td>
+                  <td>Both.</td>
+                  <td>Catch weight functionality enabled; item configured as catch-weight product.</td>
+                  <td>Required ONLY if catch-weight items are used (typical for food/meat/produce). Provide an 'Inventory adjustment' P&L account; same account is often used for both loss and profit.</td>
+                </tr>
+                <tr>
+                  <td><strong>Catch weight profit account</strong></td>
+                  <td>Records inventory gain when issued weight is MORE than received weight on catch-weight items.</td>
+                  <td>Catch-weight item inventory transaction with weight variance (high side).</td>
+                  <td>Expense (Inventory adjustment)</td>
+                  <td>Either.</td>
+                  <td>Both.</td>
+                  <td>Same as above.</td>
+                  <td>Same account as catch weight loss   typical practice.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fixed asset issue</strong></td>
+                  <td>Records inventory leaving stock when an Inventory-to-Fixed-Asset journal converts an inventory item into a fixed asset.</td>
+                  <td>Inventory to fixed asset journal posting.</td>
+                  <td>Asset (Inventory credit)</td>
+                  <td>Credit.</td>
+                  <td>Both.</td>
+                  <td>FA integration enabled; inventory-to-fixed-asset journal used.</td>
+                  <td>Provide the Fixed Asset acquisition account on the FA side; the inventory side credits this posting type. Coordinate with FA posting profile.</td>
+                </tr>
+                <tr>
+                  <td><strong>Price difference for moving average</strong></td>
+                  <td>Records the cost difference between receipt and invoice for moving-average items that has been expensed because the inventory was already issued before the invoice posted.</td>
+                  <td>PO invoice on moving-average item where price differs from receipt and on-hand isn't sufficient to absorb the difference.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Both.</td>
+                  <td>Item uses 'Moving average' inventory model.</td>
+                  <td>Provide a 'Moving average price difference' P&L account. Required ONLY if any items use the Moving Average costing method.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost revaluation for moving average</strong></td>
+                  <td>Records the impact of explicit cost adjustments on moving-average items (e.g., revaluation journal).</td>
+                  <td>Adjustment of moving-average cost via inventory cost adjustment journal.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Both.</td>
+                  <td>Item uses 'Moving average'.</td>
+                  <td>Provide a 'Moving average revaluation' P&L account. Required only with Moving Average costing.</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </details>
+        <details class="topic">
+          <summary><span class="topic__eyebrow">Posting Profile</span>Production</summary>
+          <div class="topic__body">
+            <p>Production tab   Inventory posting profile. Controls how production orders (picking list, report-as-finished, end) hit the GL. Active when 'Ledger posting' on Production control parameters = 'Item and resource' or 'Item and category'. (When set to 'Produc</p>
+            <div class="entry-table-wrap" style="overflow-x: auto;">
+            <table class="entry-table" style="min-width: 1000px;">
+              <thead><tr><th>Posting Type</th><th>Purpose</th><th>When It Posts</th><th>Account Type</th><th>Dr/Cr</th><th>P/F</th><th>Prerequisites</th><th>Guidance</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Estimated cost of materials consumed</strong></td>
+                  <td>Records the ESTIMATED value of raw materials issued to a production order when the picking list journal is posted. Held until production order is ended.</td>
+                  <td>Production picking list journal posting (physical update). Reversed when the production order is Ended (cost calculated).</td>
+                  <td>Asset (Raw materials Inventory)</td>
+                  <td>Credit. Offset = Estimated cost of materials consumed, WIP.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Production control parameters: 'Post picking list in ledger' = Yes. Item model group: 'Post physical inventory' = Yes.</td>
+                  <td>Provide the raw materials Inventory asset account. Typically the SAME as Inventory issue / Cost of purchased materials invoiced. Required if production is in scope.</td>
+                </tr>
+                <tr>
+                  <td><strong>Estimated cost of materials consumed, WIP</strong></td>
+                  <td>WIP-side debit when raw materials are issued to production via picking list. Captures the materials at WIP stage on the balance sheet.</td>
+                  <td>Picking list journal posting.</td>
+                  <td>Asset (Work in Process)</td>
+                  <td>Debit. Offset = Estimated cost of materials consumed.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Same as above.</td>
+                  <td>Provide a 'Production WIP – Materials' (or 'WIP Inventory') asset account. Required for production with WIP accounting.</td>
+                </tr>
+                <tr>
+                  <td><strong>Estimated manufactured cost</strong></td>
+                  <td>Records the ESTIMATED value of the finished good in Finished Goods inventory when 'Report as Finished' is posted (before final cost calculation).</td>
+                  <td>Report-as-finished journal posting on a production order (physical update). Reversed when the production order is Ended.</td>
+                  <td>Asset (Finished Goods)</td>
+                  <td>Debit. Offset = Estimated manufactured cost, WIP.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Production control parameters: 'Post report as finished in ledger' = Yes. Item model group: 'Post physical inventory' = Yes.</td>
+                  <td>Provide the Finished Goods inventory asset account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Estimated manufactured cost, WIP</strong></td>
+                  <td>WIP-side credit when finished good is reported as finished   reduces WIP as it becomes finished inventory.</td>
+                  <td>Report-as-finished journal posting.</td>
+                  <td>Asset (Work in Process)</td>
+                  <td>Credit. Offset = Estimated manufactured cost.</td>
+                  <td>Physical (P). Clearing.</td>
+                  <td>Same.</td>
+                  <td>Same WIP asset account (typically the same as 'Estimated cost of materials consumed, WIP').</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost of materials consumed</strong></td>
+                  <td>Records the ACTUAL value of materials consumed when the production order is Ended (post-cost calculation). Replaces the estimated entries.</td>
+                  <td>Production order End (cost calculation with End Job).</td>
+                  <td>Asset (Raw materials Inventory)</td>
+                  <td>Credit. Offset = Cost of materials consumed, WIP.</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>End production order with 'End job' = Yes.</td>
+                  <td>Same raw materials Inventory account as estimated.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost of materials consumed, WIP</strong></td>
+                  <td>WIP-side debit for the ACTUAL materials in WIP on production-order end.</td>
+                  <td>Production order End.</td>
+                  <td>Asset (Work in Process)</td>
+                  <td>Debit. Offset = Cost of materials consumed.</td>
+                  <td>Financial (F).</td>
+                  <td>Same.</td>
+                  <td>Same WIP-materials account as estimated.</td>
+                </tr>
+                <tr>
+                  <td><strong>Manufactured cost</strong></td>
+                  <td>Records the ACTUAL value of finished goods on the production order End   represents finished inventory permanently on the balance sheet.</td>
+                  <td>Production order End (cost calculation).</td>
+                  <td>Asset (Finished Goods)</td>
+                  <td>Debit. Offset = Manufactured cost, WIP.</td>
+                  <td>Financial (F).</td>
+                  <td>Same.</td>
+                  <td>Same Finished Goods account as Estimated manufactured cost.</td>
+                </tr>
+                <tr>
+                  <td><strong>Manufactured cost, WIP</strong></td>
+                  <td>WIP-side credit at production order End   reduces WIP to zero as finished goods are recognized at actual cost.</td>
+                  <td>Production order End.</td>
+                  <td>Asset (Work in Process)</td>
+                  <td>Credit. Offset = Manufactured cost.</td>
+                  <td>Financial (F).</td>
+                  <td>Same.</td>
+                  <td>Same WIP asset account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Lean service WIP receipt</strong></td>
+                  <td>Used for backflush costing in Lean Manufacturing   records WIP receipt for service/process items in lean (kanban) flows.</td>
+                  <td>Lean manufacturing kanban completion / backflush processing.</td>
+                  <td>Asset (Lean WIP)</td>
+                  <td>Debit.</td>
+                  <td>Both.</td>
+                  <td>Lean manufacturing module + backflush costing configured.</td>
+                  <td>LEAVE BLANK unless Lean Manufacturing is in scope. If lean is used, provide a 'Lean service WIP' asset account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Lean service WIP clearing</strong></td>
+                  <td>Offset / clearing account for the Lean service WIP receipt entries (backflush).</td>
+                  <td>Lean manufacturing backflush processing.</td>
+                  <td>Asset / Liability (Clearing)</td>
+                  <td>Credit.</td>
+                  <td>Both.</td>
+                  <td>Same.</td>
+                  <td>Same   required only if Lean Manufacturing is used.</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </details>
+        <details class="topic">
+          <summary><span class="topic__eyebrow">Posting Profile</span>Standard cost variance</summary>
+          <div class="topic__body">
+            <p>Standard cost variance tab   Inventory posting profile. Required for STANDARD COST items. Captures all variances between standard cost and actual cost on purchases, production, and revaluations. Per Microsoft prerequisites, 'Inventory cost revaluation' is</p>
+            <div class="entry-table-wrap" style="overflow-x: auto;">
+            <table class="entry-table" style="min-width: 1000px;">
+              <thead><tr><th>Posting Type</th><th>Purpose</th><th>When It Posts</th><th>Account Type</th><th>Dr/Cr</th><th>P/F</th><th>Prerequisites</th><th>Guidance</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Purchase price variance</strong></td>
+                  <td>Records the variance between standard cost and actual invoiced price on a PO for standard-cost items. Most common variance account in standard costing.</td>
+                  <td>PO invoice posting on items using Standard cost inventory model.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either Dr or Cr (favorable vs unfavorable).</td>
+                  <td>Financial (F). Not clearing.</td>
+                  <td>Item uses 'Standard cost' inventory model; cost group assigned.</td>
+                  <td>Provide a 'Purchase price variance' P&L account. Often segmented by cost group (e.g., PPV – Raw materials, PPV – Components). Required for any standard-cost implementation.</td>
+                </tr>
+                <tr>
+                  <td><strong>Inventory cost revaluation</strong></td>
+                  <td>Records the P&L impact when a new costing version is activated and on-hand standard-cost inventory is revalued to the new cost.</td>
+                  <td>Activation of a new active cost version that changes standard cost on items with on-hand inventory.</td>
+                  <td>Expense (Variance / Revaluation)</td>
+                  <td>Either.</td>
+                  <td>Financial (F).</td>
+                  <td>Standard cost item; new cost version activated.</td>
+                  <td>Provide an 'Inventory cost revaluation' P&L account. MANDATORY per Microsoft prerequisites for standard-cost conversions   must be assigned at minimum for all items and all cost groups.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost change variance</strong></td>
+                  <td>Records the difference when standard cost differs between sites (multi-site) or when an item is returned and original standard cost differs from current standard cost.</td>
+                  <td>Inter-site transactions on standard-cost items; sales returns where standard cost has changed.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Financial (F).</td>
+                  <td>Standard cost items with cost changes between original and current.</td>
+                  <td>Provide a 'Cost change variance' P&L account. Controller can combine with PPV or keep separate   depends on reporting needs.</td>
+                </tr>
+                <tr>
+                  <td><strong>Production lot size variance</strong></td>
+                  <td>Records the variance from amortizing constant costs (setup, fixed components) when the production order's good quantity differs from the standard order quantity used in the BOM cost calculation.</td>
+                  <td>Production order End on standard-cost manufactured items where actual run quantity differs from the standard lot size.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Financial (F).</td>
+                  <td>Standard cost manufactured item; Standard Order Quantity defined; production order ended.</td>
+                  <td>Provide a 'Production lot size variance' P&L account, typically grouped with other production variances.</td>
+                </tr>
+                <tr>
+                  <td><strong>Production price variance</strong></td>
+                  <td>Records variance from cost-category price differences   e.g., labor rate change between standard cost calc and actual reported on the production order.</td>
+                  <td>Production order End   when cost category prices on routes differ from those used in the standard cost calc.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Financial (F).</td>
+                  <td>Standard cost manufactured items; route operations with cost categories.</td>
+                  <td>Provide a 'Production price variance' P&L account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Production quantity variance</strong></td>
+                  <td>Records variance from quantity differences between estimated and actual   over/under-issuing materials, over/under-reporting time, over/under-receiving good quantity.</td>
+                  <td>Production order End where actual consumption qty differs from BOM-based estimate.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Financial (F).</td>
+                  <td>Standard cost manufactured items.</td>
+                  <td>Provide a 'Production quantity variance' P&L account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Production substitution variance</strong></td>
+                  <td>Records variance from substitution events   using items not on the BOM, manually adding components to the production BOM or operations to the production route, or using a different BOM/route version than the one used in standard cost calc.</td>
+                  <td>Production order End where component substitution or BOM/route changes occurred.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Financial (F).</td>
+                  <td>Standard cost manufactured items.</td>
+                  <td>Provide a 'Production substitution variance' P&L account.</td>
+                </tr>
+                <tr>
+                  <td><strong>Rounding variance</strong></td>
+                  <td>Captures rounding differences in standard cost calculation   small immaterial residuals.</td>
+                  <td>Production cost calculation when standard cost calc produces a rounding remainder.</td>
+                  <td>Expense (Variance)</td>
+                  <td>Either.</td>
+                  <td>Financial (F).</td>
+                  <td>Standard cost manufactured items.</td>
+                  <td>Provide a 'Rounding difference' P&L account; balances are typically very small and can be a single GL across the company.</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </details>
+        </div>
+      </article>
+
       <article class="item-pane" data-item-pane="order-to-cash">
         <header class="item-pane__header">
           <span class="item-pane__eyebrow">Accounting · Order to cash</span>
@@ -409,21 +1086,21 @@
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
               <tbody>
-                <tr><td>Issue, packing slip</td><td>COGS deferred (interim)</td><td class="num">1,000.00</td><td class="num"></td></tr>
-                <tr><td>Issue, packing slip offset</td><td>Inventory packing-slip offset</td><td class="num"></td><td class="num">1,000.00</td></tr>
-                <tr class="total-row"><td colspan="2">Totals</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+                <tr><td>Cost of goods sold, delivered</td><td>Interim COGS at packing slip (cost of items shipped)</td><td class="num">700.00</td><td class="num"></td></tr>
+                <tr><td>Cost of units, delivered</td><td>Interim inventory issue (offset)</td><td class="num"></td><td class="num">700.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">700.00</td><td class="num">700.00</td></tr>
               </tbody>
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> Both legs reverse on invoice posting and the final COGS / Inventory hits at the invoice step. The interim accounts are configured per item group on the inventory posting profile.
+            <strong>Note:</strong> The two account names here are the actual posting types on the Inventory posting profile (Sales order tab): "Cost of goods sold, delivered" (debit, P&amp;L interim) and "Cost of units, delivered" (credit, balance-sheet interim). They post only when "Post physical inventory" is enabled on the item model group. Both legs reverse on invoice posting and the final COGS / Inventory accounts hit at the invoice step. The cost is the moving-average / FIFO / standard cost of the item, not the sales price.
           </div>
         </article>
 
         <article class="article">
           <h3>Sales-order invoice, revenue, COGS, and tax</h3>
           <p class="article__meta">Sales order · Invoice posting</p>
-          <p>The invoice is the moment AR, revenue, and COGS all crystallize. The packing-slip interim entries reverse and the final journals post. Net 1,000 + 20% VAT = 1,200 invoice; cost of the goods sold = 700.</p>
+          <p>The invoice is the moment AR, revenue, and final COGS all crystallize. The packing-slip interim entries reverse and the final journals post. Net 1,000 + 20% VAT = 1,200 invoice; cost of the goods sold = 700.</p>
           <div class="entry-table-wrap">
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
@@ -431,23 +1108,23 @@
                 <tr><td>Customer (AR)</td><td>Invoice total</td><td class="num">1,200.00</td><td class="num"></td></tr>
                 <tr><td>Sales revenue</td><td>Net sales</td><td class="num"></td><td class="num">1,000.00</td></tr>
                 <tr><td>Sales tax payable</td><td>Output VAT 20%</td><td class="num"></td><td class="num">200.00</td></tr>
-                <tr><td>COGS</td><td>Cost of items sold</td><td class="num">700.00</td><td class="num"></td></tr>
-                <tr><td>Inventory, finished goods</td><td>Reduce inventory at cost</td><td class="num"></td><td class="num">700.00</td></tr>
-                <tr><td>Inventory packing-slip offset</td><td>Reverse packing-slip interim</td><td class="num">1,000.00</td><td class="num"></td></tr>
-                <tr><td>COGS deferred (interim)</td><td>Reverse packing-slip interim</td><td class="num"></td><td class="num">1,000.00</td></tr>
-                <tr class="total-row"><td colspan="2">Totals</td><td class="num">2,900.00</td><td class="num">2,900.00</td></tr>
+                <tr><td>Cost of goods sold (invoiced)</td><td>Final COGS</td><td class="num">700.00</td><td class="num"></td></tr>
+                <tr><td>Inventory, finished goods (issue)</td><td>Reduce inventory at cost</td><td class="num"></td><td class="num">700.00</td></tr>
+                <tr><td>Cost of units, delivered</td><td>Reverse packing-slip interim</td><td class="num">700.00</td><td class="num"></td></tr>
+                <tr><td>Cost of goods sold, delivered</td><td>Reverse packing-slip interim</td><td class="num"></td><td class="num">700.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals</td><td class="num">2,600.00</td><td class="num">2,600.00</td></tr>
               </tbody>
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> If the invoice is posted directly (no packing slip first), the four interim lines drop out, only the AR / revenue / VAT / COGS / Inventory entries remain. Account selection comes from the customer posting profile (AR), the inventory posting profile (COGS, Inventory), and the sales tax setup.
+            <strong>Note:</strong> If the invoice is posted directly (no packing slip first), the four interim lines drop out, only the AR / revenue / VAT / COGS (invoiced) / Inventory issue lines remain. Account selection comes from the customer posting profile (AR), the inventory posting profile (Issue, COGS at invoice and at packing slip), and the sales tax setup.
           </div>
         </article>
 
         <article class="article">
           <h3>Customer payment, direct deposit</h3>
           <p class="article__meta">AR · Payment journal</p>
-          <p>Customer pays the invoice in full by bank transfer. With basic bank reconciliation (no clearing), the bank account is debited directly.</p>
+          <p>Customer pays the invoice in full by bank transfer. When the method of payment has no Bridging account configured, the bank account is debited directly.</p>
           <div class="entry-table-wrap">
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
@@ -464,24 +1141,24 @@
         </article>
 
         <article class="article">
-          <h3>Customer payment, with bank clearing</h3>
-          <p class="article__meta">AR · Advanced bank reconciliation</p>
-          <p>When advanced bank reconciliation is enabled, the receipt first hits a bank clearing account; the bank account is updated only when the bank statement is reconciled.</p>
+          <h3>Customer payment, via a bridging account</h3>
+          <p class="article__meta">AR · Method of payment with bridging posting</p>
+          <p>When the method of payment is configured with "Bridging posting" enabled and a Bridging account specified, the receipt first hits the bridging account at payment posting; the bank account is debited later via a separate transfer (manual bridge-clearing journal, or auto-cleared by Advanced bank reconciliation when the bank statement reconciles).</p>
           <div class="entry-table-wrap">
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
               <tbody>
-                <tr><td>Bank clearing</td><td>Receipt pending bank confirmation</td><td class="num">1,200.00</td><td class="num"></td></tr>
+                <tr><td>Bridging account</td><td>Receipt pending bank confirmation</td><td class="num">1,200.00</td><td class="num"></td></tr>
                 <tr><td>Customer (AR)</td><td>Settle invoice</td><td class="num"></td><td class="num">1,200.00</td></tr>
                 <tr class="total-row"><td colspan="2">Step 1 totals</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
                 <tr><td>Bank, operating account</td><td>Bank statement reconciled</td><td class="num">1,200.00</td><td class="num"></td></tr>
-                <tr><td>Bank clearing</td><td>Clear pending receipt</td><td class="num"></td><td class="num">1,200.00</td></tr>
+                <tr><td>Bridging account</td><td>Clear bridged transaction</td><td class="num"></td><td class="num">1,200.00</td></tr>
                 <tr class="total-row"><td colspan="2">Step 2 totals</td><td class="num">1,200.00</td><td class="num">1,200.00</td></tr>
               </tbody>
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> The bank clearing account should reconcile to zero against unreconciled bank statement lines at every period close, it's one of the standard clearing-account reconciliations.
+            <strong>Note:</strong> The bridging account is set on the Method of payment (Cash and bank management), not on the bank itself, the same MoP can be reused across customers. The bridging account should reconcile to zero against unreconciled bank statement lines at every period close. Step 2 is performed manually via "Functions &gt; Select bridged transactions" in a general journal, or automated when Advanced bank reconciliation matches the statement (the auto-clear behaviour is itself a feature, separate from bridging itself).
           </div>
         </article>
 
@@ -503,7 +1180,7 @@
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> The customer advances account is a separate posting-profile setup (the prepayment posting profile in AR parameters). Track its balance, old prepayments that never got invoiced are an audit flag.
+            <strong>Note:</strong> The customer advances account is driven by a dedicated Customer posting profile (set up under Accounts receivable &gt; Setup &gt; Customer posting profiles). That profile is then selected on AR parameters &gt; Ledger and sales tax in the "Posting profile with prepayment journal voucher" field, F&amp;O uses it for any payment journal line marked as a Prepayment journal voucher. Track its balance, old prepayments that never got invoiced are an audit flag.
           </div>
         </article>
 
@@ -523,7 +1200,7 @@
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> The cash discount account is set on the cash-discount setup. Whether the discount is taken on the gross invoice or net of VAT depends on local tax rules and is a setup option (Calculate cash discount on net invoice).
+            <strong>Note:</strong> The cash discount account is the dedicated Main account on the Cash discounts setup (Accounts receivable &gt; Setup &gt; Payment &gt; Cash discounts), not a generic contra-revenue account. Most clients map it to a "Sales discounts taken" or "Cash discount given" GL account. Whether the discount is taken on the gross invoice or net of VAT depends on local tax rules and is a setup option (Calculate cash discount on amount including sales tax).
           </div>
         </article>
 
@@ -760,7 +1437,7 @@
         <article class="article">
           <h3>Vendor payment, direct deposit</h3>
           <p class="article__meta">AP · Payment journal</p>
-          <p>Pay the 18,000 invoice by bank transfer. With basic bank reconciliation, the bank account is debited directly.</p>
+          <p>Pay the 18,000 invoice by bank transfer. When the method of payment has no Bridging account, the bank account is credited directly.</p>
           <div class="entry-table-wrap">
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
@@ -772,7 +1449,7 @@
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> If advanced bank reconciliation is on, replace Bank with Bank clearing; a second entry at reconciliation moves the balance from clearing to bank.
+            <strong>Note:</strong> If the method of payment has a Bridging account configured, replace Bank with Bridging account at payment posting; a second entry (manual select-bridged-transactions journal, or auto-clear via Advanced bank reconciliation) moves the balance from the bridging account to the bank when the statement reconciles.
           </div>
         </article>
 
@@ -792,7 +1469,7 @@
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> Some jurisdictions require the discount to reduce the inventory cost or expense, not flow to a separate income account. Set up the cash-discount account and policy with the controller, it's an audit-flagged area.
+            <strong>Note:</strong> The vendor cash discount account is set on the same Cash discounts page (linked to a payment term in AP setup). Some jurisdictions require the discount to reduce the inventory cost or expense, not flow to a separate income account, F&amp;O supports this via the "Discount offset accounts" parameter (Use main accounts on the invoice lines). Confirm policy with the controller, it's an audit-flagged area.
           </div>
         </article>
 
@@ -875,25 +1552,48 @@
         </article>
 
         <article class="article">
-          <h3>Invoice price variance (PPV), invoice price higher than PO</h3>
+          <h3>Purchase price variance (PPV), standard cost item</h3>
           <p class="article__meta">Cost · Standard cost variance</p>
-          <p>PO price was 10/unit; invoice came in at 11/unit (100 units). Under standard costing, the difference posts as Purchase price variance.</p>
+          <p>For standard-cost items, the standard cost is fixed at receipt; any difference between PO/invoice price and standard goes to Purchase price variance, not into inventory. Standard 10/unit; PO and invoice both 11/unit; 100 units.</p>
           <div class="entry-table-wrap">
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
               <tbody>
                 <tr><td>Inventory, at standard</td><td>100 × 10 (standard)</td><td class="num">1,000.00</td><td class="num"></td></tr>
-                <tr><td>Purchase accrual (GRNI)</td><td>Receipt at PO price</td><td class="num"></td><td class="num">1,000.00</td></tr>
-                <tr class="total-row"><td colspan="2">Step 1: receipt at PO price</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
+                <tr><td>Purchase price variance (PPV)</td><td>Receipt 100 over standard</td><td class="num">100.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Receipt at PO price</td><td class="num"></td><td class="num">1,100.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: receipt</td><td class="num">1,100.00</td><td class="num">1,100.00</td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Clear accrual</td><td class="num">1,100.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Invoice at PO price</td><td class="num"></td><td class="num">1,100.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: invoice (no further variance)</td><td class="num">1,100.00</td><td class="num">1,100.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note:</strong> PPV applies only to items with costing method "Standard" on the item model group, the variance is recognized at receipt, when the unit posts into inventory at the standard cost. The "Purchase price variance" account is on the Inventory posting profile (Standard cost variance tab). Persistent PPV signals stale standards.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Price difference, invoice price higher than PO (non-standard cost)</h3>
+          <p class="article__meta">Cost · Invoice vs. PO price</p>
+          <p>For items costed FIFO / LIFO / weighted average / moving average, the receipt posts at PO price. If the invoice price differs from the PO price, the gap posts to "Price difference" at invoice time. PO 10/unit; invoice 11/unit; 100 units.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>Inventory</td><td>100 × 10 at receipt (PO price)</td><td class="num">1,000.00</td><td class="num"></td></tr>
+                <tr><td>Purchase accrual (GRNI)</td><td>Receipt accrual</td><td class="num"></td><td class="num">1,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: receipt</td><td class="num">1,000.00</td><td class="num">1,000.00</td></tr>
                 <tr><td>Purchase accrual (GRNI)</td><td>Clear accrual at PO price</td><td class="num">1,000.00</td><td class="num"></td></tr>
-                <tr><td>Purchase price variance (PPV)</td><td>Invoice 100 over PO</td><td class="num">100.00</td><td class="num"></td></tr>
+                <tr><td>Price difference</td><td>Invoice 100 over PO</td><td class="num">100.00</td><td class="num"></td></tr>
                 <tr><td>Vendor (AP)</td><td>Invoice at actual price</td><td class="num"></td><td class="num">1,100.00</td></tr>
                 <tr class="total-row"><td colspan="2">Step 2: invoice posting</td><td class="num">1,100.00</td><td class="num">1,100.00</td></tr>
               </tbody>
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> Under moving-average costing, the variance is absorbed into the inventory unit cost instead of going to PPV. Item model group + costing method drive the behavior. PPV is a P&amp;L line (gain or loss), track it; persistent PPV signals stale standards.
+            <strong>Note:</strong> Under moving average / weighted average, you can choose to absorb the price difference into inventory cost instead of expensing it via the Price difference account, this is controlled by the "Price difference for moving average" / cost-management feature settings. The default is to expense to Price difference. Costing method on the item model group drives the behavior. Track Price difference; persistent variance signals stale PO pricing or supplier price drift.
           </div>
         </article>
 
@@ -1371,25 +2071,45 @@
         </header>
 
         <article class="article">
-          <h3>Asset acquisition, from a PO</h3>
-          <p class="article__meta">CapEx · PO-driven acquisition</p>
-          <p>Buy 10 laptops at 1,500 each + VAT. AP invoice debits an Asset clearing / Asset bridge account; FA capitalizes from the bridge.</p>
+          <h3>Asset acquisition, from a PO (direct capitalization at invoice)</h3>
+          <p class="article__meta">CapEx · PO line linked to a fixed asset</p>
+          <p>Buy 10 laptops at 1,500 each + VAT. The PO line is linked to a fixed asset (or to a "Fixed asset" item that has the FA item posting profile). With Fixed asset parameters &gt; "Allow asset acquisition from Purchasing" set to Yes, the AP invoice posts directly to the asset acquisition account, no separate "asset clearing" GL account is involved.</p>
           <div class="entry-table-wrap">
             <table class="entry-table">
               <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
               <tbody>
-                <tr><td>Asset clearing / bridge</td><td>10 × 1,500 (held for FA)</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Fixed asset, IT equipment, acquisition</td><td>10 × 1,500 capitalized</td><td class="num">15,000.00</td><td class="num"></td></tr>
                 <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">3,000.00</td><td class="num"></td></tr>
-                <tr><td>Vendor (CapEx AP)</td><td>Total liability</td><td class="num"></td><td class="num">18,000.00</td></tr>
-                <tr class="total-row"><td colspan="2">Step 1: AP invoice</td><td class="num">18,000.00</td><td class="num">18,000.00</td></tr>
-                <tr><td>Fixed asset, IT equipment, cost</td><td>Capitalize via acquisition proposal</td><td class="num">15,000.00</td><td class="num"></td></tr>
-                <tr><td>Asset clearing / bridge</td><td>Clear bridge</td><td class="num"></td><td class="num">15,000.00</td></tr>
-                <tr class="total-row"><td colspan="2">Step 2: capitalization (FA)</td><td class="num">15,000.00</td><td class="num">15,000.00</td></tr>
+                <tr><td>Vendor (AP)</td><td>Total liability</td><td class="num"></td><td class="num">18,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Totals (single voucher at AP invoice)</td><td class="num">18,000.00</td><td class="num">18,000.00</td></tr>
               </tbody>
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> The "Acquisition proposal" in Fixed Assets is F&amp;O's equivalent of Mass Additions. Asset clearing should reconcile to zero at period end, aged balances mean assets received but not yet capitalized.
+            <strong>Note:</strong> If a product receipt was posted first (Post product receipt in ledger = Yes), there is an interim purchase accrual on the FA item's inventory posting profile, "Fixed asset receipt" debits at receipt and "Fixed asset issue" credits at invoice, both within the FA voucher chain. They net to zero per receipt-invoice pair, this is the closest thing F&amp;O has to an "asset clearing" account, but it lives on the inventory posting profile, not as a stand-alone clearing GL. There is no separate Mass Additions / bridge step.
+          </div>
+        </article>
+
+        <article class="article">
+          <h3>Asset acquisition, deferred (parameter off, or no FA link on PO line)</h3>
+          <p class="article__meta">CapEx · Acquisition proposal from a balance-sheet account</p>
+          <p>If "Allow asset acquisition from Purchasing" is Off, or the PO line is not linked to a fixed asset, the AP invoice debits whatever account the procurement category / item drives (often a CIP, prepaid asset, or expense). The asset is capitalized later via an Acquisition proposal in the FA journal, which moves the cost from that account to the FA acquisition account.</p>
+          <div class="entry-table-wrap">
+            <table class="entry-table">
+              <thead><tr><th>Account</th><th>Description</th><th>Dr</th><th>Cr</th></tr></thead>
+              <tbody>
+                <tr><td>CIP / asset suspense (per category)</td><td>10 × 1,500 awaiting capitalization</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>Sales tax recoverable</td><td>VAT 20%</td><td class="num">3,000.00</td><td class="num"></td></tr>
+                <tr><td>Vendor (AP)</td><td>Total liability</td><td class="num"></td><td class="num">18,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 1: AP invoice</td><td class="num">18,000.00</td><td class="num">18,000.00</td></tr>
+                <tr><td>Fixed asset, IT equipment, acquisition</td><td>Capitalize via acquisition proposal</td><td class="num">15,000.00</td><td class="num"></td></tr>
+                <tr><td>CIP / asset suspense</td><td>Clear suspense balance</td><td class="num"></td><td class="num">15,000.00</td></tr>
+                <tr class="total-row"><td colspan="2">Step 2: FA acquisition proposal</td><td class="num">15,000.00</td><td class="num">15,000.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <strong>Note:</strong> The credit side in step 2 is the offset account on the FA journal line, you pick the same balance-sheet account that received the AP invoice in step 1. The CIP / asset suspense account should reconcile to zero at period end against acquired-not-capitalized assets.
           </div>
         </article>
 
@@ -1408,7 +2128,7 @@
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> If multiple books are configured (corporate, tax, IFRS), each runs its own depreciation. Only the books with a posting layer = "Current" hit the GL; tax and statutory books usually post to "Operations" / "Tax" layers and stay parallel.
+            <strong>Note:</strong> If multiple books are configured (corporate, tax, IFRS), each book runs its own depreciation. Posting layer (Current, Operations, Tax, plus custom layers) segregates the postings within the GL, all layers post to the GL, the layer is just a filter for reporting and the trial balance. Books with "Post to general ledger" set to No skip the GL entirely (used for purely informational books).
           </div>
         </article>
 
@@ -1531,7 +2251,7 @@
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> The Lease module in F&amp;O Fixed Assets handles ASC 842 / IFRS 16, schedules amortization and interest, splits current vs. long-term liability automatically. Without the module, this is journal-driven and error-prone.
+            <strong>Note:</strong> The Asset leasing module (a separate module, not part of Fixed assets, shipped in F&amp;O 10.0.16, October 2020) handles ASC 842 / IFRS 16 end-to-end, books the ROU asset and lease liability, generates the amortization and interest schedules, and posts each period. Without the module, this is journal-driven and error-prone. Asset leasing integrates with Fixed assets, AP, and GL but lives under its own menu.
           </div>
         </article>
 
@@ -1685,7 +2405,7 @@
             </table>
           </div>
           <div class="callout">
-            <strong>Note:</strong> Same accounting as in Acquire to dispose, just driven from a project. F&amp;O links the capital project to a fixed asset record and posts via the "eliminate" / capitalization step.
+            <strong>Note:</strong> Same accounting as in Acquire to dispose, just driven from a project. The project type is "Investment" (or Internal with elimination to FA). Project costs accumulate on the WIP / CIP account configured per project group. When the asset is placed in service, the consultant runs Project management and accounting &gt; Periodic &gt; Eliminate, with "Eliminate to: Fixed asset", which moves the WIP balance to the FA acquisition account on the linked fixed asset record.
           </div>
         </article>
 
