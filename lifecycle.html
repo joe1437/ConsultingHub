@@ -757,8 +757,24 @@ flowchart LR
           <h2 class="item-pane__title">Fit-gap analysis</h2>
           <p class="item-pane__lead">Mapping each requirement against standard D365 F&amp;O capability, and deciding what to do with the gaps.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: the fit-gap matrix, fit / partial fit / gap classification, the conversation around each gap (configure, customize, change the process, defer, drop), and how to write a defensible recommendation for each.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>Fit-gap analysis is the process of comparing the requirements gathered in Phase 1 against the standard, out-of-the-box capabilities of Dynamics 365 Finance &amp; Operations. According to Microsoft's <strong>Success by Design</strong> framework, identifying gaps early is critical to preventing architectural debt and scope creep later in the project.</p>
+            <h3>Classification of Requirements</h3>
+            <ul>
+              <li><strong>Fit:</strong> The requirement is natively supported by D365 F&amp;O. This might require standard configuration (e.g., setting up a specific posting profile or workflow), but no code changes.</li>
+              <li><strong>Partial Fit:</strong> The system meets the core need, but a small tweak is required. This often results in a minor customization, a Power Automate flow, or a localized reporting change.</li>
+              <li><strong>Gap:</strong> The system cannot fulfill the requirement. This is where architectural decisions must be made.</li>
+            </ul>
+            <h3>The Hierarchy of Resolving Gaps</h3>
+            <p>When a true gap is identified, a seasoned D365 consultant will address it in the following order of preference:</p>
+            <ol>
+              <li><strong>Change the Business Process:</strong> Can the business adapt to how D365 works? This is always the cheapest and most upgrade-safe option.</li>
+              <li><strong>Leverage the Power Platform:</strong> Can a Power App or Power Automate flow solve the issue without altering the core ERP?</li>
+              <li><strong>Use an ISV Solution:</strong> Is there a certified Independent Software Vendor (ISV) on AppSource that already solves this problem (e.g., advanced tax calculation, specific manufacturing execution)?</li>
+              <li><strong>Customize (X++):</strong> As a last resort, write custom X++ code. Every customization adds technical debt and maintenance overhead during Microsoft's mandatory One Version updates.</li>
+            </ol>
+          </div>
         </article>
       </article>
 
@@ -769,8 +785,21 @@ flowchart LR
           <h2 class="item-pane__title">Documentation: FRD and FDDs</h2>
           <p class="item-pane__lead">Turning agreements into binding documents, Functional Requirement Documents and Functional Design Documents.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: structure of an FRD (process, scenarios, business rules, integrations, reporting), structure of an FDD (form changes, fields, posting profile, table impact, security, test cases), sign-off process, and how to keep documents alive after sign-off.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>Once the fit-gap analysis is signed off, the team moves into formal documentation. In D365 implementations, this is typically tracked within <strong>Azure DevOps (ADO)</strong>, where business requirements become Epics and Features, and customizations become User Stories and Tasks.</p>
+            <h3>The Functional Requirement Document (FRD)</h3>
+            <p>The FRD is the business view. It outlines <em>what</em> the system must do. It contains the agreed-upon business processes, the scope boundaries, required integrations, and reporting needs. A well-written FRD speaks the language of the business and serves as the baseline for user sign-off.</p>
+            <h3>The Functional Design Document (FDD)</h3>
+            <p>For every "Gap" that requires customization, a Functional Design Document (FDD) must be written. The FDD translates the business requirement into a technical blueprint. A robust FDD for D365 F&amp;O includes:</p>
+            <ul>
+              <li><strong>Data Model Impact:</strong> Which standard tables are being extended? Are new tables required?</li>
+              <li><strong>User Interface (UI):</strong> Mockups of form changes. Where will the new button live? What fields are added to the grid?</li>
+              <li><strong>Business Logic:</strong> The specific conditions and validations the X++ developer needs to write.</li>
+              <li><strong>Security:</strong> Which roles, duties, and privileges will have access to this new feature?</li>
+              <li><strong>Data Entities:</strong> If a new table is created, does it need a data entity for data migration (DMF) or OData integration?</li>
+            </ul>
+          </div>
         </article>
       </article>
 
@@ -781,8 +810,21 @@ flowchart LR
           <h2 class="item-pane__title">Data templates &amp; client data workshops</h2>
           <p class="item-pane__lead">Defining what the client must hand over, and walking them through it before they start filling it.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: master data vs setup data vs opening balances, the data template pack (vendors, customers, items, COA, dimensions, opening balances, fixed assets), data ownership matrix, the workshop format to explain each template, validation passes, cut-off strategy.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>Data migration is consistently one of the highest-risk areas in any ERP implementation. In D365 F&amp;O, data is imported using the <strong>Data Management Framework (DMF)</strong>, which utilizes <em>Data Entities</em> to validate and load data into the normalized SQL tables.</p>
+            <h3>The Data Templates</h3>
+            <p>Consultants provide the client with Excel-based data templates generated directly from D365 data entities. These templates cover:</p>
+            <ul>
+              <li><strong>Setup Data:</strong> Chart of Accounts, Financial Dimensions, Customer Groups, Payment Terms.</li>
+              <li><strong>Master Data:</strong> Customers, Vendors, Products, Employees, Fixed Assets.</li>
+              <li><strong>Opening Balances:</strong> Open AP/AR invoices, inventory on-hand, GL balances.</li>
+            </ul>
+            <h3>The Data Workshops</h3>
+            <p>Handing a client an Excel template with 150 columns (like the <code>CustCustomerV3Entity</code>) and saying "fill this out" is a recipe for failure. During data workshops, the consultant walks the client through the template, identifying which fields are mandatory, which fields dictate business logic (e.g., linking a customer to a tax group), and how to map legacy data into the new structure.</p>
+            <h3>Sequencing matters</h3>
+            <p>Data must be loaded in a strict dependency order. You cannot load a Vendor if their associated Vendor Group hasn't been created. A "Gold Build" environment is typically maintained to practice and time these data loads, ensuring the final cutover weekend is predictable.</p>
+          </div>
         </article>
       </article>
 
@@ -793,8 +835,15 @@ flowchart LR
           <h2 class="item-pane__title">Conference Room Pilots (CRPs)</h2>
           <p class="item-pane__lead">Showing the configured system back to the business, with their data and their flows, early and often.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: when CRP is needed (usually CRP1 = setup demo, CRP2 = end-to-end with sample data), the agenda, who runs each scenario, how to capture feedback, and how to close out the CRP with a clear list of changes before UAT.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>A Conference Room Pilot (CRP) is an iterative "show and tell" session. Unlike traditional waterfall projects where the client waits months to see the system, CRPs put the configured D365 environment in front of the business as early as possible.</p>
+            <h3>CRP 1: The Standard Show</h3>
+            <p>CRP 1 usually happens shortly after requirements gathering. The consultant demonstrates the standard, out-of-the-box D365 flow using generic data (e.g., the Contoso demo data). The goal is to visually anchor the business to how standard D365 operates and to validate the fit-gap assumptions.</p>
+            <h3>CRP 2: The Client Context</h3>
+            <p>CRP 2 is much deeper. The environment is loaded with a slice of the client's actual master data (their items, their customers), and the consultant runs through the specific, end-to-end scenarios identified in Phase 1. This is where the business begins to see their actual daily life modeled in the new system. It is common to identify new gaps or refine requirements during CRP 2.</p>
+            <p>The outcome of a successful CRP is a finalized design, paving the way for development to finish and for the business to begin writing their UAT test scripts.</p>
+          </div>
         </article>
       </article>
 
@@ -805,8 +854,15 @@ flowchart LR
           <h2 class="item-pane__title">UAT 1 &amp; user / super user training</h2>
           <p class="item-pane__lead">The first formal test, business users execute scripted scenarios in a near-final environment, and learn the system as they go.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: the role of super users, training material (TTT, end-user manuals, recordings), test script structure, defect triage, how to keep UAT honest (no shortcuts from the consultant team), and exit criteria for UAT 1.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>User Acceptance Testing (UAT) is the formal phase where the business users take the keyboard. The goal is to prove that the system can handle daily operations and that customizations function exactly as designed in the FDDs.</p>
+            <h3>Execution and Tools</h3>
+            <p>During UAT 1, users follow heavily scripted scenarios. In the D365 ecosystem, this is greatly aided by the <strong>Task Recorder</strong>, a tool that records a user's clicks and automatically generates step-by-step Word documents or interactive on-screen guides.</p>
+            <p>For organizations implementing CI/CD (Continuous Integration/Continuous Deployment), these Task Recordings are loaded into the <strong>Regression Suite Automation Tool (RSAT)</strong>. RSAT converts the recordings into automated tests that can be run against every new Microsoft update, ensuring custom code doesn't break when Microsoft releases a new version of F&amp;O.</p>
+            <h3>The Role of Super Users</h3>
+            <p>UAT is often combined with "Train the Trainer." Super users (SMEs from the business) are trained by the consultants. These super users then execute UAT, inherently learning the system deeply. When go-live arrives, these super users become the first line of support for the wider end-user base, significantly increasing user adoption and confidence.</p>
+          </div>
         </article>
       </article>
 
@@ -817,8 +873,14 @@ flowchart LR
           <h2 class="item-pane__title">UAT 2 / parallel run with updated setup</h2>
           <p class="item-pane__lead">A second pass with the fixes from UAT 1, often a parallel run against the legacy system to validate end-of-period numbers.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: when a parallel run is justified, how to set it up (mirror master data, run the same period in both systems), how to reconcile differences, the typical findings (rounding, mapping, posting profile setup), and the path from UAT 2 sign-off to go-live readiness.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>UAT 2 serves as the final proving ground. While UAT 1 focuses on functional correctness, UAT 2 often incorporates performance testing, security role validation, and the critical <strong>Mock Cutover</strong>.</p>
+            <h3>The Mock Cutover</h3>
+            <p>A mock cutover is a dress rehearsal for the go-live weekend. The technical team executes the complete data migration plan extracting from legacy, transforming, and loading into a fresh D365 Tier-2+ environment while timing every step. This ensures that the actual go-live window (typically 48 hours over a weekend) is achievable.</p>
+            <h3>The Parallel Run</h3>
+            <p>For highly complex or risk-averse organizations, UAT 2 may include a parallel run. For a defined period (e.g., one month), the business processes transactions in both the legacy system and D365 F&amp;O simultaneously. At month-end, the financial reports are compared. If the Trial Balance, AP Aging, and AR Aging match, the system is financially reconciled and ready for production.</p>
+          </div>
         </article>
       </article>
 
@@ -829,8 +891,20 @@ flowchart LR
           <h2 class="item-pane__title">Production environment</h2>
           <p class="item-pane__lead">Standing up the real environment, LCS, security, data migration, and the cut-over plan.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: LCS provisioning, sandbox vs production environments, security roles in production, who has access to do what, the cut-over plan (data freeze, opening balance load, reconciliation), and the pre-go-live checklist.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>Standing up the Production environment in D365 F&amp;O is tightly controlled by Microsoft. Unlike lower-tier development (Tier 1) or UAT (Tier 2+) sandbox environments, the Production environment is managed entirely through <strong>Dynamics Lifecycle Services (LCS)</strong> and requires Microsoft approval to deploy.</p>
+            <h3>The FastTrack Go-Live Readiness Review</h3>
+            <p>Before Microsoft provisions the Production environment, the project team must pass the Success by Design <strong>Go-Live Readiness Review</strong>. This is a comprehensive audit where the Microsoft FastTrack team verifies:</p>
+            <ul>
+              <li>UAT has been formally signed off by the business.</li>
+              <li>Performance testing is complete and successful.</li>
+              <li>The cutover plan is documented and timed.</li>
+              <li>A support plan (Hypercare) is in place.</li>
+              <li>Security roles are finalized, and no users have "System Administrator" access for daily work.</li>
+            </ul>
+            <p>Once approved, Microsoft deploys the environment, and the team applies the "Golden Configuration" (the final, approved setup data) via the Data Management Framework.</p>
+          </div>
         </article>
       </article>
 
@@ -841,8 +915,19 @@ flowchart LR
           <h2 class="item-pane__title">Go-live</h2>
           <p class="item-pane__lead">The switch from old to new, typically a long weekend, with a war room, a checklist, and clear rollback criteria.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: the go-live runbook (hour-by-hour), war-room cadence, opening balance reconciliation, day-1 transactions, the "no new features" rule for the cut-over weekend, and the criteria for declaring success vs rolling back.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>Go-live is the climax of the project. It is typically executed over a weekend (the "dark hours") to minimize business disruption. It follows a highly choreographed, hour-by-hour runbook.</p>
+            <h3>The Cutover Weekend</h3>
+            <ol>
+              <li><strong>System Freeze:</strong> The legacy system is locked down. No new transactions are allowed.</li>
+              <li><strong>Data Extraction:</strong> Final open transactions and master data are extracted from the legacy database.</li>
+              <li><strong>Data Load:</strong> The DMF is used to load the final data into the D365 F&amp;O Production environment.</li>
+              <li><strong>Financial Reconciliation:</strong> The finance team verifies that the opening balances in D365 match the closing balances of the legacy system to the penny.</li>
+              <li><strong>Go/No-Go Decision:</strong> Project leadership meets to review the cutover status. If critical failures occurred, the fallback plan is initiated. If successful, the system is opened to users.</li>
+            </ol>
+            <p>On Monday morning, users log into D365 F&amp;O for the first time. The golden rule of the cutover period: <em>No new features</em>. If it wasn't tested in UAT, it does not go into Production.</p>
+          </div>
         </article>
       </article>
 
@@ -853,8 +938,15 @@ flowchart LR
           <h2 class="item-pane__title">Hypercare &amp; post-go-live support</h2>
           <p class="item-pane__lead">The first 4–8 weeks after go-live, when consultant presence is highest and small problems can become big ones if missed.</p>
         </header>
-        <article class="article article--placeholder">
-          <p>Add content here: hypercare structure (daily stand-up, weekly steering), ticket triage SLAs, the first month-end close as the real test, knowledge transfer to the support team, and the formal handover from project to BAU.</p>
+                <article class="article">
+          <div class="article__content" style="margin: 0;">
+            <p>The moment the system goes live, the project enters Hypercare. This is a 4 to 8-week stabilization period characterized by intense, hands-on support from the consulting team.</p>
+            <h3>Triage and Stabilization</h3>
+            <p>During the first few weeks, the volume of support tickets will spike. A significant portion of these will be "how-to" questions or minor security role adjustments, not system defects. The consulting team runs daily triage meetings to separate user training issues from actual bugs.</p>
+            <p>The true test of Hypercare is the <strong>first month-end close</strong>. Consultants sit side-by-side with the finance team to ensure that depreciation runs, foreign currency revaluations, and financial consolidations execute flawlessly in the live system.</p>
+            <h3>Transition to BAU</h3>
+            <p>As the ticket volume drops and the system stabilizes, the implementation team begins a formal handover. Documentation is finalized, open issues are transferred to the client's internal IT team or a Managed Services provider, and the project officially transitions into Business As Usual (BAU).</p>
+          </div>
         </article>
       </article>
 
