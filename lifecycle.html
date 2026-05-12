@@ -90,6 +90,25 @@
             <summary><span class="topic__eyebrow">Method</span>How a Microsoft Business Process Workshop runs</summary>
             <div class="topic__body">
               <p>Every Microsoft BPW follows the same shape. Knowing the shape lets you walk into any of the 14 process workshops with the same playbook, only the process-specific questions change.</p>
+                            <div style="margin: 2rem 0; background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <h4 style="margin-top: 0;">Workshop Hierarchy</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Scenario Board Workshop\nBreadth pass: 90-120 mins] --> B{Deep-Dive Workshops\nDepth pass per L2 Area}
+    B --> C[L2: Develop procurement strategy]
+    B --> D[L2: Manage supplier relationships]
+    B --> E[L2: Procure goods and services]
+    C --> F((Requirements Log & Gap List))
+    D --> F
+    E --> F
+    style A fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0369a1
+    style B fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
+    style C fill:#f8fafc,stroke:#94a3b8,color:#475569
+    style D fill:#f8fafc,stroke:#94a3b8,color:#475569
+    style E fill:#f8fafc,stroke:#94a3b8,color:#475569
+    style F fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#166534
+                </div>
+              </div>
               <h4>Two layers of workshop per process</h4>
               <ul>
                 <li><strong>Scenario board discovery workshop</strong>, the breadth pass. One workshop per process. The output is an agreed scope: which scenarios are in, which are out, which are gaps. Roughly 90–120 minutes.</li>
@@ -110,7 +129,81 @@
                 <li><strong>Document agreed business scope</strong>, leave the room with a written, signed-off list of in-scope scenarios.</li>
               </ol>
               <h4>The scenario board</h4>
+              <div style="margin: 2rem 0; background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <h4 style="margin-top: 0;">Scenario Board Example (Source to Pay)</h4>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">L2 Areas are columns. Scenarios are marked as <strong style="color: #16a34a;">In Scope</strong>, <strong style="color: #dc2626; text-decoration: line-through;">Out of Scope</strong>, or <strong style="color: #eab308;">Gap</strong>.</p>
+                <div class="mermaid">
+flowchart TD
+    subgraph S2P [Complete Source to Pay Scenario Board]
+        subgraph L2A [75.10 Develop strategy]
+            A1[75.10.010 Policies]:::inScope
+            A2[75.10.020 Catalogs]:::inScope
+            A3[75.10.030 Spend analysis]:::gap
+        end
+        subgraph L2B [75.30 Manage supplier relations]
+            B1[75.30.010 Supplier onboarding]:::inScope
+            B2[75.30.020 Supplier performance]:::outScope
+            B3[75.30.030 Supplier collaboration]:::inScope
+        end
+        subgraph L2C [75.35 Source & contract]
+            C1[75.35.010 Manage RFQs]:::inScope
+            C2[75.35.020 Purchase agreements]:::inScope
+            C3[75.35.030 Contract compliance]:::gap
+        end
+        subgraph L2D [75.40 Procure goods/services]
+            D1[75.40.010 Purchase requisitions]:::inScope
+            D2[75.40.020 Purchase orders]:::inScope
+            D3[75.40.030 Receiving]:::inScope
+            D4[75.40.040 Quality inspection]:::outScope
+        end
+        subgraph L2E [75.50 Manage accounts payable]
+            E1[75.50.010 Invoice processing]:::inScope
+            E2[75.50.020 Invoice matching]:::inScope
+            E3[75.50.030 Payment runs]:::inScope
+            E4[75.50.040 Expense reports]:::gap
+        end
+    end
+    classDef inScope fill:#dcfce7,stroke:#16a34a,color:#166534
+    classDef outScope fill:#fee2e2,stroke:#dc2626,color:#991b1b,text-decoration:line-through
+    classDef gap fill:#fef9c3,stroke:#eab308,color:#854d0e
+                </div>
+              </div>
               <p>The scenario board is a one-page flowchart that runs across the top of the room. Each L2 area is a column; under each column are the scenarios and policy decisions to discuss. Run it left to right. As scenarios are discussed: <strong>highlight</strong> what's in scope, <strong>strike through</strong> what's out, <strong>add</strong> any missing ones as gaps. The marked-up board is the artifact you walk out with, photograph it before anyone leaves.</p>
+            </div>
+          </details>
+
+                    <details class="topic">
+            <summary><span class="topic__eyebrow">Visualization</span>Anatomy of a Microsoft Process Flow</summary>
+            <div class="topic__body">
+              <p>During the deep-dive discovery workshops, the focus shifts from the high-level scenario board to the detailed process flows (L3 level). Microsoft provides Visio flows and Excel data for every process, mapping the specific tasks, roles, and decisions.</p>
+              <div style="margin: 2rem 0; background: var(--bg-surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <h4 style="margin-top: 0;">Anatomy of a Process Flow</h4>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">This is an exact replication of the Microsoft Business Process Flow for <strong>a complete end-to-end Procure-to-Pay flow</strong>, demonstrating the standard shapes (Events, Tasks, Decisions).</p>
+                <div class="mermaid">
+flowchart LR
+    Start((Start)) --> Req[Create Requisition]
+    Req --> App1{Manager Approval?}
+    App1 -- No --> Stop1((End))
+    App1 -- Yes --> PO[Generate PO]
+    PO --> Send[Send to Vendor]
+    Send --> Wait((Wait for Goods))
+    Wait --> Rec[Receive Goods]
+    Rec --> Inv[Receive Invoice]
+    Inv --> Match{3-Way Match?}
+    Match -- No --> Res[Resolve Discrepancy]
+    Res --> Match
+    Match -- Yes --> Post[Post Invoice]
+    Post --> Pay[Generate Payment]
+    Pay --> End((End))
+    
+    classDef event fill:#f8fafc,stroke:#94a3b8,stroke-width:2px,color:#334155;
+    classDef task fill:#eff6ff,stroke:#3b82f6,stroke-width:1px,color:#1e3a8a;
+    classDef decision fill:#fefce8,stroke:#eab308,stroke-width:1px,color:#854d0e;
+    class Start,Stop1,Wait,End event;
+    class Req,PO,Send,Rec,Inv,Res,Post,Pay task;
+    class App1,Match decision;
+                </div>
+              </div>
             </div>
           </details>
 
@@ -773,5 +866,10 @@
 
 <script src="assets/js/app.js"></script>
 <script src="assets/js/search.js"></script>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
 </body>
 </html>
