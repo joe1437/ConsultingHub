@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Portfolio, D365 F&amp;O Consulting Hub</title>
+  <meta name="description"
+    content="Professional ERP consulting portfolio detailing Dynamics 365 and Oracle Cloud experience." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script>(function () { try { var t = localStorage.getItem('theme'); if (t === 'dark' || (!t && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) { } })();</script>
+  <style>
+    .portfolio-section {
+      margin-bottom: 4rem;
+    }
+
+    .portfolio-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .portfolio-card__header {
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .portfolio-card__title {
+      margin: 0;
+      font-size: 1.4rem;
+      color: var(--color-heading);
+    }
+
+    .portfolio-card__meta {
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-top: 0.4rem;
+    }
+
+    .portfolio-list li {
+      margin-bottom: 0.6rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--color-surface-2);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      border-left: 4px solid var(--color-accent);
+    }
+
+    .skill-card h4 {
+      margin-top: 0;
+      color: var(--color-heading);
+    }
+
+    .summary-block {
+      background: var(--color-surface-2);
+      border-left: 4px solid var(--color-accent);
+      padding: 1.5rem 2rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin-bottom: 3rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="index.html" class="site-header__brand">
+        <span class="site-header__brand-mark">D</span>
+        <span>D365 F&amp;O Consulting Hub</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+        <ul class="site-nav__list" id="primaryNav">
+          <li><a class="site-nav__link" href="consulting.html">Consulting</a></li>
+          <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
+          <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
+          <li><a class="site-nav__link" href="modules.html">Modules</a></li>
+          <li><a class="site-nav__link" href="accounting.html">Accounting</a></li>
+          <li><a class="site-nav__link" href="ai.html">AI</a></li>
+          <li><a class="site-nav__link" href="customizations.html">Customizations</a></li>
+          <li><a class="site-nav__link" href="advanced.html">Advanced</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <span class="page-header__eyebrow">Professional Experience</span>
+      <h1 class="page-header__title">ERP Projects Portfolio</h1>
+      <p class="page-header__lead">
+        Senior Functional ERP Consultant | Microsoft Dynamics 365 F&amp;O and Oracle Fusion Cloud ERP
+      </p>
+      <p class="text-muted" style="margin-top: 1rem; font-size: 0.9rem;">Last updated 13-05-2026</p>
+    </div>
+  </section>
+
+  <div class="container" style="max-width: 1100px; padding-top: 2rem; padding-bottom: 4rem;">
+
+    <!-- Professional Summary -->
+    <div class="summary-block">
+      <h2 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.3rem;">Professional Summary</h2>
+      <p style="margin: 0; font-size: 1.05rem; line-height: 1.6;">
+        Certified ERP Senior Functional Consultant with hands-on experience delivering Microsoft Dynamics 365 Finance
+        and Operations and Oracle Fusion Cloud ERP implementations across the healthcare, financial services,
+        manufacturing, retail, construction, distribution, and higher education sectors. Skilled across the full project
+        lifecycle, including requirement gathering, fit gap analysis, configuration, data migration, integration,
+        training, UAT, go live, and hyper care, with a strong focus on finance, supply chain, and procurement processes.
+        Recognized for translating complex business requirements into clean, maintainable ERP solutions, and for
+        partnering effectively with technical, integration, and business teams to deliver outcomes that stick.
+      </p>
+    </div>
+
+    <!-- Dynamics 365 Section -->
+    <section class="portfolio-section">
+      <h2 style="border-bottom: 2px solid var(--color-accent); padding-bottom: 0.5rem; margin-bottom: 2rem;">Microsoft
+        Dynamics 365 Finance and Operations</h2>
+
+      <!-- Midware Data Systems Context -->
+      <p class="text-muted" style="margin-bottom: 2rem; font-size: 1.1rem; font-weight: 500;">Midware Data Systems (an
+        ITG Company) | Senior Functional Consultant</p>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">Hôtel Dieu de France and HDF Network</h3>
+          <div class="portfolio-card__meta">Healthcare | Hôpital Mgr Cortbawi and Hôpital Saint Charles | Lebanon</div>
+        </div>
+        <p>Delivered an end-to-end D365 F&amp;O implementation for Hôtel Dieu de France, one of Lebanon's leading
+          university hospitals, and rolled the platform out to two newly acquired network hospitals. Owned the
+          functional configuration and deployment of the finance, procurement, and warehouse workstreams, and was a core
+          contributor to the integration with the Hospital Information System (HIS).</p>
+        <p><strong>Modules in scope:</strong> Accounts Payable, Accounts Receivable, Fixed Assets, Cash and Bank
+          Management, Procurement and Sourcing, Product Information Management, Inventory Management, and Advanced
+          Warehouse Management (WMS).</p>
+
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Led requirement gathering and fit gap analysis workshops across finance, procurement, and warehouse
+            stakeholders.</li>
+          <li>Authored complete project documentation, including user guides, Functional Design Documents (FDDs), and
+            Requirement Definition Documents (RDDs).</li>
+          <li>Managed data migration, UAT execution, go live, and post go live hyper care across all in-scope modules.
+          </li>
+          <li>Designed and built financial reports using the D365 Financial Report Designer to support month end
+            reporting and management review.</li>
+          <li>Implemented database logging to strengthen auditability and traceability of master data and transactional
+            changes.</li>
+          <li>Played a central role in the HIS to D365 F&amp;O integration by supporting requirement sessions,
+            configuring integration setup, leading integration specific training, and validating end to end integrated
+            transactions.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">BOB Finance</h3>
+          <div class="portfolio-card__meta">Financial Services | Payments and Remittance | Lebanon</div>
+        </div>
+        <p>Implemented D365 F&amp;O for BOB Finance, a regional payments and remittance provider, covering the full
+          finance and procurement footprint along with budgeting. Drove the training workstreams and led the functional
+          side of the integration with the BOB Finance live operational portal.</p>
+        <p><strong>Modules in scope:</strong> Accounts Payable, Accounts Receivable, Fixed Assets, Cash and Bank
+          Management, Procurement and Sourcing, Product Information Management, Inventory Management, and Budgeting.</p>
+
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Led every functional training workshop across in-scope modules and conducted fit gap analysis for new and
+            evolving business requirements.</li>
+          <li>Designed and configured approval workflows and custom security roles aligned to the client's segregation
+            of duties and internal control requirements.</li>
+          <li>Authored detailed user guides for all in-scope modules to support adoption and post go live self-service.
+          </li>
+          <li>Owned data migration, UAT facilitation, go live, and hyper care.</li>
+          <li>Partnered with the technical team on the BOB Finance live portal to D365 F&amp;O integration by supporting
+            requirement gathering, conducting integration specific training, configuring integration setup, and
+            validating integrated transactions.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">DIMA Marketing</h3>
+          <div class="portfolio-card__meta">Marketing, Retail and Distribution | Lebanon</div>
+        </div>
+        <p>Led a reimplementation engagement to remediate critical issues from a prior failed deployment. Conducted a
+          thorough validation of the existing environment, reengineered configurations across multiple modules, and
+          migrated the client to a new legal entity with a corrected accounting structure.</p>
+
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Validated the previous implementation end-to-end and corrected issues across accounting structure, posting
+            profiles, and module configuration.</li>
+          <li>Implemented the Fixed Assets module from scratch and delivered training on Fixed Assets and Accounts
+            Payable.</li>
+          <li>Configured prepayments, master planning (Min/Max), and vendor and customer rebates.</li>
+          <li>Resolved customer master synchronization issues between D365 F&amp;O and the Point of Sale (POS) system.
+          </li>
+          <li>Set up days overdue customer blocking rules to strengthen credit control.</li>
+          <li>Configured Business Events together with Power Automate to enable email-based review and approval
+            workflows.</li>
+          <li>Supported the rollout of the Retail and Service Orders modules.</li>
+          <li>Performed data migration into the new legal entity and delivered go-live and hyper care support.</li>
+          <li>Coordinated testing and delivery sessions with the technical team for customized solutions.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">BachSnacks</h3>
+          <div class="portfolio-card__meta">Food Manufacturing | Lebanon</div>
+        </div>
+        <p>Functional consultant on an end-to-end D365 F&amp;O implementation for BachSnacks, covering finance,
+          production control, and project accounting workstreams.</p>
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Conducted requirement gathering, fit gap analysis, data migration, and finance training workshops.</li>
+          <li>Configured the full finance suite alongside Production Control, including BOMs, formulas, routes,
+            operations, jobs, production and batch orders, co products and by products, and product costing.</li>
+          <li>Authored Functional Requirement Documents (FRDs) and FDDs and supported the team through production go
+            live and end user training.</li>
+          <li>Implemented and trained users on the Project Management and Accounting module.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">Beesline</h3>
+          <div class="portfolio-card__meta">Manufacturing | Natural Personal Care Products | Lebanon</div>
+        </div>
+        <p>Contributed to the D365 F&amp;O implementation for Beesline, focusing on UAT configuration, finance and
+          procurement training, and production setup support.</p>
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Executed data migration and system configuration on the UAT environment.</li>
+          <li>Delivered training sessions on Procurement and Sourcing, Accounts Payable, and Cash and Bank Management.
+          </li>
+          <li>Supported the configuration and rollout of the Production Control module.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">Butec</h3>
+          <div class="portfolio-card__meta">Engineering, Procurement and Construction (EPC) | Lebanon and Regional</div>
+        </div>
+        <p>Supported Butec's enterprise rollout by standing up multiple new legal entities and executing the associated
+          data migration with strong opening balance accuracy.</p>
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Created and configured multiple new legal entities aligned to the client's group structure.</li>
+          <li>Performed data migration and opening balance migration for each new entity.</li>
+          <li>Led data template workshops with client teams to standardize migration practices across entities.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">Université Saint-Joseph de Beyrouth (USJ)</h3>
+          <div class="portfolio-card__meta">Higher Education | Lebanon</div>
+        </div>
+        <p>Provided functional consulting support for a standard ERP implementation tightly integrated with sector
+          specific higher education software solutions.</p>
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Supported requirement gathering sessions for the standard ERP scope and integration touchpoints with the
+            higher education platform.</li>
+          <li>Delivered Fixed Assets and Inventory training workshops.</li>
+          <li>Conducted data migration for the in-scope modules.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">CWB, Dar Al Handasah, and Benta</h3>
+          <div class="portfolio-card__meta">Banking | Engineering Consultancy | Pharmaceuticals</div>
+        </div>
+        <p>Delivered data migration and post go live data correction support across three industry distinct engagements.
+        </p>
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Key contributions</h4>
+        <ul class="portfolio-list">
+          <li>Executed data migration using the Data Management Framework (DMF), including the Copy into Legal Entity
+            capability where applicable.</li>
+          <li>Provided remediation support for data quality and master data correction after deployment.</li>
+        </ul>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">Additional Engagements and Internal Initiatives</h3>
+        </div>
+        <ul class="portfolio-list">
+          <li>Provided ongoing functional support for a portfolio of D365 F&amp;O clients across finance and supply
+            chain modules.</li>
+          <li>Conducted product demonstrations and requirement gathering sessions for prospective clients and custom
+            solution opportunities.</li>
+          <li>Led internal training workshops to up skill team members on new D365 F&amp;O capabilities and delivery
+            best practices.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Oracle Cloud Section -->
+    <section class="portfolio-section">
+      <h2 style="border-bottom: 2px solid var(--color-accent); padding-bottom: 0.5rem; margin-bottom: 2rem;">Oracle
+        Fusion Cloud ERP</h2>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">Nexa Clouds</h3>
+          <div class="portfolio-card__meta">Project Based Training and Shadow Delivery</div>
+        </div>
+        <p>Engaged in a structured Oracle Cloud project-based training and shadow delivery program with Nexa Clouds,
+          contributing to live Oracle Fusion Cloud ERP implementations across multinational clients and to design pack
+          workstreams spanning Financials, Procurement, enterprise structure design, reporting, and data loading.</p>
+
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Client Engagements and Project Exposure</h4>
+        <ul class="portfolio-list">
+          <li><strong>AFR, AFI, and consolidated finance setup track:</strong> multi entity finance design covering
+            ledgers, legal entities, business units, cost centers, intercompany configuration, financial sequences, and
+            group reporting structures.</li>
+          <li><strong>Air France CRP1 General Ledger workshop assets:</strong> prepared and reviewed CRP materials
+            supporting senior consultants through Conference Room Pilot sessions for the Air France engagement.</li>
+          <li><strong>Bostik General Ledger discovery workbook:</strong> completed the GL discovery template covering
+            accounting calendars, cross validation rules, conversion rates, and chart of accounts mappings.</li>
+          <li><strong>Payables request for information packs:</strong> contributed to AP discovery covering payment
+            terms, invoice options, payment methods, blocking codes, and tax inputs.</li>
+          <li>Senior-led walkthroughs and solution demonstrations across Juman Group, Gerflor, DG Jones, and Middle East
+            Airlines.</li>
+        </ul>
+      </div>
+
+      <div class="skills-grid" style="margin-bottom: 2rem;">
+        <div class="skill-card">
+          <h4>Enterprise Structure &amp; CoA</h4>
+          <p class="text-muted" style="margin: 0; font-size: 0.95rem;">Built multi entity enterprise structure and chart
+            of accounts scenarios across AFR, AFI, and consolidated environments. Coverage included ledgers, accounting
+            calendars, legal entities, business units, cost centers, natural accounts, intercompany rules, financial
+            sequences, and reporting structures.</p>
+        </div>
+        <div class="skill-card">
+          <h4>GL &amp; Payables Discovery</h4>
+          <p class="text-muted" style="margin: 0; font-size: 0.95rem;">Supported GL and Payables setup via customer
+            information workbooks. Covered setup accounts, cross validation rules, conversion rates, journal sources, AP
+            accounts, invoice options, payment methods, and tax related inputs.</p>
+        </div>
+        <div class="skill-card">
+          <h4>Reporting, Data &amp; Validation</h4>
+          <p class="text-muted" style="margin: 0; font-size: 0.95rem;">Contributed to OTBI, BI Publisher, FRS, Smart
+            View, FBDI, and ADFDI activities. Responsibilities included preparing data templates, validating loaded
+            data, reconciling outputs, producing test evidence for SIT and UAT cycles.</p>
+        </div>
+        <div class="skill-card">
+          <h4>Documentation &amp; Training</h4>
+          <p class="text-muted" style="margin: 0; font-size: 0.95rem;">Prepared CRP workshops, user guides, quick
+            reference materials, test scripts, and training content. Collaborated in English, French, and Arabic with
+            senior consultants and client stakeholders.</p>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="portfolio-card__header">
+          <h3 class="portfolio-card__title">Oracle Cloud Consultant Success Journey</h3>
+        </div>
+        <p>Completed an accelerated Oracle Cloud Consultant Success Journey program spanning over 50 guided sessions
+          across Oracle Cloud foundations, Financials, Procurement, reporting, security, workflow, integrations,
+          support, and career readiness modules.</p>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Oracle Skills and Toolkit</h3>
+        <ul style="column-count: 2; column-gap: 2rem; font-size: 0.95rem;">
+          <li>Oracle ERP Cloud, Oracle Fusion Cloud, Oracle Financials Cloud, Oracle Procurement Cloud.</li>
+          <li>Enterprise Structure Design, Chart of Accounts (CoA), Ledgers, Business Units, Legal Entities.</li>
+          <li>General Ledger (GL), Accounts Payable (AP), Accounts Receivable (AR), Fixed Assets (FA), Cash and Bank
+            Management.</li>
+          <li>Procurement, Suppliers, Purchasing, Approvals, Procure to Pay (P2P), Record to Report (R2R), Expenses,
+            Tax, and Subledger Accounting (SLA) fundamentals.</li>
+          <li>Reporting and data tools: OTBI, BI Publisher, Financial Reporting Studio (FRS), Smart View, Power BI, and
+            SQL.</li>
+          <li>Data and security: FBDI, ADFDI, data migration, testing, reconciliations, ERP security, and documentation.
+          </li>
+          <li>Delivery methods: requirements gathering, fit gap analysis, CRP workshops, FRD and FDD authoring, UAT,
+            SIT, and hyper care.</li>
+          <li>Integrations and extensions: workflow and approvals, REST API exposure, and awareness of OIC (Oracle
+            Integration Cloud) and VBCS (Visual Builder Cloud Service).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section class="portfolio-section">
+      <h2 style="border-bottom: 2px solid var(--color-accent); padding-bottom: 0.5rem; margin-bottom: 2rem;">
+        Certifications</h2>
+      <div class="skills-grid">
+        <div class="skill-card" style="border-color: #0078D4;">
+          <h4>Microsoft Dynamics 365</h4>
+          <ul style="margin-top: 0.5rem; padding-left: 1.2rem;" class="text-muted">
+            <li>Microsoft Certified: Dynamics 365 Supply Chain Management Functional Consultant Expert</li>
+            <li>Microsoft Certified: Dynamics 365 Supply Chain Management Functional Consultant Associate</li>
+            <li>Microsoft Certified: Dynamics 365 Finance Functional Consultant Associate</li>
+          </ul>
+        </div>
+
+        <div class="skill-card" style="border-color: #C74634;">
+          <h4>Oracle</h4>
+          <ul style="margin-top: 0.5rem; padding-left: 1.2rem;" class="text-muted">
+            <li>Oracle Cloud Consultant Success Journey Program, Nexa Clouds</li>
+          </ul>
+        </div>
+
+        <div class="skill-card" style="border-color: #FF9900;">
+          <h4>Cloud, Security &amp; Foundational</h4>
+          <ul style="margin-top: 0.5rem; padding-left: 1.2rem;" class="text-muted">
+            <li>AWS Certified Cloud Practitioner</li>
+            <li>Microsoft Certified: Azure Fundamentals</li>
+            <li>Microsoft Certified: Security Operations Analyst Associate</li>
+            <li>Google Cybersecurity Professional Certificate</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="site-footer" data-footer></footer>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/search.js"></script>
+</body>
+
+</html>
