@@ -1194,6 +1194,7 @@ body.page-exit { pointer-events: none; }
 .hero .hero__eyebrow,
 .hero .hero__title,
 .hero .hero__subtitle,
+.hero .btn-primary,
 .page-header .page-header__eyebrow,
 .page-header .page-header__title,
 .page-header .page-header__lead {
@@ -1203,6 +1204,7 @@ body.page-exit { pointer-events: none; }
 .page-header .page-header__title { animation-delay: 80ms; }
 .hero .hero__subtitle,
 .page-header .page-header__lead  { animation-delay: 160ms; }
+.hero .btn-primary { animation-delay: 240ms; }
 
 /* ---------- Scroll reveal ---------- */
 .reveal {
