@@ -56,6 +56,7 @@
         <ul class="workspace__nav">
           <li><a class="workspace__nav-link" data-item-link="accounting-basics" href="#accounting-basics">Accounting basics</a></li>
           <li><a class="workspace__nav-link" data-item-link="inventory-posting" href="#inventory-posting">Inventory Posting</a></li>
+          <li><a class="workspace__nav-link" data-item-link="posting-profiles" href="#posting-profiles">Posting profiles</a></li>
           <li><a class="workspace__nav-link" data-item-link="acquire-to-dispose" href="#acquire-to-dispose">Acquire to dispose</a></li>
           <li><a class="workspace__nav-link" data-item-link="case-to-resolution" href="#case-to-resolution">Case to resolution</a></li>
           <li><a class="workspace__nav-link" data-item-link="concept-to-market" href="#concept-to-market">Concept to market</a></li>
@@ -2063,6 +2064,774 @@
       </article>
 
       <!-- ============== Acquire to dispose ============== -->
+            <!-- ============== Posting profiles ============== -->
+      <article class="item-pane" data-item-pane="posting-profiles">
+        <header class="item-pane__header">
+          <span class="item-pane__eyebrow">Accounting · Mapping</span>
+          <h2 class="item-pane__title">Posting profiles</h2>
+          <p class="item-pane__lead">The critical bridge between subledgers and the General Ledger. Posting profiles define exactly which main accounts are hit when automatic transactions occur in D365 F&O.</p>
+        </header>
+
+        <p>A misconfigured posting profile is the fastest way to break a financial reconciliation. The tables below map out the required setup for Customer, Vendor, Fixed Assets, and System-level Automatic Transactions.</p>
+
+        <div class="topics">          <details class="topic">
+            <summary><span class="topic__eyebrow">Profile</span>Customer</summary>
+            <div class="topic__body">
+              <div class="entry-table-wrap" style="overflow-x: auto;">
+                <table class="entry-table" style="min-width: 1000px;">
+                  <thead>
+                    <tr>
+                      <th>Field / Posting Type</th>
+                      <th>Definition</th>
+                      <th>Used For</th>
+                      <th>Transactions</th>
+                      <th>Account Type</th>
+                      <th>Implementation Guidance</th>
+                    </tr>
+                  </thead>
+                  <tbody>                    <tr>
+                      <td><strong>Summary account</strong></td>
+                      <td>The main Accounts Receivable (A/R) trade control account that holds the open balance owed by customers. The AR subledger&apos;s link to the General Ledger.</td>
+                      <td>Posts the customer balance each time a customer invoice (sales order, free text, project) is created (debit) or a payment is received (credit). Used by the &apos;Customer balance&apos; posting type.</td>
+                      <td>Sales order invoices; Free text invoices; Project invoices; Customer payment journals; Credit notes; Collection letters; Interest notes; Settlement.</td>
+                      <td>Asset (Balance Sheet) current asset sub-ledger control account.</td>
+                      <td>Provide the GL account used (or to be created) as &apos;Accounts Receivable Trade&apos;. Use separate posting profiles + accounts if the client wants to split domestic vs. foreign currency AR, intercompany AR, or AR for prepayments.</td>
+                    </tr>                    <tr>
+                      <td><strong>Liquidity account for payments</strong></td>
+                      <td>Pointer to the bank/cash account used by Cash Flow Forecasting for incoming customer payments. NOT used for accounting posting.</td>
+                      <td>Indicates the liquidity account D365 should assume for forecasted cash inflows from open customer invoices.</td>
+                      <td>Cash flow forecast reports only. No voucher created.</td>
+                      <td>Asset (Bank/Cash) informational only.</td>
+                      <td>If Cash flow forecasting is enabled, provide the bank account into which customer receipts are typically deposited. Otherwise, leave blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Sales tax prepayments</strong></td>
+                      <td>Clearing account for the tax portion of customer prepayments (deposits/advances) before the invoice is issued.</td>
+                      <td>Holds VAT/sales tax on customer prepayments. Reversed when the prepayment is settled against the actual invoice. The default posting profile for prepayments is configured in AR parameters.</td>
+                      <td>Customer prepayment journals (with tax); Settlement of prepayment against an invoice.</td>
+                      <td>Liability Sales tax clearing (Balance Sheet).</td>
+                      <td>If the client receives prepayments/deposits from customers that include tax, provide a Tax-on-prepayments clearing account. Otherwise, leave blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Liabilities for discount account</strong></td>
+                      <td>The liability account where the future cash discount allowed to a customer is parked at invoice time, before the discount is actually taken.</td>
+                      <td>When an invoice is issued with a cash discount potentially available, this account temporarily holds the discount as a liability. It is reversed when the discount is either taken (becomes an expense) or expires (released back to revenue / AR).</td>
+                      <td>Customer invoice posting (when cash discount is offered); Settlement (clears the liability).</td>
+                      <td>Liability Deferred Revenue / Discounts (Balance Sheet, clearing).</td>
+                      <td>Provide this account ONLY if the client uses the &apos;Liabilities for discount&apos; feature for early-payment discounts. Many clients ignore this and post the discount directly when taken in that case leave it blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Collection letter sequence</strong></td>
+                      <td>Default collection letter sequence (dunning workflow) used for customers under this posting profile.</td>
+                      <td>Determines which collection letter cadence (e.g., Reminder -&gt; 1st Notice -&gt; Final Notice -&gt; Legal) is applied when collection letters are run for these customers.</td>
+                      <td>Collection letter generation and posting; aging-based dunning runs.</td>
+                      <td>Setting (a sequence code) not an account.</td>
+                      <td>Decide with the client whether collections are managed via D365 dunning. If yes, set up a collection letter sequence first (Credit and collections &gt; Setup) and reference it here. If they outsource collections or run them outside D365, leave blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Interest code</strong></td>
+                      <td>Default interest/finance-charge code used to compute interest on overdue customer balances.</td>
+                      <td>Drives interest calculation rules (rate, basis, grace days) for the customers assigned to this profile.</td>
+                      <td>Interest note calculation and posting; aging reports that show projected interest.</td>
+                      <td>Setting (an interest code) not an account.</td>
+                      <td>Only required if the client charges interest on overdue receivables. If used, set up the interest code first (Credit and collections &gt; Setup &gt; Interest) and reference it here.</td>
+                    </tr>                    <tr>
+                      <td><strong>TABLE RESTRICTIONS Behavior toggles applied to this posting profile</strong></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>                    <tr>
+                      <td><strong>Allow automatic settlement</strong></td>
+                      <td>Toggle that controls whether customer transactions on this posting profile can be settled automatically.</td>
+                      <td>When Yes, customer payments are matched to invoices automatically based on settlement priority. When No, the user must manually mark transactions in &apos;Settle open transactions&apos; or &apos;Enter customer payments&apos;.</td>
+                      <td>Customer payment journals; Settle open transactions; Periodic settlements.</td>
+                      <td>Setting (Yes/No) not an account.</td>
+                      <td>Most AR teams keep this ON so that cash application is fast. Confirm with the AR lead whether they want full auto-match or manual control.</td>
+                    </tr>                    <tr>
+                      <td><strong>Interest</strong></td>
+                      <td>Toggle that controls whether interest is calculated for transactions under this posting profile.</td>
+                      <td>Even if an interest code is assigned (Setup tab), this toggle is the master ON/OFF switch. When No, no interest will be generated for any customer on this profile.</td>
+                      <td>Interest note calculation runs.</td>
+                      <td>Setting (Yes/No) not an account.</td>
+                      <td>Turn on only if interest will actually be charged on this profile. Common pattern: have a separate &apos;NoInterest&apos; profile for strategic customers.</td>
+                    </tr>                    <tr>
+                      <td><strong>Collection letter</strong></td>
+                      <td>Toggle that controls whether collection letters are generated for transactions under this posting profile.</td>
+                      <td>Master ON/OFF switch for dunning. Even if a Collection letter sequence is assigned, no letters are issued if this is No.</td>
+                      <td>Collection letter runs; dunning reports.</td>
+                      <td>Setting (Yes/No) not an account.</td>
+                      <td>Turn on only if the client wants automated dunning. Some clients exclude key accounts (government, intercompany) by putting them on a profile with this toggle OFF.</td>
+                    </tr>                    <tr>
+                      <td><strong>Close</strong></td>
+                      <td>The posting profile a customer transaction is reclassified into once it has been fully settled.</td>
+                      <td>Allows reporting closed AR separately from open AR. After settlement, D365 stamps transactions with this profile.</td>
+                      <td>Settlement of any customer transaction; closed-vs-open reporting.</td>
+                      <td>Setting (a posting profile name) not an account.</td>
+                      <td>Optional. Use only if the client requires separate reporting of historical/closed AR. Typically left blank for greenfield implementations.</td>
+                    </tr>                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>          <details class="topic">
+            <summary><span class="topic__eyebrow">Profile</span>Vendor</summary>
+            <div class="topic__body">
+              <div class="entry-table-wrap" style="overflow-x: auto;">
+                <table class="entry-table" style="min-width: 1000px;">
+                  <thead>
+                    <tr>
+                      <th>Field / Posting Type</th>
+                      <th>Definition</th>
+                      <th>Used For</th>
+                      <th>Transactions</th>
+                      <th>Account Type</th>
+                      <th>Implementation Guidance</th>
+                    </tr>
+                  </thead>
+                  <tbody>                    <tr>
+                      <td><strong>Summary account</strong></td>
+                      <td>The main Accounts Payable (A/P) trade control account that holds the open balance owed to vendors. This is the AP subledger&apos;s link to the General Ledger and is the single most important account on the profile.</td>
+                      <td>Posts the vendor&apos;s balance each time a vendor invoice is created (credit) or a vendor payment is made (debit). Used by the &apos;Vendor balance&apos; posting type. D365 sets &apos;Do not allow manual entry&apos; on this account automatically so users cannot post journals directly to it.</td>
+                      <td>Vendor invoice posting (PO and non-PO); Invoice journal; Vendor payment journal; Promissory notes; Credit notes; Settlement.</td>
+                      <td>Liability (Balance Sheet) typically a current liability sub-ledger control account.</td>
+                      <td>Provide the GL account that the client uses (or wants to create) as &apos;Accounts Payable Trade&apos;. If the client distinguishes between domestic and foreign-currency payables, intercompany payables, or one-time vendors, create a separate posting profile for each and provide a separate AP control account per profile.</td>
+                    </tr>                    <tr>
+                      <td><strong>Liquidity account for payments</strong></td>
+                      <td>A pointer to the bank/cash account used by Cash Flow Forecasting. This account is NOT used for actual posting it only feeds the cash flow forecast.</td>
+                      <td>Indicates which liquidity (bank) account should be assumed when forecasting future cash outflows for open vendor invoices. Only appears if Cash flow forecasts are enabled in General ledger parameters.</td>
+                      <td>Cash flow forecast reports and inquiries. No accounting voucher is ever created from this field.</td>
+                      <td>Asset (Bank/Cash) informational only.</td>
+                      <td>If the client uses Cash flow forecasting, provide the primary bank/operating account that vendor payments are expected to be drawn from. If they don&apos;t use the feature, this field can be left blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Sales tax prepayments</strong></td>
+                      <td>The clearing account used when a vendor prepayment that includes tax is recorded, before the actual invoice is posted.</td>
+                      <td>Holds the tax portion of vendor prepayments until the related invoice arrives. It is reversed automatically when the prepayment is settled against the invoice. Linked via the &apos;Prepayment journal voucher&apos; posting profile in AP parameters.</td>
+                      <td>Vendor prepayment journals (with sales tax); Application/settlement of the prepayment against an invoice.</td>
+                      <td>Liability Sales tax clearing (Balance Sheet).</td>
+                      <td>If the client makes prepayments to vendors that include VAT/sales tax, provide a Tax-on-prepayments clearing account. If prepayments don&apos;t include recoverable tax, this can usually be omitted.</td>
+                    </tr>                    <tr>
+                      <td><strong>Arrival</strong></td>
+                      <td>The &apos;Goods invoiced not approved&apos; or &apos;Pending invoice&apos; liability account, used when invoices are registered (basic info captured) but not yet approved.</td>
+                      <td>Records unapproved vendor invoices entered through the Invoice register journal. On approval, the balance is reclassified from this Arrival account to the Summary account (real AP).</td>
+                      <td>Invoice register journal (Step 1 of the 2-step AP process); Approval journal that reverses the registration.</td>
+                      <td>Liability Accrued / Unapproved AP (Balance Sheet, clearing).</td>
+                      <td>Required ONLY if the client uses the Invoice register / 2-step approval process (typical when AP enters invoices and Accounting approves them later). Provide an &apos;Invoices received pending approval&apos; liability account. If they post invoices directly, this can be left blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Offset account</strong></td>
+                      <td>The debit offset used together with the Arrival account when registering an unapproved invoice.</td>
+                      <td>Acts as the offset (debit) for the credit posted to the Arrival account when an invoice is registered in the Invoice register journal. Cleared on approval.</td>
+                      <td>Invoice register journal (debit side); Approval journal (credit side).</td>
+                      <td>Asset / Clearing (Balance Sheet, typically the same nature as the Arrival account but the offset side often a &apos;Purchases pending approval&apos; clearing).</td>
+                      <td>Required only if the Invoice register journal is used. Provide a clearing/suspense account. Often this is configured to be the same nature as Arrival so the net of the two is zero until approval.</td>
+                    </tr>                    <tr>
+                      <td><strong>TABLE RESTRICTIONS Behavior toggles applied to this posting profile</strong></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>                    <tr>
+                      <td><strong>Allow automatic settlement</strong></td>
+                      <td>Toggle that controls whether transactions on this posting profile can be settled automatically when payments are posted.</td>
+                      <td>When set to Yes, D365 will match payments to invoices automatically (FIFO or by settlement priority) without requiring the user to manually mark the invoices. When No, users must use the &apos;Settle open transactions&apos; page.</td>
+                      <td>Vendor payment journals; Settle open transactions; Periodic settlement runs.</td>
+                      <td>Setting (Yes/No) not an account.</td>
+                      <td>Decide with the client whether AP wants automatic matching (faster, fewer clicks, but harder to audit) or manual matching (slower, full control). Most clients start with No to give AP visibility, then switch on automatic settlement once they trust the process.</td>
+                    </tr>                    <tr>
+                      <td><strong>Close</strong></td>
+                      <td>The posting profile that a transaction is moved to once it has been fully settled (i.e., when the open balance becomes zero).</td>
+                      <td>Lets the client report on closed/historical AP separately from open AP. After settlement, D365 stamps the transaction with this &apos;Close&apos; posting profile so the original profile contains only open items.</td>
+                      <td>Settlement of any vendor transaction; reporting on closed vs. open balances.</td>
+                      <td>Setting (a posting profile name) not an account.</td>
+                      <td>Optional. If the client wants closed transactions reported against a different AR/AP control account (e.g., historical AP), create a second posting profile (e.g., &apos;CLOSED&apos;) and reference it here. Most implementations leave this blank or reference the same profile.</td>
+                    </tr>                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>          <details class="topic">
+            <summary><span class="topic__eyebrow">Profile</span>Fixed Assets</summary>
+            <div class="topic__body">
+              <div class="entry-table-wrap" style="overflow-x: auto;">
+                <table class="entry-table" style="min-width: 1000px;">
+                  <thead>
+                    <tr>
+                      <th>Field / Posting Type</th>
+                      <th>Definition</th>
+                      <th>Used For</th>
+                      <th>Transactions</th>
+                      <th>Account Type</th>
+                      <th>Implementation Guidance</th>
+                    </tr>
+                  </thead>
+                  <tbody>                    <tr>
+                      <td><strong>LEDGER ACCOUNTS One row per fixed asset transaction type (set per Posting profile / Book / Group)</strong></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition</strong></td>
+                      <td>The asset account that captures the purchase/acquisition cost of a fixed asset (the gross book value).</td>
+                      <td>Posted when the asset is acquired either via an acquisition proposal, a fixed asset journal, a vendor invoice with a fixed asset line, or a free text invoice. This account holds the original cost of the asset on the balance sheet.</td>
+                      <td>Acquisition transactions (FA journal); Acquisition proposal from a PO/AP invoice; Capitalization from project/WIP.</td>
+                      <td>Asset Property, Plant &amp; Equipment (cost / gross book value).</td>
+                      <td>Provide an asset cost account for each fixed asset group (e.g., Buildings Cost, Vehicles Cost, IT Equipment Cost). Best practice is one cost account per asset group.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition adjustment</strong></td>
+                      <td>Adjustment account used when the original acquisition cost of an existing asset is increased or decreased after initial capitalization (e.g., capitalized improvements, freight/tax additions, refunds).</td>
+                      <td>Posted when an Acquisition adjustment transaction is run against an existing asset. Increases or decreases the gross cost without overwriting the original Acquisition record.</td>
+                      <td>Acquisition adjustment journal; Capitalization of additional invoice costs after the asset is already in service.</td>
+                      <td>Asset PPE Adjustments (same nature as Acquisition; often the same account).</td>
+                      <td>Common practice: use the SAME account as the Acquisition account so cost and adjustments roll up together. Confirm whether the client wants them separated for reporting.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation</strong></td>
+                      <td>Accumulated depreciation (contra-asset) account that records the periodic reduction in the asset&apos;s book value.</td>
+                      <td>Posted when the Calculate depreciation proposal is run and the resulting journal is posted. Credit accumulates over the asset&apos;s life.</td>
+                      <td>Monthly/periodic depreciation runs; manual depreciation journals.</td>
+                      <td>Contra-asset Accumulated Depreciation (Balance Sheet). Offset (debit) goes to Depreciation Expense (P&amp;L).</td>
+                      <td>Provide a contra-asset (Accumulated Depreciation) account AND a P&amp;L Depreciation Expense account for each fixed asset group. The expense account is entered as the Offset account on the same posting line.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation adjustment</strong></td>
+                      <td>Adjustment to accumulated depreciation, used when prior-period depreciation needs to be corrected outside the normal monthly run.</td>
+                      <td>Posted via a Depreciation adjustment journal. Common when changing service life, method, or correcting an error.</td>
+                      <td>Depreciation adjustment journal; lifecycle change re-calculations.</td>
+                      <td>Contra-asset Accumulated Depreciation (often same account as Depreciation).</td>
+                      <td>Standard practice: use the same Accumulated Depreciation account as the regular Depreciation line. Same for the offset (Depreciation expense).</td>
+                    </tr>                    <tr>
+                      <td><strong>Revaluation</strong></td>
+                      <td>Account used when an asset&apos;s value is revalued upward or downward to fair value (IFRS revaluation model).</td>
+                      <td>Posted when a revaluation transaction is run. Typical offset is a Revaluation Surplus equity account (upward) or P&amp;L expense (downward).</td>
+                      <td>Fixed asset revaluation journal; periodic revaluation under IFRS/local GAAP.</td>
+                      <td>Asset (or Equity Revaluation surplus, depending on direction).</td>
+                      <td>Required only if the client revalues fixed assets (IFRS revaluation model or local statutory revaluation). Provide a Revaluation account and a Revaluation surplus offset. If they use cost model only, leave blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write up adjustment</strong></td>
+                      <td>Records an increase in the carrying value of an asset (other than standard revaluation), typically reversing a previous impairment.</td>
+                      <td>Posted via a Write-up adjustment journal to increase NBV. Offsets a previously recognized impairment loss or recognizes appreciation.</td>
+                      <td>Write-up journal; impairment reversal.</td>
+                      <td>Asset PPE / Other income (offset).</td>
+                      <td>Required only if the client uses write-ups (impairment reversals). Many clients leave this unused.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write down adjustment</strong></td>
+                      <td>Records a decrease in the carrying value of an asset due to impairment.</td>
+                      <td>Posted via a Write-down adjustment journal. Reduces NBV with an offset to impairment loss (P&amp;L expense).</td>
+                      <td>Write-down journal; impairment events.</td>
+                      <td>Asset (contra) PPE write-downs / P&amp;L Impairment loss (offset).</td>
+                      <td>Required if the client performs impairment testing. Provide a balance sheet &apos;Accumulated Write-down&apos; account and a P&amp;L &apos;Impairment Loss&apos; offset.</td>
+                    </tr>                    <tr>
+                      <td><strong>Disposal sale</strong></td>
+                      <td>Header-level disposal sale account. Acts as the gain/loss on disposal account. The actual breakdown of what reverses where is controlled by the Disposal: Sale grid below.</td>
+                      <td>Posted when an asset is sold (via free text invoice, FA journal disposal sale, or sales order with FA). The full disposal accounting is then expanded by the Disposal: Sale post-value rows.</td>
+                      <td>Free text invoice with FA line and Disposal type = Sale; FA journal Disposal Sale; Sales order with FA.</td>
+                      <td>P&amp;L Gain/Loss on Sale of Fixed Assets (typically).</td>
+                      <td>Provide a &apos;Gain/(Loss) on Sale of Fixed Assets&apos; P&amp;L account. This same account is typically referenced as the offset on every line of the Disposal: Sale section.</td>
+                    </tr>                    <tr>
+                      <td><strong>Disposal scrap</strong></td>
+                      <td>Header-level disposal scrap account. Acts as the gain/loss on scrap account. Detailed reversal mechanics live in the Disposal: Scrap grid.</td>
+                      <td>Posted when an asset is scrapped/written off (no sales value). The Disposal: Scrap section breaks down the reversal of acquisition and depreciation.</td>
+                      <td>FA journal Disposal Scrap; mass-disposal proposals.</td>
+                      <td>P&amp;L Loss on Scrap of Fixed Assets.</td>
+                      <td>Provide a &apos;Loss on Scrap of Fixed Assets&apos; P&amp;L account. Same logic as Disposal sale: this account also appears as the offset on each Disposal: Scrap detail line.</td>
+                    </tr>                    <tr>
+                      <td><strong>Provision for reserve</strong></td>
+                      <td>Used in jurisdictions or industries that require a tax/statutory reserve to be set aside against fixed asset gains (e.g., reinvestment reserves).</td>
+                      <td>Posted when a provision-for-reserve transaction is created against a disposal gain.</td>
+                      <td>Statutory reserve postings tied to disposal gains (rare outside specific localizations).</td>
+                      <td>Equity / Liability Statutory Reserve.</td>
+                      <td>Only relevant in specific localizations (e.g., some European tax regimes). Most implementations leave this blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Transfer from reserve</strong></td>
+                      <td>Used to release a previously created Provision for reserve back to retained earnings or income.</td>
+                      <td>Posted when the reserve is released (usually at the end of the statutory holding period).</td>
+                      <td>Reserve release transactions.</td>
+                      <td>Equity release to retained earnings.</td>
+                      <td>Only required if &apos;Provision for reserve&apos; is used. Otherwise leave blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>DISPOSAL Sale (Post-value rows; sets accounts used when an asset is SOLD)</strong></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>                    <tr>
+                      <td><strong>Setup rule (applies to every line below)</strong></td>
+                      <td>During disposal, D365 reverses each prior posting and routes the offset to the Gain/Loss on Sale account.</td>
+                      <td>Triggered on any disposal-sale transaction.</td>
+                      <td>FA journal Disposal Sale; Free text invoice with FA line; Sales order with FA.</td>
+                      <td>See per-line account types below</td>
+                      <td>MAIN ACCOUNT: the ORIGINAL account where the transaction type was posted (e.g., for &apos;Depreciation (Prior year)&apos; use the Accumulated Depreciation account). OFFSET ACCOUNT: the Gain/Loss on Sale of Fixed Assets account. EXCEPTION Net book value: BOTH main</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation (Prior year)</strong></td>
+                      <td>Reverses the accumulated depreciation recorded in prior fiscal years for the asset being disposed.</td>
+                      <td>On disposal, D365 reverses the prior-year depreciation out of Accumulated Depreciation and routes the offset to the Gain/Loss on disposal account.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation (this year)</strong></td>
+                      <td>Reverses the accumulated depreciation recorded in the current fiscal year for the asset being disposed.</td>
+                      <td>Same as Depreciation (Prior year) but for current-year depreciation. Often configured to use the same accounts.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition value</strong></td>
+                      <td>Lump-sum reversal of the gross acquisition cost (all years combined) when disposal is configured as non-detailed. Used when the Fixed assets parameter &apos;Post disposal transactions in detail&apos; = No.</td>
+                      <td>Reverses the entire acquisition cost (original + adjustments, all years) in one line.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Net book value</strong></td>
+                      <td>Captures the asset&apos;s net book value at the moment of disposal. The KEY line on the disposal profile.</td>
+                      <td>This is the ONLY line where BOTH main account and offset account should be the Gain/Loss on Disposal account effectively zeroing the asset&apos;s NBV and recognizing the gain or loss against the sale value (or zero for scrap).</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>P&amp;L Gain/(Loss) on Sale of Fixed Assets (BOTH sides)</td>
+                      <td>BOTH Main account AND Offset account = Gain/Loss on Sale of Fixed Assets. This is what writes the NBV off to P&amp;L.</td>
+                    </tr>                    <tr>
+                      <td><strong>Sales value</strong></td>
+                      <td>Records the proceeds received from selling the asset (only meaningful in Disposal sale).</td>
+                      <td>The proceeds are credited to this account; in most setups this is the same Gain/Loss on Disposal account so that the net P&amp;L impact = Sale value NBV.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>P&amp;L Gain/(Loss) on Sale of Fixed Assets</td>
+                      <td>Main account = Gain/Loss on Sale of Fixed Assets. Offset is the AR/Bank account (filled in by the document).</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition adjustments (this year)</strong></td>
+                      <td>Reverses current-year adjustments to the acquisition cost.</td>
+                      <td>Used when &apos;Post disposal transactions in detail&apos; = Yes and acquisition adjustments are tracked separately from initial acquisition.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition adjustments (Prior years)</strong></td>
+                      <td>Reverses prior-year acquisition adjustments.</td>
+                      <td>Same as &apos;Acquisition adjustments (this year)&apos; but for prior fiscal years.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition (this year)</strong></td>
+                      <td>Reverses the current-year portion of the original acquisition cost (detail mode).</td>
+                      <td>Used when &apos;Post disposal transactions in detail&apos; = Yes. Mutually exclusive with the lump-sum &apos;Acquisition value&apos; line.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition (prior years)</strong></td>
+                      <td>Reverses the prior-years portion of the original acquisition cost (detail mode).</td>
+                      <td>Used in conjunction with &apos;Acquisition (this year)&apos; when disposal detail mode is enabled.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation adjustments (Prior year)</strong></td>
+                      <td>Reverses prior-year depreciation adjustments (manual corrections).</td>
+                      <td>Typically uses the same accounts as Depreciation (Prior year).</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation adjustments (this year)</strong></td>
+                      <td>Reverses current-year depreciation adjustments.</td>
+                      <td>Typically uses the same accounts as Depreciation (this year).</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Revaluations (this year)</strong></td>
+                      <td>Reverses revaluation amounts booked in the current year.</td>
+                      <td>Only relevant for clients using the revaluation model.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Revaluations (prior years)</strong></td>
+                      <td>Reverses revaluation amounts booked in prior years.</td>
+                      <td>Only relevant for clients using the revaluation model.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write up adjustments (prior years)</strong></td>
+                      <td>Reverses prior-year write-ups (impairment reversals).</td>
+                      <td>Used only when write-up adjustments have been historically posted.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write up adjustments (this year)</strong></td>
+                      <td>Reverses current-year write-ups.</td>
+                      <td>Used only when write-up adjustments have been historically posted.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write down adjustments (prior years)</strong></td>
+                      <td>Reverses prior-year impairment write-downs.</td>
+                      <td>Used only when write-down adjustments have been historically posted.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write down adjustments (this year)</strong></td>
+                      <td>Reverses current-year impairment write-downs.</td>
+                      <td>Used only when write-down adjustments have been historically posted.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Provision for reserve</strong></td>
+                      <td>Reverses statutory reserves previously created against this asset.</td>
+                      <td>Only relevant in jurisdictions that require such reserves.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Transfer from reserve</strong></td>
+                      <td>Releases reserves back to equity at disposal.</td>
+                      <td>Only relevant in jurisdictions that require statutory reserves.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Extraordinary depreciation (prior years)</strong></td>
+                      <td>Reverses prior-year extraordinary depreciation (accelerated/bonus depreciation).</td>
+                      <td>Used by clients that take special/extraordinary tax depreciation.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Extraordinary depreciation (this year)</strong></td>
+                      <td>Reverses current-year extraordinary depreciation.</td>
+                      <td>Used by clients that take special/extraordinary tax depreciation.</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Special depreciation allowance</strong></td>
+                      <td>Reverses any special depreciation allowance (e.g., bonus depreciation in the US tax book) previously booked.</td>
+                      <td>Used by clients with special depreciation rules (US Sec.179/bonus, special allowances).</td>
+                      <td>Disposal Sale processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above for this transaction type. OFFSET = the Gain/(Loss) on Sale of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>DISPOSAL Scrap (Post-value rows; sets accounts used when an asset is SCRAPPED)</strong></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>                    <tr>
+                      <td><strong>Setup rule (applies to every line below)</strong></td>
+                      <td>During scrap, D365 reverses prior postings and routes the offset to the Loss on Scrap account. No sales proceeds.</td>
+                      <td>Triggered on any disposal-scrap transaction.</td>
+                      <td>FA journal Disposal Scrap; mass scrap proposals.</td>
+                      <td>See per-line account types below</td>
+                      <td>MAIN ACCOUNT: the ORIGINAL account where the transaction type was posted. OFFSET ACCOUNT: Loss on Scrap of Fixed Assets. EXCEPTION Net book value: BOTH main and offset = Loss on Scrap of Fixed Assets so the NBV is written off to P&amp;L. Tip: most clients u</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation (Prior year)</strong></td>
+                      <td>Reverses the accumulated depreciation recorded in prior fiscal years for the asset being disposed.</td>
+                      <td>On disposal, D365 reverses the prior-year depreciation out of Accumulated Depreciation and routes the offset to the Gain/Loss on disposal account.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation (this year)</strong></td>
+                      <td>Reverses the accumulated depreciation recorded in the current fiscal year for the asset being disposed.</td>
+                      <td>Same as Depreciation (Prior year) but for current-year depreciation. Often configured to use the same accounts.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition value</strong></td>
+                      <td>Lump-sum reversal of the gross acquisition cost (all years combined) when disposal is configured as non-detailed. Used when the Fixed assets parameter &apos;Post disposal transactions in detail&apos; = No.</td>
+                      <td>Reverses the entire acquisition cost (original + adjustments, all years) in one line.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Net book value</strong></td>
+                      <td>Captures the asset&apos;s net book value at the moment of disposal. The KEY line on the disposal profile.</td>
+                      <td>This is the ONLY line where BOTH main account and offset account should be the Gain/Loss on Disposal account effectively zeroing the asset&apos;s NBV and recognizing the gain or loss against the sale value (or zero for scrap).</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>P&amp;L Loss on Scrap of Fixed Assets (BOTH sides)</td>
+                      <td>BOTH Main account AND Offset account = Loss on Scrap of Fixed Assets. Writes the NBV off to P&amp;L.</td>
+                    </tr>                    <tr>
+                      <td><strong>Sales value</strong></td>
+                      <td>Records the proceeds received from selling the asset (only meaningful in Disposal sale).</td>
+                      <td>The proceeds are credited to this account; in most setups this is the same Gain/Loss on Disposal account so that the net P&amp;L impact = Sale value NBV.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Not typically used for scrap</td>
+                      <td>Usually not configured for scrap (no proceeds). Leave blank unless partial recovery is expected.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition adjustments (this year)</strong></td>
+                      <td>Reverses current-year adjustments to the acquisition cost.</td>
+                      <td>Used when &apos;Post disposal transactions in detail&apos; = Yes and acquisition adjustments are tracked separately from initial acquisition.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition adjustments (Prior years)</strong></td>
+                      <td>Reverses prior-year acquisition adjustments.</td>
+                      <td>Same as &apos;Acquisition adjustments (this year)&apos; but for prior fiscal years.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition (this year)</strong></td>
+                      <td>Reverses the current-year portion of the original acquisition cost (detail mode).</td>
+                      <td>Used when &apos;Post disposal transactions in detail&apos; = Yes. Mutually exclusive with the lump-sum &apos;Acquisition value&apos; line.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Acquisition (prior years)</strong></td>
+                      <td>Reverses the prior-years portion of the original acquisition cost (detail mode).</td>
+                      <td>Used in conjunction with &apos;Acquisition (this year)&apos; when disposal detail mode is enabled.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation adjustments (Prior year)</strong></td>
+                      <td>Reverses prior-year depreciation adjustments (manual corrections).</td>
+                      <td>Typically uses the same accounts as Depreciation (Prior year).</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Depreciation adjustments (this year)</strong></td>
+                      <td>Reverses current-year depreciation adjustments.</td>
+                      <td>Typically uses the same accounts as Depreciation (this year).</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Revaluations (this year)</strong></td>
+                      <td>Reverses revaluation amounts booked in the current year.</td>
+                      <td>Only relevant for clients using the revaluation model.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Revaluations (prior years)</strong></td>
+                      <td>Reverses revaluation amounts booked in prior years.</td>
+                      <td>Only relevant for clients using the revaluation model.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write up adjustments (prior years)</strong></td>
+                      <td>Reverses prior-year write-ups (impairment reversals).</td>
+                      <td>Used only when write-up adjustments have been historically posted.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write up adjustments (this year)</strong></td>
+                      <td>Reverses current-year write-ups.</td>
+                      <td>Used only when write-up adjustments have been historically posted.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write down adjustments (prior years)</strong></td>
+                      <td>Reverses prior-year impairment write-downs.</td>
+                      <td>Used only when write-down adjustments have been historically posted.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Write down adjustments (this year)</strong></td>
+                      <td>Reverses current-year impairment write-downs.</td>
+                      <td>Used only when write-down adjustments have been historically posted.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Provision for reserve</strong></td>
+                      <td>Reverses statutory reserves previously created against this asset.</td>
+                      <td>Only relevant in jurisdictions that require such reserves.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Transfer from reserve</strong></td>
+                      <td>Releases reserves back to equity at disposal.</td>
+                      <td>Only relevant in jurisdictions that require statutory reserves.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Extraordinary depreciation (prior years)</strong></td>
+                      <td>Reverses prior-year extraordinary depreciation (accelerated/bonus depreciation).</td>
+                      <td>Used by clients that take special/extraordinary tax depreciation.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Extraordinary depreciation (this year)</strong></td>
+                      <td>Reverses current-year extraordinary depreciation.</td>
+                      <td>Used by clients that take special/extraordinary tax depreciation.</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Special depreciation allowance</strong></td>
+                      <td>Reverses any special depreciation allowance (e.g., bonus depreciation in the US tax book) previously booked.</td>
+                      <td>Used by clients with special depreciation rules (US Sec.179/bonus, special allowances).</td>
+                      <td>Disposal Scrap processing on the asset.</td>
+                      <td>Reverses the ORIGINAL account from the Ledger accounts section</td>
+                      <td>MAIN ACCOUNT = the same account used in the Ledger accounts section above. OFFSET = the Loss on Scrap of Fixed Assets account.</td>
+                    </tr>                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>          <details class="topic">
+            <summary><span class="topic__eyebrow">Profile</span>Accounts for Automatic Transactions</summary>
+            <div class="topic__body">
+              <div class="entry-table-wrap" style="overflow-x: auto;">
+                <table class="entry-table" style="min-width: 1000px;">
+                  <thead>
+                    <tr>
+                      <th>Field / Posting Type</th>
+                      <th>Definition</th>
+                      <th>Used For</th>
+                      <th>Transactions</th>
+                      <th>Account Type</th>
+                      <th>Implementation Guidance</th>
+                    </tr>
+                  </thead>
+                  <tbody>                    <tr>
+                      <td><strong>Penny difference in reporting currency</strong></td>
+                      <td>Catches sub-cent rounding differences that arise when foreign-currency amounts are translated to the reporting currency.</td>
+                      <td>D365 posts the tiny residual (typically less than 1 cent) here so the voucher balances.</td>
+                      <td>Any multi-currency voucher where reporting-currency translation produces a rounding remainder.</td>
+                      <td>Expense Miscellaneous Expense (P&amp;L).</td>
+                      <td>Provide a &apos;Rounding Differences Reporting Currency&apos; expense account. A single small P&amp;L account is sufficient; balances should be near zero.</td>
+                    </tr>                    <tr>
+                      <td><strong>Error account</strong></td>
+                      <td>Fallback account used when the system cannot determine the correct posting account for a transaction.</td>
+                      <td>Receives postings that would otherwise fail. Should be monitored every period and re-classified.</td>
+                      <td>Any voucher where the configured posting profile is missing or invalid for a posting type.</td>
+                      <td>Expense Suspense / Error Account (P&amp;L or Balance Sheet).</td>
+                      <td>REQUIRED. Provide an &apos;Error / Suspense&apos; account. The team should reconcile this account monthly any balance means something posted incorrectly and needs investigation.</td>
+                    </tr>                    <tr>
+                      <td><strong>Penny difference in accounting currency</strong></td>
+                      <td>Catches sub-cent rounding differences when foreign-currency amounts are translated to the accounting (transaction) currency.</td>
+                      <td>Same concept as the reporting-currency penny difference but for the accounting currency.</td>
+                      <td>Multi-currency vouchers where translation to accounting currency leaves a small residual.</td>
+                      <td>Expense Miscellaneous Expense (P&amp;L).</td>
+                      <td>Provide a &apos;Rounding Differences Accounting Currency&apos; account (or use the same one as Reporting currency).</td>
+                    </tr>                    <tr>
+                      <td><strong>Year-end result</strong></td>
+                      <td>The destination account for the net Profit or Loss when the Year-end close process is run usually Retained Earnings.</td>
+                      <td>During year-end close, D365 moves balances of all P&amp;L (Profit &amp; Loss type) main accounts into this single account.</td>
+                      <td>Year-end closing process only (not periodic close).</td>
+                      <td>Equity Retained Earnings (Balance Sheet).</td>
+                      <td>REQUIRED. Provide the Retained Earnings account. This is one of the most important automatic accounts to configure correctly before the first fiscal year-end.</td>
+                    </tr>                    <tr>
+                      <td><strong>Cash discount</strong></td>
+                      <td>Default cash discount account used when no more specific cash discount account is configured (lowest priority in the cash-discount account resolution).</td>
+                      <td>Cash discount account selection order: (1) Alternative cash discount on Settle page &gt; (2) Customer/Vendor cash discount on Ledger posting group &gt; (3) Cash discount code&apos;s Main account &gt; (4) THIS field on Accounts for automatic transactions.</td>
+                      <td>Cash discount on customer or vendor settlement when the more specific accounts are blank.</td>
+                      <td>Revenue contra (customer) or Expense (vendor).</td>
+                      <td>Generally NOT used directly the client should configure the Cash discount account on each Cash discount code instead. Leave this blank or point it at the same account as the cash discount codes.</td>
+                    </tr>                    <tr>
+                      <td><strong>Balance account for consolidation differences</strong></td>
+                      <td>Balance sheet (capital) side of penny differences that arise during consolidation when foreign-currency subsidiaries are revalued.</td>
+                      <td>Posted when consolidation revaluation produces a rounding/translation residual on a balance sheet account.</td>
+                      <td>Consolidation runs with currency revaluation.</td>
+                      <td>Equity / OCI Cumulative Translation Adjustment (Balance Sheet).</td>
+                      <td>Required only for clients running D365 consolidation. Provide a &apos;CTA Balance&apos; equity/OCI account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Profit and loss account for consolidation differences</strong></td>
+                      <td>P&amp;L side of penny differences arising during consolidation revaluation.</td>
+                      <td>Same concept as the balance sheet account above, but for P&amp;L translation residuals.</td>
+                      <td>Consolidation runs with currency revaluation.</td>
+                      <td>Expense / Revenue Translation gain/loss (P&amp;L).</td>
+                      <td>Required only for clients running D365 consolidation. Provide a P&amp;L translation account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Customer cash discount</strong></td>
+                      <td>Default account for cash discounts GIVEN to customers when they pay early.</td>
+                      <td>Not directly used from this page by default D365 actually resolves the cash discount account through the Cash discount code itself. The value here serves as the absolute fallback.</td>
+                      <td>Customer payment settlement that triggers a cash discount.</td>
+                      <td>Revenue contra (Sales discounts taken).</td>
+                      <td>Best practice: configure the cash-discount account on each Cash discount code. This row can be left blank or set to a generic &apos;Sales Discounts&apos; account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Customer invoice discount</strong></td>
+                      <td>Default account for invoice-level discounts on customer invoices (line-independent, applied to the invoice total).</td>
+                      <td>Used when a customer is granted an invoice discount at invoice time. Falls back from charges code configuration.</td>
+                      <td>Sales orders / free text invoices with an invoice discount.</td>
+                      <td>Revenue contra (Sales discounts).</td>
+                      <td>Provide a &apos;Sales Invoice Discounts&apos; contra-revenue account if the client uses invoice-level discounts on AR. Otherwise leave blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Vendor cash discount</strong></td>
+                      <td>Default account for cash discounts TAKEN from vendors when invoices are paid early.</td>
+                      <td>Same fallback role as Customer cash discount but on the AP side. Real-world account resolution typically happens at the Cash discount code level.</td>
+                      <td>Vendor payment settlement that triggers a cash discount.</td>
+                      <td>Revenue / Other income (Purchase discounts taken) or contra-expense.</td>
+                      <td>Best practice: configure on each Cash discount code. Leave blank here or point to a generic &apos;Purchase Discounts&apos; income account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Vendor invoice discount</strong></td>
+                      <td>Default account for invoice-level discounts received from vendors.</td>
+                      <td>Used when a vendor invoice carries an invoice-total discount.</td>
+                      <td>Vendor invoices with an invoice discount.</td>
+                      <td>Revenue / Other income or contra-expense.</td>
+                      <td>Provide a &apos;Purchase Invoice Discounts&apos; account if the client receives invoice discounts. Otherwise leave blank.</td>
+                    </tr>                    <tr>
+                      <td><strong>Order, freight</strong></td>
+                      <td>Default freight charges account on sales or purchase orders when no specific charges-code account is configured.</td>
+                      <td>Fallback for the &apos;Order, freight&apos; posting type used in Charges codes. Most clients configure freight directly on each Charges code.</td>
+                      <td>Sales / purchase orders with a freight charge code.</td>
+                      <td>Revenue (customer freight income) or Expense (vendor freight cost).</td>
+                      <td>Best practice: configure the freight account on each Charges code (one for AR-side freight income, one for AP-side freight expense). Leave this field blank or point to a generic freight account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Order fee</strong></td>
+                      <td>Default order-fee account when no specific charges-code account is configured.</td>
+                      <td>Fallback for the &apos;Fee&apos; posting type on Charges codes (e.g., handling fees, surcharges).</td>
+                      <td>Sales / purchase orders with an order-fee charges code.</td>
+                      <td>Revenue (customer fees) or Expense (vendor fees).</td>
+                      <td>Same approach as Order freight configure on Charges codes. Leave blank or point to a generic fee account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Order invoice rounding</strong></td>
+                      <td>Account that captures rounding differences applied to sales-order invoices when the invoice is rounded (e.g., to the nearest 0.05).</td>
+                      <td>Posted only when AR invoice rounding is activated and produces a non-zero rounding adjustment line.</td>
+                      <td>Sales order invoices when invoice rounding is configured (typically required in some countries: CHF, SEK, etc.).</td>
+                      <td>Revenue / Expense Rounding (P&amp;L).</td>
+                      <td>Required only if the client activates invoice rounding for AR (typical for countries that no longer use small coinage). Provide a &apos;Rounding AR&apos; P&amp;L account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Vendor invoice rounding-off</strong></td>
+                      <td>Account that captures rounding differences applied to vendor invoices when AP invoice rounding is enabled.</td>
+                      <td>Same mechanism as &apos;Order invoice rounding&apos; but for AP.</td>
+                      <td>Vendor invoices when AP invoice rounding is configured.</td>
+                      <td>Revenue / Expense Rounding (P&amp;L).</td>
+                      <td>Required only if AP invoice rounding is used. Provide a &apos;Rounding AP&apos; P&amp;L account (can be the same as Order invoice rounding).</td>
+                    </tr>                    <tr>
+                      <td><strong>Purchase, fixed receipt price profit</strong></td>
+                      <td>Variance account used when an item uses Fixed Receipt Price costing and the invoiced price is LOWER than the configured cost price (favorable variance).</td>
+                      <td>When AP invoices a PO for an item with Fixed Receipt Price set, any difference between the cost price and the invoiced price goes to a profit (favorable) or loss (unfavorable) account. THIS field captures the absolute fallback profit account when not conf</td>
+                      <td>Vendor invoice posting against a PO for items with the Fixed receipt price item-model-group option enabled.</td>
+                      <td>Expense / Revenue Purchase Price Variance (P&amp;L).</td>
+                      <td>Best practice: configure profit &amp; loss variance accounts on the INVENTORY posting profile (Inventory management &gt; Setup &gt; Posting &gt; Posting &gt; Purchase order tab) for the relevant item group. This automatic-transactions field can be left blank or used as a</td>
+                    </tr>                    <tr>
+                      <td><strong>Interunit debit</strong></td>
+                      <td>Auto-balancing debit account used when a journal does not balance at the level of the financial dimension that is configured as the &apos;Balancing financial dimension&apos; on the Ledger page.</td>
+                      <td>If a transaction would leave a financial dimension (e.g., Business Unit) out of balance, D365 automatically creates an additional balancing line using this account as the DEBIT side.</td>
+                      <td>Any cross-dimension journal where the balancing dimension is not equal on debit and credit (e.g., shared services postings, cross-BU allocations).</td>
+                      <td>Asset Interunit Receivable (Balance Sheet).</td>
+                      <td>Required if the client uses a balancing financial dimension (most multi-entity setups do). Provide an &apos;Interunit Receivable&apos; / &apos;Due From&apos; control account.</td>
+                    </tr>                    <tr>
+                      <td><strong>Interunit credit</strong></td>
+                      <td>Auto-balancing credit account, the companion to Interunit debit, used when the balancing financial dimension is out of balance on the credit side.</td>
+                      <td>Posted automatically by D365 to make the journal balance at the dimension level.</td>
+                      <td>Same scenarios as Interunit debit.</td>
+                      <td>Liability Interunit Payable (Balance Sheet).</td>
+                      <td>Required if a balancing financial dimension is used. Provide an &apos;Interunit Payable&apos; / &apos;Due To&apos; control account. The Interunit Debit and Interunit Credit balances should net to zero in consolidated reporting.</td>
+                    </tr>                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>        </div>
+      </article>
+
       <article class="item-pane" data-item-pane="acquire-to-dispose">
         <header class="item-pane__header">
           <span class="item-pane__eyebrow">Accounting · Acquire to dispose</span>
