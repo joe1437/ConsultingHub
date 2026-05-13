@@ -58,6 +58,7 @@
         <li><a href="#dmf">Data Management Framework</a></li>
         <li><a href="#power-platform">Power Platform</a></li>
         <li><a href="#electronic-reporting">Electronic reporting</a></li>
+        <li><a href="#synapse-link">Azure Synapse Link</a></li>
         <li><a href="#governance">Change governance</a></li>
       </ul>
     </aside>
@@ -67,90 +68,145 @@
       <section id="configure-vs-customize">
         <article class="article">
           <h2>Configure vs customize, the decision framework</h2>
-          <p class="article__meta">Method · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, the cost of customization (upgrades, regression risk, technical debt), how to lead clients toward standard processes, and the times when customization is genuinely the right answer.</p>
-          </article>
+          <p class="article__meta">Method · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> During the Fit/Gap analysis phase of the project, before a single line of code is written.</p>
+            <h3>The Cost of Customization</h3>
+            <p>Consultants must act as gatekeepers. Every customization introduces technical debt. Custom code requires ongoing maintenance, increases the risk of regression bugs during Microsoft's continuous One Version updates, and mandates the creation of automated RSAT test scripts. Customizations must be justified by a clear, measurable Return on Investment (ROI) or a strict legal requirement.</p>
+            <h3>Guiding the Client</h3>
+            <p>Clients often request customizations simply because they want the new ERP to work exactly like their legacy system. The consultant's job is to challenge this mindset. Always demonstrate the standard D365 process first. If the standard process achieves the business goal, even if it requires a few extra clicks, advocate for configuration over customization.</p>
+          </div>
         </article>
       </section>
 
       <section id="extensions">
         <article class="article">
           <h2>Extensions &amp; the X++ extension model</h2>
-          <p class="article__meta">Technical · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, extension models (over-layering vs extensions), the role of the developer, deployable packages, table extensions, form extensions, event handlers, and chains of command.</p>
-          </article>
+          <p class="article__meta">Technical · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> When standard configuration cannot meet a critical business requirement, and custom X++ code is necessary.</p>
+            <h3>The End of Overlayering</h3>
+            <p>In older versions of Dynamics AX, developers used "overlayering" to directly modify standard Microsoft source code. This is now completely blocked. Dynamics 365 Finance and Operations strictly enforces an Extensibility model. Standard code is locked, and developers must build extensions that hook into the standard processes without altering the base objects.</p>
+            <h3>Chain of Command (CoC) and Event Handlers</h3>
+            <p>To augment standard functionality, developers use the Chain of Command (CoC). This allows them to wrap standard methods, executing custom logic either before or after the standard code runs. Alternatively, they can subscribe to standard Events (like an "OnValidatingWrite" event on a table). Consultants must work closely with developers to ensure that the requested custom logic can actually be achieved using these supported extensibility points.</p>
+          </div>
         </article>
       </section>
 
       <section id="isv">
         <article class="article">
           <h2>ISV solutions</h2>
-          <p class="article__meta">Ecosystem · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, common ISVs you'll meet (DMS, EDI, tax, banking, document automation), how to evaluate one, deployment implications, and licensing patterns.</p>
-          </article>
+          <p class="article__meta">Ecosystem · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> When the client requires deep, specialized industry functionality that is commoditized in the market (such as EDI, Advanced Tax Calculation, or AP OCR Automation) and building it from scratch would be prohibitively expensive.</p>
+            <h3>Evaluating ISVs</h3>
+            <p>Independent Software Vendors (ISVs) provide pre packaged solutions that bolt onto D365. Consultants must rigorously evaluate them.</p>
+            <ul>
+              <li><strong>AppSource Certification:</strong> Ensure the solution is certified on Microsoft AppSource.</li>
+              <li><strong>Technical Footprint:</strong> Request the ISV's technical documentation. Avoid ISVs that require highly intrusive core modifications, as they can cause severe performance issues and block future Microsoft updates.</li>
+              <li><strong>Licensing:</strong> Clarify the licensing model early. Is it a flat fee, or based on transaction volume? Does it require additional Azure consumption?</li>
+            </ul>
+          </div>
         </article>
       </section>
 
       <section id="integration-patterns">
         <article class="article">
           <h2>Integration patterns</h2>
-          <p class="article__meta">Technical · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, synchronous (OData, custom services) vs asynchronous (DMF, recurring integration, Service Bus), batch vs real-time, error handling, idempotency, and the consultant's role in defining the integration spec.</p>
-          </article>
+          <p class="article__meta">Technical · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> When connecting D365 F&amp;O to external systems like a third party Warehouse Management System (WMS), a CRM, or a Manufacturing Execution System (MES).</p>
+            <h3>Choosing the Right Pattern</h3>
+            <p>The biggest integration mistake is using a synchronous pattern for an asynchronous problem.</p>
+            <ul>
+              <li><strong>OData and Custom Services:</strong> Use for low volume, synchronous integrations where the external system needs a real time response (like querying an inventory balance). Do not use OData for importing thousands of orders, as it will crush system performance.</li>
+              <li><strong>Recurring Integrations and Data Management:</strong> Use for high volume, asynchronous file based integrations (like a nightly import of hundreds of journal entries).</li>
+              <li><strong>Business Events:</strong> Use when D365 needs to push a lightweight notification to an external system (like triggering a Logic App the moment a Purchase Order is approved).</li>
+            </ul>
+          </div>
         </article>
       </section>
 
       <section id="dual-write">
         <article class="article">
           <h2>Dual-write &amp; Dataverse</h2>
-          <p class="article__meta">Technical · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, what dual-write actually does, the entity maps, the sync direction, common failure modes, and how it ties F&amp;O to the rest of the Dynamics 365 family.</p>
-          </article>
+          <p class="article__meta">Technical · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> When integrating F&amp;O with Dynamics 365 Customer Engagement (Sales, Field Service) or building Power Platform apps.</p>
+            <h3>Dual-write</h3>
+            <p>Dual-write provides near real time, bidirectional synchronization. When a customer is created in F&amp;O, it is instantly written into the Dataverse database. Use this for core Master Data (Customers, Vendors, Products) where both systems require offline access to the physical data. Note that Dual-write duplicates data storage.</p>
+            <h3>Virtual Entities (Virtual Tables)</h3>
+            <p>Virtual Entities allow Dataverse to read and write directly to F&amp;O without copying the data. The data remains in the F&amp;O database, and Dataverse just acts as a real time window into it. Use this for transactional data (like Sales Orders or Invoices) to prevent massive data duplication while still allowing Power Apps to interact with the records.</p>
+          </div>
         </article>
       </section>
 
       <section id="dmf">
         <article class="article">
           <h2>Data Management Framework (DMF / DIXF)</h2>
-          <p class="article__meta">Technical · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, data entities, import/export projects, recurring data jobs, source mappings, error handling, and using DMF for go-live data migration.</p>
-          </article>
+          <p class="article__meta">Technical · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> For massive data migration during the go live phase, and for ongoing high volume asynchronous integrations.</p>
+            <h3>Data Entities</h3>
+            <p>The Data Management Framework (DMF) relies on Data Entities, which are denormalized views of complex F&amp;O table structures. Instead of importing into 5 separate customer tables, you import into one "Customers V3" entity, and the system handles the distribution.</p>
+            <h3>Import and Export Projects</h3>
+            <p>Consultants will spend significant time in the Data management workspace configuring Import and Export projects. You must map source files (like CSV or Excel) to the staging tables, define the execution sequence, and manage error handling. For integrations, these projects can be configured to run automatically as Recurring Data Jobs.</p>
+          </div>
         </article>
       </section>
 
       <section id="power-platform">
         <article class="article">
           <h2>Power Platform integration</h2>
-          <p class="article__meta">Technical · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, Power Automate flows over F&amp;O, Power Apps front-ends, the F&amp;O virtual entities in Dataverse, and where this should be used vs avoided.</p>
-          </article>
+          <p class="article__meta">Technical · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> To build rapid automations, custom approvals, or lightweight mobile apps without deploying custom X++ code.</p>
+            <h3>Power Automate</h3>
+            <p>Leverage the D365 F&amp;O connector in Power Automate. Consultants can build flows that listen for F&amp;O Business Events (like an invoice being posted) and automatically route notifications through Microsoft Teams or Outlook. This is much faster and cheaper than writing custom X++ workflow alerts.</p>
+            <h3>Power Apps</h3>
+            <p>If warehouse workers need a simple mobile app to scan barcodes, do not build a custom F&amp;O form. Build a Canvas Power App that connects to F&amp;O via Virtual Entities, providing a tailored, low code user interface that communicates with the ERP in real time.</p>
+          </div>
         </article>
       </section>
 
       <section id="electronic-reporting">
         <article class="article">
           <h2>Electronic reporting (ER) &amp; e-invoicing</h2>
-          <p class="article__meta">Technical · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, ER configuration model, format vs model, country-specific e-invoicing scenarios, and how to extend a delivered configuration.</p>
-          </article>
+          <p class="article__meta">Technical · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> To modify outbound documents (like Customer Invoices or checks) or generate statutory tax files without requiring a developer.</p>
+            <h3>The ER Framework</h3>
+            <p>Electronic Reporting (ER) separates the Data Model (what data is available) from the Format (how it looks). Consultants can use the ER designer to map fields to XML, CSV, or Excel formats. This is heavily utilized for government mandated electronic invoicing (such as PEPPOL formats in Europe). You can derive standard Microsoft formats and extend them to include custom fields without touching code.</p>
+          </div>
+        </article>
+      </section>
+
+      
+      <section id="synapse-link">
+        <article class="article">
+          <h2>Data export &amp; Azure Synapse Link</h2>
+          <p class="article__meta">Technical · Last updated 13-05-2026</p>
+          <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> When the client needs to export massive amounts of ERP data for enterprise data warehousing, Power BI analytics, or machine learning pipelines.</p>
+            <h3>The Death of BYOD</h3>
+            <p>Historically, clients used the "Bring Your Own Database" (BYOD) feature to push data to an Azure SQL DB. Microsoft is aggressively deprecating this, along with the "Export to Data Lake" feature.</p>
+            <h3>Azure Synapse Link for Dataverse</h3>
+            <p>The modern architectural standard is Azure Synapse Link. By linking the F&amp;O environment to Dataverse, consultants can configure the system to continuously push table data into an Azure Data Lake Storage Gen2 account in Delta Lake or Parquet format. This provides high performance, cost effective storage that integrates directly with Azure Synapse Analytics and Microsoft Fabric for enterprise reporting, completely bypassing the ERP database to prevent performance degradation.</p>
+          </div>
         </article>
       </section>
 
       <section id="governance">
         <article class="article">
           <h2>Change governance</h2>
-          <p class="article__meta">Method · Last updated -</p>
-          <article class="article article--placeholder" style="margin: 0;">
-            <p>Add content here, change request templates, impact assessment, the role of architecture review, and how to keep customizations from accumulating into unmanageable debt.</p>
-          </article>
+          <p class="article__meta">Method · Last updated 13-05-2026</p>
+                    <div class="article__content" style="margin: 0;">
+            <p><strong>When to use it:</strong> Continuously throughout the build, test, and deploy phases of an implementation.</p>
+            <h3>Application Lifecycle Management (ALM)</h3>
+            <p>Customizations must be strictly managed using Azure DevOps. Developers check their X++ code into version control. Automated build pipelines compile the code and generate a Deployable Package. This package is then uploaded to Lifecycle Services (LCS) and pushed to the UAT Sandbox for testing.</p>
+            <h3>Strict Governance</h3>
+            <p>Never bypass the process. Ensure that every customization is linked to an approved Azure DevOps work item. Enforce mandatory code reviews. If governance slips, technical debt accumulates rapidly, and the client will face severe instability during the next mandatory Microsoft service update.</p>
+          </div>
         </article>
       </section>
 
