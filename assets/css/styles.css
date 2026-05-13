@@ -1353,3 +1353,44 @@ button:active, .btn:active { transform: translateY(1px); }
     transform: none !important;
   }
 }
+
+/* =========================================================
+   Alert Banner
+   ========================================================= */
+.alert-banner {
+  background-color: var(--color-warning);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  text-align: center;
+}
+
+.alert-banner__text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* On mobile screens, convert to scrolling marquee */
+@media (max-width: 768px) {
+  .alert-banner {
+    padding: 0.5rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  .alert-banner__text {
+    padding-left: 100%;
+    animation: marquee 15s linear infinite;
+  }
+
+  .alert-banner:hover .alert-banner__text {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+  }
+}
