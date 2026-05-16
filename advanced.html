@@ -3,241 +3,268 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Advanced Features, D365 F&amp;O Consulting Hub</title>
+<title>Advanced Features · D365 F&amp;O Consulting Hub</title>
+<meta name="description" content="Financial dimensions, multi-entity, intercompany, security depth — the topics that quietly make or break large implementations." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme', 'dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/redesign.css" />
+<link rel="stylesheet" href="assets/css/hub.css" />
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container site-header__inner">
-    <a href="index.html" class="site-header__brand">
-      <span class="site-header__brand-mark">D</span>
-      <span>D365 F&amp;O Consulting Hub</span>
+<!-- ── Header ── -->
+<header class="rd-header">
+  <div class="rd-header__inner">
+    <a href="index.html" class="rd-header__brand">
+      <span class="rd-header__mark">
+        <svg width="15" height="15" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <path d="M 9 8 L 9 28"  stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <path d="M 27 8 L 27 28" stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <line x1="6" y1="18" x2="30" y2="18" stroke="#C29036" stroke-width="1.6"/>
+        </svg>
+      </span>
+      <span class="rd-header__name">Joe El <em>Hajj</em></span>
     </a>
-    <nav class="site-nav" aria-label="Primary">
-      <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
-      <ul class="site-nav__list" id="primaryNav">
-        <li><a class="site-nav__link" href="consulting.html">Consulting</a></li>
-        <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
-        <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
-        <li><a class="site-nav__link" href="modules.html">Modules</a></li>
-        <li><a class="site-nav__link" href="accounting.html">Accounting</a></li>
-        <li><a class="site-nav__link" href="ai.html">AI</a></li>
-        <li><a class="site-nav__link" href="customizations.html">Customizations</a></li>
-        <li><a class="site-nav__link is-active" href="advanced.html">Advanced</a></li>
+    <nav aria-label="Primary">
+      <ul class="rd-header__nav">
+        <li class="rd-nav-dropdown">
+          <button class="rd-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">
+            The Hub <span class="rd-nav-dropdown__caret">▾</span>
+          </button>
+          <div class="rd-nav-dropdown__menu" role="menu">
+            <a href="consulting.html" class="rd-nav-dropdown__link">Overview</a>
+            <div class="rd-nav-dropdown__divider"></div>
+            <a href="lifecycle.html" class="rd-nav-dropdown__link">ERP Lifecycle</a>
+            <a href="modules.html" class="rd-nav-dropdown__link">Modules</a>
+            <a href="business-processes.html" class="rd-nav-dropdown__link">Business Processes</a>
+            <a href="accounting.html" class="rd-nav-dropdown__link">Accounting</a>
+            <a href="ai.html" class="rd-nav-dropdown__link">AI in D365</a>
+            <a href="customizations.html" class="rd-nav-dropdown__link">Customizations &amp; Integrations</a>
+            <a href="advanced.html" class="rd-nav-dropdown__link is-active">Advanced Features</a>
+          </div>
+        </li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
       </ul>
     </nav>
+    <a href="mailto:Joe1437@outlook.com" class="rd-header__cta">Book a call →</a>
   </div>
 </header>
 
-<section class="page-header">
-  <div class="container">
-    <span class="page-header__eyebrow">08 · Going deeper</span>
-    <h1 class="page-header__title">Advanced features</h1>
-    <p class="page-header__lead">
-      The features that separate a competent consultant from a senior one, financial dimensions, multi-entity, intercompany, security depth, and the topics that quietly make or break large implementations.
-    </p>
+<!-- ── Page hero ── -->
+<section class="hub-hero">
+  <div class="hub-hero__inner">
+    <div class="rd-rise">
+      <span class="hub-hero__eyebrow">08 · Going deeper</span>
+      <h1 class="hub-hero__title">Advanced features</h1>
+      <p class="hub-hero__lead">The features that separate a competent consultant from a senior one — financial dimensions, multi-entity, intercompany, security depth, and the topics that quietly make or break large implementations.</p>
+    </div>
   </div>
 </section>
 
-<div class="container">
-  <div class="article-page">
+<!-- ── Content ── -->
+<div class="article-page">
 
-    <aside class="article-page__toc" aria-label="On this page">
-      <p class="article-page__toc-title">On this page</p>
-      <ul>
-        <li><a href="#advanced-bank-reconciliation">Advanced bank reconciliation</a></li>
-        <li><a href="#multi-entity">Multi-entity &amp; multi-currency</a></li>
-        <li><a href="#intercompany">Intercompany</a></li>
-        <li><a href="#consolidation">Consolidation</a></li>
-        <li><a href="#security">Security model in depth</a></li>
-        <li><a href="#workflows">Workflow design</a></li>
-        <li><a href="#localizations">Localizations</a></li>
-        <li><a href="#performance">Performance &amp; scale</a></li>
-        <li><a href="#release-management">Release management</a></li>
-      </ul>
-    </aside>
+  <aside class="article-page__toc" aria-label="On this page">
+    <p class="article-page__toc-title">On this page</p>
+    <ul>
+      <li><a href="#advanced-bank-reconciliation">Advanced bank reconciliation</a></li>
+      <li><a href="#multi-entity">Multi-entity &amp; multi-currency</a></li>
+      <li><a href="#intercompany">Intercompany</a></li>
+      <li><a href="#consolidation">Consolidation</a></li>
+      <li><a href="#security">Security model in depth</a></li>
+      <li><a href="#workflows">Workflow design</a></li>
+      <li><a href="#localizations">Localizations</a></li>
+      <li><a href="#performance">Performance &amp; scale</a></li>
+      <li><a href="#release-management">Release management</a></li>
+    </ul>
+  </aside>
 
-    <main class="article-page__main">
+  <main class="article-page__main">
 
-      <section id="advanced-bank-reconciliation">
-        <article class="article">
-          <h2>Advanced bank reconciliation</h2>
-          <p class="article__meta">Foundations · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> Implement Advanced Bank Reconciliation (ABR) when a client processes a high volume of daily bank transactions and manual tick mark reconciliation is no longer sustainable.</p>
-            <h3>Technical Setup</h3>
-            <p>Dynamics 365 supports industry standard banking formats out of the box. You must first acquire the correct format from the client's bank (like BAI2, MT940, or CAMT.053).</p>
-            <ul>
-              <li>Navigate to the Electronic Reporting workspace and import the required format configurations from the Microsoft global repository.</li>
-              <li>Go to <strong>Cash and bank management > Setup > Advanced bank reconciliation setup > Bank statement format</strong> and map your imported ER format to a processing group.</li>
-            </ul>
-            <h3>Functional Setup</h3>
-            <p>The core of ABR is the matching engine. You must define exactly how the system identifies a match between the bank file and the ERP ledger.</p>
-            <ul>
-              <li><strong>Matching Rules:</strong> Define the granular logic. For example, a rule might state that the bank transaction date must match the ERP transaction date exactly, and the amount must match exactly.</li>
-              <li><strong>Matching Rule Sets:</strong> Group your rules sequentially. Best practice dictates running highly specific rules first (like matching by exact check number) and broad rules last (like matching by amount within a 3 day window).</li>
-            </ul>
-            <h3>Execution</h3>
-            <p>To enable ABR for a specific bank account, navigate to the Bank accounts form and toggle <em>Advanced bank reconciliation</em> to Yes. Once enabled, you cannot revert to manual reconciliation for that account. During testing, keep "Reconcile after import" turned off. Once you validate that your rules catch 90 percent of transactions, turn it on to fully automate the daily reconciliation process.</p>
-          </div>
-        </article>
-      </section>
+    <section id="advanced-bank-reconciliation">
+      <article class="article rd-rise">
+        <h2>Advanced bank reconciliation</h2>
+        <span class="article__meta">Foundations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> Implement Advanced Bank Reconciliation (ABR) when a client processes a high volume of daily bank transactions and manual tick-mark reconciliation is no longer sustainable.</p>
+          <h3>Technical Setup</h3>
+          <p>Dynamics 365 supports industry-standard banking formats out of the box. You must first acquire the correct format from the client's bank (like BAI2, MT940, or CAMT.053).</p>
+          <ul>
+            <li>Navigate to the Electronic Reporting workspace and import the required format configurations from the Microsoft global repository.</li>
+            <li>Go to <strong>Cash and bank management &gt; Setup &gt; Advanced bank reconciliation setup &gt; Bank statement format</strong> and map your imported ER format to a processing group.</li>
+          </ul>
+          <h3>Functional Setup</h3>
+          <p>The core of ABR is the matching engine. You must define exactly how the system identifies a match between the bank file and the ERP ledger.</p>
+          <ul>
+            <li><strong>Matching Rules:</strong> Define the granular logic. For example, a rule might state that the bank transaction date must match the ERP transaction date exactly, and the amount must match exactly.</li>
+            <li><strong>Matching Rule Sets:</strong> Group your rules sequentially. Best practice dictates running highly specific rules first (like matching by exact check number) and broad rules last (like matching by amount within a 3-day window).</li>
+          </ul>
+          <h3>Execution</h3>
+          <p>To enable ABR for a specific bank account, navigate to the Bank accounts form and toggle <em>Advanced bank reconciliation</em> to Yes. Once enabled, you cannot revert to manual reconciliation for that account. During testing, keep "Reconcile after import" turned off. Once you validate that your rules catch 90 percent of transactions, turn it on to fully automate the daily reconciliation process.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="multi-entity">
-        <article class="article">
-          <h2>Multi-entity &amp; multi-currency</h2>
-          <p class="article__meta">Foundations · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> Required for global organizations operating across multiple tax jurisdictions, or shared service centers managing payables across subsidiaries.</p>
-            <h3>Legal Entity Strategy</h3>
-            <p>The first architectural decision is whether to split operations into multiple legal entities or use a single entity with financial dimensions. Use multiple legal entities when statutory reporting and tax ID requirements mandate hard data isolation. Use a single entity with a "Location" dimension if the operations share the same tax ID and statutory reporting boundary.</p>
-            <h3>Currency Setup</h3>
-            <p>Dynamics 365 tracks multiple currency layers for every transaction.</p>
-            <ul>
-              <li><strong>Accounting Currency:</strong> The functional currency used for local statutory reporting.</li>
-              <li><strong>Reporting Currency:</strong> The secondary currency used for corporate rollups.</li>
-            </ul>
-            <p>Configure automated exchange rate providers (like OANDA or Central Bank integrations) in the General Ledger setup to pull daily spot rates, eliminating manual data entry.</p>
-            <h3>Operations and Month End</h3>
-            <p>Configure Foreign Currency Revaluation (FX Reval) logic. At month end, consultants must ensure the system revalues open AP and AR invoices against the current exchange rate, posting unrealized gains or losses automatically.</p>
-          </div>
-        </article>
-      </section>
+    <section id="multi-entity">
+      <article class="article rd-rise">
+        <h2>Multi-entity &amp; multi-currency</h2>
+        <span class="article__meta">Foundations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> Required for global organizations operating across multiple tax jurisdictions, or shared service centers managing payables across subsidiaries.</p>
+          <h3>Legal Entity Strategy</h3>
+          <p>The first architectural decision is whether to split operations into multiple legal entities or use a single entity with financial dimensions. Use multiple legal entities when statutory reporting and tax ID requirements mandate hard data isolation. Use a single entity with a "Location" dimension if the operations share the same tax ID and statutory reporting boundary.</p>
+          <h3>Currency Setup</h3>
+          <p>Dynamics 365 tracks multiple currency layers for every transaction.</p>
+          <ul>
+            <li><strong>Accounting Currency:</strong> The functional currency used for local statutory reporting.</li>
+            <li><strong>Reporting Currency:</strong> The secondary currency used for corporate rollups.</li>
+          </ul>
+          <p>Configure automated exchange rate providers (like OANDA or Central Bank integrations) in the General Ledger setup to pull daily spot rates, eliminating manual data entry.</p>
+          <h3>Operations and Month End</h3>
+          <p>Configure Foreign Currency Revaluation (FX Reval) logic. At month end, consultants must ensure the system revalues open AP and AR invoices against the current exchange rate, posting unrealized gains or losses automatically.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="intercompany">
-        <article class="article">
-          <h2>Intercompany</h2>
-          <p class="article__meta">Cross-cutting · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> When distinct legal entities within the same Microsoft tenant buy and sell to each other, or allocate shared expenses.</p>
-            <h3>Ledger Setup</h3>
-            <p>To ensure clean consolidations, you must define unique "Due to" (Liability) and "Due from" (Asset) main accounts for each legal entity. Never use a single shared intercompany account, as it will cause a nightmare during the month end elimination process.</p>
-            <h3>Configuration Steps</h3>
-            <p>Navigate to <strong>General ledger > Setup > Intercompany accounting</strong>. You must create an origin and destination pairing.</p>
-            <ul>
-              <li>Select the originating company and destination company.</li>
-              <li>Define the debit and credit accounts.</li>
-              <li><strong>Consultant tip:</strong> Always use the "Create reciprocal relationship" button. This automatically generates the reverse configuration in the counterpart company, preventing manual typos.</li>
-            </ul>
-            <h3>Trade Setup</h3>
-            <p>If the entities trade physical goods, you must set up intercompany customers and vendors. In the selling entity, create a customer record and toggle the Intercompany active flag. Link it directly to the corresponding vendor record in the purchasing entity. Define your auto invoicing policies so that when the selling entity ships the goods, the purchasing entity automatically receives the vendor invoice.</p>
-          </div>
-        </article>
-      </section>
+    <section id="intercompany">
+      <article class="article rd-rise">
+        <h2>Intercompany</h2>
+        <span class="article__meta">Cross-cutting · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> When distinct legal entities within the same Microsoft tenant buy and sell to each other, or allocate shared expenses.</p>
+          <h3>Ledger Setup</h3>
+          <p>To ensure clean consolidations, you must define unique "Due to" (Liability) and "Due from" (Asset) main accounts for each legal entity. Never use a single shared intercompany account, as it will cause a nightmare during the month-end elimination process.</p>
+          <h3>Configuration Steps</h3>
+          <p>Navigate to <strong>General ledger &gt; Setup &gt; Intercompany accounting</strong>. You must create an origin and destination pairing.</p>
+          <ul>
+            <li>Select the originating company and destination company.</li>
+            <li>Define the debit and credit accounts.</li>
+            <li><strong>Consultant tip:</strong> Always use the "Create reciprocal relationship" button. This automatically generates the reverse configuration in the counterpart company, preventing manual typos.</li>
+          </ul>
+          <h3>Trade Setup</h3>
+          <p>If the entities trade physical goods, you must set up intercompany customers and vendors. In the selling entity, create a customer record and toggle the Intercompany active flag. Link it directly to the corresponding vendor record in the purchasing entity. Define your auto invoicing policies so that when the selling entity ships the goods, the purchasing entity automatically receives the vendor invoice.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="consolidation">
-        <article class="article">
-          <h2>Consolidation</h2>
-          <p class="article__meta">Cross-cutting · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> At month end or year end when the parent company needs to generate aggregated financial statements across all global subsidiaries.</p>
-            <h3>Methodology Choice</h3>
-            <p>Dynamics 365 offers two main approaches to consolidation.</p>
-            <ul>
-              <li><strong>Consolidate Online:</strong> A "hard" consolidation where subsidiary balances are physically copied into a dedicated Consolidation legal entity. Use this when you need a rigid, auditable ledger of the consolidated numbers or complex tiered currency translations.</li>
-              <li><strong>Financial Reporting:</strong> A "soft" consolidation managed entirely within Management Reporter. Use this when the subsidiaries share the same chart of accounts and you want real time aggregated reporting without creating dummy ledger entries.</li>
-            </ul>
-            <h3>Eliminations</h3>
-            <p>You cannot count intercompany revenue twice. You must configure Elimination Rules to reverse the "Due to" and "Due from" balances. It is best practice to post these eliminations into a separate "Elimination Entity" rather than muddying the parent company ledger.</p>
-          </div>
-        </article>
-      </section>
+    <section id="consolidation">
+      <article class="article rd-rise">
+        <h2>Consolidation</h2>
+        <span class="article__meta">Cross-cutting · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> At month end or year end when the parent company needs to generate aggregated financial statements across all global subsidiaries.</p>
+          <h3>Methodology Choice</h3>
+          <p>Dynamics 365 offers two main approaches to consolidation.</p>
+          <ul>
+            <li><strong>Consolidate Online:</strong> A "hard" consolidation where subsidiary balances are physically copied into a dedicated Consolidation legal entity. Use this when you need a rigid, auditable ledger of the consolidated numbers or complex tiered currency translations.</li>
+            <li><strong>Financial Reporting:</strong> A "soft" consolidation managed entirely within Management Reporter. Use this when the subsidiaries share the same chart of accounts and you want real-time aggregated reporting without creating dummy ledger entries.</li>
+          </ul>
+          <h3>Eliminations</h3>
+          <p>You cannot count intercompany revenue twice. You must configure Elimination Rules to reverse the "Due to" and "Due from" balances. It is best practice to post these eliminations into a separate "Elimination Entity" rather than muddying the parent company ledger.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="security">
-        <article class="article">
-          <h2>Security model in depth</h2>
-          <p class="article__meta">Operations · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> Mandatory during every implementation to ensure strict segregation of duties and pass external IT audits.</p>
-            <h3>The Security Hierarchy</h3>
-            <p>Do not assign users directly to granular permissions. D365 uses a strict hierarchy.</p>
-            <ul>
-              <li><strong>Roles:</strong> Assigned to the user (like Accounts Payable Clerk).</li>
-              <li><strong>Duties:</strong> Assigned to Roles (like Maintain vendor invoices).</li>
-              <li><strong>Privileges:</strong> Assigned to Duties (like the specific technical permission to open the invoice form and click Save).</li>
-            </ul>
-            <h3>Extensible Data Security (XDS)</h3>
-            <p>Standard security restricts access to menus and forms. XDS restricts access to actual rows of data. Use XDS when a manager should only see the sales orders for their specific region. This applies filtering at the database level, meaning the user cannot bypass it via Excel add ins or custom reports.</p>
-            <h3>Segregation of Duties</h3>
-            <p>Navigate to the System Administration workspace and configure Segregation of Duties rules. Define conflicts, such as stating that a user who has the duty to "Maintain Vendors" cannot also have the duty to "Pay Vendors". The system will automatically block administrators from assigning both roles to a single employee, preventing fraud.</p>
-          </div>
-        </article>
-      </section>
+    <section id="security">
+      <article class="article rd-rise">
+        <h2>Security model in depth</h2>
+        <span class="article__meta">Operations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> Mandatory during every implementation to ensure strict segregation of duties and pass external IT audits.</p>
+          <h3>The Security Hierarchy</h3>
+          <p>Do not assign users directly to granular permissions. D365 uses a strict hierarchy.</p>
+          <ul>
+            <li><strong>Roles:</strong> Assigned to the user (like Accounts Payable Clerk).</li>
+            <li><strong>Duties:</strong> Assigned to Roles (like Maintain vendor invoices).</li>
+            <li><strong>Privileges:</strong> Assigned to Duties (like the specific technical permission to open the invoice form and click Save).</li>
+          </ul>
+          <h3>Extensible Data Security (XDS)</h3>
+          <p>Standard security restricts access to menus and forms. XDS restricts access to actual rows of data. Use XDS when a manager should only see the sales orders for their specific region. This applies filtering at the database level, meaning the user cannot bypass it via Excel add-ins or custom reports.</p>
+          <h3>Segregation of Duties</h3>
+          <p>Navigate to the System Administration workspace and configure Segregation of Duties rules. Define conflicts, such as stating that a user who has the duty to "Maintain Vendors" cannot also have the duty to "Pay Vendors". The system will automatically block administrators from assigning both roles to a single employee, preventing fraud.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="workflows">
-        <article class="article">
-          <h2>Workflow design</h2>
-          <p class="article__meta">Configuration · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> To enforce strict business process approvals, such as requiring a manager to sign off on a Purchase Requisition before a Purchase Order is generated.</p>
-            <h3>Architecture</h3>
-            <p>Use the Workflow editor to design the routing logic. You can build serial approvals (Person A then Person B) or parallel approvals (Person A and Person B must both approve simultaneously). Build conditional branching to auto approve low value requests.</p>
-            <h3>Position Based Routing</h3>
-            <p>A critical consultant best practice is to route workflows to Job Positions rather than specific User IDs. If you route an approval to "John Doe", the workflow breaks the day John resigns. If you route it to the "VP of Finance" position, the system automatically routes the approval to whoever is assigned that position in the HR module today.</p>
-            <h3>Troubleshooting</h3>
-            <p>If workflows stall, check the batch framework. Workflows rely on a background batch job to process messages. If the batch job fails, all approvals stop. Always ensure the workflow batch group is assigned to a dedicated, healthy batch server.</p>
-          </div>
-        </article>
-      </section>
+    <section id="workflows">
+      <article class="article rd-rise">
+        <h2>Workflow design</h2>
+        <span class="article__meta">Configuration · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> To enforce strict business process approvals, such as requiring a manager to sign off on a Purchase Requisition before a Purchase Order is generated.</p>
+          <h3>Architecture</h3>
+          <p>Use the Workflow editor to design the routing logic. You can build serial approvals (Person A then Person B) or parallel approvals (Person A and Person B must both approve simultaneously). Build conditional branching to auto-approve low-value requests.</p>
+          <h3>Position Based Routing</h3>
+          <p>A critical consultant best practice is to route workflows to Job Positions rather than specific User IDs. If you route an approval to "John Doe", the workflow breaks the day John resigns. If you route it to the "VP of Finance" position, the system automatically routes the approval to whoever is assigned that position in the HR module today.</p>
+          <h3>Troubleshooting</h3>
+          <p>If workflows stall, check the batch framework. Workflows rely on a background batch job to process messages. If the batch job fails, all approvals stop. Always ensure the workflow batch group is assigned to a dedicated, healthy batch server.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="localizations">
-        <article class="article">
-          <h2>Localizations</h2>
-          <p class="article__meta">Regional · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> When deploying the ERP in countries with complex, government mandated statutory reporting or electronic invoicing requirements.</p>
-            <h3>Electronic Invoicing and Reporting</h3>
-            <p>Many countries (like Italy, Brazil, and India) require businesses to send digital XML invoices directly to the government tax authority for real time validation. Dynamics 365 handles this via the Electronic Reporting (ER) framework. Consultants must download the specific country configurations from Microsoft Lifecycle Services.</p>
-            <h3>Global Strategy</h3>
-            <p>When rolling out D365 globally, use a "Global Template" approach. Build the core chart of accounts and supply chain processes to be identical across all countries. Then, enable the specific localizations only for the legal entities operating in those countries. This ensures corporate reporting remains standardized while local accountants stay legally compliant.</p>
-          </div>
-        </article>
-      </section>
+    <section id="localizations">
+      <article class="article rd-rise">
+        <h2>Localizations</h2>
+        <span class="article__meta">Regional · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> When deploying the ERP in countries with complex, government-mandated statutory reporting or electronic invoicing requirements.</p>
+          <h3>Electronic Invoicing and Reporting</h3>
+          <p>Many countries (like Italy, Brazil, and India) require businesses to send digital XML invoices directly to the government tax authority for real-time validation. Dynamics 365 handles this via the Electronic Reporting (ER) framework. Consultants must download the specific country configurations from Microsoft Lifecycle Services.</p>
+          <h3>Global Strategy</h3>
+          <p>When rolling out D365 globally, use a "Global Template" approach. Build the core chart of accounts and supply chain processes to be identical across all countries. Then, enable the specific localizations only for the legal entities operating in those countries. This ensures corporate reporting remains standardized while local accountants stay legally compliant.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="performance">
-        <article class="article">
-          <h2>Performance &amp; scale</h2>
-          <p class="article__meta">Operations · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> Throughout the testing phases (especially UAT) and when preparing the architecture for a high volume go live.</p>
-            <h3>Batch Design</h3>
-            <p>Performance degradation is rarely a system fault, it is usually a scheduling fault. Never schedule heavy batch jobs (like inventory closing or MRP) during peak user hours. Architect batch groups to run overnight, and dedicate specific server nodes to handle heavy integrations so they do not steal CPU from end users typing in sales orders.</p>
-            <h3>Master Planning</h3>
-            <p>Master Planning (MRP) is the heaviest process in D365. Consultants must migrate clients to the Planning Optimization Add in, which offloads the heavy MRP calculations from the D365 SQL database into a dedicated microservice, reducing runtimes from hours to minutes.</p>
-            <h3>Data Management</h3>
-            <p>Establish a rigorous cleanup strategy. Enable the built in cleanup batch jobs for database logs, staging tables, and batch history. If staging tables are left unchecked, they will bloat the database and severely impact read/write performance.</p>
-          </div>
-        </article>
-      </section>
+    <section id="performance">
+      <article class="article rd-rise">
+        <h2>Performance &amp; scale</h2>
+        <span class="article__meta">Operations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> Throughout the testing phases (especially UAT) and when preparing the architecture for a high-volume go-live.</p>
+          <h3>Batch Design</h3>
+          <p>Performance degradation is rarely a system fault — it is usually a scheduling fault. Never schedule heavy batch jobs (like inventory closing or MRP) during peak user hours. Architect batch groups to run overnight, and dedicate specific server nodes to handle heavy integrations so they do not steal CPU from end users typing in sales orders.</p>
+          <h3>Master Planning</h3>
+          <p>Master Planning (MRP) is the heaviest process in D365. Consultants must migrate clients to the Planning Optimization Add-in, which offloads the heavy MRP calculations from the D365 SQL database into a dedicated microservice, reducing runtimes from hours to minutes.</p>
+          <h3>Data Management</h3>
+          <p>Establish a rigorous cleanup strategy. Enable the built-in cleanup batch jobs for database logs, staging tables, and batch history. If staging tables are left unchecked, they will bloat the database and severely impact read/write performance.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="release-management">
-        <article class="article">
-          <h2>Release management &amp; the One Version cadence</h2>
-          <p class="article__meta">Operations · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p><strong>When to use it:</strong> Every single month. Microsoft forces continuous updates to the cloud environment, and consultants must manage the testing lifecycle.</p>
-            <h3>The Cadence</h3>
-            <p>Microsoft releases four major service updates a year. Clients must take at least two of them. You can pause an update, but you cannot pause two consecutive updates. Proactive Quality Updates (PQUs) are released monthly for security and cannot be paused.</p>
-            <h3>Regression Suite Automation Tool (RSAT)</h3>
-            <p>Because the system changes constantly, manual testing is impossible. Consultants must implement RSAT. RSAT allows you to record a task (like creating a sales order) and play it back automatically against the new Microsoft release. If the update breaks the sales order process, RSAT flags it immediately.</p>
-            <h3>Environment Strategy</h3>
-            <p>Never apply an update directly to Production. Always apply the Microsoft service update to a Tier 2 Sandbox environment first. Run your RSAT suite, validate your ISV integrations, and obtain formal sign off from the business owners before scheduling the Production update window.</p>
-          </div>
-        </article>
-      </section>
+    <section id="release-management">
+      <article class="article rd-rise">
+        <h2>Release management &amp; the One Version cadence</h2>
+        <span class="article__meta">Operations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p><strong>When to use it:</strong> Every single month. Microsoft forces continuous updates to the cloud environment, and consultants must manage the testing lifecycle.</p>
+          <h3>The Cadence</h3>
+          <p>Microsoft releases four major service updates a year. Clients must take at least two of them. You can pause an update, but you cannot pause two consecutive updates. Proactive Quality Updates (PQUs) are released monthly for security and cannot be paused.</p>
+          <h3>Regression Suite Automation Tool (RSAT)</h3>
+          <p>Because the system changes constantly, manual testing is impossible. Consultants must implement RSAT. RSAT allows you to record a task (like creating a sales order) and play it back automatically against the new Microsoft release. If the update breaks the sales order process, RSAT flags it immediately.</p>
+          <h3>Environment Strategy</h3>
+          <p>Never apply an update directly to Production. Always apply the Microsoft service update to a Tier 2 Sandbox environment first. Run your RSAT suite, validate your ISV integrations, and obtain formal sign-off from the business owners before scheduling the Production update window.</p>
+        </div>
+      </article>
+    </section>
 
-    </main>
-  </div>
+  </main>
 </div>
 
-<footer class="site-footer" data-footer></footer>
+<!-- ── Footer ── -->
+<footer class="rd-footer">
+  <div>© 2026 · Joe El Hajj · Beirut</div>
+  <div class="rd-footer__links">
+    <a href="https://www.linkedin.com/in/joe-el-hajj-0b44b5222/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:Joe1437@outlook.com">Email</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
 
 <script src="assets/js/app.js"></script>
-<script src="assets/js/search.js"></script>
+<script src="assets/js/scroll.js"></script>
+<script src="assets/js/hub.js"></script>
 </body>
 </html>

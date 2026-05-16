@@ -1,0 +1,194 @@
+/* ============================================================
+   Redesign — design tokens & animation system
+   HomeA editorial direction: Instrument Serif × Inter Tight
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Serif:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Brand */
+  --rd-navy:       #0E1B33;
+  --rd-navy-700:   #15243F;
+  --rd-navy-500:   #2B3F66;
+  --rd-gold:       #C29036;
+  --rd-gold-hover: #A77A28;
+  --rd-clay:       #B5613E;
+
+  /* Surfaces */
+  --rd-cream:      #FAF8F4;
+  --rd-paper:      #FFFFFF;
+  --rd-stone-50:   #F1EEE8;
+  --rd-stone-100:  #E5E1D7;
+  --rd-line:       #E5E1D7;
+
+  /* Text */
+  --rd-ink:   #14151A;
+  --rd-ink-2: #3B3D45;
+  --rd-ink-3: #6B6E78;
+  --rd-ink-4: #9C9FA7;
+
+  /* Type */
+  --rd-serif-a: 'Instrument Serif', 'Times New Roman', serif;
+  --rd-sans-a:  'Inter Tight', 'Inter', system-ui, sans-serif;
+  --rd-serif-b: 'IBM Plex Serif', 'Times New Roman', serif;
+  --rd-mono:    'JetBrains Mono', monospace;
+
+  /* Motion */
+  --rd-ease-out:  cubic-bezier(0.22, 0.61, 0.36, 1);
+  --rd-ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --rd-fast:      180ms;
+  --rd-base:      320ms;
+  --rd-slow:      520ms;
+}
+
+/* ---- Scroll-reveal ---- */
+.rd-rise {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 720ms var(--rd-ease-snap), transform 720ms var(--rd-ease-snap);
+  will-change: opacity, transform;
+}
+.rd-rise.in { opacity: 1; transform: none; }
+
+.rd-fade { opacity: 0; transition: opacity 800ms var(--rd-ease-out); }
+.rd-fade.in { opacity: 1; }
+
+.rd-blur {
+  opacity: 0;
+  filter: blur(8px);
+  transition: opacity 720ms var(--rd-ease-snap), filter 720ms var(--rd-ease-snap);
+}
+.rd-blur.in { opacity: 1; filter: none; }
+
+.rd-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 620ms var(--rd-ease-snap), transform 620ms var(--rd-ease-snap);
+}
+.rd-stagger.in > * { opacity: 1; transform: none; }
+.rd-stagger.in > *:nth-child(1) { transition-delay:  60ms; }
+.rd-stagger.in > *:nth-child(2) { transition-delay: 140ms; }
+.rd-stagger.in > *:nth-child(3) { transition-delay: 220ms; }
+.rd-stagger.in > *:nth-child(4) { transition-delay: 300ms; }
+.rd-stagger.in > *:nth-child(5) { transition-delay: 380ms; }
+.rd-stagger.in > *:nth-child(6) { transition-delay: 460ms; }
+.rd-stagger.in > *:nth-child(7) { transition-delay: 540ms; }
+.rd-stagger.in > *:nth-child(8) { transition-delay: 620ms; }
+
+/* Parallax — driven by --scrollY on :root */
+.rd-parallax-slow { transform: translate3d(0, calc(var(--scrollY,0) * 0.15px), 0); will-change: transform; }
+.rd-parallax-up   { transform: translate3d(0, calc(var(--scrollY,0) * -0.10px), 0); will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rd-rise, .rd-fade, .rd-blur, .rd-stagger > * {
+    opacity: 1 !important; transform: none !important; filter: none !important;
+  }
+  [class*="rd-parallax-"] { transform: none !important; }
+}
+
+/* ---- Eyebrow / label ---- */
+.rd-eyebrow {
+  display: inline-block;
+  font-family: var(--rd-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rd-gold);
+  font-weight: 500;
+}
+
+/* ---- Pull quote ---- */
+.rd-pull {
+  font-family: var(--rd-serif-a);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.25;
+  color: var(--rd-navy);
+  border-left: 2px solid var(--rd-clay);
+  padding: 8px 0 8px 20px;
+}
+
+/* ---- Big number ---- */
+.rd-bignum {
+  font-family: var(--rd-serif-a);
+  font-size: 96px;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--rd-navy);
+  font-weight: 400;
+}
+
+/* ---- Audience selector ---- */
+.rd-audience {
+  display: inline-flex;
+  gap: 0;
+  background: var(--rd-paper);
+  border: 1px solid var(--rd-line);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+}
+.rd-audience button {
+  background: transparent;
+  border: 0;
+  color: var(--rd-ink-2);
+  padding: 10px 18px;
+  font-family: var(--rd-sans-a);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background var(--rd-fast), color var(--rd-fast);
+  white-space: nowrap;
+}
+.rd-audience button:hover { background: var(--rd-stone-50); }
+.rd-audience button.is-active {
+  background: var(--rd-gold);
+  color: var(--rd-navy);
+}
+
+/* ---- Chapter cards ---- */
+.rd-chapter {
+  display: block;
+  padding: 24px 28px;
+  background: #fff;
+  border: 1px solid var(--rd-line);
+  border-radius: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow 320ms var(--rd-ease-snap),
+              border-color 320ms var(--rd-ease-snap),
+              transform 320ms var(--rd-ease-snap);
+}
+.rd-chapter:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(14,27,51,0.10);
+  border-color: var(--rd-stone-100);
+}
+
+/* ---- Engagement cards ---- */
+.rd-engagement {
+  background: var(--rd-cream);
+  border: 1px solid var(--rd-line);
+  border-radius: 14px;
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-decoration: none;
+  transition: transform 300ms var(--rd-ease-snap), box-shadow 300ms var(--rd-ease-snap);
+  cursor: pointer;
+}
+.rd-engagement:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(14,27,51,0.08);
+}
+
+/* ---- Lifecycle puck animation ---- */
+@keyframes lifecycle-pulse {
+  0%, 100% { r: 5; }
+  50% { r: 7; }
+}
+@keyframes orbit-cw  { to { transform: rotate(360deg);  } }
+@keyframes orbit-ccw { to { transform: rotate(-360deg); } }

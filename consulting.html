@@ -3,185 +3,212 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Consulting &amp; D365, D365 F&amp;O Consulting Hub</title>
+<title>Consulting &amp; D365 F&amp;O · D365 F&amp;O Consulting Hub</title>
+<meta name="description" content="What Microsoft Dynamics 365 F&O is, what it means to be a functional consultant, and the consulting craft." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme', 'dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/redesign.css" />
+<link rel="stylesheet" href="assets/css/hub.css" />
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container site-header__inner">
-    <a href="index.html" class="site-header__brand">
-      <span class="site-header__brand-mark">D</span>
-      <span>D365 F&amp;O Consulting Hub</span>
+<!-- ── Header ── -->
+<header class="rd-header">
+  <div class="rd-header__inner">
+    <a href="index.html" class="rd-header__brand">
+      <span class="rd-header__mark">
+        <svg width="15" height="15" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <path d="M 9 8 L 9 28"  stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <path d="M 27 8 L 27 28" stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <line x1="6" y1="18" x2="30" y2="18" stroke="#C29036" stroke-width="1.6"/>
+        </svg>
+      </span>
+      <span class="rd-header__name">Joe El <em>Hajj</em></span>
     </a>
-    <nav class="site-nav" aria-label="Primary">
-      <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
-      <ul class="site-nav__list" id="primaryNav">
-        <li><a class="site-nav__link is-active" href="consulting.html">Consulting</a></li>
-        <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
-        <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
-        <li><a class="site-nav__link" href="modules.html">Modules</a></li>
-        <li><a class="site-nav__link" href="accounting.html">Accounting</a></li>
-        <li><a class="site-nav__link" href="ai.html">AI</a></li>
-        <li><a class="site-nav__link" href="customizations.html">Customizations</a></li>
-        <li><a class="site-nav__link" href="advanced.html">Advanced</a></li>
+    <nav aria-label="Primary">
+      <ul class="rd-header__nav">
+        <li class="rd-nav-dropdown">
+          <button class="rd-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">
+            The Hub <span class="rd-nav-dropdown__caret">▾</span>
+          </button>
+          <div class="rd-nav-dropdown__menu" role="menu">
+            <a href="consulting.html" class="rd-nav-dropdown__link is-active">Overview</a>
+            <div class="rd-nav-dropdown__divider"></div>
+            <a href="lifecycle.html" class="rd-nav-dropdown__link">ERP Lifecycle</a>
+            <a href="modules.html" class="rd-nav-dropdown__link">Modules</a>
+            <a href="business-processes.html" class="rd-nav-dropdown__link">Business Processes</a>
+            <a href="accounting.html" class="rd-nav-dropdown__link">Accounting</a>
+            <a href="ai.html" class="rd-nav-dropdown__link">AI in D365</a>
+            <a href="customizations.html" class="rd-nav-dropdown__link">Customizations &amp; Integrations</a>
+            <a href="advanced.html" class="rd-nav-dropdown__link">Advanced Features</a>
+          </div>
+        </li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
       </ul>
     </nav>
+    <a href="mailto:Joe1437@outlook.com" class="rd-header__cta">Book a call →</a>
   </div>
 </header>
 
-<section class="page-header">
-  <div class="container">
-    <span class="page-header__eyebrow">01 · Foundations</span>
-    <h1 class="page-header__title">Consulting &amp; D365 Finance and Operations</h1>
-    <p class="page-header__lead">
-      What Microsoft Dynamics 365 F&amp;O is, what it means to be a functional consultant, and the consulting craft itself, communication, expectation management, and turning business problems into working systems.
-    </p>
+<!-- ── Page hero ── -->
+<section class="hub-hero">
+  <div class="hub-hero__inner">
+    <div class="rd-rise">
+      <span class="hub-hero__eyebrow">01 · Foundations</span>
+      <h1 class="hub-hero__title">Consulting &amp; D365 Finance and Operations</h1>
+      <p class="hub-hero__lead">What Microsoft Dynamics 365 F&amp;O is, what it means to be a functional consultant, and the consulting craft itself — communication, expectation management, and turning business problems into working systems.</p>
+    </div>
   </div>
 </section>
 
-<div class="container">
-  <div class="article-page">
+<!-- ── Content ── -->
+<div class="article-page">
 
-    <aside class="article-page__toc" aria-label="On this page">
-      <p class="article-page__toc-title">On this page</p>
-      <ul>
-        <li><a href="#what-is-d365">What is D365 F&amp;O</a></li>
-        <li><a href="#licensing">Licensing</a></li>
-        <li><a href="#why-erp-matters">Why ERP matters</a></li>
-        <li><a href="#consultant-role">The functional consultant role</a></li>
-        <li><a href="#consulting-skills">Consulting skills</a></li>
-        <li><a href="#stakeholders">Working with stakeholders</a></li>
-        <li><a href="#career">Career path &amp; growth</a></li>
-      </ul>
-    </aside>
+  <aside class="article-page__toc" aria-label="On this page">
+    <p class="article-page__toc-title">On this page</p>
+    <ul>
+      <li><a href="#what-is-d365">What is D365 F&amp;O</a></li>
+      <li><a href="#licensing">Licensing</a></li>
+      <li><a href="#why-erp-matters">Why ERP matters</a></li>
+      <li><a href="#consultant-role">The functional consultant role</a></li>
+      <li><a href="#consulting-skills">Consulting skills</a></li>
+      <li><a href="#stakeholders">Working with stakeholders</a></li>
+      <li><a href="#career">Career path &amp; growth</a></li>
+    </ul>
+  </aside>
 
-    <main class="article-page__main">
-      <section id="what-is-d365">
-        <article class="article">
-          <h2>What is Microsoft Dynamics 365 Finance &amp; Operations</h2>
-          <p class="article__meta">Foundations · Last updated 13-05-2026</p>
-          <div class="article__content" style="margin: 0;">
-            <p>Microsoft Dynamics 365 Finance &amp; Operations (F&amp;O) is Microsoft's flagship enterprise resource planning (ERP) platform designed for medium to large, complex, or global organizations. It sits at the top of the Dynamics 365 product family, which also includes specialized applications like Commerce, Human Resources, and Project Operations.</p>
-            <p>Unlike its smaller counterpart, Business Central, F&amp;O is built to handle multi-company, multi-currency, and highly regulated environments out of the box. It is a cloud-native platform hosted on Microsoft Azure, providing seamless integration with the Microsoft ecosystem, including Power Platform (Power Apps, Power BI, Power Automate), Microsoft 365, and AI-powered Copilot capabilities.</p>
-            <p>At its core, D365 F&amp;O unifies an organization's global financials and operations, allowing enterprises to automate business processes, monitor real-time financial health, optimize supply chain logistics, and make data-driven decisions at scale.</p>
-          </div>
-        </article>
-      </section>
+  <main class="article-page__main">
+    <section id="what-is-d365">
+      <article class="article rd-rise">
+        <h2>What is Microsoft Dynamics 365 Finance &amp; Operations</h2>
+        <span class="article__meta">Foundations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>Microsoft Dynamics 365 Finance &amp; Operations (F&amp;O) is Microsoft's flagship enterprise resource planning (ERP) platform designed for medium to large, complex, or global organizations. It sits at the top of the Dynamics 365 product family, which also includes specialized applications like Commerce, Human Resources, and Project Operations.</p>
+          <p>Unlike its smaller counterpart, Business Central, F&amp;O is built to handle multi-company, multi-currency, and highly regulated environments out of the box. It is a cloud-native platform hosted on Microsoft Azure, providing seamless integration with the Microsoft ecosystem, including Power Platform (Power Apps, Power BI, Power Automate), Microsoft 365, and AI-powered Copilot capabilities.</p>
+          <p>At its core, D365 F&amp;O unifies an organization's global financials and operations, allowing enterprises to automate business processes, monitor real-time financial health, optimize supply chain logistics, and make data-driven decisions at scale.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="licensing">
-        <article class="article">
-          <h2>D365 F&amp;O Licensing</h2>
-          <p class="article__meta">Foundations · Last updated 13-05-2026</p>
-          <div class="article__content" style="margin: 0;">
-            <p>D365 licensing is subscription-based, billed annually on a per-user basis. A minimum of 20 full user licenses of either D365 Finance or Supply Chain Management is required to purchase the platform.</p>
-            <p>The base full-user license starts at $210 per user per month, and each application is available either as a base license at full price or as an attach license at a significantly discounted rate. For example, attaching Supply Chain Management to a Finance base license costs $30 per user per month.</p>
-            <p>Beyond full users, there are several other license types:</p>
-            <ul>
-              <li><strong>Activity licenses</strong> ($50 per user/month): Designed for day-to-day transactional users who don't need full administrative access.</li>
-              <li><strong>Team Member licenses</strong> ($8 per user/month): Designed for light, read-only access and basic tasks like submitting time and expense reports.</li>
-              <li><strong>Premium licenses</strong> ($300 per user/month): Available for Finance and Supply Chain Management, these include advanced analytics, financial planning capabilities, and 1,000 Copilot Credits per user per month for AI-powered tools.</li>
-              <li><strong>Device licenses</strong> ($85 per device/month): Available for shared environments such as warehouse floors or retail stations, allowing multiple users to share a single terminal a highly cost-effective option for shift-based operations.</li>
-            </ul>
-          </div>
-        </article>
-      </section>
+    <section id="licensing">
+      <article class="article rd-rise">
+        <h2>D365 F&amp;O Licensing</h2>
+        <span class="article__meta">Foundations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>D365 licensing is subscription-based, billed annually on a per-user basis. A minimum of 20 full user licenses of either D365 Finance or Supply Chain Management is required to purchase the platform.</p>
+          <p>The base full-user license starts at $210 per user per month, and each application is available either as a base license at full price or as an attach license at a significantly discounted rate. For example, attaching Supply Chain Management to a Finance base license costs $30 per user per month.</p>
+          <p>Beyond full users, there are several other license types:</p>
+          <ul>
+            <li><strong>Activity licenses</strong> ($50 per user/month): Designed for day-to-day transactional users who don't need full administrative access.</li>
+            <li><strong>Team Member licenses</strong> ($8 per user/month): Designed for light, read-only access and basic tasks like submitting time and expense reports.</li>
+            <li><strong>Premium licenses</strong> ($300 per user/month): Available for Finance and Supply Chain Management, these include advanced analytics, financial planning capabilities, and 1,000 Copilot Credits per user per month for AI-powered tools.</li>
+            <li><strong>Device licenses</strong> ($85 per device/month): Available for shared environments such as warehouse floors or retail stations, allowing multiple users to share a single terminal — a highly cost-effective option for shift-based operations.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
 
-      <section id="why-erp-matters">
-        <article class="article">
-          <h2>Why ERP matters to a business</h2>
-          <p class="article__meta">Foundations · Last updated 13-05-2026</p>
-          <div class="article__content" style="margin: 0;">
-            <p>An ERP system is the central nervous system of an enterprise. It serves as the single "system of record," meaning it holds the ultimate financial and operational truth for the company. Without an ERP, businesses inevitably rely on fragmented "shadow systems" disparate spreadsheets, local Access databases, and manual data entry spanning multiple disconnected tools.</p>
-            <p>ERP matters because it <strong>forces process discipline</strong>. You cannot pay a vendor if the invoice hasn't been matched to a purchase order. You cannot ship a product if it hasn't been picked from the warehouse. The system acts as a rigid framework that enforces compliance, reduces human error, and provides an audit trail for every action.</p>
-            <p>However, an ERP is only as successful as its adoption. This is why <strong>executive sponsorship</strong> matters as much as the technology itself. If leadership does not champion the new processes and enforce the transition away from legacy spreadsheets, even the most beautifully configured D365 environment will fail to deliver ROI.</p>
-          </div>
-        </article>
-      </section>
+    <section id="why-erp-matters">
+      <article class="article rd-rise">
+        <h2>Why ERP matters to a business</h2>
+        <span class="article__meta">Foundations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>An ERP system is the central nervous system of an enterprise. It serves as the single "system of record," meaning it holds the ultimate financial and operational truth for the company. Without an ERP, businesses inevitably rely on fragmented "shadow systems" — disparate spreadsheets, local Access databases, and manual data entry spanning multiple disconnected tools.</p>
+          <p>ERP matters because it <strong>forces process discipline</strong>. You cannot pay a vendor if the invoice hasn't been matched to a purchase order. You cannot ship a product if it hasn't been picked from the warehouse. The system acts as a rigid framework that enforces compliance, reduces human error, and provides an audit trail for every action.</p>
+          <p>However, an ERP is only as successful as its adoption. This is why <strong>executive sponsorship</strong> matters as much as the technology itself. If leadership does not champion the new processes and enforce the transition away from legacy spreadsheets, even the most beautifully configured D365 environment will fail to deliver ROI.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="consultant-role">
-        <article class="article">
-          <h2>What a functional consultant actually does</h2>
-          <p class="article__meta">Role · Last updated 13-05-2026</p>
-          <div class="article__content" style="margin: 0;">
-            <p>A functional consultant is the bridge between a business's operational needs and the technical capabilities of D365 F&amp;O. They speak both the language of business (finance, supply chain, manufacturing) and the language of the software.</p>
-            <p>The role is highly dynamic and evolves through the lifecycle of a project. A typical day or week might involve:</p>
-            <ul>
-              <li><strong>Requirement Gathering:</strong> Leading workshops with client stakeholders to map out current business processes and identify pain points.</li>
-              <li><strong>System Configuration:</strong> Setting up the D365 environment (chart of accounts, posting profiles, tax codes, inventory parameters) to align with the client's business rules.</li>
-              <li><strong>Functional Design:</strong> Writing Functional Design Documents (FDDs) for requirements that cannot be met out-of-the-box. These documents explain exactly what custom code needs to be built by the development team.</li>
-              <li><strong>Testing &amp; QA:</strong> Writing test scripts and guiding users through User Acceptance Testing (UAT) to prove the system works.</li>
-              <li><strong>Training &amp; Support:</strong> Creating training materials, teaching end-users how to use the new processes, and providing post-go-live support.</li>
-            </ul>
-            <p>While technical consultants (developers) write the X++ code to customize the system, the functional consultant owns the business outcome and the configuration.</p>
-          </div>
-        </article>
-      </section>
+    <section id="consultant-role">
+      <article class="article rd-rise">
+        <h2>What a functional consultant actually does</h2>
+        <span class="article__meta">Role · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>A functional consultant is the bridge between a business's operational needs and the technical capabilities of D365 F&amp;O. They speak both the language of business (finance, supply chain, manufacturing) and the language of the software.</p>
+          <p>The role is highly dynamic and evolves through the lifecycle of a project. A typical day or week might involve:</p>
+          <ul>
+            <li><strong>Requirement Gathering:</strong> Leading workshops with client stakeholders to map out current business processes and identify pain points.</li>
+            <li><strong>System Configuration:</strong> Setting up the D365 environment (chart of accounts, posting profiles, tax codes, inventory parameters) to align with the client's business rules.</li>
+            <li><strong>Functional Design:</strong> Writing Functional Design Documents (FDDs) for requirements that cannot be met out-of-the-box. These documents explain exactly what custom code needs to be built by the development team.</li>
+            <li><strong>Testing &amp; QA:</strong> Writing test scripts and guiding users through User Acceptance Testing (UAT) to prove the system works.</li>
+            <li><strong>Training &amp; Support:</strong> Creating training materials, teaching end-users how to use the new processes, and providing post-go-live support.</li>
+          </ul>
+          <p>While technical consultants (developers) write the X++ code to customize the system, the functional consultant owns the business outcome and the configuration.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="consulting-skills">
-        <article class="article">
-          <h2>Consulting skills that separate good from great</h2>
-          <p class="article__meta">Skills · Last updated 13-05-2026</p>
-          <div class="article__content" style="margin: 0;">
-            <p>Technical knowledge of D365 will get you a job, but soft skills will make you a great consultant. The best consultants excel at:</p>
-            <ul>
-              <li><strong>Active Listening &amp; Asking the Right Questions:</strong> Clients often request a specific feature ("We need a custom button here"), but a great consultant digs into the underlying problem ("Why do you need to approve this twice?") to find a better, out-of-the-box solution.</li>
-              <li><strong>Structured Thinking &amp; Dealing with Ambiguity:</strong> Projects are chaotic. Great consultants can take vague, contradictory requirements from multiple departments and structure them into a coherent system design.</li>
-              <li><strong>Expectation Management:</strong> Knowing when and how to say "no." It is crucial to manage scope creep and clearly communicate what the system can and cannot do without extensive customization.</li>
-              <li><strong>Written &amp; Verbal Communication:</strong> Writing clear, unambiguous FDDs for developers and presenting complex system flows to non-technical executives.</li>
-            </ul>
-          </div>
-        </article>
-      </section>
+    <section id="consulting-skills">
+      <article class="article rd-rise">
+        <h2>Consulting skills that separate good from great</h2>
+        <span class="article__meta">Skills · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>Technical knowledge of D365 will get you a job, but soft skills will make you a great consultant. The best consultants excel at:</p>
+          <ul>
+            <li><strong>Active Listening &amp; Asking the Right Questions:</strong> Clients often request a specific feature ("We need a custom button here"), but a great consultant digs into the underlying problem ("Why do you need to approve this twice?") to find a better, out-of-the-box solution.</li>
+            <li><strong>Structured Thinking &amp; Dealing with Ambiguity:</strong> Projects are chaotic. Great consultants can take vague, contradictory requirements from multiple departments and structure them into a coherent system design.</li>
+            <li><strong>Expectation Management:</strong> Knowing when and how to say "no." It is crucial to manage scope creep and clearly communicate what the system can and cannot do without extensive customization.</li>
+            <li><strong>Written &amp; Verbal Communication:</strong> Writing clear, unambiguous FDDs for developers and presenting complex system flows to non-technical executives.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
 
-      <section id="stakeholders">
-        <article class="article">
-          <h2>Working with stakeholders</h2>
-          <p class="article__meta">Soft skills · Last updated 13-05-2026</p>
-          <div class="article__content" style="margin: 0;">
-            <p>An ERP implementation is a massive change management exercise. You will interface with several distinct personas, each with their own priorities:</p>
-            <ul>
-              <li><strong>Executive Sponsors (CFO, COO):</strong> They care about ROI, budget, timeline, and reporting. They are your ultimate escalation point when business units refuse to change processes.</li>
-              <li><strong>Process Owners:</strong> Managers who own a specific area (e.g., Accounts Payable Manager). They care about efficiency and getting their team's daily work done.</li>
-              <li><strong>End Users:</strong> The people doing the data entry. They care about usability and often resist change. Winning their trust is critical for adoption.</li>
-              <li><strong>IT &amp; Developers:</strong> They care about system performance, security, and clear requirements.</li>
-            </ul>
-            <p>A significant part of the job involves navigating disagreements between business units. For example, Sales might want a convoluted customer hierarchy, while Finance needs a flat structure for credit limits. A strong consultant facilitates these conversations, highlights the pros and cons in D365, and drives the team toward a consensus.</p>
-          </div>
-        </article>
-      </section>
+    <section id="stakeholders">
+      <article class="article rd-rise">
+        <h2>Working with stakeholders</h2>
+        <span class="article__meta">Soft skills · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>An ERP implementation is a massive change management exercise. You will interface with several distinct personas, each with their own priorities:</p>
+          <ul>
+            <li><strong>Executive Sponsors (CFO, COO):</strong> They care about ROI, budget, timeline, and reporting. They are your ultimate escalation point when business units refuse to change processes.</li>
+            <li><strong>Process Owners:</strong> Managers who own a specific area (e.g., Accounts Payable Manager). They care about efficiency and getting their team's daily work done.</li>
+            <li><strong>End Users:</strong> The people doing the data entry. They care about usability and often resist change. Winning their trust is critical for adoption.</li>
+            <li><strong>IT &amp; Developers:</strong> They care about system performance, security, and clear requirements.</li>
+          </ul>
+          <p>A significant part of the job involves navigating disagreements between business units. For example, Sales might want a convoluted customer hierarchy, while Finance needs a flat structure for credit limits. A strong consultant facilitates these conversations, highlights the pros and cons in D365, and drives the team toward a consensus.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="career">
-        <article class="article">
-          <h2>Career path &amp; growth</h2>
-          <p class="article__meta">Career · Last updated 13-05-2026</p>
-          <div class="article__content" style="margin: 0;">
-            <p>The career path in D365 consulting generally follows this progression: <strong>Junior Consultant &rarr; Senior Consultant &rarr; Lead Consultant &rarr; Solution Architect</strong>.</p>
-            <p>As you progress, the focus shifts from system configuration (knowing which buttons to click) to process design, team leadership, and enterprise-wide architecture.</p>
-            <h3>Certifications</h3>
-            <p>Microsoft recently revamped its certification paths. The foundational MB-300 exam has been retired, meaning candidates can now proceed directly to role-specific standalone exams:</p>
-            <ul>
-              <li><strong>MB-310 (Finance Functional Consultant Associate):</strong> Focuses on financial management, accounting, budgeting, and the general ledger.</li>
-              <li><strong>MB-330 (Supply Chain Management Functional Consultant Associate):</strong> Focuses on inventory, warehousing, procurement, and logistics.</li>
-              <li><strong>MB-335 (Supply Chain Management Functional Consultant Expert):</strong> For advanced supply chain consultants, focusing on complex warehouse and manufacturing implementations.</li>
-              <li><strong>MB-500 (Finance and Operations Apps Developer Associate):</strong> The technical track for developers customizing F&amp;O using X++.</li>
-              <li><strong>MB-700 (Solution Architect Expert):</strong> The pinnacle certification for experienced professionals designing complex, enterprise-wide D365 solutions.</li>
-            </ul>
-            <p>While generalizing is helpful early on, consultants typically specialize in either Finance or Supply Chain (and sometimes manufacturing or commerce) as they reach the Senior and Lead levels.</p>
-          </div>
-        </article>
-      </section>
-    </main>
-  </div>
+    <section id="career">
+      <article class="article rd-rise">
+        <h2>Career path &amp; growth</h2>
+        <span class="article__meta">Career · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>The career path in D365 consulting generally follows this progression: <strong>Junior Consultant → Senior Consultant → Lead Consultant → Solution Architect</strong>.</p>
+          <p>As you progress, the focus shifts from system configuration (knowing which buttons to click) to process design, team leadership, and enterprise-wide architecture.</p>
+          <h3>Certifications</h3>
+          <p>Microsoft recently revamped its certification paths. The foundational MB-300 exam has been retired, meaning candidates can now proceed directly to role-specific standalone exams:</p>
+          <ul>
+            <li><strong>MB-310 (Finance Functional Consultant Associate):</strong> Focuses on financial management, accounting, budgeting, and the general ledger.</li>
+            <li><strong>MB-330 (Supply Chain Management Functional Consultant Associate):</strong> Focuses on inventory, warehousing, procurement, and logistics.</li>
+            <li><strong>MB-335 (Supply Chain Management Functional Consultant Expert):</strong> For advanced supply chain consultants, focusing on complex warehouse and manufacturing implementations.</li>
+            <li><strong>MB-500 (Finance and Operations Apps Developer Associate):</strong> The technical track for developers customizing F&amp;O using X++.</li>
+            <li><strong>MB-700 (Solution Architect Expert):</strong> The pinnacle certification for experienced professionals designing complex, enterprise-wide D365 solutions.</li>
+          </ul>
+          <p>While generalizing is helpful early on, consultants typically specialize in either Finance or Supply Chain (and sometimes manufacturing or commerce) as they reach the Senior and Lead levels.</p>
+        </div>
+      </article>
+    </section>
+  </main>
 </div>
 
-<footer class="site-footer" data-footer></footer>
+<!-- ── Footer ── -->
+<footer class="rd-footer">
+  <div>© 2026 · Joe El Hajj · Beirut</div>
+  <div class="rd-footer__links">
+    <a href="https://www.linkedin.com/in/joe-el-hajj-0b44b5222/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:Joe1437@outlook.com">Email</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
 
 <script src="assets/js/app.js"></script>
-<script src="assets/js/search.js"></script>
+<script src="assets/js/scroll.js"></script>
+<script src="assets/js/hub.js"></script>
 </body>
 </html>
