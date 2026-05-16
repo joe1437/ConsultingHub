@@ -3,48 +3,64 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Modules, D365 F&amp;O Consulting Hub</title>
+<title>Modules · D365 F&amp;O Consulting Hub</title>
+<meta name="description" content="Every functional module in D365 F&O — what it does, how it's set up, where it touches other modules." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme', 'dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/redesign.css" />
+<link rel="stylesheet" href="assets/css/hub.css" />
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container site-header__inner">
-    <a href="index.html" class="site-header__brand">
-      <span class="site-header__brand-mark">D</span>
-      <span>D365 F&amp;O Consulting Hub</span>
+<header class="rd-header">
+  <div class="rd-header__inner">
+    <a href="index.html" class="rd-header__brand">
+      <span class="rd-header__mark">
+        <svg width="15" height="15" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <path d="M 9 8 L 9 28"  stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <path d="M 27 8 L 27 28" stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <line x1="6" y1="18" x2="30" y2="18" stroke="#C29036" stroke-width="1.6"/>
+        </svg>
+      </span>
+      <span class="rd-header__name">Joe El <em>Hajj</em></span>
     </a>
-    <nav class="site-nav" aria-label="Primary">
-      <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
-      <ul class="site-nav__list" id="primaryNav">
-        <li><a class="site-nav__link" href="consulting.html">Consulting</a></li>
-        <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
-        <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
-        <li><a class="site-nav__link is-active" href="modules.html">Modules</a></li>
-        <li><a class="site-nav__link" href="accounting.html">Accounting</a></li>
-        <li><a class="site-nav__link" href="ai.html">AI</a></li>
-        <li><a class="site-nav__link" href="customizations.html">Customizations</a></li>
-        <li><a class="site-nav__link" href="advanced.html">Advanced</a></li>
+    <nav aria-label="Primary">
+      <ul class="rd-header__nav">
+        <li class="rd-nav-dropdown">
+          <button class="rd-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">
+            The Hub <span class="rd-nav-dropdown__caret">▾</span>
+          </button>
+          <div class="rd-nav-dropdown__menu" role="menu">
+            <a href="consulting.html" class="rd-nav-dropdown__link">Overview</a>
+            <div class="rd-nav-dropdown__divider"></div>
+            <a href="lifecycle.html" class="rd-nav-dropdown__link">ERP Lifecycle</a>
+            <a href="modules.html" class="rd-nav-dropdown__link is-active">Modules</a>
+            <a href="business-processes.html" class="rd-nav-dropdown__link">Business Processes</a>
+            <a href="accounting.html" class="rd-nav-dropdown__link">Accounting</a>
+            <a href="ai.html" class="rd-nav-dropdown__link">AI in D365</a>
+            <a href="customizations.html" class="rd-nav-dropdown__link">Customizations &amp; Integrations</a>
+            <a href="advanced.html" class="rd-nav-dropdown__link">Advanced Features</a>
+          </div>
+        </li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
       </ul>
     </nav>
+    <a href="mailto:Joe1437@outlook.com" class="rd-header__cta">Book a call →</a>
   </div>
 </header>
 
-<section class="page-header">
-  <div class="container">
-    <span class="page-header__eyebrow">04 · Application surface</span>
-    <h1 class="page-header__title">Main modules</h1>
-    <p class="page-header__lead">
-      Every functional module in D365 F&amp;O, what it does, how it's set up, where it touches other modules. Pick a module from the left to see its article.
-    </p>
+<section class="hub-hero">
+  <div class="hub-hero__inner">
+    <div class="rd-rise">
+      <span class="hub-hero__eyebrow">04 · Application surface</span>
+      <h1 class="hub-hero__title">Main modules</h1>
+      <p class="hub-hero__lead">Every functional module in D365 F&amp;O — what it does, how it's set up, where it touches other modules. Pick a module from the sidebar to read its article.</p>
+    </div>
   </div>
 </section>
 
-<div class="container" data-workspace>
+<div class="workspace-outer" data-workspace>
   <div class="workspace">
 
     <aside class="workspace__sidebar" aria-label="Modules">
@@ -53,7 +69,7 @@
       </button>
       <div class="workspace__sidebar-body">
         <p class="workspace__sidebar-title">Modules</p>
-        <ul class="workspace__nav">
+        <ul class="workspace__nav rd-stagger">
           <li><a class="workspace__nav-link" data-item-link="accounts-payable" href="#accounts-payable">Accounts Payable</a></li>
           <li><a class="workspace__nav-link" data-item-link="accounts-receivable" href="#accounts-receivable">Accounts Receivable</a></li>
           <li><a class="workspace__nav-link" data-item-link="asset-management" href="#asset-management">Asset Management</a></li>
@@ -3778,9 +3794,18 @@
   </div>
 </div>
 
-<footer class="site-footer" data-footer></footer>
+<footer class="rd-footer">
+  <div>© 2026 · Joe El Hajj · Beirut</div>
+  <div class="rd-footer__links">
+    <a href="https://www.linkedin.com/in/joe-el-hajj-0b44b5222/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:Joe1437@outlook.com">Email</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
 
 <script src="assets/js/app.js"></script>
-<script src="assets/js/search.js"></script>
+<script src="assets/js/scroll.js"></script>
+<script src="assets/js/hub.js"></script>
 </body>
 </html>

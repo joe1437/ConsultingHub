@@ -3,192 +3,219 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI in D365 F&amp;O, D365 F&amp;O Consulting Hub</title>
+<title>AI in D365 F&amp;O · D365 F&amp;O Consulting Hub</title>
+<meta name="description" content="Copilot, agents, and embedded intelligence in F&O — what's available today, what's coming, and how to talk about it credibly with clients." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/styles.css" />
-<script>(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme', 'dark');}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/css/redesign.css" />
+<link rel="stylesheet" href="assets/css/hub.css" />
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container site-header__inner">
-    <a href="index.html" class="site-header__brand">
-      <span class="site-header__brand-mark">D</span>
-      <span>D365 F&amp;O Consulting Hub</span>
+<!-- ── Header ── -->
+<header class="rd-header">
+  <div class="rd-header__inner">
+    <a href="index.html" class="rd-header__brand">
+      <span class="rd-header__mark">
+        <svg width="15" height="15" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <path d="M 9 8 L 9 28"  stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <path d="M 27 8 L 27 28" stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
+          <line x1="6" y1="18" x2="30" y2="18" stroke="#C29036" stroke-width="1.6"/>
+        </svg>
+      </span>
+      <span class="rd-header__name">Joe El <em>Hajj</em></span>
     </a>
-    <nav class="site-nav" aria-label="Primary">
-      <button class="site-nav__toggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
-      <ul class="site-nav__list" id="primaryNav">
-        <li><a class="site-nav__link" href="consulting.html">Consulting</a></li>
-        <li><a class="site-nav__link" href="lifecycle.html">Lifecycle</a></li>
-        <li><a class="site-nav__link" href="business-processes.html">Processes</a></li>
-        <li><a class="site-nav__link" href="modules.html">Modules</a></li>
-        <li><a class="site-nav__link" href="accounting.html">Accounting</a></li>
-        <li><a class="site-nav__link is-active" href="ai.html">AI</a></li>
-        <li><a class="site-nav__link" href="customizations.html">Customizations</a></li>
-        <li><a class="site-nav__link" href="advanced.html">Advanced</a></li>
+    <nav aria-label="Primary">
+      <ul class="rd-header__nav">
+        <li class="rd-nav-dropdown">
+          <button class="rd-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">
+            The Hub <span class="rd-nav-dropdown__caret">▾</span>
+          </button>
+          <div class="rd-nav-dropdown__menu" role="menu">
+            <a href="consulting.html" class="rd-nav-dropdown__link">Overview</a>
+            <div class="rd-nav-dropdown__divider"></div>
+            <a href="lifecycle.html" class="rd-nav-dropdown__link">ERP Lifecycle</a>
+            <a href="modules.html" class="rd-nav-dropdown__link">Modules</a>
+            <a href="business-processes.html" class="rd-nav-dropdown__link">Business Processes</a>
+            <a href="accounting.html" class="rd-nav-dropdown__link">Accounting</a>
+            <a href="ai.html" class="rd-nav-dropdown__link is-active">AI in D365</a>
+            <a href="customizations.html" class="rd-nav-dropdown__link">Customizations &amp; Integrations</a>
+            <a href="advanced.html" class="rd-nav-dropdown__link">Advanced Features</a>
+          </div>
+        </li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
       </ul>
     </nav>
+    <a href="mailto:Joe1437@outlook.com" class="rd-header__cta">Book a call →</a>
   </div>
 </header>
 
-<section class="page-header">
-  <div class="container">
-    <span class="page-header__eyebrow">06 · Modern stack</span>
-    <h1 class="page-header__title">AI in D365 Finance &amp; Operations</h1>
-    <p class="page-header__lead">
-      Copilot, agents, and embedded intelligence in F&amp;O, what's available today, what's coming, and how to talk about it credibly with clients.
-    </p>
+<!-- ── Page hero ── -->
+<section class="hub-hero">
+  <div class="hub-hero__inner">
+    <div class="rd-rise">
+      <span class="hub-hero__eyebrow">06 · Modern stack</span>
+      <h1 class="hub-hero__title">AI in D365 Finance &amp; Operations</h1>
+      <p class="hub-hero__lead">Copilot, agents, and embedded intelligence in F&amp;O — what's available today, what's coming, and how to talk about it credibly with clients.</p>
+    </div>
   </div>
 </section>
 
-<div class="container">
-  <div class="article-page">
+<!-- ── Content ── -->
+<div class="article-page">
 
-    <aside class="article-page__toc" aria-label="On this page">
-      <p class="article-page__toc-title">On this page</p>
-      <ul>
-        <li><a href="#overview">Overview</a></li>
-        <li><a href="#copilot">Copilot in F&amp;O</a></li>
-        <li><a href="#finance-agents">Finance agents</a></li>
-        <li><a href="#scm-ai">Supply chain intelligence</a></li>
-        <li><a href="#power-platform-ai">Power Platform &amp; Copilot Studio</a></li>
-        <li><a href="#governance">Governance &amp; trust</a></li>
-        <li><a href="#client-conversations">Client conversations</a></li>
-      </ul>
-    </aside>
+  <aside class="article-page__toc" aria-label="On this page">
+    <p class="article-page__toc-title">On this page</p>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#copilot">Copilot in F&amp;O</a></li>
+      <li><a href="#finance-agents">Finance agents</a></li>
+      <li><a href="#scm-ai">Supply chain intelligence</a></li>
+      <li><a href="#power-platform-ai">Power Platform &amp; Copilot Studio</a></li>
+      <li><a href="#governance">Governance &amp; trust</a></li>
+      <li><a href="#client-conversations">Client conversations</a></li>
+    </ul>
+  </aside>
 
-    <main class="article-page__main">
+  <main class="article-page__main">
 
-      <section id="overview">
-        <article class="article">
-          <h2>Overview, where AI shows up in F&amp;O</h2>
-          <p class="article__meta">Foundations · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p>Artificial Intelligence in Dynamics 365 Finance and Operations is no longer just a roadmap promise; it is actively embedded into the application. For consultants, understanding AI requires separating the marketing buzz from the actual capabilities deployed in the system. The AI ecosystem in F&amp;O falls into three primary categories.</p>
-            <ul>
-              <li><strong>Generative AI (Copilot):</strong> The conversational interface powered by Large Language Models (LLMs). This includes the Copilot sidecar where users can ask natural language questions about their data, generate email drafts for collections, and summarize large datasets.</li>
-              <li><strong>Embedded Machine Learning:</strong> Traditional predictive AI models built directly into the business processes. This is branded heavily as <em>Finance Insights</em> and includes models that predict when a customer will pay an invoice or generate baseline cash flow forecasts based on historical trends.</li>
-              <li><strong>Extensibility:</strong> The ability to build custom AI solutions using the Power Platform. This includes using AI Builder to extract data from vendor invoices via OCR (Optical Character Recognition) or using Copilot Studio to build custom chatbots that query F&amp;O data via OData endpoints.</li>
-            </ul>
-          </div>
-        </article>
-      </section>
+    <section id="overview">
+      <article class="article rd-rise">
+        <h2>Overview — where AI shows up in F&amp;O</h2>
+        <span class="article__meta">Foundations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>Artificial Intelligence in Dynamics 365 Finance and Operations is no longer just a roadmap promise; it is actively embedded into the application. For consultants, understanding AI requires separating the marketing buzz from the actual capabilities deployed in the system. The AI ecosystem in F&amp;O falls into three primary categories.</p>
+          <ul>
+            <li><strong>Generative AI (Copilot):</strong> The conversational interface powered by Large Language Models (LLMs). This includes the Copilot sidecar where users can ask natural language questions about their data, generate email drafts for collections, and summarize large datasets.</li>
+            <li><strong>Embedded Machine Learning:</strong> Traditional predictive AI models built directly into the business processes. This is branded heavily as <em>Finance Insights</em> and includes models that predict when a customer will pay an invoice or generate baseline cash flow forecasts based on historical trends.</li>
+            <li><strong>Extensibility:</strong> The ability to build custom AI solutions using the Power Platform. This includes using AI Builder to extract data from vendor invoices via OCR (Optical Character Recognition) or using Copilot Studio to build custom chatbots that query F&amp;O data via OData endpoints.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
 
-      <section id="copilot">
-        <article class="article">
-          <h2>Copilot in F&amp;O</h2>
-          <p class="article__meta">Feature · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p>Copilot in F&amp;O provides users with an AI assistant that lives directly in the side panel of the application. It grounds its responses securely in the organization's ERP data.</p>
-            <h3>Prerequisites for Enabling Copilot</h3>
-            <p>Consultants must ensure the environment meets strict technical requirements before Copilot features can be activated.</p>
-            <ul>
-              <li>The environment must be running Dynamics 365 Finance version 10.0.38 or later.</li>
-              <li>Power Platform Integration must be enabled within Microsoft Dynamics Lifecycle Services (LCS). Copilot relies on the Dataverse connection to process requests.</li>
-            </ul>
-            <h3>Configuration Steps</h3>
-            <ol>
-              <li><strong>Assign Security Roles:</strong> In the Power Platform Admin Center, navigate to the connected Dataverse environment and assign the <em>Finance and Operations AI</em> security role to the users who need Copilot access. Without this role, the Copilot panel will not load.</li>
-              <li><strong>Enable Features:</strong> Log into D365 F&amp;O and navigate to <strong>System administration > Workspaces > Feature management</strong>. Search for "Copilot" and enable the core capabilities (like user experiences for Copilot and specific workspace integrations).</li>
-            </ol>
-            <h3>Consultant Actionable Use Cases</h3>
-            <p>Once enabled, train your clients on high value use cases. For example, in the Credit and Collections workspace, users can click a button to have Copilot draft a personalized email to a customer summarizing their past due invoices. In procurement, users can ask Copilot to summarize changes made to a purchase order.</p>
-          </div>
-        </article>
-      </section>
+    <section id="copilot">
+      <article class="article rd-rise">
+        <h2>Copilot in F&amp;O</h2>
+        <span class="article__meta">Feature · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>Copilot in F&amp;O provides users with an AI assistant that lives directly in the side panel of the application. It grounds its responses securely in the organization's ERP data.</p>
+          <h3>Prerequisites for Enabling Copilot</h3>
+          <p>Consultants must ensure the environment meets strict technical requirements before Copilot features can be activated.</p>
+          <ul>
+            <li>The environment must be running Dynamics 365 Finance version 10.0.38 or later.</li>
+            <li>Power Platform Integration must be enabled within Microsoft Dynamics Lifecycle Services (LCS). Copilot relies on the Dataverse connection to process requests.</li>
+          </ul>
+          <h3>Configuration Steps</h3>
+          <ol>
+            <li><strong>Assign Security Roles:</strong> In the Power Platform Admin Center, navigate to the connected Dataverse environment and assign the <em>Finance and Operations AI</em> security role to the users who need Copilot access. Without this role, the Copilot panel will not load.</li>
+            <li><strong>Enable Features:</strong> Log into D365 F&amp;O and navigate to <strong>System administration &gt; Workspaces &gt; Feature management</strong>. Search for "Copilot" and enable the core capabilities (like user experiences for Copilot and specific workspace integrations).</li>
+          </ol>
+          <h3>Consultant Actionable Use Cases</h3>
+          <p>Once enabled, train your clients on high value use cases. For example, in the Credit and Collections workspace, users can click a button to have Copilot draft a personalized email to a customer summarizing their past due invoices. In procurement, users can ask Copilot to summarize changes made to a purchase order.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="finance-agents">
-        <article class="article">
-          <h2>Finance agents</h2>
-          <p class="article__meta">Feature · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p>Finance Insights brings predictive Machine Learning models to the finance department. Instead of answering "what happened", these models attempt to answer "what will happen" based on historical data.</p>
-            <h3>Prerequisites and Data Requirements</h3>
-            <p>Unlike Copilot, Machine Learning models require significant historical data to train accurately. You must have a Tier 2 sandbox environment or higher. The minimum data requirements are strict:</p>
-            <ul>
-              <li><strong>Customer Payment Predictions:</strong> Requires at least one year of historical customer invoice and payment data.</li>
-              <li><strong>Cash Flow and Budget Proposals:</strong> Microsoft strongly recommends at least three years of historical data for accurate trend analysis.</li>
-            </ul>
-            <p>Additionally, the tenant must have AI Builder credits allocated (typically 20,000 credits per month are included with the required licensing).</p>
-            <h3>Configuration Steps</h3>
-            <ol>
-              <li><strong>Install the Add-in:</strong> Open Lifecycle Services (LCS), navigate to the environment details, and install the <em>Finance Insights add-in</em>. You may also need to install the Export to Data Lake add-in depending on your architecture.</li>
-              <li><strong>Enable Feature Management:</strong> In F&amp;O, enable the <em>Finance insights</em> feature in the Feature management workspace.</li>
-              <li><strong>Check Provisioning:</strong> Go to <strong>System administration > Setup > Process automation</strong> and verify that the "Insights provisioning status check" background process is executing successfully.</li>
-            </ol>
-            <p>Once provisioned, the models must be trained. Navigate to the specific workspaces (e.g., Credit and collections) to initialize the models. The models will score open invoices, predicting whether they will be paid on time, late, or very late, allowing collections agents to prioritize their daily calls.</p>
-          </div>
-        </article>
-      </section>
+    <section id="finance-agents">
+      <article class="article rd-rise">
+        <h2>Finance agents</h2>
+        <span class="article__meta">Feature · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>Finance Insights brings predictive Machine Learning models to the finance department. Instead of answering "what happened", these models attempt to answer "what will happen" based on historical data.</p>
+          <h3>Prerequisites and Data Requirements</h3>
+          <p>Unlike Copilot, Machine Learning models require significant historical data to train accurately. You must have a Tier 2 sandbox environment or higher. The minimum data requirements are strict:</p>
+          <ul>
+            <li><strong>Customer Payment Predictions:</strong> Requires at least one year of historical customer invoice and payment data.</li>
+            <li><strong>Cash Flow and Budget Proposals:</strong> Microsoft strongly recommends at least three years of historical data for accurate trend analysis.</li>
+          </ul>
+          <p>Additionally, the tenant must have AI Builder credits allocated (typically 20,000 credits per month are included with the required licensing).</p>
+          <h3>Configuration Steps</h3>
+          <ol>
+            <li><strong>Install the Add-in:</strong> Open Lifecycle Services (LCS), navigate to the environment details, and install the <em>Finance Insights add-in</em>. You may also need to install the Export to Data Lake add-in depending on your architecture.</li>
+            <li><strong>Enable Feature Management:</strong> In F&amp;O, enable the <em>Finance insights</em> feature in the Feature management workspace.</li>
+            <li><strong>Check Provisioning:</strong> Go to <strong>System administration &gt; Setup &gt; Process automation</strong> and verify that the "Insights provisioning status check" background process is executing successfully.</li>
+          </ol>
+          <p>Once provisioned, the models must be trained. Navigate to the specific workspaces (e.g., Credit and collections) to initialize the models. The models will score open invoices, predicting whether they will be paid on time, late, or very late, allowing collections agents to prioritize their daily calls.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="scm-ai">
-        <article class="article">
-          <h2>Supply chain intelligence</h2>
-          <p class="article__meta">Feature · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p>Supply Chain Management (SCM) benefits heavily from AI, focusing on forecasting accuracy and inventory visibility.</p>
-            <h3>Demand Planning and Azure ML</h3>
-            <p>The native Demand Planning app utilizes Azure Machine Learning to generate baseline forecasts. As a consultant, you configure data profiles that feed historical sales data into the ML models. The models automatically select the best forecasting algorithm (like ARIMA or ETS) to predict future demand. You can also integrate external signals like weather data or macroeconomic indicators to refine the predictions.</p>
-            <h3>Inventory Visibility with Copilot</h3>
-            <p>For organizations with complex, multi-warehouse setups, the Inventory Visibility Add-in allows external systems to query stock levels in real time. With Copilot enabled, users can type natural language queries directly into the app, such as "Do we have any Surface Pro laptops available in the Seattle warehouse?" Copilot translates this into the necessary API calls and returns a human readable inventory summary.</p>
-          </div>
-        </article>
-      </section>
+    <section id="scm-ai">
+      <article class="article rd-rise">
+        <h2>Supply chain intelligence</h2>
+        <span class="article__meta">Feature · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>Supply Chain Management (SCM) benefits heavily from AI, focusing on forecasting accuracy and inventory visibility.</p>
+          <h3>Demand Planning and Azure ML</h3>
+          <p>The native Demand Planning app utilizes Azure Machine Learning to generate baseline forecasts. As a consultant, you configure data profiles that feed historical sales data into the ML models. The models automatically select the best forecasting algorithm (like ARIMA or ETS) to predict future demand. You can also integrate external signals like weather data or macroeconomic indicators to refine the predictions.</p>
+          <h3>Inventory Visibility with Copilot</h3>
+          <p>For organizations with complex, multi-warehouse setups, the Inventory Visibility Add-in allows external systems to query stock levels in real time. With Copilot enabled, users can type natural language queries directly into the app, such as "Do we have any Surface Pro laptops available in the Seattle warehouse?" Copilot translates this into the necessary API calls and returns a human readable inventory summary.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="power-platform-ai">
-        <article class="article">
-          <h2>Power Platform &amp; Copilot Studio</h2>
-          <p class="article__meta">Extending · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p>When out-of-the-box AI features do not meet a specific business requirement, consultants must look to the broader Power Platform for extensibility.</p>
-            <h3>AI Builder for Process Automation</h3>
-            <p>AI Builder provides pre-built and custom models that integrate seamlessly with Power Automate. A classic consulting scenario is Accounts Payable automation. You can configure a Power Automate flow that triggers when a vendor emails an invoice. The flow uses the AI Builder Invoice Processing model to extract the vendor name, invoice number, and line items. It then pushes this structured data directly into a D365 F&amp;O Pending Vendor Invoice journal via standard Data Entities, eliminating manual data entry.</p>
-            <h3>Copilot Studio Custom Agents</h3>
-            <p>If a client wants an internal chatbot that can answer proprietary questions, you build it using Copilot Studio. You can create a custom agent and configure its "Topics". For example, you can build an HR agent that queries F&amp;O OData endpoints to answer employee questions about their remaining leave balances or expense report statuses.</p>
-          </div>
-        </article>
-      </section>
+    <section id="power-platform-ai">
+      <article class="article rd-rise">
+        <h2>Power Platform &amp; Copilot Studio</h2>
+        <span class="article__meta">Extending · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>When out-of-the-box AI features do not meet a specific business requirement, consultants must look to the broader Power Platform for extensibility.</p>
+          <h3>AI Builder for Process Automation</h3>
+          <p>AI Builder provides pre-built and custom models that integrate seamlessly with Power Automate. A classic consulting scenario is Accounts Payable automation. You can configure a Power Automate flow that triggers when a vendor emails an invoice. The flow uses the AI Builder Invoice Processing model to extract the vendor name, invoice number, and line items. It then pushes this structured data directly into a D365 F&amp;O Pending Vendor Invoice journal via standard Data Entities, eliminating manual data entry.</p>
+          <h3>Copilot Studio Custom Agents</h3>
+          <p>If a client wants an internal chatbot that can answer proprietary questions, you build it using Copilot Studio. You can create a custom agent and configure its "Topics". For example, you can build an HR agent that queries F&amp;O OData endpoints to answer employee questions about their remaining leave balances or expense report statuses.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="governance">
-        <article class="article">
-          <h2>Governance &amp; trust</h2>
-          <p class="article__meta">Operations · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p>During an implementation, the Chief Information Security Officer (CISO) will inevitably ask how Microsoft uses their financial data. A consultant must be prepared to confidently address governance, privacy, and security.</p>
-            <h3>The Golden Rule of Microsoft AI</h3>
-            <p>Your data is your data. Microsoft explicitly states that tenant data (including customer information, financial records, and prompts) is never used to train the foundational OpenAI models. The LLMs are stateless; they do not remember the data passed to them after the response is generated.</p>
-            <h3>Role Based Access Control (RBAC)</h3>
-            <p>Copilot adheres strictly to the existing D365 security model. If a user does not have permission to view payroll data in the standard F&amp;O user interface, they cannot bypass that security by asking Copilot to summarize the payroll data. Copilot runs in the context of the logged-in user.</p>
-            <h3>Data Residency</h3>
-            <p>Depending on the geographic region of the F&amp;O environment, the Azure OpenAI endpoint processing the requests might be located in a different data boundary. Consultants must check the Power Platform admin center to see if cross-region data movement consent is required and ensure the client formally approves it.</p>
-          </div>
-        </article>
-      </section>
+    <section id="governance">
+      <article class="article rd-rise">
+        <h2>Governance &amp; trust</h2>
+        <span class="article__meta">Operations · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>During an implementation, the Chief Information Security Officer (CISO) will inevitably ask how Microsoft uses their financial data. A consultant must be prepared to confidently address governance, privacy, and security.</p>
+          <h3>The Golden Rule of Microsoft AI</h3>
+          <p>Your data is your data. Microsoft explicitly states that tenant data (including customer information, financial records, and prompts) is never used to train the foundational OpenAI models. The LLMs are stateless; they do not remember the data passed to them after the response is generated.</p>
+          <h3>Role Based Access Control (RBAC)</h3>
+          <p>Copilot adheres strictly to the existing D365 security model. If a user does not have permission to view payroll data in the standard F&amp;O user interface, they cannot bypass that security by asking Copilot to summarize the payroll data. Copilot runs in the context of the logged-in user.</p>
+          <h3>Data Residency</h3>
+          <p>Depending on the geographic region of the F&amp;O environment, the Azure OpenAI endpoint processing the requests might be located in a different data boundary. Consultants must check the Power Platform admin center to see if cross-region data movement consent is required and ensure the client formally approves it.</p>
+        </div>
+      </article>
+    </section>
 
-      <section id="client-conversations">
-        <article class="article">
-          <h2>Client conversations</h2>
-          <p class="article__meta">Consulting craft · Last updated 13-05-2026</p>
-                    <div class="article__content" style="margin: 0;">
-            <p>AI is heavily marketed, leading to inflated client expectations. The role of the consultant is to bridge the gap between hype and reality.</p>
-            <h3>Scoping AI Realisticly</h3>
-            <p>Never treat AI as magic. Machine learning models require clean, consistent data to function. If a client is migrating from an old legacy system with terrible data hygiene, Finance Insights will generate terrible predictions. Consultants must advocate for aggressive data cleansing as a prerequisite for any AI initiative.</p>
-            <h3>The Licensing Conversation</h3>
-            <p>Be extremely clear about licensing early in the project. While basic Copilot features are included in the standard D365 F&amp;O license, intensive operations like running custom AI Builder models consume capacity credits. If a client plans to process ten thousand invoices a month through AI Builder, you must calculate the required add-on capacity and present the true cost of ownership before building the solution.</p>
-          </div>
-        </article>
-      </section>
+    <section id="client-conversations">
+      <article class="article rd-rise">
+        <h2>Client conversations</h2>
+        <span class="article__meta">Consulting craft · Last updated 13-05-2026</span>
+        <div class="article__content">
+          <p>AI is heavily marketed, leading to inflated client expectations. The role of the consultant is to bridge the gap between hype and reality.</p>
+          <h3>Scoping AI Realistically</h3>
+          <p>Never treat AI as magic. Machine learning models require clean, consistent data to function. If a client is migrating from an old legacy system with terrible data hygiene, Finance Insights will generate terrible predictions. Consultants must advocate for aggressive data cleansing as a prerequisite for any AI initiative.</p>
+          <h3>The Licensing Conversation</h3>
+          <p>Be extremely clear about licensing early in the project. While basic Copilot features are included in the standard D365 F&amp;O license, intensive operations like running custom AI Builder models consume capacity credits. If a client plans to process ten thousand invoices a month through AI Builder, you must calculate the required add-on capacity and present the true cost of ownership before building the solution.</p>
+        </div>
+      </article>
+    </section>
 
-    </main>
-  </div>
+  </main>
 </div>
 
-<footer class="site-footer" data-footer></footer>
+<!-- ── Footer ── -->
+<footer class="rd-footer">
+  <div>© 2026 · Joe El Hajj · Beirut</div>
+  <div class="rd-footer__links">
+    <a href="https://www.linkedin.com/in/joe-el-hajj-0b44b5222/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:Joe1437@outlook.com">Email</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
 
 <script src="assets/js/app.js"></script>
-<script src="assets/js/search.js"></script>
+<script src="assets/js/scroll.js"></script>
+<script src="assets/js/hub.js"></script>
 </body>
 </html>
