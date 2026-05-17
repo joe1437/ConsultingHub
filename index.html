@@ -607,6 +607,19 @@
       overflow: hidden;
     }
 
+    /* Row of multiple logos for a single engagement (e.g. HDF + HMC + HSC). */
+    .rd-eng-logos {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rd-eng-logos .rd-eng-logo {
+      width: 52px;
+      height: 52px;
+      padding: 6px;
+      border-radius: 10px;
+    }
+
     .rd-eng-logo img {
       max-width: 100%;
       max-height: 100%;
@@ -1189,7 +1202,7 @@
           <div class="rd-bignum">
             <span data-ticker data-to="20" data-suffix="+">0+</span>
           </div>
-          <div class="rd-stats__label">D365 F&amp;O and Oracle Fusion engagements, end-to-end.</div>
+          <div class="rd-stats__label">D365 F&amp;O and Oracle Fusion engagements.</div>
         </div>
         <div>
           <div class="rd-bignum">
@@ -1227,8 +1240,14 @@
 
       <div class="rd-engagements__grid rd-stagger">
         <a href="portfolio.html" class="rd-engagement">
-          <div class="rd-eng-logo"><img src="assets/images/hotel_dieu_de_france_logo.jpg"
-              alt="Hôtel Dieu de France logo" loading="lazy"></div>
+          <div class="rd-eng-logos">
+            <div class="rd-eng-logo"><img src="assets/images/hotel_dieu_de_france_logo.jpg"
+                alt="Hôtel Dieu de France logo" loading="lazy"></div>
+            <div class="rd-eng-logo"><img src="assets/images/HMC.png"
+                alt="HMC logo" loading="lazy"></div>
+            <div class="rd-eng-logo"><img src="assets/images/HSC.png"
+                alt="HSC logo" loading="lazy"></div>
+          </div>
           <div>
             <div class="rd-eng-sector">Healthcare</div>
             <h3 class="rd-eng-title">Hôtel Dieu de France</h3>
