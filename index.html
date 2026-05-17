@@ -1,1322 +1,1696 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Joe El Hajj · D365 F&amp;O ERP Consulting</title>
-<meta name="description" content="Senior D365 F&O and Oracle Fusion ERP consultant. Reference hub and portfolio." />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="assets/css/redesign.css" />
-<style>
-/* ── Base reset ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--rd-sans-a);
-  background: var(--rd-cream);
-  color: var(--rd-ink);
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration: none; }
-button { font-family: var(--rd-sans-a); }
-img { display: block; max-width: 100%; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joe El Hajj · D365 F&amp;O ERP Consulting</title>
+  <meta name="description" content="Senior D365 F&O and Oracle Fusion ERP consultant. Reference hub and portfolio." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/redesign.css" />
+  <style>
+    /* ── Base reset ── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-/* ── Layout ── */
-.rd-container { max-width: 1320px; margin: 0 auto; padding: 0 56px; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* ── Header ── */
-.rd-header {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  border-bottom: 1px solid var(--rd-line);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(250,248,244,0.88);
-  backdrop-filter: saturate(140%) blur(8px);
-}
-.rd-header__inner {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 56px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-.rd-header__brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  flex-shrink: 0;
-}
-.rd-header__mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--rd-gold);
-  flex-shrink: 0;
-}
-.rd-header__name {
-  font-family: var(--rd-serif-b);
-  font-weight: 400;
-  font-size: 15px;
-  color: var(--rd-navy);
-  letter-spacing: -0.005em;
-}
-.rd-header__name em {
-  color: var(--rd-gold);
-  font-family: var(--rd-serif-a);
-  font-style: italic;
-}
-.rd-header__inner > nav { margin-left: auto; }
-.rd-header__nav {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  font-size: 13px;
-  color: var(--rd-ink-3);
-  list-style: none;
-}
-.rd-header__nav a {
-  text-decoration: none;
-  color: var(--rd-ink-3);
-  transition: color var(--rd-fast);
-}
-.rd-header__nav a:hover { color: var(--rd-navy); }
-.rd-header__nav a.is-active { color: var(--rd-navy); }
+    body {
+      font-family: var(--rd-sans-a);
+      background: var(--rd-cream);
+      color: var(--rd-ink);
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* ── Hub dropdown ── */
-.rd-nav-dropdown { position: relative; list-style: none; }
-.rd-nav-dropdown__btn {
-  background: none; border: none; padding: 0;
-  font-family: var(--rd-sans-a); font-size: 13px; color: var(--rd-ink-3);
-  cursor: pointer; display: flex; align-items: center; gap: 5px;
-  transition: color var(--rd-fast);
-}
-.rd-nav-dropdown__btn:hover { color: var(--rd-navy); }
-.rd-nav-dropdown__caret {
-  display: inline-block; font-size: 9px; line-height: 1;
-  transition: transform 200ms var(--rd-ease-out);
-}
-.rd-nav-dropdown.is-open .rd-nav-dropdown__caret { transform: rotate(180deg); }
-.rd-nav-dropdown__menu {
-  display: none; position: absolute; top: calc(100% + 14px); left: 50%;
-  transform: translateX(-50%); min-width: 220px;
-  background: #fff; border: 1px solid var(--rd-line);
-  border-radius: 12px; padding: 6px;
-  box-shadow: 0 12px 32px rgba(14,27,51,0.12); z-index: 300;
-}
-.rd-nav-dropdown.is-open .rd-nav-dropdown__menu { display: block; }
-.rd-nav-dropdown__link {
-  display: block; padding: 9px 14px; font-size: 13px; color: var(--rd-ink-2);
-  text-decoration: none; border-radius: 7px;
-  transition: background var(--rd-fast), color var(--rd-fast);
-}
-.rd-nav-dropdown__link:hover { background: var(--rd-stone-50); color: var(--rd-navy); }
-.rd-nav-dropdown__divider { height: 1px; background: var(--rd-line); margin: 4px 8px; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-.rd-header__cta {
-  margin-left: 32px;
-  background: var(--rd-navy);
-  color: #fff;
-  border: 0;
-  padding: 9px 18px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background var(--rd-fast), transform var(--rd-fast);
-  white-space: nowrap;
-}
-.rd-header__cta:hover {
-  background: var(--rd-navy-500);
-  transform: translateY(-1px);
-}
+    button {
+      font-family: var(--rd-sans-a);
+    }
 
-/* ── Section label ── */
-.rd-section-label {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--rd-ink-4);
-}
-.rd-section-label__num { color: var(--rd-gold); }
-.rd-section-label__rule {
-  flex: 0 0 28px;
-  height: 1px;
-  background: var(--rd-ink-4);
-}
-.rd-section-label.on-dark { color: rgba(255,255,255,0.45); }
-.rd-section-label.on-dark .rd-section-label__rule { background: rgba(255,255,255,0.45); }
-.rd-section-label.on-dark .rd-section-label__text { color: rgba(255,255,255,0.85); }
+    img {
+      display: block;
+      max-width: 100%;
+    }
 
-/* ── HERO ── */
-.rd-hero {
-  padding: 88px 0 64px;
-  position: relative;
-  overflow: hidden;
-}
-.rd-hero__bg-mark {
-  position: absolute;
-  right: -80px;
-  top: 40px;
-  width: 560px;
-  height: 560px;
-  opacity: 0.06;
-  pointer-events: none;
-}
-.rd-hero__inner {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 56px;
-  position: relative;
-}
-.rd-hero__title {
-  font-family: var(--rd-serif-a);
-  font-weight: 400;
-  font-size: clamp(72px, 8vw, 128px);
-  line-height: 0.94;
-  letter-spacing: -0.025em;
-  color: var(--rd-navy);
-  margin: 28px 0 0;
-  max-width: 1100px;
-}
-.rd-hero__title em {
-  color: var(--rd-clay);
-  font-style: italic;
-}
-.rd-hero__subtitle {
-  max-width: 580px;
-  font-size: 19px;
-  line-height: 1.55;
-  color: var(--rd-ink-2);
-  margin: 36px 0 32px;
-}
-.rd-hero__response {
-  margin-top: 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  max-width: 1280px;
-}
-.rd-hero__aud-eyebrow {
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--rd-gold);
-  margin-bottom: 14px;
-}
-.rd-hero__aud-lead {
-  font-size: 21px;
-  line-height: 1.5;
-  color: var(--rd-ink);
-  margin: 0 0 28px;
-  font-family: var(--rd-serif-a);
-  font-weight: 400;
-}
-.rd-hero__aud-cta {
-  background: var(--rd-gold);
-  color: var(--rd-navy);
-  border: 0;
-  padding: 14px 26px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  display: inline-block;
-  transition: background var(--rd-fast), transform var(--rd-fast);
-}
-.rd-hero__aud-cta:hover {
-  background: var(--rd-gold-hover);
-  transform: translateY(-2px);
-}
-.rd-lifecycle-card {
-  background: #fff;
-  border: 1px solid var(--rd-line);
-  border-radius: 14px;
-  padding: 24px 28px 48px;
-  position: relative;
-  overflow: visible;
-  box-shadow: 0 14px 40px rgba(14,27,51,0.06);
-}
-.rd-lifecycle-card__eyebrow {
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--rd-gold);
-  margin-bottom: 6px;
-}
-.rd-lifecycle-card__title {
-  font-family: var(--rd-serif-a);
-  font-size: 24px;
-  color: var(--rd-navy);
-  margin-bottom: 16px;
-}
+    /* ── Layout ── */
+    .rd-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 56px;
+    }
 
-/* ── STATS SECTION ── */
-.rd-stats {
-  padding: 88px 0;
-  background: var(--rd-paper);
-  border-top: 1px solid var(--rd-line);
-}
-.rd-stats__grid {
-  margin-top: 40px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-}
-.rd-stats__label {
-  font-size: 15px;
-  color: var(--rd-ink-3);
-  margin-top: 14px;
-  line-height: 1.45;
-  max-width: 280px;
-}
+    /* ── Header ── */
+    .rd-header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      border-bottom: 1px solid var(--rd-line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 244, 0.88);
+      backdrop-filter: saturate(140%) blur(8px);
+    }
 
-/* ── APPROACH (scroll-tracked) ── */
-.rd-approach {
-  background: var(--rd-navy);
-  color: #FAF8F4;
-  padding: 120px 0;
-  position: relative;
-  overflow: hidden;
-  min-height: calc(100vh + 900px);
-}
-.rd-approach__inner {
-  position: relative;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 56px;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 80px;
-}
-.rd-approach__title {
-  font-family: var(--rd-serif-a);
-  font-weight: 400;
-  font-size: clamp(56px, 5vw, 80px);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  color: #FAF8F4;
-  margin: 24px 0 28px;
-}
-.rd-approach__title em { color: var(--rd-gold); font-style: italic; }
-.rd-approach__body {
-  font-size: 18px;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.75);
-  margin: 0 0 48px;
-  max-width: 560px;
-}
-.rd-phase {
-  display: flex;
-  align-items: baseline;
-  gap: 18px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.rd-phase__num {
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: var(--rd-gold);
-  flex: 0 0 36px;
-}
-.rd-phase__title {
-  font-family: var(--rd-serif-a);
-  font-size: 24px;
-  color: #fff;
-  font-style: italic;
-  margin-bottom: 4px;
-}
-.rd-phase__desc { font-size: 14px; color: rgba(255,255,255,0.65); }
-.rd-lifecycle-sticky {
-  position: sticky;
-  top: 120px;
-}
+    .rd-header__inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 56px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
 
-/* ── INSIDE THE HUB ── */
-.rd-hub {
-  padding: 120px 56px;
-}
-.rd-hub__inner {
-  max-width: 1320px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 80px;
-  align-items: start;
-}
-.rd-hub__quote {
-  margin-top: 24px;
-  font-family: var(--rd-serif-a);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 1.25;
-  color: var(--rd-navy);
-  border-left: 2px solid var(--rd-clay);
-  padding: 8px 0 8px 20px;
-}
-.rd-hub__attribution {
-  margin-top: 24px;
-  font-size: 14px;
-  color: var(--rd-ink-3);
-  font-family: var(--rd-mono);
-  letter-spacing: 0.04em;
-}
-.rd-hub__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.rd-chapter__eyebrow {
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  color: var(--rd-gold);
-  letter-spacing: 0.16em;
-  display: block;
-  margin-bottom: 10px;
-}
-.rd-chapter__title {
-  font-family: var(--rd-serif-a);
-  font-size: 26px;
-  color: var(--rd-navy);
-  font-style: italic;
-  font-weight: 400;
-  display: block;
-  margin-bottom: 10px;
-}
-.rd-chapter__desc { font-size: 13.5px; line-height: 1.5; color: var(--rd-ink-3); }
+    .rd-header__brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
 
-/* ── FEATURED ENGAGEMENTS ── */
-.rd-engagements {
-  padding: 80px 0;
-  background: var(--rd-paper);
-  border-top: 1px solid var(--rd-line);
-}
-.rd-engagements__header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 48px;
-}
-.rd-engagements__heading {
-  font-family: var(--rd-serif-a);
-  font-weight: 400;
-  font-size: 56px;
-  line-height: 1.0;
-  color: var(--rd-navy);
-  margin: 14px 0 0;
-}
-.rd-engagements__heading em { color: var(--rd-clay); font-style: italic; }
-.rd-engagements__all {
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  color: var(--rd-navy);
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--rd-navy);
-  padding-bottom: 2px;
-  white-space: nowrap;
-  text-decoration: none;
-}
-.rd-engagements__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-.rd-eng-logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  background: #fff;
-  border: 1px solid var(--rd-line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.rd-eng-logo img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
-.rd-eng-sector {
-  font-family: var(--rd-mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  color: var(--rd-clay);
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.rd-eng-title {
-  font-family: var(--rd-serif-a);
-  font-weight: 400;
-  font-size: 30px;
-  color: var(--rd-navy);
-  margin: 0 0 6px;
-}
-.rd-eng-meta { font-size: 13.5px; color: var(--rd-ink-3); margin: 0; line-height: 1.5; }
-.rd-eng-cta {
-  margin-top: auto;
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  color: var(--rd-navy);
-}
+    .rd-header__mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--rd-gold);
+      flex-shrink: 0;
+    }
 
-/* ── CONTACT ── */
-.rd-contact {
-  padding: 120px 56px;
-  background: var(--rd-navy);
-  color: #FAF8F4;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
-.rd-contact__title {
-  font-family: var(--rd-serif-a);
-  font-weight: 400;
-  font-size: clamp(56px, 6vw, 96px);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  color: #FAF8F4;
-  margin: 28px 0 24px;
-}
-.rd-contact__title em { color: var(--rd-gold); font-style: italic; }
-.rd-contact__body {
-  font-size: 19px;
-  line-height: 1.55;
-  color: rgba(255,255,255,0.75);
-  margin: 0 auto 36px;
-  max-width: 600px;
-}
-.rd-contact__actions {
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.rd-btn-primary {
-  background: var(--rd-gold);
-  color: var(--rd-navy);
-  border: 0;
-  padding: 16px 32px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  display: inline-block;
-  transition: background var(--rd-fast), transform var(--rd-fast);
-}
-.rd-btn-primary:hover { background: var(--rd-gold-hover); transform: translateY(-2px); }
-.rd-btn-ghost {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.20);
-  padding: 16px 32px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 15px;
-  text-decoration: none;
-  display: inline-block;
-  transition: border-color var(--rd-fast), transform var(--rd-fast);
-}
-.rd-btn-ghost:hover { border-color: rgba(255,255,255,0.45); transform: translateY(-2px); }
+    .rd-header__name {
+      font-family: var(--rd-serif-b);
+      font-weight: 400;
+      font-size: 15px;
+      color: var(--rd-navy);
+      letter-spacing: -0.005em;
+    }
 
-/* ── FOOTER ── */
-.rd-footer {
-  padding: 40px 56px;
-  background: var(--rd-cream);
-  border-top: 1px solid var(--rd-line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--rd-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--rd-ink-3);
-}
-.rd-footer__links { display: flex; gap: 24px; }
-.rd-footer__links a { color: var(--rd-ink-3); text-decoration: none; transition: color var(--rd-fast); }
-.rd-footer__links a:hover { color: var(--rd-navy); }
+    .rd-header__name em {
+      color: var(--rd-gold);
+      font-family: var(--rd-serif-a);
+      font-style: italic;
+    }
 
-/* ── Topography bg ── */
-.rd-topo {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.rd-topo svg { width: 100%; height: 100%; }
+    .rd-header__inner>nav {
+      margin-left: auto;
+    }
 
-/* ── Audience response cards — audience-dependent content ── */
-[data-aud] { display: none; }
-[data-aud].is-visible { display: block; }
+    .rd-header__nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      font-size: 13px;
+      color: var(--rd-ink-3);
+      list-style: none;
+    }
 
-/* ── Responsive ── */
-@media (max-width: 1100px) {
-  .rd-hero__response, .rd-hub__inner, .rd-approach__inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .rd-lifecycle-sticky { position: static; }
-  .rd-hero__bg-mark { display: none; }
-  .rd-engagements__grid { grid-template-columns: 1fr 1fr; }
-  .rd-stats__grid { gap: 24px; }
-}
-@media (max-width: 700px) {
-  .rd-header__inner { padding: 0 24px; }
-  .rd-header__nav { gap: 16px; }
-  .rd-header__nav > li:not(.rd-nav-dropdown) { display: none; }
-  .rd-hero__inner { padding: 0 24px; }
-  .rd-approach__inner { padding: 0 24px; }
-  .rd-stats, .rd-hub, .rd-engagements,
-  .rd-contact { padding-left: 24px; padding-right: 24px; }
-  .rd-container { padding: 0 24px; }
-  .rd-hub__grid { grid-template-columns: 1fr; }
-  .rd-engagements__grid { grid-template-columns: 1fr; }
-  .rd-stats__grid { grid-template-columns: 1fr; }
-  .rd-engagements__header { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .rd-footer { flex-direction: column; gap: 16px; text-align: center; }
+    .rd-header__nav a {
+      text-decoration: none;
+      color: var(--rd-ink-3);
+      transition: color var(--rd-fast);
+    }
 
-  /* Tighter vertical rhythm on phones so sections feel less sparse. */
-  .rd-hero { padding: 56px 0 40px; }
-  .rd-stats { padding: 56px 0; }
-  .rd-approach { padding: 64px 0; }
-  .rd-hub { padding: 64px 24px; }
-  .rd-engagements { padding: 56px 0; }
-  .rd-contact { padding: 64px 24px; }
+    .rd-header__nav a:hover {
+      color: var(--rd-navy);
+    }
 
-  /* Hero lifecycle SVG was getting cut off because the parallax
+    .rd-header__nav a.is-active {
+      color: var(--rd-navy);
+    }
+
+    /* ── Hub dropdown ── */
+    .rd-nav-dropdown {
+      position: relative;
+      list-style: none;
+    }
+
+    .rd-nav-dropdown__btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: var(--rd-sans-a);
+      font-size: 13px;
+      color: var(--rd-ink-3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color var(--rd-fast);
+    }
+
+    .rd-nav-dropdown__btn:hover {
+      color: var(--rd-navy);
+    }
+
+    .rd-nav-dropdown__caret {
+      display: inline-block;
+      font-size: 9px;
+      line-height: 1;
+      transition: transform 200ms var(--rd-ease-out);
+    }
+
+    .rd-nav-dropdown.is-open .rd-nav-dropdown__caret {
+      transform: rotate(180deg);
+    }
+
+    .rd-nav-dropdown__menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 220px;
+      background: #fff;
+      border: 1px solid var(--rd-line);
+      border-radius: 12px;
+      padding: 6px;
+      box-shadow: 0 12px 32px rgba(14, 27, 51, 0.12);
+      z-index: 300;
+    }
+
+    .rd-nav-dropdown.is-open .rd-nav-dropdown__menu {
+      display: block;
+    }
+
+    .rd-nav-dropdown__link {
+      display: block;
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--rd-ink-2);
+      text-decoration: none;
+      border-radius: 7px;
+      transition: background var(--rd-fast), color var(--rd-fast);
+    }
+
+    .rd-nav-dropdown__link:hover {
+      background: var(--rd-stone-50);
+      color: var(--rd-navy);
+    }
+
+    .rd-nav-dropdown__divider {
+      height: 1px;
+      background: var(--rd-line);
+      margin: 4px 8px;
+    }
+
+    .rd-header__cta {
+      margin-left: 32px;
+      background: var(--rd-navy);
+      color: #fff;
+      border: 0;
+      padding: 9px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background var(--rd-fast), transform var(--rd-fast);
+      white-space: nowrap;
+    }
+
+    .rd-header__cta:hover {
+      background: var(--rd-navy-500);
+      transform: translateY(-1px);
+    }
+
+    /* ── Section label ── */
+    .rd-section-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rd-ink-4);
+    }
+
+    .rd-section-label__num {
+      color: var(--rd-gold);
+    }
+
+    .rd-section-label__rule {
+      flex: 0 0 28px;
+      height: 1px;
+      background: var(--rd-ink-4);
+    }
+
+    .rd-section-label.on-dark {
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .rd-section-label.on-dark .rd-section-label__rule {
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    .rd-section-label.on-dark .rd-section-label__text {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* ── HERO ── */
+    .rd-hero {
+      padding: 88px 0 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rd-hero__bg-mark {
+      position: absolute;
+      right: -80px;
+      top: 40px;
+      width: 560px;
+      height: 560px;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    .rd-hero__inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 56px;
+      position: relative;
+    }
+
+    .rd-hero__title {
+      font-family: var(--rd-serif-a);
+      font-weight: 400;
+      font-size: clamp(72px, 8vw, 128px);
+      line-height: 0.94;
+      letter-spacing: -0.025em;
+      color: var(--rd-navy);
+      margin: 28px 0 0;
+      max-width: 1100px;
+    }
+
+    .rd-hero__title em {
+      color: var(--rd-clay);
+      font-style: italic;
+    }
+
+    .rd-hero__subtitle {
+      max-width: 580px;
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--rd-ink-2);
+      margin: 36px 0 32px;
+    }
+
+    .rd-hero__response {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      max-width: 1280px;
+    }
+
+    .rd-hero__aud-eyebrow {
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rd-gold);
+      margin-bottom: 14px;
+    }
+
+    .rd-hero__aud-lead {
+      font-size: 21px;
+      line-height: 1.5;
+      color: var(--rd-ink);
+      margin: 0 0 28px;
+      font-family: var(--rd-serif-a);
+      font-weight: 400;
+    }
+
+    .rd-hero__aud-cta {
+      background: var(--rd-gold);
+      color: var(--rd-navy);
+      border: 0;
+      padding: 14px 26px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      display: inline-block;
+      transition: background var(--rd-fast), transform var(--rd-fast);
+    }
+
+    .rd-hero__aud-cta:hover {
+      background: var(--rd-gold-hover);
+      transform: translateY(-2px);
+    }
+
+    .rd-lifecycle-card {
+      background: #fff;
+      border: 1px solid var(--rd-line);
+      border-radius: 14px;
+      padding: 24px 28px 48px;
+      position: relative;
+      overflow: visible;
+      box-shadow: 0 14px 40px rgba(14, 27, 51, 0.06);
+    }
+
+    .rd-lifecycle-card__eyebrow {
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rd-gold);
+      margin-bottom: 6px;
+    }
+
+    .rd-lifecycle-card__title {
+      font-family: var(--rd-serif-a);
+      font-size: 24px;
+      color: var(--rd-navy);
+      margin-bottom: 16px;
+    }
+
+    /* ── STATS SECTION ── */
+    .rd-stats {
+      padding: 88px 0;
+      background: var(--rd-paper);
+      border-top: 1px solid var(--rd-line);
+    }
+
+    .rd-stats__grid {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .rd-stats__label {
+      font-size: 15px;
+      color: var(--rd-ink-3);
+      margin-top: 14px;
+      line-height: 1.45;
+      max-width: 280px;
+    }
+
+    /* ── APPROACH (scroll-tracked) ── */
+    .rd-approach {
+      background: var(--rd-navy);
+      color: #FAF8F4;
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh + 900px);
+    }
+
+    .rd-approach__inner {
+      position: relative;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 56px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+    }
+
+    .rd-approach__title {
+      font-family: var(--rd-serif-a);
+      font-weight: 400;
+      font-size: clamp(56px, 5vw, 80px);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      color: #FAF8F4;
+      margin: 24px 0 28px;
+    }
+
+    .rd-approach__title em {
+      color: var(--rd-gold);
+      font-style: italic;
+    }
+
+    .rd-approach__body {
+      font-size: 18px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.75);
+      margin: 0 0 48px;
+      max-width: 560px;
+    }
+
+    .rd-phase {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .rd-phase__num {
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--rd-gold);
+      flex: 0 0 36px;
+    }
+
+    .rd-phase__title {
+      font-family: var(--rd-serif-a);
+      font-size: 24px;
+      color: #fff;
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    .rd-phase__desc {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .rd-lifecycle-sticky {
+      position: sticky;
+      top: 120px;
+    }
+
+    /* ── INSIDE THE HUB ── */
+    .rd-hub {
+      padding: 120px 56px;
+    }
+
+    .rd-hub__inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .rd-hub__quote {
+      margin-top: 24px;
+      font-family: var(--rd-serif-a);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.25;
+      color: var(--rd-navy);
+      border-left: 2px solid var(--rd-clay);
+      padding: 8px 0 8px 20px;
+    }
+
+    .rd-hub__attribution {
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--rd-ink-3);
+      font-family: var(--rd-mono);
+      letter-spacing: 0.04em;
+    }
+
+    .rd-hub__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .rd-chapter__eyebrow {
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      color: var(--rd-gold);
+      letter-spacing: 0.16em;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .rd-chapter__title {
+      font-family: var(--rd-serif-a);
+      font-size: 26px;
+      color: var(--rd-navy);
+      font-style: italic;
+      font-weight: 400;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .rd-chapter__desc {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--rd-ink-3);
+    }
+
+    /* ── FEATURED ENGAGEMENTS ── */
+    .rd-engagements {
+      padding: 80px 0;
+      background: var(--rd-paper);
+      border-top: 1px solid var(--rd-line);
+    }
+
+    .rd-engagements__header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .rd-engagements__heading {
+      font-family: var(--rd-serif-a);
+      font-weight: 400;
+      font-size: 56px;
+      line-height: 1.0;
+      color: var(--rd-navy);
+      margin: 14px 0 0;
+    }
+
+    .rd-engagements__heading em {
+      color: var(--rd-clay);
+      font-style: italic;
+    }
+
+    .rd-engagements__all {
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--rd-navy);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--rd-navy);
+      padding-bottom: 2px;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .rd-engagements__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .rd-eng-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--rd-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .rd-eng-logo img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .rd-eng-sector {
+      font-family: var(--rd-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--rd-clay);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .rd-eng-title {
+      font-family: var(--rd-serif-a);
+      font-weight: 400;
+      font-size: 30px;
+      color: var(--rd-navy);
+      margin: 0 0 6px;
+    }
+
+    .rd-eng-meta {
+      font-size: 13.5px;
+      color: var(--rd-ink-3);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .rd-eng-cta {
+      margin-top: auto;
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--rd-navy);
+    }
+
+    /* ── CONTACT ── */
+    .rd-contact {
+      padding: 120px 56px;
+      background: var(--rd-navy);
+      color: #FAF8F4;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .rd-contact__title {
+      font-family: var(--rd-serif-a);
+      font-weight: 400;
+      font-size: clamp(56px, 6vw, 96px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: #FAF8F4;
+      margin: 28px 0 24px;
+    }
+
+    .rd-contact__title em {
+      color: var(--rd-gold);
+      font-style: italic;
+    }
+
+    .rd-contact__body {
+      font-size: 19px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.75);
+      margin: 0 auto 36px;
+      max-width: 600px;
+    }
+
+    .rd-contact__actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .rd-btn-primary {
+      background: var(--rd-gold);
+      color: var(--rd-navy);
+      border: 0;
+      padding: 16px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      text-decoration: none;
+      display: inline-block;
+      transition: background var(--rd-fast), transform var(--rd-fast);
+    }
+
+    .rd-btn-primary:hover {
+      background: var(--rd-gold-hover);
+      transform: translateY(-2px);
+    }
+
+    .rd-btn-ghost {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      padding: 16px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color var(--rd-fast), transform var(--rd-fast);
+    }
+
+    .rd-btn-ghost:hover {
+      border-color: rgba(255, 255, 255, 0.45);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    .rd-footer {
+      padding: 40px 56px;
+      background: var(--rd-cream);
+      border-top: 1px solid var(--rd-line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--rd-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--rd-ink-3);
+    }
+
+    .rd-footer__links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .rd-footer__links a {
+      color: var(--rd-ink-3);
+      text-decoration: none;
+      transition: color var(--rd-fast);
+    }
+
+    .rd-footer__links a:hover {
+      color: var(--rd-navy);
+    }
+
+    /* ── Topography bg ── */
+    .rd-topo {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .rd-topo svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Audience response cards — audience-dependent content ── */
+    [data-aud] {
+      display: none;
+    }
+
+    [data-aud].is-visible {
+      display: block;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1100px) {
+
+      .rd-hero__response,
+      .rd-hub__inner,
+      .rd-approach__inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .rd-lifecycle-sticky {
+        position: static;
+      }
+
+      .rd-hero__bg-mark {
+        display: none;
+      }
+
+      .rd-engagements__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .rd-stats__grid {
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .rd-header__inner {
+        padding: 0 24px;
+      }
+
+      .rd-header__nav {
+        gap: 16px;
+      }
+
+      .rd-header__nav>li:not(.rd-nav-dropdown) {
+        display: none;
+      }
+
+      .rd-hero__inner {
+        padding: 0 24px;
+      }
+
+      .rd-approach__inner {
+        padding: 0 24px;
+      }
+
+      .rd-stats,
+      .rd-hub,
+      .rd-engagements,
+      .rd-contact {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .rd-container {
+        padding: 0 24px;
+      }
+
+      .rd-hub__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rd-engagements__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rd-stats__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rd-engagements__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .rd-footer {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      /* Tighter vertical rhythm on phones so sections feel less sparse. */
+      .rd-hero {
+        padding: 56px 0 40px;
+      }
+
+      .rd-stats {
+        padding: 56px 0;
+      }
+
+      .rd-approach {
+        padding: 64px 0;
+      }
+
+      .rd-hub {
+        padding: 64px 24px;
+      }
+
+      .rd-engagements {
+        padding: 56px 0;
+      }
+
+      .rd-contact {
+        padding: 64px 24px;
+      }
+
+      /* Hero lifecycle SVG was getting cut off because the parallax
      transform on .rd-parallax-slow pushed the card downward past
      .rd-hero's `overflow: hidden` boundary. Disable parallax on
      phones so the card stays in place and renders fully. */
-  .rd-lifecycle-card.rd-parallax-slow { transform: none !important; }
+      .rd-lifecycle-card.rd-parallax-slow {
+        transform: none !important;
+      }
 
-  /* Approach section: hide the scroll-driven SVG roadmap on phones.
+      /* Approach section: hide the scroll-driven SVG roadmap on phones.
      The animation depends on desktop layout math (sticky + tall scroll
      track) and renders incorrectly here. The 10 phases are already
      listed as text on the left, so no information is lost. Also drop
      the artificial 900px scroll buffer that existed solely to power
      the animation. */
-  .rd-lifecycle-sticky { display: none; }
-  .rd-approach { min-height: 0; }
-}
-@media (max-width: 480px) {
-  .rd-container { padding: 0 16px; }
-  .rd-header__inner { padding: 0 16px; }
-  .rd-hero__inner { padding: 0 16px; }
-  .rd-approach__inner { padding: 0 16px; }
-  .rd-stats, .rd-engagements { padding-left: 16px; padding-right: 16px; }
-  .rd-hub { padding-left: 16px; padding-right: 16px; }
-  .rd-contact { padding-left: 16px; padding-right: 16px; }
-}
-</style>
+      .rd-lifecycle-sticky {
+        display: none;
+      }
+
+      .rd-approach {
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .rd-container {
+        padding: 0 16px;
+      }
+
+      .rd-header__inner {
+        padding: 0 16px;
+      }
+
+      .rd-hero__inner {
+        padding: 0 16px;
+      }
+
+      .rd-approach__inner {
+        padding: 0 16px;
+      }
+
+      .rd-stats,
+      .rd-engagements {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .rd-hub {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .rd-contact {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ============ HEADER ============ -->
-<header class="rd-header">
-  <div class="rd-header__inner">
-    <a href="index.html" class="rd-header__brand">
-      <span class="rd-header__mark">
-        <svg width="15" height="15" viewBox="0 0 36 36" fill="none">
-          <path d="M 9 8 L 9 28"  stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
-          <path d="M 27 8 L 27 28" stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square"/>
-          <line x1="6" y1="18" x2="30" y2="18" stroke="#C29036" stroke-width="1.6"/>
-        </svg>
-      </span>
-      <span class="rd-header__name">Joe El <em>Hajj</em></span>
-    </a>
-    <nav>
-      <ul class="rd-header__nav">
-        <li class="rd-nav-dropdown">
-          <button class="rd-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">
-            The Hub <span class="rd-nav-dropdown__caret">▾</span>
-          </button>
-          <div class="rd-nav-dropdown__menu" role="menu">
-            <a href="consulting.html" class="rd-nav-dropdown__link">Overview</a>
-            <div class="rd-nav-dropdown__divider"></div>
-            <a href="lifecycle.html" class="rd-nav-dropdown__link">ERP Lifecycle</a>
-            <a href="modules.html" class="rd-nav-dropdown__link">Modules</a>
-            <a href="business-processes.html" class="rd-nav-dropdown__link">Business Processes</a>
-            <a href="accounting.html" class="rd-nav-dropdown__link">Accounting</a>
-            <a href="ai.html" class="rd-nav-dropdown__link">AI in D365</a>
-            <a href="customizations.html" class="rd-nav-dropdown__link">Customizations &amp; Integrations</a>
-            <a href="advanced.html" class="rd-nav-dropdown__link">Advanced Features</a>
-          </div>
-        </li>
-        <li><a href="portfolio.html">Portfolio</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <a href="mailto:Joe1437@outlook.com" class="rd-header__cta">Book a call →</a>
-  </div>
-</header>
+  <!-- ============ HEADER ============ -->
+  <header class="rd-header">
+    <div class="rd-header__inner">
+      <a href="index.html" class="rd-header__brand">
+        <span class="rd-header__mark">
+          <svg width="15" height="15" viewBox="0 0 36 36" fill="none">
+            <path d="M 9 8 L 9 28" stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square" />
+            <path d="M 27 8 L 27 28" stroke="#0E1B33" stroke-width="2.4" stroke-linecap="square" />
+            <line x1="6" y1="18" x2="30" y2="18" stroke="#C29036" stroke-width="1.6" />
+          </svg>
+        </span>
+        <span class="rd-header__name">Joe El <em>Hajj</em></span>
+      </a>
+      <nav>
+        <ul class="rd-header__nav">
+          <li class="rd-nav-dropdown">
+            <button class="rd-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">
+              The Hub <span class="rd-nav-dropdown__caret">▾</span>
+            </button>
+            <div class="rd-nav-dropdown__menu" role="menu">
+              <a href="consulting.html" class="rd-nav-dropdown__link">Overview</a>
+              <div class="rd-nav-dropdown__divider"></div>
+              <a href="lifecycle.html" class="rd-nav-dropdown__link">ERP Lifecycle</a>
+              <a href="modules.html" class="rd-nav-dropdown__link">Modules</a>
+              <a href="business-processes.html" class="rd-nav-dropdown__link">Business Processes</a>
+              <a href="accounting.html" class="rd-nav-dropdown__link">Accounting</a>
+              <a href="ai.html" class="rd-nav-dropdown__link">AI in D365</a>
+              <a href="customizations.html" class="rd-nav-dropdown__link">Customizations &amp; Integrations</a>
+              <a href="advanced.html" class="rd-nav-dropdown__link">Advanced Features</a>
+            </div>
+          </li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a href="mailto:Joe1437@outlook.com" class="rd-header__cta">Book a call →</a>
+    </div>
+  </header>
 
-<!-- ============ HERO ============ -->
-<section class="rd-hero">
-  <!-- Decorative parallax H mark -->
-  <div class="rd-hero__bg-mark rd-parallax-up">
-    <svg viewBox="0 0 200 200" width="560" height="560">
-      <circle cx="100" cy="100" r="98" fill="none" stroke="#0E1B33" stroke-width="1"/>
-      <path d="M 60 50 L 60 150" stroke="#0E1B33" stroke-width="6" stroke-linecap="square"/>
-      <path d="M 140 50 L 140 150" stroke="#0E1B33" stroke-width="6" stroke-linecap="square"/>
-      <line x1="40" y1="100" x2="160" y2="100" stroke="#C29036" stroke-width="4"/>
-    </svg>
-  </div>
-
-  <div class="rd-hero__inner">
-    <div class="rd-rise">
-      <div class="rd-section-label">
-        <span class="rd-section-label__num">00</span>
-        <span class="rd-section-label__rule"></span>
-        <span class="rd-section-label__text">Senior functional consultant, Microsoft- &amp; Oracle-certified</span>
-      </div>
+  <!-- ============ HERO ============ -->
+  <section class="rd-hero">
+    <!-- Decorative parallax H mark -->
+    <div class="rd-hero__bg-mark rd-parallax-up">
+      <svg viewBox="0 0 200 200" width="560" height="560">
+        <circle cx="100" cy="100" r="98" fill="none" stroke="#0E1B33" stroke-width="1" />
+        <path d="M 60 50 L 60 150" stroke="#0E1B33" stroke-width="6" stroke-linecap="square" />
+        <path d="M 140 50 L 140 150" stroke="#0E1B33" stroke-width="6" stroke-linecap="square" />
+        <line x1="40" y1="100" x2="160" y2="100" stroke="#C29036" stroke-width="4" />
+      </svg>
     </div>
 
-    <h1 class="rd-hero__title rd-rise">
-      ERP that <em>actually</em><br>
-      ships, sticks, and<br>
-      earns its keep.
-    </h1>
-
-    <p class="rd-hero__subtitle rd-rise">
-      Microsoft Dynamics 365 Finance &amp; Operations and Oracle Fusion Cloud, delivered end-to-end
-      across healthcare, finance, manufacturing, retail &amp; distribution, construction, higher-ed,
-      and more. This is the reference shelf and the portfolio in one place.
-    </p>
-
-    <!-- Audience selector -->
-    <div class="rd-rise">
-      <div class="rd-audience" role="group" aria-label="Select your profile">
-        <button data-aud-btn="client" class="is-active">I'm hiring an ERP consultant</button>
-        <button data-aud-btn="consultant">I'm an ERP practitioner</button>
-        <button data-aud-btn="student">I'm learning the craft</button>
-      </div>
-    </div>
-
-    <!-- Audience-driven response -->
-    <div class="rd-rise rd-hero__response">
-      <div>
-        <!-- Client copy -->
-        <div data-aud="client" class="is-visible">
-          <div class="rd-hero__aud-eyebrow">For prospective clients</div>
-          <p class="rd-hero__aud-lead">
-            Senior, certified, with a portfolio of D365 F&amp;O and Oracle Fusion implementations
-            across healthcare, finance, manufacturing, and higher-ed.
-          </p>
-          <a href="portfolio.html" class="rd-hero__aud-cta">See the portfolio →</a>
-        </div>
-        <!-- Consultant copy -->
-        <div data-aud="consultant">
-          <div class="rd-hero__aud-eyebrow">For ERP practitioners</div>
-          <p class="rd-hero__aud-lead">
-            A reference shelf for the craft. Lifecycle, business processes, modules, accounting,
-            AI, customizations, and the advanced features.
-          </p>
-          <a href="#hub" class="rd-hero__aud-cta">Open the hub →</a>
-        </div>
-        <!-- Student copy -->
-        <div data-aud="student">
-          <div class="rd-hero__aud-eyebrow">For learners</div>
-          <p class="rd-hero__aud-lead">
-            Plain-English foundations: what D365 F&amp;O is, what a functional consultant actually does,
-            and how a real implementation unfolds.
-          </p>
-          <a href="consulting.html" class="rd-hero__aud-cta">Start with foundations →</a>
-        </div>
-      </div>
-
-      <!-- Lifecycle diagram card -->
-      <div class="rd-lifecycle-card rd-parallax-slow">
-        <div class="rd-lifecycle-card__eyebrow">The implementation lifecycle</div>
-        <div class="rd-lifecycle-card__title">Ten phases, requirements to hypercare.</div>
-        <!-- 10-phase lifecycle SVG — sine-wave path, matches lifecycle.html -->
-        <svg viewBox="0 0 720 280" width="100%" height="auto" style="display:block;overflow:visible;">
-          <defs>
-            <linearGradient id="lc-line" x1="0" x2="1">
-              <stop offset="0"   stop-color="#C29036" stop-opacity="0.0"/>
-              <stop offset="0.15" stop-color="#C29036" stop-opacity="0.9"/>
-              <stop offset="0.85" stop-color="#B5613E" stop-opacity="0.9"/>
-              <stop offset="1"   stop-color="#B5613E" stop-opacity="0.0"/>
-            </linearGradient>
-          </defs>
-          <!-- guide path — 10 stops alternating bottom (y=205) and top (y=90) -->
-          <path id="lc-path"
-            d="M 60 205 C 93 205 94 90 127 90 C 160 90 160 205 193 205 C 226 205 227 90 260 90 C 293 90 293 205 327 205 C 360 205 360 90 393 90 C 426 90 427 205 460 205 C 493 205 493 90 527 90 C 560 90 560 205 593 205 C 626 205 627 90 660 90"
-            fill="none" stroke="#E5E1D7" stroke-width="1.2" stroke-dasharray="2 4"/>
-          <!-- coloured overlay -->
-          <path
-            d="M 60 205 C 93 205 94 90 127 90 C 160 90 160 205 193 205 C 226 205 227 90 260 90 C 293 90 293 205 327 205 C 360 205 360 90 393 90 C 426 90 427 205 460 205 C 493 205 493 90 527 90 C 560 90 560 205 593 205 C 626 205 627 90 660 90"
-            fill="none" stroke="url(#lc-line)" stroke-width="2"/>
-          <!-- animated puck -->
-          <circle r="5" fill="#C29036">
-            <animateMotion dur="9s" repeatCount="indefinite"
-              path="M 60 205 C 93 205 94 90 127 90 C 160 90 160 205 193 205 C 226 205 227 90 260 90 C 293 90 293 205 327 205 C 360 205 360 90 393 90 C 426 90 427 205 460 205 C 493 205 493 90 527 90 C 560 90 560 205 593 205 C 626 205 627 90 660 90"/>
-            <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Phase 1: Requirements — bottom -->
-          <g>
-            <circle cx="60"  cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="60"  y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">01</text>
-            <text x="60"  y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">Requirements</text>
-          </g>
-          <!-- Phase 2: Fit-Gap — top -->
-          <g>
-            <circle cx="127" cy="90"  r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="127" y="78"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">02</text>
-            <text x="127" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">Fit-Gap</text>
-          </g>
-          <!-- Phase 3: FRD & FDDs — bottom -->
-          <g>
-            <circle cx="193" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="193" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">03</text>
-            <text x="193" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">FRD &amp; FDDs</text>
-          </g>
-          <!-- Phase 4: Data — top -->
-          <g>
-            <circle cx="260" cy="90"  r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="260" y="78"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">04</text>
-            <text x="260" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">Data</text>
-          </g>
-          <!-- Phase 5: CRPs — bottom -->
-          <g>
-            <circle cx="327" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="327" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">05</text>
-            <text x="327" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">CRPs</text>
-          </g>
-          <!-- Phase 6: UAT 1 — top -->
-          <g>
-            <circle cx="393" cy="90"  r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="393" y="78"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">06</text>
-            <text x="393" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">UAT 1</text>
-          </g>
-          <!-- Phase 7: UAT 2 — bottom -->
-          <g>
-            <circle cx="460" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="460" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">07</text>
-            <text x="460" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">UAT 2</text>
-          </g>
-          <!-- Phase 8: Production env. — top -->
-          <g>
-            <circle cx="527" cy="90"  r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="527" y="78"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">08</text>
-            <text x="527" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">Prod. env.</text>
-          </g>
-          <!-- Phase 9: Go-live — bottom -->
-          <g>
-            <circle cx="593" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="593" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">09</text>
-            <text x="593" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">Go-live</text>
-          </g>
-          <!-- Phase 10: Hypercare — top -->
-          <g>
-            <circle cx="660" cy="90"  r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4"/>
-            <text x="660" y="78"  text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5" fill="#6B6E78" letter-spacing="0.1em">10</text>
-            <text x="660" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12" fill="#0E1B33">Hypercare</text>
-          </g>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ STATS ============ -->
-<section class="rd-stats">
-  <div class="rd-container">
-    <div class="rd-rise">
-      <div class="rd-section-label">
-        <span class="rd-section-label__num">01</span>
-        <span class="rd-section-label__rule"></span>
-        <span class="rd-section-label__text">The work, by the numbers</span>
-      </div>
-    </div>
-
-    <div class="rd-stats__grid rd-stagger">
-      <div>
-        <div class="rd-bignum">
-          <span data-ticker data-to="20" data-suffix="+">0+</span>
-        </div>
-        <div class="rd-stats__label">D365 F&amp;O and Oracle Fusion engagements, end-to-end.</div>
-      </div>
-      <div>
-        <div class="rd-bignum">
-          <span data-ticker data-to="7">0</span>
-        </div>
-        <div class="rd-stats__label">Industries served, from healthcare to higher-ed.</div>
-      </div>
-      <div>
-        <div class="rd-bignum">
-          <span data-ticker data-to="4">0</span>
-        </div>
-        <div class="rd-stats__label">Microsoft &amp; Oracle functional certifications.</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ FEATURED ENGAGEMENTS ============ -->
-<section class="rd-engagements">
-  <div class="rd-container">
-    <div class="rd-engagements__header">
+    <div class="rd-hero__inner">
       <div class="rd-rise">
         <div class="rd-section-label">
-          <span class="rd-section-label__num">02</span>
+          <span class="rd-section-label__num">00</span>
           <span class="rd-section-label__rule"></span>
-          <span class="rd-section-label__text">Featured engagements</span>
+          <span class="rd-section-label__text">Senior functional consultant, Microsoft- &amp; Oracle-certified</span>
         </div>
-        <h2 class="rd-engagements__heading">
-          Real systems, in <em>production</em>.
+      </div>
+
+      <h1 class="rd-hero__title rd-rise">
+        ERP that <em>actually</em><br>
+        ships, sticks, and<br>
+        earns its keep.
+      </h1>
+
+      <p class="rd-hero__subtitle rd-rise">
+        Microsoft Dynamics 365 Finance &amp; Operations and Oracle Fusion Cloud, delivered end-to-end
+        across healthcare, finance, manufacturing, retail &amp; distribution, construction, higher-ed,
+        and more. This is the reference shelf and the portfolio in one place.
+      </p>
+
+      <!-- Audience selector -->
+      <div class="rd-rise">
+        <div class="rd-audience" role="group" aria-label="Select your profile">
+          <button data-aud-btn="client" class="is-active">I'm hiring an ERP consultant</button>
+          <button data-aud-btn="consultant">I'm an ERP practitioner</button>
+          <button data-aud-btn="student">I'm learning the craft</button>
+        </div>
+      </div>
+
+      <!-- Audience-driven response -->
+      <div class="rd-rise rd-hero__response">
+        <div>
+          <!-- Client copy -->
+          <div data-aud="client" class="is-visible">
+            <div class="rd-hero__aud-eyebrow">For prospective clients</div>
+            <p class="rd-hero__aud-lead">
+              Senior, certified, with a portfolio of D365 F&amp;O and Oracle Fusion implementations
+              across multiple industries.
+            </p>
+            <a href="portfolio.html" class="rd-hero__aud-cta">See the portfolio →</a>
+          </div>
+          <!-- Consultant copy -->
+          <div data-aud="consultant">
+            <div class="rd-hero__aud-eyebrow">For ERP practitioners</div>
+            <p class="rd-hero__aud-lead">
+              A reference shelf for the craft. Lifecycle, business processes, modules, accounting,
+              AI, customizations, and the advanced features.
+            </p>
+            <a href="#hub" class="rd-hero__aud-cta">Open the hub →</a>
+          </div>
+          <!-- Student copy -->
+          <div data-aud="student">
+            <div class="rd-hero__aud-eyebrow">For learners</div>
+            <p class="rd-hero__aud-lead">
+              Plain-English foundations: what D365 F&amp;O is, what a functional consultant actually does,
+              and how a real implementation unfolds.
+            </p>
+            <a href="consulting.html" class="rd-hero__aud-cta">Start with foundations →</a>
+          </div>
+        </div>
+
+        <!-- Lifecycle diagram card -->
+        <div class="rd-lifecycle-card rd-parallax-slow">
+          <div class="rd-lifecycle-card__eyebrow">The implementation lifecycle</div>
+          <div class="rd-lifecycle-card__title">Ten phases, requirements to hypercare.</div>
+          <!-- 10-phase lifecycle SVG — sine-wave path, matches lifecycle.html -->
+          <svg viewBox="0 0 720 280" width="100%" height="auto" style="display:block;overflow:visible;">
+            <defs>
+              <linearGradient id="lc-line" x1="0" x2="1">
+                <stop offset="0" stop-color="#C29036" stop-opacity="0.0" />
+                <stop offset="0.15" stop-color="#C29036" stop-opacity="0.9" />
+                <stop offset="0.85" stop-color="#B5613E" stop-opacity="0.9" />
+                <stop offset="1" stop-color="#B5613E" stop-opacity="0.0" />
+              </linearGradient>
+            </defs>
+            <!-- guide path — 10 stops alternating bottom (y=205) and top (y=90) -->
+            <path id="lc-path"
+              d="M 60 205 C 93 205 94 90 127 90 C 160 90 160 205 193 205 C 226 205 227 90 260 90 C 293 90 293 205 327 205 C 360 205 360 90 393 90 C 426 90 427 205 460 205 C 493 205 493 90 527 90 C 560 90 560 205 593 205 C 626 205 627 90 660 90"
+              fill="none" stroke="#E5E1D7" stroke-width="1.2" stroke-dasharray="2 4" />
+            <!-- coloured overlay -->
+            <path
+              d="M 60 205 C 93 205 94 90 127 90 C 160 90 160 205 193 205 C 226 205 227 90 260 90 C 293 90 293 205 327 205 C 360 205 360 90 393 90 C 426 90 427 205 460 205 C 493 205 493 90 527 90 C 560 90 560 205 593 205 C 626 205 627 90 660 90"
+              fill="none" stroke="url(#lc-line)" stroke-width="2" />
+            <!-- animated puck -->
+            <circle r="5" fill="#C29036">
+              <animateMotion dur="9s" repeatCount="indefinite"
+                path="M 60 205 C 93 205 94 90 127 90 C 160 90 160 205 193 205 C 226 205 227 90 260 90 C 293 90 293 205 327 205 C 360 205 360 90 393 90 C 426 90 427 205 460 205 C 493 205 493 90 527 90 C 560 90 560 205 593 205 C 626 205 627 90 660 90" />
+              <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite" />
+            </circle>
+            <!-- Phase 1: Requirements — bottom -->
+            <g>
+              <circle cx="60" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="60" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">01</text>
+              <text x="60" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">Requirements</text>
+            </g>
+            <!-- Phase 2: Fit-Gap — top -->
+            <g>
+              <circle cx="127" cy="90" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="127" y="78" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">02</text>
+              <text x="127" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">Fit-Gap</text>
+            </g>
+            <!-- Phase 3: FRD & FDDs — bottom -->
+            <g>
+              <circle cx="193" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="193" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">03</text>
+              <text x="193" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">FRD &amp; FDDs</text>
+            </g>
+            <!-- Phase 4: Data — top -->
+            <g>
+              <circle cx="260" cy="90" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="260" y="78" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">04</text>
+              <text x="260" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">Data</text>
+            </g>
+            <!-- Phase 5: CRPs — bottom -->
+            <g>
+              <circle cx="327" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="327" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">05</text>
+              <text x="327" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">CRPs</text>
+            </g>
+            <!-- Phase 6: UAT 1 — top -->
+            <g>
+              <circle cx="393" cy="90" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="393" y="78" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">06</text>
+              <text x="393" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">UAT 1</text>
+            </g>
+            <!-- Phase 7: UAT 2 — bottom -->
+            <g>
+              <circle cx="460" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="460" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">07</text>
+              <text x="460" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">UAT 2</text>
+            </g>
+            <!-- Phase 8: Production env. — top -->
+            <g>
+              <circle cx="527" cy="90" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="527" y="78" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">08</text>
+              <text x="527" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">Prod. env.</text>
+            </g>
+            <!-- Phase 9: Go-live — bottom -->
+            <g>
+              <circle cx="593" cy="205" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="593" y="193" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">09</text>
+              <text x="593" y="224" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">Go-live</text>
+            </g>
+            <!-- Phase 10: Hypercare — top -->
+            <g>
+              <circle cx="660" cy="90" r="5" fill="#FAF8F4" stroke="#0E1B33" stroke-width="1.4" />
+              <text x="660" y="78" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="7.5"
+                fill="#6B6E78" letter-spacing="0.1em">10</text>
+              <text x="660" y="112" text-anchor="middle" font-family="'Instrument Serif',serif" font-size="12"
+                fill="#0E1B33">Hypercare</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="rd-stats">
+    <div class="rd-container">
+      <div class="rd-rise">
+        <div class="rd-section-label">
+          <span class="rd-section-label__num">01</span>
+          <span class="rd-section-label__rule"></span>
+          <span class="rd-section-label__text">The work, by the numbers</span>
+        </div>
+      </div>
+
+      <div class="rd-stats__grid rd-stagger">
+        <div>
+          <div class="rd-bignum">
+            <span data-ticker data-to="20" data-suffix="+">0+</span>
+          </div>
+          <div class="rd-stats__label">D365 F&amp;O and Oracle Fusion engagements, end-to-end.</div>
+        </div>
+        <div>
+          <div class="rd-bignum">
+            <span data-ticker data-to="7">0</span>
+          </div>
+          <div class="rd-stats__label">Industries served, from healthcare to higher-ed.</div>
+        </div>
+        <div>
+          <div class="rd-bignum">
+            <span data-ticker data-to="4">0</span>
+          </div>
+          <div class="rd-stats__label">Microsoft &amp; Oracle functional certifications.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FEATURED ENGAGEMENTS ============ -->
+  <section class="rd-engagements">
+    <div class="rd-container">
+      <div class="rd-engagements__header">
+        <div class="rd-rise">
+          <div class="rd-section-label">
+            <span class="rd-section-label__num">02</span>
+            <span class="rd-section-label__rule"></span>
+            <span class="rd-section-label__text">Featured engagements</span>
+          </div>
+          <h2 class="rd-engagements__heading">
+            Real systems, in <em>production</em>.
+          </h2>
+        </div>
+        <a href="portfolio.html" class="rd-engagements__all rd-rise">See all 9 →</a>
+      </div>
+
+      <div class="rd-engagements__grid rd-stagger">
+        <a href="portfolio.html" class="rd-engagement">
+          <div class="rd-eng-logo"><img src="assets/images/hotel_dieu_de_france_logo.jpg"
+              alt="Hôtel Dieu de France logo" loading="lazy"></div>
+          <div>
+            <div class="rd-eng-sector">Healthcare</div>
+            <h3 class="rd-eng-title">Hôtel Dieu de France</h3>
+            <p class="rd-eng-meta">3 hospitals · 8 modules · HIS integration</p>
+          </div>
+          <span class="rd-eng-cta">Read the case →</span>
+        </a>
+        <a href="portfolio.html" class="rd-engagement">
+          <div class="rd-eng-logo"><img src="assets/images/BOB.png" alt="BOB Finance logo" loading="lazy"></div>
+          <div>
+            <div class="rd-eng-sector">Finance</div>
+            <h3 class="rd-eng-title">BOB Finance</h3>
+            <p class="rd-eng-meta">Payments &amp; remittance · live-portal integration</p>
+          </div>
+          <span class="rd-eng-cta">Read the case →</span>
+        </a>
+        <a href="portfolio.html" class="rd-engagement">
+          <div class="rd-eng-logo"><img src="assets/images/DIMA.png" alt="DIMA Marketing logo" loading="lazy"></div>
+          <div>
+            <div class="rd-eng-sector">Retail &amp; Distribution</div>
+            <h3 class="rd-eng-title">DIMA Marketing</h3>
+            <p class="rd-eng-meta">Reimplementation · legal entity migration</p>
+          </div>
+          <span class="rd-eng-cta">Read the case →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INSIDE THE HUB ============ -->
+  <section class="rd-hub" id="hub">
+    <div class="rd-hub__inner">
+      <div>
+        <div class="rd-rise">
+          <div class="rd-section-label">
+            <span class="rd-section-label__num">03</span>
+            <span class="rd-section-label__rule"></span>
+            <span class="rd-section-label__text">Inside the hub</span>
+          </div>
+        </div>
+        <p class="rd-pull rd-rise" style="margin-top:24px;max-width:420px;">
+          Eight chapters, end to end, from foundations to advanced features. The reference shelf that backs every
+          engagement.
+        </p>
+      </div>
+
+      <div class="rd-hub__grid rd-stagger">
+        <a class="rd-chapter" href="consulting.html">
+          <span class="rd-chapter__eyebrow">01</span>
+          <span class="rd-chapter__title">Foundations</span>
+          <span class="rd-chapter__desc">What D365 F&amp;O is. What a functional consultant does.</span>
+        </a>
+        <a class="rd-chapter" href="lifecycle.html">
+          <span class="rd-chapter__eyebrow">02</span>
+          <span class="rd-chapter__title">Lifecycle</span>
+          <span class="rd-chapter__desc">Requirements through hyper-care, one phase at a time.</span>
+        </a>
+        <a class="rd-chapter" href="business-processes.html">
+          <span class="rd-chapter__eyebrow">03</span>
+          <span class="rd-chapter__title">Processes</span>
+          <span class="rd-chapter__desc">Source-to-pay, order-to-cash, record-to-report.</span>
+        </a>
+        <a class="rd-chapter" href="modules.html">
+          <span class="rd-chapter__eyebrow">04</span>
+          <span class="rd-chapter__title">Modules</span>
+          <span class="rd-chapter__desc">Every functional module, set up and cross-referenced.</span>
+        </a>
+        <a class="rd-chapter" href="accounting.html">
+          <span class="rd-chapter__eyebrow">05</span>
+          <span class="rd-chapter__title">Accounting</span>
+          <span class="rd-chapter__desc">Each business event mapped to its journal entry.</span>
+        </a>
+        <a class="rd-chapter" href="ai.html">
+          <span class="rd-chapter__eyebrow">06</span>
+          <span class="rd-chapter__title">AI</span>
+          <span class="rd-chapter__desc">Copilot, agents, and embedded intelligence.</span>
+        </a>
+        <a class="rd-chapter" href="customizations.html">
+          <span class="rd-chapter__eyebrow">07</span>
+          <span class="rd-chapter__title">Customizations</span>
+          <span class="rd-chapter__desc">Extensions, dual-write, Power Platform, build-vs-configure.</span>
+        </a>
+        <a class="rd-chapter" href="advanced.html">
+          <span class="rd-chapter__eyebrow">08</span>
+          <span class="rd-chapter__title">Advanced</span>
+          <span class="rd-chapter__desc">Intercompany, multi-entity, advanced bank rec.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APPROACH — scroll-tracked lifecycle ============ -->
+  <section class="rd-approach rd-track" id="approach">
+    <!-- Topography background -->
+    <div class="rd-topo">
+      <svg viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+        <path d="M -50 100 C 200 60, 500 140, 800 80 S 1100 120, 1500 90" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 138 C 200 98, 500 178, 800 118 S 1100 158, 1500 128" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 176 C 200 136, 500 216, 800 156 S 1100 196, 1500 166" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 214 C 200 174, 500 254, 800 194 S 1100 234, 1500 204" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 252 C 200 212, 500 292, 800 232 S 1100 272, 1500 242" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 290 C 200 250, 500 330, 800 270 S 1100 310, 1500 280" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 328 C 200 288, 500 368, 800 308 S 1100 348, 1500 318" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 366 C 200 326, 500 406, 800 346 S 1100 386, 1500 356" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 404 C 200 364, 500 444, 800 384 S 1100 424, 1500 394" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 442 C 200 402, 500 482, 800 422 S 1100 462, 1500 432" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 480 C 200 440, 500 520, 800 460 S 1100 500, 1500 470" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 518 C 200 478, 500 558, 800 498 S 1100 538, 1500 508" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 556 C 200 516, 500 596, 800 536 S 1100 576, 1500 546" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 594 C 200 554, 500 634, 800 574 S 1100 614, 1500 584" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+      </svg>
+    </div>
+
+    <div class="rd-approach__inner">
+      <div>
+        <div class="rd-rise">
+          <div class="rd-section-label on-dark">
+            <span class="rd-section-label__num">04</span>
+            <span class="rd-section-label__rule"></span>
+            <span class="rd-section-label__text">The approach · lifecycle in motion</span>
+          </div>
+        </div>
+        <h2 class="rd-approach__title rd-rise">
+          Every engagement,<br>
+          <em>ten phases.</em>
         </h2>
-      </div>
-      <a href="portfolio.html" class="rd-engagements__all rd-rise">See all 9 →</a>
-    </div>
+        <p class="rd-approach__body rd-rise">
+          From requirement gathering to hypercare. The path on the right traces the full
+          implementation arc as you scroll. Every project lives somewhere on it.
+          <a href="lifecycle.html"
+            style="color:var(--rd-gold);text-decoration:underline;font-size:14px;display:block;margin-top:12px;">Explore
+            each phase in detail →</a>
+        </p>
 
-    <div class="rd-engagements__grid rd-stagger">
-      <a href="portfolio.html" class="rd-engagement">
-        <div class="rd-eng-logo"><img src="assets/images/hotel_dieu_de_france_logo.jpg" alt="Hôtel Dieu de France logo" loading="lazy"></div>
-        <div>
-          <div class="rd-eng-sector">Healthcare</div>
-          <h3 class="rd-eng-title">Hôtel Dieu de France</h3>
-          <p class="rd-eng-meta">3 hospitals · 8 modules · HIS integration</p>
-        </div>
-        <span class="rd-eng-cta">Read the case →</span>
-      </a>
-      <a href="portfolio.html" class="rd-engagement">
-        <div class="rd-eng-logo"><img src="assets/images/BOB.png" alt="BOB Finance logo" loading="lazy"></div>
-        <div>
-          <div class="rd-eng-sector">Finance</div>
-          <h3 class="rd-eng-title">BOB Finance</h3>
-          <p class="rd-eng-meta">Payments &amp; remittance · live-portal integration</p>
-        </div>
-        <span class="rd-eng-cta">Read the case →</span>
-      </a>
-      <a href="portfolio.html" class="rd-engagement">
-        <div class="rd-eng-logo"><img src="assets/images/DIMA.png" alt="DIMA Marketing logo" loading="lazy"></div>
-        <div>
-          <div class="rd-eng-sector">Retail &amp; Distribution</div>
-          <h3 class="rd-eng-title">DIMA Marketing</h3>
-          <p class="rd-eng-meta">Reimplementation · legal entity migration</p>
-        </div>
-        <span class="rd-eng-cta">Read the case →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ INSIDE THE HUB ============ -->
-<section class="rd-hub" id="hub">
-  <div class="rd-hub__inner">
-    <div>
-      <div class="rd-rise">
-        <div class="rd-section-label">
-          <span class="rd-section-label__num">03</span>
-          <span class="rd-section-label__rule"></span>
-          <span class="rd-section-label__text">Inside the hub</span>
-        </div>
-      </div>
-      <p class="rd-pull rd-rise" style="margin-top:24px;max-width:420px;">
-        Eight chapters, end to end, from foundations to advanced features. The reference shelf that backs every engagement.
-      </p>
-    </div>
-
-    <div class="rd-hub__grid rd-stagger">
-      <a class="rd-chapter" href="consulting.html">
-        <span class="rd-chapter__eyebrow">01</span>
-        <span class="rd-chapter__title">Foundations</span>
-        <span class="rd-chapter__desc">What D365 F&amp;O is. What a functional consultant does.</span>
-      </a>
-      <a class="rd-chapter" href="lifecycle.html">
-        <span class="rd-chapter__eyebrow">02</span>
-        <span class="rd-chapter__title">Lifecycle</span>
-        <span class="rd-chapter__desc">Requirements through hyper-care, one phase at a time.</span>
-      </a>
-      <a class="rd-chapter" href="business-processes.html">
-        <span class="rd-chapter__eyebrow">03</span>
-        <span class="rd-chapter__title">Processes</span>
-        <span class="rd-chapter__desc">Source-to-pay, order-to-cash, record-to-report.</span>
-      </a>
-      <a class="rd-chapter" href="modules.html">
-        <span class="rd-chapter__eyebrow">04</span>
-        <span class="rd-chapter__title">Modules</span>
-        <span class="rd-chapter__desc">Every functional module, set up and cross-referenced.</span>
-      </a>
-      <a class="rd-chapter" href="accounting.html">
-        <span class="rd-chapter__eyebrow">05</span>
-        <span class="rd-chapter__title">Accounting</span>
-        <span class="rd-chapter__desc">Each business event mapped to its journal entry.</span>
-      </a>
-      <a class="rd-chapter" href="ai.html">
-        <span class="rd-chapter__eyebrow">06</span>
-        <span class="rd-chapter__title">AI</span>
-        <span class="rd-chapter__desc">Copilot, agents, and embedded intelligence.</span>
-      </a>
-      <a class="rd-chapter" href="customizations.html">
-        <span class="rd-chapter__eyebrow">07</span>
-        <span class="rd-chapter__title">Customizations</span>
-        <span class="rd-chapter__desc">Extensions, dual-write, Power Platform, build-vs-configure.</span>
-      </a>
-      <a class="rd-chapter" href="advanced.html">
-        <span class="rd-chapter__eyebrow">08</span>
-        <span class="rd-chapter__title">Advanced</span>
-        <span class="rd-chapter__desc">Intercompany, multi-entity, advanced bank rec.</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ APPROACH — scroll-tracked lifecycle ============ -->
-<section class="rd-approach rd-track" id="approach">
-  <!-- Topography background -->
-  <div class="rd-topo">
-    <svg viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
-      <path d="M -50 100 C 200 60, 500 140, 800 80 S 1100 120, 1500 90"  fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 138 C 200 98, 500 178, 800 118 S 1100 158, 1500 128" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 176 C 200 136, 500 216, 800 156 S 1100 196, 1500 166" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 214 C 200 174, 500 254, 800 194 S 1100 234, 1500 204" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 252 C 200 212, 500 292, 800 232 S 1100 272, 1500 242" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 290 C 200 250, 500 330, 800 270 S 1100 310, 1500 280" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 328 C 200 288, 500 368, 800 308 S 1100 348, 1500 318" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 366 C 200 326, 500 406, 800 346 S 1100 386, 1500 356" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 404 C 200 364, 500 444, 800 384 S 1100 424, 1500 394" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 442 C 200 402, 500 482, 800 422 S 1100 462, 1500 432" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 480 C 200 440, 500 520, 800 460 S 1100 500, 1500 470" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 518 C 200 478, 500 558, 800 498 S 1100 538, 1500 508" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 556 C 200 516, 500 596, 800 536 S 1100 576, 1500 546" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 594 C 200 554, 500 634, 800 574 S 1100 614, 1500 584" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-    </svg>
-  </div>
-
-  <div class="rd-approach__inner">
-    <div>
-      <div class="rd-rise">
-        <div class="rd-section-label on-dark">
-          <span class="rd-section-label__num">04</span>
-          <span class="rd-section-label__rule"></span>
-          <span class="rd-section-label__text">The approach · lifecycle in motion</span>
-        </div>
-      </div>
-      <h2 class="rd-approach__title rd-rise">
-        Every engagement,<br>
-        <em>ten phases.</em>
-      </h2>
-      <p class="rd-approach__body rd-rise">
-        From requirement gathering to hypercare. The path on the right traces the full
-        implementation arc as you scroll. Every project lives somewhere on it.
-        <a href="lifecycle.html" style="color:var(--rd-gold);text-decoration:underline;font-size:14px;display:block;margin-top:12px;">Explore each phase in detail →</a>
-      </p>
-
-      <div class="rd-stagger" style="display:flex;flex-direction:column;gap:14px;">
-        <div class="rd-phase">
-          <span class="rd-phase__num">01</span>
-          <div>
-            <div class="rd-phase__title">Requirement gathering</div>
-            <div class="rd-phase__desc">Workshops, stakeholder mapping, scenario board.</div>
+        <div class="rd-stagger" style="display:flex;flex-direction:column;gap:14px;">
+          <div class="rd-phase">
+            <span class="rd-phase__num">01</span>
+            <div>
+              <div class="rd-phase__title">Requirement gathering</div>
+              <div class="rd-phase__desc">Workshops, stakeholder mapping, scenario board.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">02</span>
-          <div>
-            <div class="rd-phase__title">Fit-gap analysis</div>
-            <div class="rd-phase__desc">Compare requirements to D365 out-of-box; classify gaps.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">02</span>
+            <div>
+              <div class="rd-phase__title">Fit-gap analysis</div>
+              <div class="rd-phase__desc">Compare requirements to D365 out-of-box; classify gaps.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">03</span>
-          <div>
-            <div class="rd-phase__title">Documentation (FRD &amp; FDDs)</div>
-            <div class="rd-phase__desc">Functional requirements and design documents for every gap.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">03</span>
+            <div>
+              <div class="rd-phase__title">Documentation (FRD &amp; FDDs)</div>
+              <div class="rd-phase__desc">Functional requirements and design documents for every gap.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">04</span>
-          <div>
-            <div class="rd-phase__title">Data templates &amp; workshops</div>
-            <div class="rd-phase__desc">Migration templates, data strategy, client data prep.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">04</span>
+            <div>
+              <div class="rd-phase__title">Data templates &amp; workshops</div>
+              <div class="rd-phase__desc">Migration templates, data strategy, client data prep.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">05</span>
-          <div>
-            <div class="rd-phase__title">Conference Room Pilots (CRPs)</div>
-            <div class="rd-phase__desc">CRP 1 configuration walk-through; CRP 2 with live data.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">05</span>
+            <div>
+              <div class="rd-phase__title">Conference Room Pilots (CRPs)</div>
+              <div class="rd-phase__desc">CRP 1 configuration walk-through; CRP 2 with live data.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">06</span>
-          <div>
-            <div class="rd-phase__title">UAT 1 &amp; user training</div>
-            <div class="rd-phase__desc">Scripted scenarios, Task Recorder, train-the-trainer.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">06</span>
+            <div>
+              <div class="rd-phase__title">UAT 1 &amp; user training</div>
+              <div class="rd-phase__desc">Scripted scenarios, Task Recorder, train-the-trainer.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">07</span>
-          <div>
-            <div class="rd-phase__title">UAT 2 / parallel run</div>
-            <div class="rd-phase__desc">Performance, security validation, mock cutover rehearsal.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">07</span>
+            <div>
+              <div class="rd-phase__title">UAT 2 / parallel run</div>
+              <div class="rd-phase__desc">Performance, security validation, mock cutover rehearsal.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">08</span>
-          <div>
-            <div class="rd-phase__title">Production environment</div>
-            <div class="rd-phase__desc">Go-live readiness review, golden config, production deploy.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">08</span>
+            <div>
+              <div class="rd-phase__title">Production environment</div>
+              <div class="rd-phase__desc">Go-live readiness review, golden config, production deploy.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">09</span>
-          <div>
-            <div class="rd-phase__title">Go-live</div>
-            <div class="rd-phase__desc">Cutover weekend runbook: data loads, smoke test, sign-off.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">09</span>
+            <div>
+              <div class="rd-phase__title">Go-live</div>
+              <div class="rd-phase__desc">Cutover weekend runbook: data loads, smoke test, sign-off.</div>
+            </div>
           </div>
-        </div>
-        <div class="rd-phase">
-          <span class="rd-phase__num">10</span>
-          <div>
-            <div class="rd-phase__title">Hypercare &amp; support</div>
-            <div class="rd-phase__desc">4–8 week stabilization, first month-end close, BAU handover.</div>
+          <div class="rd-phase">
+            <span class="rd-phase__num">10</span>
+            <div>
+              <div class="rd-phase__title">Hypercare &amp; support</div>
+              <div class="rd-phase__desc">4–8 week stabilization, first month-end close, BAU handover.</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Scroll-driven lifecycle diagram — 10 phases, winding path -->
-    <div>
-      <div class="rd-lifecycle-sticky">
-        <!--
+      <!-- Scroll-driven lifecycle diagram — 10 phases, winding path -->
+      <div>
+        <div class="rd-lifecycle-sticky">
+          <!--
           ViewBox 360 × 1060. Left nodes (x=60): phases 1,3,5,7,9.
           Right nodes (x=190): phases 2,4,6,8,10.
           Spacing: 106px per phase. JS drives puck via getPointAtLength.
         -->
-        <svg viewBox="0 0 360 1060" width="100%" height="auto" style="display:block;overflow:visible;">
-          <defs>
-            <linearGradient id="sl-line" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0"   stop-color="#C29036"/>
-              <stop offset="0.5" stop-color="#C29036"/>
-              <stop offset="1"   stop-color="#B5613E"/>
-            </linearGradient>
-            <filter id="puck-glow" x="-100%" y="-100%" width="300%" height="300%">
-              <feGaussianBlur stdDeviation="4" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
+          <svg viewBox="0 0 360 1060" width="100%" height="auto" style="display:block;overflow:visible;">
+            <defs>
+              <linearGradient id="sl-line" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#C29036" />
+                <stop offset="0.5" stop-color="#C29036" />
+                <stop offset="1" stop-color="#B5613E" />
+              </linearGradient>
+              <filter id="puck-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
 
-          <!-- guide path -->
-          <path id="sl-path-main"
-            d="M 60 60 C 60 113 190 113 190 166 C 190 219 60 219 60 272 C 60 325 190 325 190 378 C 190 431 60 431 60 484 C 60 537 190 537 190 590 C 190 643 60 643 60 696 C 60 749 190 749 190 802 C 190 855 60 855 60 908 C 60 961 190 961 190 1014"
-            fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" stroke-dasharray="2 5"/>
+            <!-- guide path -->
+            <path id="sl-path-main"
+              d="M 60 60 C 60 113 190 113 190 166 C 190 219 60 219 60 272 C 60 325 190 325 190 378 C 190 431 60 431 60 484 C 60 537 190 537 190 590 C 190 643 60 643 60 696 C 60 749 190 749 190 802 C 190 855 60 855 60 908 C 60 961 190 961 190 1014"
+              fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" stroke-dasharray="2 5" />
 
-          <!-- gold trail driven by --p -->
-          <path id="sl-trail"
-            d="M 60 60 C 60 113 190 113 190 166 C 190 219 60 219 60 272 C 60 325 190 325 190 378 C 190 431 60 431 60 484 C 60 537 190 537 190 590 C 190 643 60 643 60 696 C 60 749 190 749 190 802 C 190 855 60 855 60 908 C 60 961 190 961 190 1014"
-            fill="none" stroke="url(#sl-line)" stroke-width="2.4"
-            pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1"/>
+            <!-- gold trail driven by --p -->
+            <path id="sl-trail"
+              d="M 60 60 C 60 113 190 113 190 166 C 190 219 60 219 60 272 C 60 325 190 325 190 378 C 190 431 60 431 60 484 C 60 537 190 537 190 590 C 190 643 60 643 60 696 C 60 749 190 749 190 802 C 190 855 60 855 60 908 C 60 961 190 961 190 1014"
+              fill="none" stroke="url(#sl-line)" stroke-width="2.4" pathLength="1" stroke-dasharray="1 1"
+              stroke-dashoffset="1" />
 
-          <!-- Phase 1: Requirement gathering — left -->
-          <g>
-            <circle cx="60" cy="60" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="82" y="54" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">01</text>
-            <text x="82" y="72" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">Requirements</text>
-          </g>
-          <!-- Phase 2: Fit-gap — right -->
-          <g>
-            <circle cx="190" cy="166" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="212" y="160" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">02</text>
-            <text x="212" y="178" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">Fit-Gap</text>
-          </g>
-          <!-- Phase 3: FRD & FDDs — left -->
-          <g>
-            <circle cx="60" cy="272" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="82" y="266" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">03</text>
-            <text x="82" y="284" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">FRD &amp; FDDs</text>
-          </g>
-          <!-- Phase 4: Data workshops — right -->
-          <g>
-            <circle cx="190" cy="378" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="212" y="372" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">04</text>
-            <text x="212" y="390" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">Data</text>
-          </g>
-          <!-- Phase 5: CRPs — left -->
-          <g>
-            <circle cx="60" cy="484" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="82" y="478" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">05</text>
-            <text x="82" y="496" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">CRPs</text>
-          </g>
-          <!-- Phase 6: UAT 1 — right -->
-          <g>
-            <circle cx="190" cy="590" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="212" y="584" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">06</text>
-            <text x="212" y="602" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">UAT 1</text>
-          </g>
-          <!-- Phase 7: UAT 2 — left -->
-          <g>
-            <circle cx="60" cy="696" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="82" y="690" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">07</text>
-            <text x="82" y="708" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">UAT 2</text>
-          </g>
-          <!-- Phase 8: Production env. — right -->
-          <g>
-            <circle cx="190" cy="802" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="212" y="796" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">08</text>
-            <text x="212" y="814" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">Prod. env.</text>
-          </g>
-          <!-- Phase 9: Go-live — left -->
-          <g>
-            <circle cx="60" cy="908" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="82" y="902" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">09</text>
-            <text x="82" y="920" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">Go-live</text>
-          </g>
-          <!-- Phase 10: Hypercare — right -->
-          <g>
-            <circle cx="190" cy="1014" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4"/>
-            <text x="212" y="1008" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">10</text>
-            <text x="212" y="1026" font-family="'Instrument Serif',serif" font-size="18" font-style="italic" fill="#FAF8F4">Hypercare</text>
-          </g>
+            <!-- Phase 1: Requirement gathering — left -->
+            <g>
+              <circle cx="60" cy="60" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="82" y="54" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)"
+                letter-spacing="0.14em">01</text>
+              <text x="82" y="72" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">Requirements</text>
+            </g>
+            <!-- Phase 2: Fit-gap — right -->
+            <g>
+              <circle cx="190" cy="166" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="212" y="160" font-family="'JetBrains Mono',monospace" font-size="10"
+                fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">02</text>
+              <text x="212" y="178" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">Fit-Gap</text>
+            </g>
+            <!-- Phase 3: FRD & FDDs — left -->
+            <g>
+              <circle cx="60" cy="272" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="82" y="266" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)"
+                letter-spacing="0.14em">03</text>
+              <text x="82" y="284" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">FRD &amp; FDDs</text>
+            </g>
+            <!-- Phase 4: Data workshops — right -->
+            <g>
+              <circle cx="190" cy="378" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="212" y="372" font-family="'JetBrains Mono',monospace" font-size="10"
+                fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">04</text>
+              <text x="212" y="390" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">Data</text>
+            </g>
+            <!-- Phase 5: CRPs — left -->
+            <g>
+              <circle cx="60" cy="484" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="82" y="478" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)"
+                letter-spacing="0.14em">05</text>
+              <text x="82" y="496" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">CRPs</text>
+            </g>
+            <!-- Phase 6: UAT 1 — right -->
+            <g>
+              <circle cx="190" cy="590" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="212" y="584" font-family="'JetBrains Mono',monospace" font-size="10"
+                fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">06</text>
+              <text x="212" y="602" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">UAT 1</text>
+            </g>
+            <!-- Phase 7: UAT 2 — left -->
+            <g>
+              <circle cx="60" cy="696" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="82" y="690" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)"
+                letter-spacing="0.14em">07</text>
+              <text x="82" y="708" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">UAT 2</text>
+            </g>
+            <!-- Phase 8: Production env. — right -->
+            <g>
+              <circle cx="190" cy="802" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="212" y="796" font-family="'JetBrains Mono',monospace" font-size="10"
+                fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">08</text>
+              <text x="212" y="814" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">Prod. env.</text>
+            </g>
+            <!-- Phase 9: Go-live — left -->
+            <g>
+              <circle cx="60" cy="908" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="82" y="902" font-family="'JetBrains Mono',monospace" font-size="10" fill="rgba(255,255,255,0.55)"
+                letter-spacing="0.14em">09</text>
+              <text x="82" y="920" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">Go-live</text>
+            </g>
+            <!-- Phase 10: Hypercare — right -->
+            <g>
+              <circle cx="190" cy="1014" r="9" fill="#0E1B33" stroke="#FAF8F4" stroke-width="1.4" />
+              <text x="212" y="1008" font-family="'JetBrains Mono',monospace" font-size="10"
+                fill="rgba(255,255,255,0.55)" letter-spacing="0.14em">10</text>
+              <text x="212" y="1026" font-family="'Instrument Serif',serif" font-size="18" font-style="italic"
+                fill="#FAF8F4">Hypercare</text>
+            </g>
 
-          <!-- puck — JS positions via getPointAtLength -->
-          <circle id="sl-puck" cx="60" cy="60" r="8" fill="#C29036" filter="url(#puck-glow)"/>
-        </svg>
+            <!-- puck — JS positions via getPointAtLength -->
+            <circle id="sl-puck" cx="60" cy="60" r="8" fill="#C29036" filter="url(#puck-glow)" />
+          </svg>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ CONTACT CTA ============ -->
-<section class="rd-contact" id="contact">
-  <div class="rd-topo">
-    <svg viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
-      <path d="M -50 100 C 200 60, 500 140, 800 80 S 1100 120, 1500 90"  fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 176 C 200 136, 500 216, 800 156 S 1100 196, 1500 166" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 252 C 200 212, 500 292, 800 232 S 1100 272, 1500 242" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 328 C 200 288, 500 368, 800 308 S 1100 348, 1500 318" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-      <path d="M -50 404 C 200 364, 500 444, 800 384 S 1100 424, 1500 394" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-    </svg>
-  </div>
-  <div style="position:relative;max-width:980px;margin:0 auto;" class="rd-rise">
-    <div class="rd-section-label on-dark" style="justify-content:center;">
-      <span class="rd-section-label__num">05</span>
-      <span class="rd-section-label__rule"></span>
-      <span class="rd-section-label__text">Get in touch</span>
+  <!-- ============ CONTACT CTA ============ -->
+  <section class="rd-contact" id="contact">
+    <div class="rd-topo">
+      <svg viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+        <path d="M -50 100 C 200 60, 500 140, 800 80 S 1100 120, 1500 90" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 176 C 200 136, 500 216, 800 156 S 1100 196, 1500 166" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 252 C 200 212, 500 292, 800 232 S 1100 272, 1500 242" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 328 C 200 288, 500 368, 800 308 S 1100 348, 1500 318" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+        <path d="M -50 404 C 200 364, 500 444, 800 384 S 1100 424, 1500 394" fill="none" stroke="rgba(255,255,255,0.06)"
+          stroke-width="1" />
+      </svg>
     </div>
-    <h2 class="rd-contact__title">
-      Got an ERP problem<br>
-      <em>worth solving?</em>
-    </h2>
-    <p class="rd-contact__body">
-      Whether you're scoping a new implementation, salvaging a stalled one, or just need a
-      second opinion, pick a time below or send me an email directly.
-    </p>
-    <div class="rd-contact__actions">
-      <a href="mailto:Joe1437@outlook.com" class="rd-btn-primary">Book a 30-min call →</a>
-      <a href="mailto:Joe1437@outlook.com" class="rd-btn-ghost">Joe1437@outlook.com</a>
+    <div style="position:relative;max-width:980px;margin:0 auto;" class="rd-rise">
+      <div class="rd-section-label on-dark" style="justify-content:center;">
+        <span class="rd-section-label__num">05</span>
+        <span class="rd-section-label__rule"></span>
+        <span class="rd-section-label__text">Get in touch</span>
+      </div>
+      <h2 class="rd-contact__title">
+        Got an ERP problem<br>
+        <em>worth solving?</em>
+      </h2>
+      <p class="rd-contact__body">
+        Whether you're scoping a new implementation, salvaging a stalled one, or just need a
+        second opinion, pick a time below or send me an email directly.
+      </p>
+      <div class="rd-contact__actions">
+        <a href="mailto:Joe1437@outlook.com" class="rd-btn-primary">Book a 30-min call →</a>
+        <a href="mailto:Joe1437@outlook.com" class="rd-btn-ghost">Joe1437@outlook.com</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ FOOTER ============ -->
-<footer class="rd-footer">
-  <div>© 2026 · Joe El Hajj · Beirut</div>
-  <div class="rd-footer__links">
-    <a href="https://www.linkedin.com/in/joe-el-hajj-0b44b5222/" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="mailto:Joe1437@outlook.com">Email</a>
-    <a href="portfolio.html">Portfolio</a>
-  </div>
-</footer>
+  <!-- ============ FOOTER ============ -->
+  <footer class="rd-footer">
+    <div>© 2026 · Joe El Hajj · Beirut</div>
+    <div class="rd-footer__links">
+      <a href="https://www.linkedin.com/in/joe-el-hajj-0b44b5222/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:Joe1437@outlook.com">Email</a>
+      <a href="portfolio.html">Portfolio</a>
+    </div>
+  </footer>
 
-<script src="assets/js/scroll.js" defer></script>
-<script>
-// Audience selector
-(function () {
-  var btns = document.querySelectorAll('[data-aud-btn]');
-  var panels = document.querySelectorAll('[data-aud]');
+  <script src="assets/js/scroll.js" defer></script>
+  <script>
+    // Audience selector
+    (function () {
+      var btns = document.querySelectorAll('[data-aud-btn]');
+      var panels = document.querySelectorAll('[data-aud]');
 
-  function activate(id) {
-    btns.forEach(function (b) {
-      b.classList.toggle('is-active', b.dataset.audBtn === id);
-    });
-    panels.forEach(function (p) {
-      p.classList.toggle('is-visible', p.dataset.aud === id);
-    });
-  }
+      function activate(id) {
+        btns.forEach(function (b) {
+          b.classList.toggle('is-active', b.dataset.audBtn === id);
+        });
+        panels.forEach(function (p) {
+          p.classList.toggle('is-visible', p.dataset.aud === id);
+        });
+      }
 
-  btns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      activate(btn.dataset.audBtn);
-    });
-  });
-})();
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          activate(btn.dataset.audBtn);
+        });
+      });
+    })();
 
-// Hub dropdown toggle
-(function () {
-  var dd = document.querySelector('.rd-nav-dropdown');
-  if (!dd) return;
-  var btn = dd.querySelector('.rd-nav-dropdown__btn');
-  btn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    var open = dd.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', String(open));
-  });
-  document.addEventListener('click', function () {
-    dd.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-  });
-  dd.querySelector('.rd-nav-dropdown__menu').addEventListener('click', function (e) {
-    e.stopPropagation(); // keep menu open when clicking links (browser will navigate)
-  });
-})();
+    // Hub dropdown toggle
+    (function () {
+      var dd = document.querySelector('.rd-nav-dropdown');
+      if (!dd) return;
+      var btn = dd.querySelector('.rd-nav-dropdown__btn');
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = dd.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', function () {
+        dd.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+      });
+      dd.querySelector('.rd-nav-dropdown__menu').addEventListener('click', function (e) {
+        e.stopPropagation(); // keep menu open when clicking links (browser will navigate)
+      });
+    })();
 
-// Scroll lifecycle puck — JS-driven via getPointAtLength (reliable cross-browser)
-(function () {
-  var svgPath  = document.getElementById('sl-path-main');
-  var trail    = document.getElementById('sl-trail');
-  var puck     = document.getElementById('sl-puck');
-  var track    = document.querySelector('.rd-approach');
-  if (!svgPath || !puck || !track) return;
+    // Scroll lifecycle puck — JS-driven via getPointAtLength (reliable cross-browser)
+    (function () {
+      var svgPath = document.getElementById('sl-path-main');
+      var trail = document.getElementById('sl-trail');
+      var puck = document.getElementById('sl-puck');
+      var track = document.querySelector('.rd-approach');
+      if (!svgPath || !puck || !track) return;
 
-  var total = svgPath.getTotalLength();
-  var lastP = -1;
+      var total = svgPath.getTotalLength();
+      var lastP = -1;
 
-  function tick() {
-    var raw = track.style.getPropertyValue('--p');
-    var p = raw !== '' ? parseFloat(raw) : 0;
-    if (p !== lastP) {
-      lastP = p;
-      var pt = svgPath.getPointAtLength(p * total);
-      puck.setAttribute('cx', pt.x);
-      puck.setAttribute('cy', pt.y);
-      // Drive the gold trail: dashoffset goes 1→0 as p goes 0→1
-      if (trail) trail.style.strokeDashoffset = String(1 - p);
-    }
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-})();
-</script>
+      function tick() {
+        var raw = track.style.getPropertyValue('--p');
+        var p = raw !== '' ? parseFloat(raw) : 0;
+        if (p !== lastP) {
+          lastP = p;
+          var pt = svgPath.getPointAtLength(p * total);
+          puck.setAttribute('cx', pt.x);
+          puck.setAttribute('cy', pt.y);
+          // Drive the gold trail: dashoffset goes 1→0 as p goes 0→1
+          if (trail) trail.style.strokeDashoffset = String(1 - p);
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  </script>
 </body>
+
 </html>
