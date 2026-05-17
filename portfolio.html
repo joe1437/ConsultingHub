@@ -177,12 +177,29 @@ details ul li { margin-bottom: 6px; }
 }
 @media (max-width: 700px) {
   .rd-header__inner { padding: 0 24px; }
-  .rd-header__nav { display: none; }
+  .rd-header__nav { gap: 16px; }
+  .rd-header__nav > li:not(.rd-nav-dropdown) { display: none; }
   .pf-hero, .pf-filter, .pf-projects, .pf-subsection,
   .pf-additional, .pf-certs, .rd-footer { padding-left: 24px; padding-right: 24px; }
   .pf-stats { grid-template-columns: 1fr 1fr; gap: 24px; }
   .pf-certs__grid { grid-template-columns: 1fr; }
   .rd-footer { flex-direction: column; gap: 16px; }
+
+  /* Tighter section padding for portfolio on phones. */
+  .pf-hero { padding: 48px 24px 0; }
+  .pf-filter { padding: 32px 24px 0; }
+  .pf-projects { padding: 24px 24px 32px; }
+  .pf-subsection { padding: 0 24px 48px; }
+  .pf-additional { padding: 0 24px 40px; }
+  .pf-certs { padding: 48px 24px 56px; }
+  .pf-card { padding: 20px 22px; }
+}
+@media (max-width: 480px) {
+  .rd-header__inner { padding: 0 16px; }
+  .pf-hero, .pf-filter, .pf-projects, .pf-subsection,
+  .pf-additional, .pf-certs, .rd-footer { padding-left: 16px; padding-right: 16px; }
+  .pf-stats { grid-template-columns: 1fr; gap: 16px; }
+  .pf-card { padding: 18px 18px; }
 }
 </style>
 </head>

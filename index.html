@@ -637,7 +637,8 @@ img { display: block; max-width: 100%; }
 }
 @media (max-width: 700px) {
   .rd-header__inner { padding: 0 24px; }
-  .rd-header__nav { display: none; }
+  .rd-header__nav { gap: 16px; }
+  .rd-header__nav > li:not(.rd-nav-dropdown) { display: none; }
   .rd-hero__inner { padding: 0 24px; }
   .rd-approach__inner { padding: 0 24px; }
   .rd-stats, .rd-hub, .rd-engagements,
@@ -648,6 +649,25 @@ img { display: block; max-width: 100%; }
   .rd-stats__grid { grid-template-columns: 1fr; }
   .rd-engagements__header { flex-direction: column; align-items: flex-start; gap: 16px; }
   .rd-footer { flex-direction: column; gap: 16px; text-align: center; }
+
+  /* Tighter vertical rhythm on phones so sections feel less sparse. */
+  .rd-hero { padding: 56px 0 40px; }
+  .rd-stats { padding: 56px 0; }
+  .rd-approach { padding: 64px 0; }
+  .rd-hub { padding: 64px 24px; }
+  .rd-engagements { padding: 56px 0; }
+  .rd-philosophy { padding: 72px 24px; }
+  .rd-contact { padding: 64px 24px; }
+}
+@media (max-width: 480px) {
+  .rd-container { padding: 0 16px; }
+  .rd-header__inner { padding: 0 16px; }
+  .rd-hero__inner { padding: 0 16px; }
+  .rd-approach__inner { padding: 0 16px; }
+  .rd-stats, .rd-engagements { padding-left: 16px; padding-right: 16px; }
+  .rd-hub { padding-left: 16px; padding-right: 16px; }
+  .rd-philosophy { padding-left: 16px; padding-right: 16px; }
+  .rd-contact { padding-left: 16px; padding-right: 16px; }
 }
 </style>
 </head>

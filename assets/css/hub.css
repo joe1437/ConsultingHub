@@ -783,9 +783,10 @@ details[open] .topic__body {
   .workspace__sidebar-toggle { display: flex; }
   .workspace__main { padding: 32px 24px 64px; }
 
-  /* Header: hide nav on small screens */
-  .rd-header__nav { display: none; }
-  .rd-header__cta { display: none; }
+  /* Header: keep brand + Hub dropdown + CTA; hide secondary links only */
+  .rd-header__nav { gap: 16px; }
+  .rd-header__nav > li:not(.rd-nav-dropdown) { display: none; }
+  .rd-header__cta { margin-left: 16px; padding: 8px 14px; font-size: 12px; }
   .rd-header__inner { padding: 0 24px; }
 
   /* Hero */
@@ -800,4 +801,20 @@ details[open] .topic__body {
 @media (max-width: 600px) {
   h2 { font-size: 1.4rem; }
   .item-pane__title { font-size: 1.7rem; }
+
+  /* Tighter side padding on phones so content uses available width. */
+  .rd-header__inner { padding: 0 16px; }
+  .hub-hero__inner { padding: 0 16px; }
+  .hub-footer__inner { padding: 0 16px; }
+  .article-page { padding: 24px 16px 48px; gap: 24px; }
+  .article { padding: 16px; }
+  .workspace__main { padding: 24px 16px 48px; }
+
+  /* Hero scales down on phones. */
+  .hub-hero { padding: 28px 0 24px; }
+  .hub-hero__title { font-size: 1.5rem; line-height: 1.2; }
+  .hub-hero__lead { font-size: 0.95rem; }
+
+  /* Footer stays stacked, with smaller padding. */
+  .rd-footer { padding: 24px 16px; }
 }
