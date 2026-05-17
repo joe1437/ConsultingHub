@@ -658,6 +658,21 @@ img { display: block; max-width: 100%; }
   .rd-engagements { padding: 56px 0; }
   .rd-philosophy { padding: 72px 24px; }
   .rd-contact { padding: 64px 24px; }
+
+  /* Hero lifecycle SVG was getting cut off because the parallax
+     transform on .rd-parallax-slow pushed the card downward past
+     .rd-hero's `overflow: hidden` boundary. Disable parallax on
+     phones so the card stays in place and renders fully. */
+  .rd-lifecycle-card.rd-parallax-slow { transform: none !important; }
+
+  /* Approach section: hide the scroll-driven SVG roadmap on phones.
+     The animation depends on desktop layout math (sticky + tall scroll
+     track) and renders incorrectly here. The 10 phases are already
+     listed as text on the left, so no information is lost. Also drop
+     the artificial 900px scroll buffer that existed solely to power
+     the animation. */
+  .rd-lifecycle-sticky { display: none; }
+  .rd-approach { min-height: 0; }
 }
 @media (max-width: 480px) {
   .rd-container { padding: 0 16px; }
