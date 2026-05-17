@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://elhajjconsulting.com/sitemap.xml

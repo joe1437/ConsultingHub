@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FAF8F4"/>
+
+  <!-- Subtle topographic line accent in the corner -->
+  <g stroke="#0E1B33" stroke-width="1" fill="none" opacity="0.06">
+    <path d="M -50 100 C 200 60, 500 140, 800 80 S 1100 120, 1500 90"/>
+    <path d="M -50 138 C 200 98, 500 178, 800 118 S 1100 158, 1500 128"/>
+    <path d="M -50 176 C 200 136, 500 216, 800 156 S 1100 196, 1500 166"/>
+    <path d="M -50 530 C 200 490, 500 570, 800 510 S 1100 550, 1500 520"/>
+    <path d="M -50 568 C 200 528, 500 608, 800 548 S 1100 588, 1500 558"/>
+  </g>
+
+  <!-- EH monogram inside a circle (matches site logo) -->
+  <g transform="translate(140, 215)">
+    <circle cx="100" cy="100" r="98" fill="none" stroke="#0E1B33" stroke-width="1.5"/>
+    <!-- E spine / H left upright -->
+    <path d="M 50 50 L 50 150" stroke="#0E1B33" stroke-width="6" stroke-linecap="square"/>
+    <!-- H right upright -->
+    <path d="M 150 50 L 150 150" stroke="#0E1B33" stroke-width="6" stroke-linecap="square"/>
+    <!-- E top arm -->
+    <line x1="50" y1="50" x2="98" y2="50" stroke="#C29036" stroke-width="4"/>
+    <!-- E bottom arm -->
+    <line x1="50" y1="150" x2="98" y2="150" stroke="#C29036" stroke-width="4"/>
+    <!-- Shared middle bar -->
+    <line x1="50" y1="100" x2="150" y2="100" stroke="#C29036" stroke-width="4.5"/>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="400" y="248"
+        font-family="'JetBrains Mono', 'Courier New', monospace"
+        font-size="20"
+        letter-spacing="3.6"
+        fill="#6B6E78">
+    SENIOR ERP CONSULTING
+  </text>
+
+  <!-- Wordmark: "El Hajj" in gold italic serif + "Consulting" in navy serif -->
+  <text x="400" y="332"
+        font-family="'Instrument Serif', 'Times New Roman', serif"
+        font-size="78"
+        font-style="italic"
+        fill="#C29036">El Hajj</text>
+  <text x="640" y="332"
+        font-family="'IBM Plex Serif', 'Times New Roman', serif"
+        font-size="78"
+        fill="#0E1B33">Consulting</text>
+
+  <!-- Tagline -->
+  <text x="400" y="400"
+        font-family="'Inter Tight', 'Inter', system-ui, sans-serif"
+        font-size="28"
+        fill="#3B3D45">
+    Microsoft Dynamics 365 F&amp;O and Oracle Fusion,
+  </text>
+  <text x="400" y="438"
+        font-family="'Inter Tight', 'Inter', system-ui, sans-serif"
+        font-size="28"
+        fill="#3B3D45">
+    delivered end-to-end.
+  </text>
+
+  <!-- Domain footer -->
+  <text x="400" y="500"
+        font-family="'JetBrains Mono', 'Courier New', monospace"
+        font-size="18"
+        letter-spacing="2"
+        fill="#9C9FA7">
+    elhajjconsulting.com
+  </text>
+</svg>
