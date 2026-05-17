@@ -398,22 +398,59 @@ hr { border: 0; border-top: 1px solid var(--rd-line); margin: 2rem 0; }
 .workspace__sidebar::-webkit-scrollbar-track { background: transparent; }
 .workspace__sidebar::-webkit-scrollbar-thumb { background: var(--rd-stone-100); border-radius: 2px; }
 
-/* Mobile toggle (hidden on desktop) */
+/* Mobile toggle (hidden on desktop). On phones this is the
+   primary section switcher for hub pages — must look like an
+   interactive picker, not a static banner. */
 .workspace__sidebar-toggle {
   display: none;
   width: 100%;
   background: var(--rd-navy);
   color: #fff;
   border: 0;
-  padding: 14px 20px;
+  padding: 26px 20px 14px;
   font-family: var(--rd-sans-a);
   font-size: 14px;
   text-align: left;
   cursor: pointer;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  position: relative;
 }
-.workspace__sidebar-current { font-weight: 500; }
+/* Tiny eyebrow label above the current item so the picker reads as
+   "this section / tap to change", not as a page heading. */
+.workspace__sidebar-toggle::before {
+  content: attr(data-toggle-label);
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-family: var(--rd-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rd-gold);
+  font-weight: 500;
+}
+/* Chevron indicating it opens a list; rotates when sidebar is open. */
+.workspace__sidebar-toggle::after {
+  content: "";
+  margin-left: auto;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(45deg);
+  transition: transform 220ms var(--rd-ease-out);
+  flex-shrink: 0;
+}
+.workspace__sidebar.is-open .workspace__sidebar-toggle::after {
+  transform: rotate(-135deg);
+}
+.workspace__sidebar-toggle:hover { background: var(--rd-navy-700); }
+.workspace__sidebar-current {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+}
 
 .workspace__sidebar-title {
   font-family: var(--rd-mono);
@@ -790,16 +827,41 @@ details[open] .topic__body {
   /* Workspace: stack sidebar above pane */
   .workspace { grid-template-columns: 1fr; }
   .workspace__sidebar {
-    position: static;
+    position: sticky;
+    top: 64px;
+    z-index: 50;
     height: auto;
     overflow-y: visible;
     border-right: 0;
     border-bottom: 1px solid var(--rd-line);
     padding: 0;
+    background: var(--rd-paper);
   }
-  .workspace__sidebar-body { display: none; }
-  .workspace__sidebar.is-open .workspace__sidebar-body { display: block; padding: 16px 0; }
+  .workspace__sidebar-body {
+    display: none;
+    background: var(--rd-cream);
+    border-top: 1px solid var(--rd-line);
+  }
+  .workspace__sidebar.is-open .workspace__sidebar-body {
+    display: block;
+    padding: 12px 0;
+    max-height: 60vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .workspace__sidebar.is-open .workspace__sidebar-title { display: none; }
   .workspace__sidebar-toggle { display: flex; }
+  /* Bigger tap targets and clearer active state on mobile. */
+  .workspace__sidebar.is-open .workspace__nav-link {
+    padding: 12px 24px;
+    font-size: 15px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .workspace__sidebar.is-open .workspace__nav-link.is-active {
+    background: var(--rd-stone-50);
+  }
   .workspace__main { padding: 32px 24px 64px; }
 
   /* Header: keep brand + Hub dropdown + CTA; hide secondary links only */

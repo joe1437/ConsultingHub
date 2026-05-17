@@ -254,6 +254,10 @@ html, body { max-width: 100%; overflow-x: clip; }
   /* Editorial scale: dial down oversized display type. */
   .rd-bignum { font-size: 64px; }
   .rd-pull { font-size: 22px; padding-left: 16px; }
+
+  /* Hub-page section picker (workspace sidebar) sits below the
+     56px header on phones, not the 64px desktop header. */
+  .workspace__sidebar { top: 56px; }
 }
 
 /* ── Ultra-narrow phones (≤380px) ── */
