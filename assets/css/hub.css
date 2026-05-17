@@ -318,6 +318,12 @@ hr { border: 0; border-top: 1px solid var(--rd-line); margin: 2rem 0; }
 .article-page__main > section { margin-bottom: 40px; }
 .article-page__main > section:last-child { margin-bottom: 0; }
 
+/* Grid items default to min-width:auto, which would let wide
+   content (e.g. an .entry-table-wrap) blow the column past the
+   viewport. Forcing min-width:0 lets inner scroll containers work. */
+.article-page__toc,
+.article-page__main { min-width: 0; }
+
 .article {
   background: var(--rd-paper);
   border: 1px solid var(--rd-line);
@@ -451,6 +457,11 @@ hr { border: 0; border-top: 1px solid var(--rd-line); margin: 2rem 0; }
 .workspace__main {
   padding: 48px 64px 96px;
   min-height: calc(100vh - 64px);
+  /* Grid items default to min-width:auto, which lets wide content
+     (e.g. an .entry-table with min-width:1000px) blow the column
+     past the viewport. Forcing min-width:0 lets the inner
+     .entry-table-wrap actually become the scroll container. */
+  min-width: 0;
 }
 
 /* Item panes — only one shown at a time (app.js controls) */
