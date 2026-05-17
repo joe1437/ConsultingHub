@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+  <!-- Navy filled circle background -->
+  <circle cx="18" cy="18" r="17" fill="#0E1B33"/>
+  <!-- E spine / H left upright -->
+  <path d="M 10 10 L 10 26" stroke="#FAF8F4" stroke-width="2.6" stroke-linecap="square"/>
+  <!-- H right upright -->
+  <path d="M 26 10 L 26 26" stroke="#FAF8F4" stroke-width="2.6" stroke-linecap="square"/>
+  <!-- E top arm -->
+  <line x1="10" y1="10" x2="18" y2="10" stroke="#C29036" stroke-width="2"/>
+  <!-- E bottom arm -->
+  <line x1="10" y1="26" x2="18" y2="26" stroke="#C29036" stroke-width="2"/>
+  <!-- Shared middle bar -->
+  <line x1="10" y1="18" x2="26" y2="18" stroke="#C29036" stroke-width="2.2"/>
+</svg>
